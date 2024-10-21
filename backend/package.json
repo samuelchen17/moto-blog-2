@@ -1,5 +1,5 @@
 {
-  "name": "rest_api_authentication",
+  "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
