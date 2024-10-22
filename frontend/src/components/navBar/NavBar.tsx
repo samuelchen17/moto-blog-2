@@ -1,14 +1,8 @@
-import {
-  Button,
-  Navbar,
-  NavbarBrand,
-  NavbarCollapse,
-  NavbarLink,
-  TextInput,
-} from "flowbite-react";
+import { Button, Navbar, NavbarBrand, TextInput } from "flowbite-react";
 import helmetIcon from "/helmet.svg";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
+import NavBarLinks from "./NavBarLinks";
 
 const NavBar = () => {
   const path = useLocation().pathname;
@@ -36,35 +30,7 @@ const NavBar = () => {
       </Button>
 
       {/* links */}
-      <NavbarCollapse>
-        <NavbarLink as={Link} to="home" active={path === "/home"}>
-          HOME
-        </NavbarLink>
-        <NavbarLink
-          className=""
-          as={Link}
-          to="dashboard"
-          active={path === "/dashboard"}
-        >
-          DASH
-        </NavbarLink>
-        <NavbarLink
-          className=""
-          as={Link}
-          to="dashboard"
-          active={path === "/dashboard"}
-        >
-          BLOGS
-        </NavbarLink>
-        <NavbarLink
-          className=""
-          as={Link}
-          to="dashboard"
-          active={path === "/dashboard"}
-        >
-          ABOUT
-        </NavbarLink>
-      </NavbarCollapse>
+      <NavBarLinks currentPath={path} />
     </Navbar>
   );
 };
