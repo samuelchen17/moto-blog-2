@@ -9,7 +9,7 @@ const NavBar = () => {
 
   return (
     <Navbar className="border-b-2">
-      <NavbarBrand as={Link} to="/">
+      <NavbarBrand className="flex gap-2" as={Link} to="/">
         <img src={helmetIcon} className="h-[60px] dark:invert" />
         <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
           SC MOTO
@@ -17,7 +17,7 @@ const NavBar = () => {
       </NavbarBrand>
 
       {/* search bar */}
-      <form>
+      {/* <form>
         <TextInput
           type="text"
           placeholder="Search..."
@@ -27,10 +27,20 @@ const NavBar = () => {
       </form>
       <Button className="lg:hidden" color="gray">
         <AiOutlineSearch />
-      </Button>
+      </Button> */}
 
       {/* links */}
       <NavBarLinks currentPath={path} />
+
+      {/* auth */}
+      <div className="flex gap-2">
+        <Button as={Link} to="/home" color="none">
+          Log In
+        </Button>
+        <Button className="bg-black dark:bg-white" as={Link} to="/home" pill>
+          Sign Up
+        </Button>
+      </div>
     </Navbar>
   );
 };

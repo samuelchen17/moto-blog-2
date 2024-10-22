@@ -1,9 +1,9 @@
 import { NavbarLink, NavbarCollapse } from "flowbite-react";
 import { Link } from "react-router-dom";
 
-interface INavBarLinksProps {
-  currentPath: string;
-}
+// interface INavBarLinksProps {
+//   currentPath: string;
+// }
 
 interface INavLinks {
   name: string;
@@ -29,7 +29,8 @@ const navLinks: INavLinks[] = [
   },
 ];
 
-const NavBarLinks: React.FC<INavBarLinksProps> = ({ currentPath }) => {
+// const NavBarLinks: React.FC<INavBarLinksProps> = ({ currentPath }) => {
+const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
   return (
     <NavbarCollapse>
       {navLinks.map((link) => (
