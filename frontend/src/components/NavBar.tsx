@@ -40,8 +40,29 @@ const NavBar = () => {
         <NavbarLink as={Link} to="home" active={path === "/home"}>
           HOME
         </NavbarLink>
-        <NavbarLink as={Link} to="dashboard" active={path === "/dashboard"}>
+        <NavbarLink
+          className=""
+          as={Link}
+          to="dashboard"
+          active={path === "/dashboard"}
+        >
           DASH
+        </NavbarLink>
+        <NavbarLink
+          className=""
+          as={Link}
+          to="dashboard"
+          active={path === "/dashboard"}
+        >
+          BLOGS
+        </NavbarLink>
+        <NavbarLink
+          className=""
+          as={Link}
+          to="dashboard"
+          active={path === "/dashboard"}
+        >
+          ABOUT
         </NavbarLink>
       </NavbarCollapse>
     </Navbar>
