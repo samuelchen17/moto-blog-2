@@ -49,13 +49,14 @@ export const AuthFormsSignUp = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault;
     try {
-      const res: Response = await fetch("/auth/signup", {
+      const res: Response = await fetch("/auth/register", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" },
       });
 
       const data = await res.json();
+      console.log(data);
       //    sign user in
     } catch (err) {
       console.error("Error:", err);

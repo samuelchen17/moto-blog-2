@@ -10,9 +10,6 @@ const config = {
       maxPoolSize: 50, // Maximum of 50 connections in the connection pool
       autoIndex: false, // Don't automatically build indexes, useful for production
       retryWrites: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      tls: true,
       //   authSource
     },
     url: process.env.MONGODB_URL,
