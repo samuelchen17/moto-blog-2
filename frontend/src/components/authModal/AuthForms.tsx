@@ -1,4 +1,5 @@
 import { Checkbox, Button, Label, TextInput } from "flowbite-react";
+import { useState } from "react";
 
 export const AuthFormsSignIn = () => {
   return (
@@ -41,8 +42,28 @@ export const AuthFormsSignIn = () => {
 };
 
 export const AuthFormsSignUp = () => {
+  const [formData, setFormData] = useState({});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault;
+    try {
+      const res: Response = await fetch("/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      //   const data = await res.json();
+      //    sign user in
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="email" value="Your email" />
@@ -51,8 +72,8 @@ export const AuthFormsSignUp = () => {
           id="email"
           placeholder="name@company.com"
           // value={email}
-          // onChange={(event) => setEmail(event.target.value)}
           required
+          onChange={handleChange}
         />
       </div>
       <div>
@@ -63,15 +84,20 @@ export const AuthFormsSignUp = () => {
           id="username"
           placeholder="name@company.com"
           // value={email}
-          // onChange={(event) => setEmail(event.target.value)}
           required
+          onChange={handleChange}
         />
       </div>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="password" value="Your password" />
         </div>
-        <TextInput id="password" type="password" required />
+        <TextInput
+          id="password"
+          type="password"
+          required
+          onChange={handleChange}
+        />
       </div>
       <div className="w-full">
         <Button type="submit">Create account</Button>

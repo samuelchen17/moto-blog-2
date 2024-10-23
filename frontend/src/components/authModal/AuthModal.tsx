@@ -1,6 +1,4 @@
 import { Modal, ModalBody, ModalHeader } from "flowbite-react";
-import AuthSignUp from "./AuthSignUp";
-import AuthSignIn from "./AuthSignIn";
 import { AuthFormsSignIn, AuthFormsSignUp } from "./AuthForms";
 
 interface IAuthModalProps {
@@ -8,10 +6,6 @@ interface IAuthModalProps {
   authMode: string;
   setAuthOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAuthMode: React.Dispatch<React.SetStateAction<"login" | "register">>;
-}
-
-export interface IAuthSignProps {
-  toggleAuthMode: () => void;
 }
 
 interface IAuthLayoutProps {
@@ -34,7 +28,9 @@ const AuthModal: React.FC<IAuthModalProps> = ({
   return (
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
       <ModalHeader />
-      <AuthLayout toggleAuthMode={toggleAuthMode} isSignIn={isSignIn} />
+      <ModalBody>
+        <AuthLayout toggleAuthMode={toggleAuthMode} isSignIn={isSignIn} />
+      </ModalBody>
     </Modal>
   );
 };
@@ -44,26 +40,24 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({
   isSignIn,
 }) => {
   return (
-    <ModalBody>
-      <div className="space-y-6">
-        <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-          {isSignIn ? "Login" : "Sign Up"}
-        </h3>
+    <div className="space-y-6">
+      <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+        {isSignIn ? "Login" : "Sign Up"}
+      </h3>
 
-        {/* sign in form */}
-        {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
+      {/* sign in form */}
+      {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
 
-        <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-          {isSignIn ? "Not registered?" : "Have an account?"}&nbsp;
-          <button
-            onClick={toggleAuthMode}
-            className="text-cyan-700 hover:underline dark:text-cyan-500"
-          >
-            {isSignIn ? "Create account" : "Log in "}
-          </button>
-        </div>
+      <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
+        {isSignIn ? "Not registered?" : "Have an account?"}&nbsp;
+        <button
+          onClick={toggleAuthMode}
+          className="text-cyan-700 hover:underline dark:text-cyan-500"
+        >
+          {isSignIn ? "Create account" : "Log in "}
+        </button>
       </div>
-    </ModalBody>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { Button, NavbarToggle } from "flowbite-react";
 import { useState } from "react";
-import AuthModal from "../authModal/authModal";
+import AuthModal from "../authModal/AuthModal";
 
 const NavBarAuth = () => {
   const [authOpen, setAuthOpen] = useState(false);
