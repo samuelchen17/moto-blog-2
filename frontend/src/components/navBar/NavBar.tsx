@@ -1,14 +1,13 @@
 import {
-  Button,
   Navbar,
   NavbarBrand,
-  NavbarToggle,
-  TextInput,
+  // TextInput,
 } from "flowbite-react";
 import helmetIcon from "/helmet.svg";
 import { Link, useLocation } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
+// import { AiOutlineSearch } from "react-icons/ai";
 import NavBarLinks from "./NavBarLinks";
+import NavBarAuth from "./NavBarAuth";
 
 const NavBar = () => {
   const path = useLocation().pathname;
@@ -22,8 +21,22 @@ const NavBar = () => {
         </span>
       </NavbarBrand>
 
-      {/* search bar */}
-      {/* <form>
+      {/* authentication links */}
+      <NavBarAuth />
+
+      {/* navigation links */}
+      <NavBarLinks currentPath={path} />
+    </Navbar>
+  );
+};
+
+export default NavBar;
+
+{
+  /* search bar */
+}
+{
+  /* <form>
         <TextInput
           type="text"
           placeholder="Search..."
@@ -33,23 +46,5 @@ const NavBar = () => {
       </form>
       <Button className="lg:hidden" color="gray">
         <AiOutlineSearch />
-      </Button> */}
-
-      {/* authentication links */}
-      <div className="flex gap-2 md:order-last">
-        <Button as={Link} to="/home" color="none">
-          Log In
-        </Button>
-        <Button className="bg-black dark:bg-white" as={Link} to="/home" pill>
-          Sign Up
-        </Button>
-        <NavbarToggle />
-      </div>
-
-      {/* navigation links */}
-      <NavBarLinks currentPath={path} />
-    </Navbar>
-  );
-};
-
-export default NavBar;
+      </Button> */
+}

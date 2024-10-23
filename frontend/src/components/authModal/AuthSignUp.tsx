@@ -1,11 +1,11 @@
 import { ModalBody, Checkbox, Button, Label, TextInput } from "flowbite-react";
 
-const AuthSignIn = () => {
+const AuthSignUp = () => {
   return (
     <ModalBody>
       <div className="space-y-6">
         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-          Sign in to our platform
+          SIGNUPPPPPP
         </h3>
         <div>
           <div className="mb-2 block">
@@ -54,4 +54,4 @@ const AuthSignIn = () => {
   );
 };
 
-export default AuthSignIn;
+export default AuthSignUp;
