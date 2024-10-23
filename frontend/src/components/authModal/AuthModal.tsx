@@ -9,6 +9,7 @@ interface IAuthModalProps {
 }
 
 interface IAuthLayoutProps {
+  closeModal: () => void;
   toggleAuthMode: () => void;
   isSignIn: boolean;
 }
@@ -19,7 +20,7 @@ const AuthModal: React.FC<IAuthModalProps> = ({
   authMode,
   setAuthMode,
 }) => {
-  const closeModal = () => setAuthOpen(!authOpen);
+  const closeModal = () => setAuthOpen(false);
   const isSignIn = authMode === "login";
   const toggleAuthMode = () => {
     setAuthMode((prevMode) => (prevMode === "login" ? "register" : "login"));
@@ -29,13 +30,18 @@ const AuthModal: React.FC<IAuthModalProps> = ({
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
       <ModalHeader />
       <ModalBody>
-        <AuthLayout toggleAuthMode={toggleAuthMode} isSignIn={isSignIn} />
+        <AuthLayout
+          toggleAuthMode={toggleAuthMode}
+          isSignIn={isSignIn}
+          closeModal={closeModal}
+        />
       </ModalBody>
     </Modal>
   );
 };
 
 const AuthLayout: React.FC<IAuthLayoutProps> = ({
+  closeModal,
   toggleAuthMode,
   isSignIn,
 }) => {
@@ -47,7 +53,7 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({
 
       {/* sign in form */}
       {isSignIn ? (
-        <AuthFormsSignIn />
+        <AuthFormsSignIn closeModal={closeModal} />
       ) : (
         <AuthFormsSignUp toggleAuthMode={toggleAuthMode} />
       )}

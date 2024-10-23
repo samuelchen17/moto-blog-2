@@ -7,12 +7,12 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useState } from "react";
-import { redirect } from "react-router-dom";
 
-export const AuthFormsSignIn = () => {
+export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -38,7 +38,7 @@ export const AuthFormsSignIn = () => {
         throw new Error(data.message || "An unexpected error occurred");
       }
 
-      redirect("/home");
+      closeModal();
     } catch (err) {
       console.error("Error:", err);
 
@@ -113,6 +113,7 @@ export const AuthFormsSignUp = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
