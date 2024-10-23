@@ -1,4 +1,10 @@
-import { Button, Navbar, NavbarBrand, TextInput } from "flowbite-react";
+import {
+  Button,
+  Navbar,
+  NavbarBrand,
+  NavbarToggle,
+  TextInput,
+} from "flowbite-react";
 import helmetIcon from "/helmet.svg";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -10,7 +16,7 @@ const NavBar = () => {
   return (
     <Navbar className="border-b-2">
       <NavbarBrand className="flex gap-2" as={Link} to="/">
-        <img src={helmetIcon} className="h-[60px] dark:invert" />
+        <img src={helmetIcon} className="sm:h-[60px] h-[30px] dark:invert" />
         <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
           SC MOTO
         </span>
@@ -29,18 +35,19 @@ const NavBar = () => {
         <AiOutlineSearch />
       </Button> */}
 
-      {/* links */}
-      <NavBarLinks currentPath={path} />
-
-      {/* auth */}
-      <div className="flex gap-2">
+      {/* authentication links */}
+      <div className="flex gap-2 md:order-last">
         <Button as={Link} to="/home" color="none">
           Log In
         </Button>
         <Button className="bg-black dark:bg-white" as={Link} to="/home" pill>
           Sign Up
         </Button>
+        <NavbarToggle />
       </div>
+
+      {/* navigation links */}
+      <NavBarLinks currentPath={path} />
     </Navbar>
   );
 };

@@ -12,19 +12,19 @@ interface INavLinks {
 
 const navLinks: INavLinks[] = [
   {
-    name: "HOME",
+    name: "home",
     path: "/home",
   },
   {
-    name: "BLOGS",
+    name: "blogs",
     path: "/blogs",
   },
   {
-    name: "ABOUT",
+    name: "about",
     path: "/about",
   },
   {
-    name: "DASH",
+    name: "dash",
     path: "/dashboard",
   },
 ];
@@ -35,6 +35,7 @@ const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
     <NavbarCollapse>
       {navLinks.map((link) => (
         <NavbarLink
+          className="capitalize"
           key={link.path}
           as={Link}
           to={link.path}
