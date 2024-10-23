@@ -30,7 +30,12 @@ const NavBarAuth = () => {
       <NavbarToggle />
 
       {/* authentication modal */}
-      <AuthModal authOpen={authOpen} authMode={authMode} />
+      <AuthModal
+        authOpen={authOpen}
+        authMode={authMode}
+        setAuthOpen={setAuthOpen}
+        setAuthMode={setAuthMode}
+      />
     </div>
   );
 };

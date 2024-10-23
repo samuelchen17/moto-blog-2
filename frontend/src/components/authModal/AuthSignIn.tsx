@@ -5,7 +5,7 @@ const AuthSignIn = () => {
     <ModalBody>
       <div className="space-y-6">
         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-          Sign in to our platform
+          Login
         </h3>
         <div>
           <div className="mb-2 block">

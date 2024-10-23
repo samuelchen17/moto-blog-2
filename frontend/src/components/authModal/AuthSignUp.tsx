@@ -25,28 +25,16 @@ const AuthSignUp = () => {
           </div>
           <TextInput id="password" type="password" required />
         </div>
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2">
-            <Checkbox id="remember" />
-            <Label htmlFor="remember">Remember me</Label>
-          </div>
-          <a
-            href="#"
-            className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
-          >
-            Lost Password?
-          </a>
-        </div>
         <div className="w-full">
-          <Button>Log in to your account</Button>
+          <Button>Create account</Button>
         </div>
         <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-          Not registered?&nbsp;
+          Have an account?&nbsp;
           <a
             href="#"
             className="text-cyan-700 hover:underline dark:text-cyan-500"
           >
-            Create account
+            Log in
           </a>
         </div>
       </div>
