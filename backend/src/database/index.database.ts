@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import { CustomError } from "../utils/errorHandler.utils";
-
-dotenv.config(); // load env variables
+import config from "../config/config";
 
 const connectDB = async () => {
   try {
-    if (!process.env.MONGODB_URL) {
+    if (!config.mongo.url) {
       throw new CustomError(500, "DB URL is not configured");
     }
 
-    await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(config.mongo.url, config.mongo.options);
     console.log("DB is connected");
   } catch (error) {
     if (error instanceof Error) {

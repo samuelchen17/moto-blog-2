@@ -13,7 +13,6 @@ const config = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       tls: true,
-      compressors: ["zlib"],
       //   authSource
     },
     url: process.env.MONGODB_URL,

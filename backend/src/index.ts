@@ -7,9 +7,10 @@ import cors from "cors";
 import connectDB from "./database/index.database";
 import { errorHandler } from "./utils/errorHandler.utils";
 import router from "./router/index.router";
+import config from "./config/config";
 
 const app = express();
-const PORT = process.env.PORT || 6060; // if env PORT undefined, default to 6060
+// const PORT = process.env.PORT || 6060; // if env PORT undefined, default to 6060
 
 app.use(
   cors({
@@ -26,8 +27,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // to parse URL-encoded data
 const server = http.createServer(app);
 
 // listen for requests
-server.listen(PORT, () => {
-  console.log(`Server is running on localhost on port ${PORT}`);
+server.listen(config.server.port, () => {
+  console.log(
+    `Server is running at ${config.server.host} on port ${config.server.port}`
+  );
 });
 
 connectDB(); // connect to DB
