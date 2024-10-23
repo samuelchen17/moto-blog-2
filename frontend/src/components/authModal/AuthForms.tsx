@@ -7,10 +7,53 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useState } from "react";
+import { redirect } from "react-router-dom";
 
 export const AuthFormsSignIn = () => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // clear error message
+    setErrorMessage(null);
+
+    try {
+      setIsLoading(true);
+
+      const res: Response = await fetch("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Display the error message from the backend
+        throw new Error(data.message || "An unexpected error occurred");
+      }
+
+      redirect("/home");
+    } catch (err) {
+      console.error("Error:", err);
+
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="email" value="Your email" />
@@ -18,16 +61,20 @@ export const AuthFormsSignIn = () => {
         <TextInput
           id="email"
           placeholder="name@company.com"
-          // value={email}
-          // onChange={(event) => setEmail(event.target.value)}
           required
+          onChange={handleChange}
         />
       </div>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="password" value="Your password" />
         </div>
-        <TextInput id="password" type="password" required />
+        <TextInput
+          id="password"
+          type="password"
+          required
+          onChange={handleChange}
+        />
       </div>
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
@@ -41,8 +88,18 @@ export const AuthFormsSignIn = () => {
           Lost Password?
         </a>
       </div>
+      {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
       <div className="w-full">
-        <Button type="submit">Log in</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner size="sm" />
+              <span className="pl-2">Loading...</span>{" "}
+            </>
+          ) : (
+            "Log in"
+          )}
+        </Button>
       </div>
     </form>
   );

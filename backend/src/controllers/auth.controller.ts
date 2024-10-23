@@ -69,7 +69,7 @@ export const login = async (
     );
 
     if (!user) {
-      return next(new CustomError(400, "User not found"));
+      return next(new CustomError(401, "Incorrect email or password"));
     }
 
     // check if these properties exist so that it cannot be undefined
@@ -81,7 +81,7 @@ export const login = async (
     const expectedHash = authentication(user.authentication.salt, password);
 
     if (user.authentication.password !== expectedHash) {
-      next(new CustomError(403, "Incorrect email or password"));
+      return next(new CustomError(401, "Incorrect email or password"));
     }
 
     // add sessionToken to user in db
@@ -90,6 +90,7 @@ export const login = async (
       salt,
       user._id.toString()
     );
+
     // save session token
     await user.save();
 
@@ -106,7 +107,10 @@ export const login = async (
       maxAge: 3600000,
     });
 
-    res.status(200).json({ message: "Successfully logged in", user: user });
+    res.status(200).json({
+      message: "Successfully logged in",
+      user: user._id,
+    });
   } catch (error) {
     next(new CustomError(500, "Failed to log user in"));
   }
