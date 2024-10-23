@@ -1,5 +1,5 @@
 import { Modal, ModalBody, ModalHeader } from "flowbite-react";
-import AuthLogIn from "./AuthLogIn";
+import AuthSignUp from "./AuthSignUp";
 import AuthSignIn from "./AuthSignIn";
 
 interface IAuthModalProps {
@@ -9,10 +9,10 @@ interface IAuthModalProps {
 
 const AuthModal: React.FC<IAuthModalProps> = ({ authOpen, authMode }) => {
   return (
-    <Modal show={authOpen}>
+    <Modal show={authOpen} popup>
       <ModalHeader />
       <ModalBody>
-        {authMode === "login" ? <AuthLogIn /> : <AuthSignIn />}
+        {authMode === "login" ? <AuthSignIn /> : <AuthSignUp />}
       </ModalBody>
     </Modal>
   );
