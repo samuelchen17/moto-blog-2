@@ -44,10 +44,10 @@ export const AuthFormsSignIn = () => {
 export const AuthFormsSignUp = () => {
   const [formData, setFormData] = useState({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault;
+    e.preventDefault();
     try {
       const res: Response = await fetch("/auth/register", {
         method: "POST",
@@ -67,10 +67,10 @@ export const AuthFormsSignUp = () => {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="email" value="Your email" />
+          <Label htmlFor="username" value="Your username" />
         </div>
         <TextInput
-          id="email"
+          id="username"
           placeholder="name@company.com"
           // value={email}
           required
@@ -79,10 +79,10 @@ export const AuthFormsSignUp = () => {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="username" value="Your username" />
+          <Label htmlFor="email" value="Your email" />
         </div>
         <TextInput
-          id="username"
+          id="email"
           placeholder="name@company.com"
           // value={email}
           required

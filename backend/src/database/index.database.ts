@@ -23,7 +23,3 @@ const connectDB = async () => {
 };
 
 export default connectDB;
-
-// mongoose.Promise = Promise; // outdated with new mongoose
-// mongoose.connect(process.env.MONGODB_URL);
-// mongoose.connection.on("error", (error: Error) => console.log(error));

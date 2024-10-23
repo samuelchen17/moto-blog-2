@@ -42,7 +42,10 @@ export const register = async (
       },
     });
 
-    res.status(201).json({ message: "Successfully registered", user: newUser });
+    res.status(201).json({
+      message: "Successfully registered",
+      user: { email: newUser?.email, username: newUser?.username },
+    });
   } catch (error) {
     next(new CustomError(500, "Failed to register user"));
   }
