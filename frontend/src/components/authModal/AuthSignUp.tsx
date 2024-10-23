@@ -1,11 +1,12 @@
-import { ModalBody, Checkbox, Button, Label, TextInput } from "flowbite-react";
+import { ModalBody, Button, Label, TextInput } from "flowbite-react";
+import { IAuthSignProps } from "./authModal";
 
-const AuthSignUp = () => {
+const AuthSignUp: React.FC<IAuthSignProps> = ({ toggleAuthMode }) => {
   return (
     <ModalBody>
       <div className="space-y-6">
         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-          SIGNUPPPPPP
+          SIGN UP
         </h3>
         <div>
           <div className="mb-2 block">
@@ -30,12 +31,12 @@ const AuthSignUp = () => {
         </div>
         <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
           Have an account?&nbsp;
-          <a
-            href="#"
+          <button
+            onClick={toggleAuthMode}
             className="text-cyan-700 hover:underline dark:text-cyan-500"
           >
             Log in
-          </a>
+          </button>
         </div>
       </div>
     </ModalBody>
