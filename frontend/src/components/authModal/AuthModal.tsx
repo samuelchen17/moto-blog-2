@@ -46,7 +46,11 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({
       </h3>
 
       {/* sign in form */}
-      {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
+      {isSignIn ? (
+        <AuthFormsSignIn />
+      ) : (
+        <AuthFormsSignUp toggleAuthMode={toggleAuthMode} />
+      )}
 
       <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
         {isSignIn ? "Not registered?" : "Have an account?"}&nbsp;

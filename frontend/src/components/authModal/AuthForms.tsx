@@ -1,4 +1,11 @@
-import { Checkbox, Button, Label, TextInput } from "flowbite-react";
+import {
+  Checkbox,
+  Button,
+  Label,
+  TextInput,
+  Alert,
+  Spinner,
+} from "flowbite-react";
 import { useState } from "react";
 
 export const AuthFormsSignIn = () => {
@@ -41,14 +48,26 @@ export const AuthFormsSignIn = () => {
   );
 };
 
-export const AuthFormsSignUp = () => {
+export const AuthFormsSignUp = ({
+  toggleAuthMode,
+}: {
+  toggleAuthMode: () => void;
+}) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim });
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // clear error message
+    setErrorMessage(null);
+
     try {
+      setIsLoading(true);
+
       const res: Response = await fetch("/auth/register", {
         method: "POST",
         body: JSON.stringify(formData),
@@ -56,10 +75,26 @@ export const AuthFormsSignUp = () => {
       });
 
       const data = await res.json();
-      console.log(data);
-      //    sign user in
+
+      if (!res.ok) {
+        // Display the error message from the backend
+        throw new Error(data.message || "An unexpected error occurred");
+      }
+
+      setIsLoading(false);
+
+      // redirect to log in
+      toggleAuthMode();
     } catch (err) {
+      setIsLoading(false);
+
       console.error("Error:", err);
+
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
     }
   };
 
@@ -72,7 +107,6 @@ export const AuthFormsSignUp = () => {
         <TextInput
           id="username"
           placeholder="name@company.com"
-          // value={email}
           required
           onChange={handleChange}
         />
@@ -84,7 +118,6 @@ export const AuthFormsSignUp = () => {
         <TextInput
           id="email"
           placeholder="name@company.com"
-          // value={email}
           required
           onChange={handleChange}
         />
@@ -100,8 +133,18 @@ export const AuthFormsSignUp = () => {
           onChange={handleChange}
         />
       </div>
+      {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
       <div className="w-full">
-        <Button type="submit">Create account</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner size="sm" />
+              <span className="pl-2">Loading...</span>{" "}
+            </>
+          ) : (
+            "Create account"
+          )}
+        </Button>
       </div>
     </form>
   );
