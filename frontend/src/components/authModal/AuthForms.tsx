@@ -55,7 +55,7 @@ export const AuthFormsSignUp = () => {
         headers: { "Content-Type": "application/json" },
       });
 
-      //   const data = await res.json();
+      const data = await res.json();
       //    sign user in
     } catch (err) {
       console.error("Error:", err);
