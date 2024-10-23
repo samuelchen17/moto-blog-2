@@ -81,13 +81,9 @@ export const AuthFormsSignUp = ({
         throw new Error(data.message || "An unexpected error occurred");
       }
 
-      setIsLoading(false);
-
       // redirect to log in
       toggleAuthMode();
     } catch (err) {
-      setIsLoading(false);
-
       console.error("Error:", err);
 
       if (err instanceof Error) {
@@ -95,6 +91,8 @@ export const AuthFormsSignUp = ({
       } else {
         setErrorMessage("An unknown error occurred");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
