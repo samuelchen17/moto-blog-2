@@ -34,7 +34,7 @@ export const AuthFormsSignIn = () => {
         </a>
       </div>
       <div className="w-full">
-        <Button type="submit">Log in to your account</Button>
+        <Button type="submit">Log in</Button>
       </div>
     </form>
   );
