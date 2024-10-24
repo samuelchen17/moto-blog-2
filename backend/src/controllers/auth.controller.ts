@@ -49,7 +49,11 @@ export const register = async (
     res.status(201).json({
       message: "Successfully registered",
       success: true,
-      user: newUser._id,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     next(new CustomError(500, "Internal server error"));
@@ -70,7 +74,7 @@ export const login = async (
 
     const user = await getUserByEmail(
       email,
-      "authentication.salt + authentication.password"
+      "email + username + authentication.salt + authentication.password"
     );
 
     if (!user) {
@@ -112,10 +116,16 @@ export const login = async (
       maxAge: 3600000,
     });
 
+    console.log(user);
+
     res.status(200).json({
       message: "Successfully logged in",
       success: true,
-      user: user._id,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (error) {
     next(new CustomError(500, "Failed to log user in"));

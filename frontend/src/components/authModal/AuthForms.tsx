@@ -18,7 +18,11 @@ import {
 export interface IAuthSuccessRes {
   message: string;
   success: true;
-  user: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
 }
 export interface IAuthErrorRes {
   status: "error";
