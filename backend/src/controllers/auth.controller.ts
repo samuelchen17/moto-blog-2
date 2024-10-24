@@ -48,6 +48,7 @@ export const register = async (
 
     res.status(201).json({
       message: "Successfully registered",
+      success: true,
       user: newUser._id,
     });
   } catch (error) {
@@ -113,6 +114,7 @@ export const login = async (
 
     res.status(200).json({
       message: "Successfully logged in",
+      success: true,
       user: user._id,
     });
   } catch (error) {

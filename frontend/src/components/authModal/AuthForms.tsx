@@ -15,18 +15,24 @@ import {
 } from "../../redux/features/user/userSlice";
 import type { RootState } from "../../redux/store";
 
-interface IAuthSuccessRes {
+export interface IAuthSuccessRes {
   message: string;
+  success: true;
   user: string;
 }
-interface IAuthErrorRes {
+export interface IAuthErrorRes {
   status: "error";
-  success: boolean;
+  success: false;
   statusCode: number;
   message: string;
 }
 
 type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
+
+// type predicate, if return true, data is IAuthSuccessRes
+const isAuthSuccessResponse = (data: AuthResponse): data is IAuthSuccessRes => {
+  return data.success === true;
+};
 
 export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   // const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -46,10 +52,10 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
     // clear error message
     // setErrorMessage(null); // replaced by redux
 
+    dispatch(signInStart());
+
     try {
       // setIsLoading(true); // replaced by redux
-
-      dispatch(signInStart());
 
       const res: Response = await fetch("/auth/login", {
         method: "POST",
@@ -63,9 +69,14 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
         // Display the error message from the backend
         // throw new Error(data.message || "An unexpected error occurred"); // replaced by redux
         dispatch(signInFailure(data.message));
+        return; // dispatch does not return
       }
 
-      dispatch(signInSuccess(data));
+      if (isAuthSuccessResponse(data)) {
+        dispatch(signInSuccess(data));
+      } else {
+        dispatch(signInFailure(data.message));
+      }
 
       closeModal();
     } catch (err) {

@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
+import {
+  IAuthSuccessRes,
+  IAuthErrorRes,
+} from "../../../components/authModal/AuthForms";
 
 interface IUserState {
-  currentUser: string | null;
+  currentUser: IAuthSuccessRes | null;
   error: string | null;
   loading: boolean;
 }
@@ -22,12 +26,15 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    signInSuccess: (state, action) => {
+    signInSuccess: (state, action: PayloadAction<IAuthSuccessRes>) => {
       state.currentUser = action.payload;
       state.loading = false;
       state.error = null;
     },
-    signInFailure: (state, action) => {
+    signInFailure: (
+      state,
+      action: PayloadAction<IAuthErrorRes["message"] | string>
+    ) => {
       state.loading = false;
       state.error = action.payload;
     },
