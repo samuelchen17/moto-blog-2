@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Dropdown,
+  DropdownDivider,
   DropdownHeader,
   DropdownItem,
   NavbarToggle,
@@ -12,6 +13,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { IoMdPerson } from "react-icons/io";
 import { PiSignOutBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 const NavBarAuth = () => {
   const [authOpen, setAuthOpen] = useState(false);
@@ -42,16 +44,17 @@ const NavBarAuth = () => {
           }
         >
           <DropdownHeader>
-            <DropdownItem>{currentUser.user.username}</DropdownItem>
-            <DropdownItem>
-              <IoMdPerson />
-              Profile
-            </DropdownItem>
-            <DropdownItem>
-              <PiSignOutBold />
-              Log out
-            </DropdownItem>
+            <span>{currentUser.user.username}</span>
           </DropdownHeader>
+          <DropdownItem as={Link} to={"/dashboard?tab=profile"}>
+            <IoMdPerson />
+            Profile
+          </DropdownItem>
+          <DropdownDivider />
+          <DropdownItem>
+            <PiSignOutBold />
+            Log out
+          </DropdownItem>
         </Dropdown>
       ) : (
         <>
