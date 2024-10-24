@@ -13,7 +13,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../../redux/features/user/userSlice";
-import type { RootState } from "../../redux/store";
+// import type { RootState } from "../../redux/store";
 
 export interface IAuthSuccessRes {
   message: string;
