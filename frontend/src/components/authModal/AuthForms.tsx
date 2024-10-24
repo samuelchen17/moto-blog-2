@@ -40,7 +40,10 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   const { loading: isLoading, error: errorMessage } = useAppSelector(
     (state) => state.user
   );
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<{
+    email?: string;
+    password?: string;
+  }>({});
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +77,7 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
+        setFormData({});
       } else {
         dispatch(signInFailure(data.message));
       }
@@ -151,7 +155,11 @@ export const AuthFormsSignUp = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<{
+    email?: string;
+    password?: string;
+    username?: string;
+  }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
