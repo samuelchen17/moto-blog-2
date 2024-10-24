@@ -7,7 +7,7 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useState } from "react";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   signInStart,
   signInSuccess,
@@ -29,8 +29,11 @@ interface IAuthErrorRes {
 type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
 
 export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { loading: isLoading, error: errorMessage } = useAppSelector(
+    (state) => state.user
+  );
   const [formData, setFormData] = useState({});
   const dispatch = useAppDispatch();
 
@@ -63,6 +66,7 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
       }
 
       dispatch(signInSuccess(data));
+
       closeModal();
     } catch (err) {
       console.error("Error:", err);
@@ -71,10 +75,8 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
         // setErrorMessage(err.message);
         dispatch(signInFailure(err.message));
       } else {
-        setErrorMessage("An unknown error occurred");
+        dispatch(signInFailure("An unknown error occurred"));
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
