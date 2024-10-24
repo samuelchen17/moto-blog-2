@@ -3,8 +3,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 
 interface IUserState {
-  currentUser: null;
-  error: null;
+  currentUser: string | null;
+  error: string | null;
   loading: boolean;
 }
 

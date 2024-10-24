@@ -42,12 +42,16 @@ export const register = async (
       },
     });
 
+    if (!newUser) {
+      return next(new CustomError(400, "Failed to create account"));
+    }
+
     res.status(201).json({
       message: "Successfully registered",
-      user: { email: newUser?.email, username: newUser?.username },
+      user: newUser._id,
     });
   } catch (error) {
-    next(new CustomError(500, "Failed to register user"));
+    next(new CustomError(500, "Internal server error"));
   }
 };
 

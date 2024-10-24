@@ -7,11 +7,32 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useState } from "react";
+import { useAppDispatch } from "../../redux/hooks";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../redux/features/user/userSlice";
+import type { RootState } from "../../redux/store";
+
+interface IAuthSuccessRes {
+  message: string;
+  user: string;
+}
+interface IAuthErrorRes {
+  status: "error";
+  success: boolean;
+  statusCode: number;
+  message: string;
+}
+
+type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
 
 export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
+  const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -20,10 +41,12 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
     e.preventDefault();
 
     // clear error message
-    setErrorMessage(null);
+    // setErrorMessage(null); // replaced by redux
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true); // replaced by redux
+
+      dispatch(signInStart());
 
       const res: Response = await fetch("/auth/login", {
         method: "POST",
@@ -31,19 +54,22 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
         headers: { "Content-Type": "application/json" },
       });
 
-      const data = await res.json();
+      const data: AuthResponse = await res.json();
 
       if (!res.ok) {
         // Display the error message from the backend
-        throw new Error(data.message || "An unexpected error occurred");
+        // throw new Error(data.message || "An unexpected error occurred"); // replaced by redux
+        dispatch(signInFailure(data.message));
       }
 
+      dispatch(signInSuccess(data));
       closeModal();
     } catch (err) {
       console.error("Error:", err);
 
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        // setErrorMessage(err.message);
+        dispatch(signInFailure(err.message));
       } else {
         setErrorMessage("An unknown error occurred");
       }
@@ -132,7 +158,7 @@ export const AuthFormsSignUp = ({
         headers: { "Content-Type": "application/json" },
       });
 
-      const data = await res.json();
+      const data: AuthResponse = await res.json();
 
       if (!res.ok) {
         // Display the error message from the backend
