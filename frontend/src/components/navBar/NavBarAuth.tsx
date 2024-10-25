@@ -18,7 +18,9 @@ import { Link } from "react-router-dom";
 const NavBarAuth = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  const { currentUser } = useAppSelector((state: RootState) => state.user);
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
 
   // const toggleModal = () => setAuthOpen(!authOpen);
   // const toggleAuthMode = () =>

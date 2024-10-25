@@ -6,7 +6,7 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const { theme } = useAppSelector((state) => state.theme);
+  const { theme } = useAppSelector((state) => state.persisted.theme);
   return (
     <div className={theme}>
       <div className="bg-white text-black dark:text-white dark:bg-black min-h-screen">

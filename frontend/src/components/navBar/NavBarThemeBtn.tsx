@@ -6,7 +6,7 @@ import { RootState } from "../../redux/store";
 
 const NavBarThemeBtn = () => {
   const dispatch = useAppDispatch();
-  const { theme } = useAppSelector((state: RootState) => state.theme);
+  const { theme } = useAppSelector((state: RootState) => state.persisted.theme);
 
   return (
     <Button

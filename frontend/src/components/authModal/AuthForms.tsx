@@ -42,7 +42,7 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   // const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const { loading: isLoading, error: errorMessage } = useAppSelector(
-    (state) => state.user
+    (state) => state.persisted.user
   );
   const [formData, setFormData] = useState<{
     email?: string;
