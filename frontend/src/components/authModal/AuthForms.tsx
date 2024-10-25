@@ -13,6 +13,10 @@ import {
   signInSuccess,
   signInFailure,
 } from "../../redux/features/user/userSlice";
+import {
+  toggleAuthModal,
+  toggleAuthMode,
+} from "../../redux/features/modal/authModalSlice";
 // import type { RootState } from "../../redux/store";
 
 export interface IAuthSuccessRes {
@@ -38,7 +42,7 @@ const isAuthSuccessResponse = (data: AuthResponse): data is IAuthSuccessRes => {
   return data.success === true;
 };
 
-export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
+export const AuthFormsSignIn = () => {
   // const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const { loading: isLoading, error: errorMessage } = useAppSelector(
@@ -86,7 +90,7 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
         dispatch(signInFailure(data.message));
       }
 
-      closeModal();
+      dispatch(toggleAuthModal());
     } catch (err) {
       console.error("Error:", err);
 
@@ -152,11 +156,7 @@ export const AuthFormsSignIn = ({ closeModal }: { closeModal: () => void }) => {
   );
 };
 
-export const AuthFormsSignUp = ({
-  toggleAuthMode,
-}: {
-  toggleAuthMode: () => void;
-}) => {
+export const AuthFormsSignUp = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<{
@@ -164,6 +164,9 @@ export const AuthFormsSignUp = ({
     password?: string;
     username?: string;
   }>({});
+
+  // redux
+  const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -191,7 +194,7 @@ export const AuthFormsSignUp = ({
       }
 
       // redirect to log in
-      toggleAuthMode();
+      dispatch(toggleAuthMode());
     } catch (err) {
       console.error("Error:", err);
 
