@@ -30,7 +30,7 @@ const NavBarAuth = () => {
   };
 
   return (
-    <div className="flex gap-2 md:order-last">
+    <>
       {currentUser ? (
         <Dropdown
           arrowIcon={false}
@@ -80,7 +80,7 @@ const NavBarAuth = () => {
         setAuthOpen={setAuthOpen}
         setAuthMode={setAuthMode}
       />
-    </div>
+    </>
   );
 };
 
