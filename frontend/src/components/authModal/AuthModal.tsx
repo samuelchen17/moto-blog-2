@@ -1,11 +1,15 @@
 import { Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { AuthFormsSignIn, AuthFormsSignUp } from "./AuthForms";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import {
+  toggleAuthModal,
+  toggleAuthMode,
+} from "../../redux/features/modal/authModalSlice";
+import { RootState } from "../../redux/store";
 
 interface IAuthModalProps {
   authOpen: boolean;
   authMode: string;
-  setAuthOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAuthMode: React.Dispatch<React.SetStateAction<"login" | "register">>;
 }
 
 interface IAuthLayoutProps {
@@ -14,24 +18,25 @@ interface IAuthLayoutProps {
   isSignIn: boolean;
 }
 
-const AuthModal: React.FC<IAuthModalProps> = ({
-  authOpen,
-  setAuthOpen,
-  authMode,
-  setAuthMode,
-}) => {
-  const closeModal = () => setAuthOpen(false);
+const AuthModal = () => {
+  const { authOpen, authMode } = useAppSelector(
+    (state: RootState) => state.authModal
+  );
+  const dispatch = useAppDispatch();
+  const closeModal = () => dispatch(toggleAuthModal());
   const isSignIn = authMode === "login";
-  const toggleAuthMode = () => {
-    setAuthMode((prevMode) => (prevMode === "login" ? "register" : "login"));
-  };
+  // const toggleAuthMode = () => {
+  //   setAuthMode((prevMode) => (prevMode === "login" ? "register" : "login"));
+  // };
 
   return (
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
       <ModalHeader />
       <ModalBody>
         <AuthLayout
-          toggleAuthMode={toggleAuthMode}
+          toggleAuthMode={() => {
+            dispatch(toggleAuthMode());
+          }}
           isSignIn={isSignIn}
           closeModal={closeModal}
         />

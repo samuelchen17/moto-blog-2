@@ -7,29 +7,24 @@ import {
   DropdownItem,
   NavbarToggle,
 } from "flowbite-react";
-import { useState } from "react";
 import AuthModal from "../authModal/AuthModal";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { IoMdPerson } from "react-icons/io";
 import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import {
+  openRegister,
+  openLogin,
+} from "../../redux/features/modal/authModalSlice";
 
 const NavBarAuth = () => {
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
-  // const toggleModal = () => setAuthOpen(!authOpen);
-  // const toggleAuthMode = () =>
-  //   setAuthMode(authMode === "login" ? "register" : "login");
-
-  const toggleModal = (mode: "login" | "register") => {
-    setAuthMode(mode);
-    setAuthOpen(true);
-  };
+  // redux modal
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -41,7 +36,7 @@ const NavBarAuth = () => {
             <Avatar
               alt="user"
               rounded
-              // img={currentUser.profilePicture}
+              // img={currentUser.profilePicture} // implement
             />
           }
         >
@@ -60,13 +55,13 @@ const NavBarAuth = () => {
         </Dropdown>
       ) : (
         <>
-          <Button color="none" onClick={() => toggleModal("login")}>
+          <Button color="none" onClick={() => dispatch(openLogin())}>
             Log In
           </Button>
           <Button
             className="bg-black dark:bg-white"
             pill
-            onClick={() => toggleModal("register")}
+            onClick={() => dispatch(openRegister())}
           >
             Sign Up
           </Button>
@@ -76,12 +71,7 @@ const NavBarAuth = () => {
       <NavbarToggle />
 
       {/* authentication modal */}
-      <AuthModal
-        authOpen={authOpen}
-        authMode={authMode}
-        setAuthOpen={setAuthOpen}
-        setAuthMode={setAuthMode}
-      />
+      <AuthModal />
     </>
   );
 };
