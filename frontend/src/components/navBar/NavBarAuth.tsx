@@ -41,17 +41,20 @@ const NavBarAuth = () => {
           }
         >
           <DropdownHeader>
-            <span>{currentUser.user.username}</span>
+            <span className="block text-sm">{currentUser.user.username}</span>
+            <span className="block truncate text-sm font-medium">
+              {currentUser.user.email}
+            </span>
           </DropdownHeader>
-          <DropdownItem as={Link} to={"/dashboard?tab=profile"}>
-            <IoMdPerson />
+          <DropdownItem
+            as={Link}
+            to={"/dashboard?tab=profile"}
+            icon={IoMdPerson}
+          >
             Profile
           </DropdownItem>
           <DropdownDivider />
-          <DropdownItem>
-            <PiSignOutBold />
-            Log out
-          </DropdownItem>
+          <DropdownItem icon={PiSignOutBold}>Log out</DropdownItem>
         </Dropdown>
       ) : (
         <>
