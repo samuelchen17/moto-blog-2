@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Dropdown,
-  DropdownDivider,
-  DropdownHeader,
-  DropdownItem,
-  NavbarToggle,
-} from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import AuthModal from "../authModal/AuthModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
@@ -40,21 +32,21 @@ const NavBarAuth = () => {
             />
           }
         >
-          <DropdownHeader>
+          <Dropdown.Header>
             <span className="block text-sm">{currentUser.user.username}</span>
             <span className="block truncate text-sm font-medium">
               {currentUser.user.email}
             </span>
-          </DropdownHeader>
-          <DropdownItem
+          </Dropdown.Header>
+          <Dropdown.Item
             as={Link}
             to={"/dashboard?tab=profile"}
             icon={IoMdPerson}
           >
             Profile
-          </DropdownItem>
-          <DropdownDivider />
-          <DropdownItem icon={PiSignOutBold}>Log out</DropdownItem>
+          </Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Item icon={PiSignOutBold}>Log out</Dropdown.Item>
         </Dropdown>
       ) : (
         <>
@@ -71,7 +63,7 @@ const NavBarAuth = () => {
         </>
       )}
 
-      <NavbarToggle />
+      <Navbar.Toggle />
 
       {/* authentication modal */}
       <AuthModal />

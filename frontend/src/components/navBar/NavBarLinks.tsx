@@ -1,4 +1,4 @@
-import { NavbarLink, NavbarCollapse } from "flowbite-react";
+import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 // interface INavBarLinksProps {
@@ -32,9 +32,9 @@ const navLinks: INavLinks[] = [
 // const NavBarLinks: React.FC<INavBarLinksProps> = ({ currentPath }) => {
 const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
   return (
-    <NavbarCollapse>
+    <Navbar.Collapse>
       {navLinks.map((link) => (
-        <NavbarLink
+        <Navbar.Link
           className="capitalize"
           key={link.path}
           as={Link}
@@ -42,9 +42,9 @@ const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
           active={currentPath === link.path}
         >
           {link.name}
-        </NavbarLink>
+        </Navbar.Link>
       ))}
-    </NavbarCollapse>
+    </Navbar.Collapse>
   );
 };
 

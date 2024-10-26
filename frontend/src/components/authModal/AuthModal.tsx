@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalHeader } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { AuthFormsSignIn, AuthFormsSignUp } from "./AuthForms";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -21,10 +21,10 @@ const AuthModal = () => {
 
   return (
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
-      <ModalHeader />
-      <ModalBody>
+      <Modal.Header />
+      <Modal.Body>
         <AuthLayout isSignIn={isSignIn} />
-      </ModalBody>
+      </Modal.Body>
     </Modal>
   );
 };
