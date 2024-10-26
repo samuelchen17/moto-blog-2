@@ -2,13 +2,13 @@ import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import AuthModal from "../authModal/AuthModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { IoMdPerson } from "react-icons/io";
 import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
   openRegister,
   openLogin,
 } from "../../redux/features/modal/authModalSlice";
+import { HiUser } from "react-icons/hi";
 
 const NavBarAuth = () => {
   const { currentUser } = useAppSelector(
@@ -38,11 +38,7 @@ const NavBarAuth = () => {
               {currentUser.user.email}
             </span>
           </Dropdown.Header>
-          <Dropdown.Item
-            as={Link}
-            to={"/dashboard?tab=profile"}
-            icon={IoMdPerson}
-          >
+          <Dropdown.Item as={Link} to={"/dashboard?tab=profile"} icon={HiUser}>
             Profile
           </Dropdown.Item>
           <Dropdown.Divider />

@@ -1,29 +1,38 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import {
-  HiArrowSmRight,
-  HiChartPie,
-  HiInbox,
-  HiShoppingBag,
-  HiTable,
-  HiUser,
-} from "react-icons/hi";
+import { HiArrowSmRight, HiShoppingBag, HiTable, HiUser } from "react-icons/hi";
+import { PiSignOutBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 const DashSidebar = () => {
+  const location = useLocation();
+  const [tab, setTab] = useState<string>("");
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const tabFromUrl = urlParams.get("tab");
+    if (tabFromUrl) {
+      setTab(tabFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <Sidebar aria-label="Sidebar with multi-level dropdown example">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            Dashboard
+          <Sidebar.Item
+            as={Link}
+            to={"/dashboard?tab=profile"}
+            icon={HiUser}
+            label={"user"}
+            labelColor="dark"
+            active={tab === "profile"}
+          >
+            Profile
           </Sidebar.Item>
-          <Sidebar.Collapse icon={HiShoppingBag} label="E-commerce">
-            <Sidebar.Item href="#">Products</Sidebar.Item>
-            <Sidebar.Item href="#">Sales</Sidebar.Item>
-            <Sidebar.Item href="#">Refunds</Sidebar.Item>
-            <Sidebar.Item href="#">Shipping</Sidebar.Item>
-          </Sidebar.Collapse>
-          <Sidebar.Item href="#" icon={HiInbox}>
-            Inbox
+          <Sidebar.Item href="#" icon={PiSignOutBold}>
+            Sign Out
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiUser}>
             Users
