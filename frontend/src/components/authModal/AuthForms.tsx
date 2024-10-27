@@ -17,7 +17,6 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-import OAuth from "./OAuth";
 // import type { RootState } from "../../redux/store";
 
 export interface IAuthSuccessRes {
