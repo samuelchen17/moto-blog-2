@@ -20,6 +20,13 @@ export const register = async (
       return next(new CustomError(400, "All fields are required"));
     }
 
+    // validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return next(new CustomError(400, "Invalid email format"));
+    }
+
+    // check if already exists
     const existingUser = await getUserByEmail(email);
     const existingUsername = await getUserByUsername(username);
 
