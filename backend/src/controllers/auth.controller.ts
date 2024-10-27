@@ -36,6 +36,8 @@ export const register = async (
     const newUser = await createUser({
       email,
       username,
+      profilePicture:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       authentication: {
         salt,
         password: hashedPassword,
@@ -52,6 +54,7 @@ export const register = async (
       user: {
         id: newUser._id,
         username: newUser.username,
+        profilePicture: newUser.profilePicture,
         email: newUser.email,
       },
     });
@@ -74,7 +77,7 @@ export const login = async (
 
     const user = await getUserByEmail(
       email,
-      "email + username + authentication.salt + authentication.password"
+      "email + username + profilePicture + authentication.salt + authentication.password"
     );
 
     if (!user) {
@@ -124,6 +127,7 @@ export const login = async (
       user: {
         id: user._id,
         username: user.username,
+        profilePicture: user.profilePicture,
         email: user.email,
       },
     });

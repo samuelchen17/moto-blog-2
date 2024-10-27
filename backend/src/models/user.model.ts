@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 export interface IUser extends Document {
   username: string;
   email: string;
+  profilePicture: string;
   authentication: {
     password: string;
     salt?: string;
@@ -23,6 +24,10 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: true,
       unique: true,
+    },
+    profilePicture: {
+      type: String,
+      required: true,
     },
     authentication: {
       password: {

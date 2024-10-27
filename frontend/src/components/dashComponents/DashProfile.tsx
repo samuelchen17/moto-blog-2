@@ -1,6 +1,7 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Avatar, Label, TextInput } from "flowbite-react";
+import { Label, TextInput } from "flowbite-react";
+import DashDP from "./DashDP";
 
 const DashProfile = () => {
   const { currentUser } = useAppSelector(
@@ -43,16 +44,7 @@ const DashProfile = () => {
             <TextInput type="text" id="password" placeholder="password" />
           </div>
         </form>
-        <div>
-          <span>Profile picture</span>
-          <div className="self-center w-32 h-32">
-            <Avatar
-              alt="user"
-              className="rounded-full w-full h-full object-cover"
-              // img={currentUser.profilePicture} // implement
-            />
-          </div>
-        </div>
+        <DashDP />
       </div>
       <div>
         <span>Delete Account</span>

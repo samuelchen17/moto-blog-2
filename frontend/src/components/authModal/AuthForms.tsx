@@ -25,6 +25,7 @@ export interface IAuthSuccessRes {
   user: {
     id: string;
     username: string;
+    profilePicture: string;
     email: string;
   };
 }
