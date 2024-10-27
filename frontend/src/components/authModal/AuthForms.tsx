@@ -217,7 +217,7 @@ export const AuthFormsSignUp = () => {
         </div>
         <TextInput
           id="username"
-          placeholder="name@company.com"
+          placeholder=""
           required
           onChange={handleChange}
         />
@@ -227,6 +227,7 @@ export const AuthFormsSignUp = () => {
           <Label htmlFor="email" value="Your email" />
         </div>
         <TextInput
+          // type="email"
           id="email"
           placeholder="name@company.com"
           required
