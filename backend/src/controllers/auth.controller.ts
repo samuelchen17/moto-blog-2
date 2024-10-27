@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   createUser,
   getUserByEmail,
+  getUserByEmailOrUsername,
   getUserByUsername,
 } from "../services/user.services";
 import { random, authentication } from "../utils/user.utils";
@@ -69,14 +70,14 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    const { email, password } = req.body;
+    const { emailOrUsername, password } = req.body;
 
-    if (!email || !password) {
+    if (!emailOrUsername || !password) {
       return next(new CustomError(400, "All fields are required"));
     }
 
-    const user = await getUserByEmail(
-      email,
+    const user = await getUserByEmailOrUsername(
+      emailOrUsername,
       "email + username + profilePicture + authentication.salt + authentication.password"
     );
 

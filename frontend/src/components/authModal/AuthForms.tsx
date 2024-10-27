@@ -108,11 +108,11 @@ export const AuthFormsSignIn = () => {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="email" value="Your email" />
+          <Label htmlFor="emailOrUsername" value="Your email or username" />
         </div>
         <TextInput
-          id="email"
-          placeholder="name@company.com"
+          id="emailOrUsername"
+          placeholder=""
           required
           onChange={handleChange}
         />

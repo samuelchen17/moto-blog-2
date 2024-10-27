@@ -3,6 +3,8 @@ import { AiFillGoogleCircle } from "react-icons/ai";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from "../../config/firebaseConfig";
 
+// implement display name
+
 const OAuth = () => {
   const auth = getAuth(firebaseApp);
   const handleOAuthClick = async () => {

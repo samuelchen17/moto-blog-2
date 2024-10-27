@@ -25,7 +25,7 @@ const authModalSlice = createSlice({
       state.authOpen = true;
     },
     openRegister: (state) => {
-      state.authMode = "login";
+      state.authMode = "register";
       state.authOpen = true;
     },
   },
