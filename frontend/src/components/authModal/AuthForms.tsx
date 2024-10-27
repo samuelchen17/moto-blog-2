@@ -17,6 +17,7 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
+import OAuth from "./OAuth";
 // import type { RootState } from "../../redux/store";
 
 export interface IAuthSuccessRes {
@@ -153,6 +154,7 @@ export const AuthFormsSignIn = () => {
           )}
         </Button>
       </div>
+      <OAuth />
     </form>
   );
 };
@@ -257,6 +259,7 @@ export const AuthFormsSignUp = () => {
           )}
         </Button>
       </div>
+      <OAuth />
     </form>
   );
 };
