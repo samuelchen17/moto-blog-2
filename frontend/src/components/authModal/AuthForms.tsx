@@ -154,7 +154,6 @@ export const AuthFormsSignIn = () => {
           )}
         </Button>
       </div>
-      <OAuth />
     </form>
   );
 };
@@ -259,7 +258,6 @@ export const AuthFormsSignUp = () => {
           )}
         </Button>
       </div>
-      <OAuth />
     </form>
   );
 };
