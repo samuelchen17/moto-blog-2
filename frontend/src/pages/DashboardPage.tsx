@@ -16,9 +16,9 @@ const DashboardPage = () => {
   }, [location.search]);
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col md:flex-row">
       {/* sidebar */}
-      <div>
+      <div className="">
         <DashSidebar />
       </div>
       {/* profile */}

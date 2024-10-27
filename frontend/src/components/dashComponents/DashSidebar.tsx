@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiShoppingBag, HiTable, HiUser } from "react-icons/hi";
+import { HiUser } from "react-icons/hi";
 import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const DashSidebar = () => {
   }, [location.search]);
 
   return (
-    <Sidebar aria-label="Sidebar with multi-level dropdown example">
+    <Sidebar className="">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item
@@ -33,18 +33,6 @@ const DashSidebar = () => {
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={PiSignOutBold}>
             Sign Out
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiUser}>
-            Users
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
-            Products
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiArrowSmRight}>
-            Sign In
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTable}>
-            Sign Up
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
