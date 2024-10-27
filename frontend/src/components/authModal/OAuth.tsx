@@ -1,8 +1,23 @@
 import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseApp } from "../../config/firebaseConfig";
 
 const OAuth = () => {
-  const handleOAuthClick = async () => {};
+  const auth = getAuth(firebaseApp);
+  const handleOAuthClick = async () => {
+    const provider = new GoogleAuthProvider();
+
+    // always ask user to select account
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    try {
+      const googleResults = await signInWithPopup(auth, provider);
+      console.log(googleResults);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Button className="w-full" onClick={handleOAuthClick}>
