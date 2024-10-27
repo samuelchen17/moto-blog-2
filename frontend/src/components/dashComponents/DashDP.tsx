@@ -36,4 +36,6 @@ const DashDP = () => {
   );
 };
 
+// store profile image in firebase and store url in MONGO
+
 export default DashDP;
