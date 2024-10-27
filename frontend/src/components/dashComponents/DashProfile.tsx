@@ -8,7 +8,7 @@ const DashProfile = () => {
   );
 
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-lg outline outline-red-500">
       <h1>Profile</h1>
       <form className="flex flex-col">
         <div className="self-center w-32 h-32">
