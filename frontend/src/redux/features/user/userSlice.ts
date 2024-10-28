@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import {
   IAuthSuccessRes,
   IAuthErrorRes,
-} from "../../../components/authModal/AuthForms";
+} from "../../../interface/auth.interface";
 
 interface IUserState {
   currentUser: IAuthSuccessRes | null;

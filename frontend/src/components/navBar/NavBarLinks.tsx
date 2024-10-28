@@ -1,10 +1,6 @@
 import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 
-// interface INavBarLinksProps {
-//   currentPath: string;
-// }
-
 interface INavLinks {
   name: string;
   path: string;

@@ -15,7 +15,17 @@ const OAuth = () => {
 
     try {
       const googleResults = await signInWithPopup(auth, provider);
-      console.log(googleResults);
+      const res = await fetch("/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: googleResults.user.displayName,
+          email: googleResults.user.email,
+          displayPicture: googleResults.user.photoURL,
+        }),
+      });
+
+      const data = await res.json();
     } catch (err) {
       console.log(err);
     }

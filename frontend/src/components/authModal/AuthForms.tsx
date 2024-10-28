@@ -17,24 +17,7 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-// import type { RootState } from "../../redux/store";
-
-export interface IAuthSuccessRes {
-  message: string;
-  success: true;
-  user: {
-    id: string;
-    username: string;
-    profilePicture: string;
-    email: string;
-  };
-}
-export interface IAuthErrorRes {
-  status: "error";
-  success: false;
-  statusCode: number;
-  message: string;
-}
+import { IAuthSuccessRes, IAuthErrorRes } from "../../interface/auth.interface";
 
 type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
 
