@@ -5,6 +5,7 @@ import { firebaseApp } from "../../config/firebaseConfig";
 import { useAppDispatch } from "../../redux/hooks";
 import { signInSuccess } from "../../redux/features/user/userSlice";
 import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
+import { IGoogleAuthPayload } from "@shared/types/auth";
 
 // implement display name
 
@@ -19,14 +20,18 @@ const OAuth = () => {
 
     try {
       const googleResults = await signInWithPopup(auth, provider);
+
+      // Define the payload using the GoogleAuthPayload type
+      const payload: IGoogleAuthPayload = {
+        name: googleResults.user.displayName || "",
+        email: googleResults.user.email || "",
+        dpUrl: googleResults.user.photoURL || "",
+      };
+
       const res = await fetch("/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: googleResults.user.displayName,
-          email: googleResults.user.email,
-          displayPicture: googleResults.user.photoURL,
-        }),
+        body: JSON.stringify({ payload }),
       });
 
       // implement interface for data

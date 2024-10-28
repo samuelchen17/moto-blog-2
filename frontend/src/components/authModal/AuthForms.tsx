@@ -17,7 +17,9 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-import { IAuthSuccessRes, IAuthErrorRes } from "../../interface/auth.interface";
+import { IAuthSuccessRes, IAuthErrorRes } from "../../types/auth.interface";
+import OAuth from "./OAuth";
+import { ISignInAuthPayload, ISignUpAuthPayload } from "@shared/types/auth";
 
 type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
 
@@ -32,10 +34,10 @@ export const AuthFormsSignIn = () => {
   const { loading: isLoading, error: errorMessage } = useAppSelector(
     (state) => state.persisted.user
   );
-  const [formData, setFormData] = useState<{
-    email?: string;
-    password?: string;
-  }>({});
+
+  const clearForm: ISignInAuthPayload = { emailOrUsername: "", password: "" };
+
+  const [formData, setFormData] = useState<ISignInAuthPayload>(clearForm);
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,9 +54,11 @@ export const AuthFormsSignIn = () => {
     try {
       // setIsLoading(true); // replaced by redux
 
+      const payload: ISignInAuthPayload = { ...formData };
+
       const res: Response = await fetch("/auth/login", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
 
@@ -69,7 +73,7 @@ export const AuthFormsSignIn = () => {
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
-        setFormData({});
+        setFormData(clearForm);
       } else {
         dispatch(signInFailure(data.message));
       }
@@ -96,7 +100,7 @@ export const AuthFormsSignIn = () => {
         <TextInput
           id="emailOrUsername"
           placeholder=""
-          required
+          // required
           onChange={handleChange}
         />
       </div>
@@ -107,7 +111,7 @@ export const AuthFormsSignIn = () => {
         <TextInput
           id="password"
           type="password"
-          required
+          // required
           onChange={handleChange}
         />
       </div>
@@ -136,6 +140,7 @@ export const AuthFormsSignIn = () => {
           )}
         </Button>
       </div>
+      <OAuth />
     </form>
   );
 };
@@ -143,11 +148,14 @@ export const AuthFormsSignIn = () => {
 export const AuthFormsSignUp = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<{
-    email?: string;
-    password?: string;
-    username?: string;
-  }>({});
+
+  const clearForm: ISignUpAuthPayload = {
+    email: "",
+    username: "",
+    password: "",
+  };
+
+  const [formData, setFormData] = useState<ISignUpAuthPayload>(clearForm);
 
   // redux
   const dispatch = useAppDispatch();
@@ -164,9 +172,11 @@ export const AuthFormsSignUp = () => {
     try {
       setIsLoading(true);
 
+      const payload: ISignUpAuthPayload = { ...formData };
+
       const res: Response = await fetch("/auth/register", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
 
@@ -201,7 +211,7 @@ export const AuthFormsSignUp = () => {
         <TextInput
           id="username"
           placeholder=""
-          required
+          // required
           onChange={handleChange}
         />
       </div>
@@ -213,7 +223,7 @@ export const AuthFormsSignUp = () => {
           // type="email"
           id="email"
           placeholder="name@company.com"
-          required
+          // required
           onChange={handleChange}
         />
       </div>
@@ -224,7 +234,7 @@ export const AuthFormsSignUp = () => {
         <TextInput
           id="password"
           type="password"
-          required
+          // required
           onChange={handleChange}
         />
       </div>
@@ -241,6 +251,7 @@ export const AuthFormsSignUp = () => {
           )}
         </Button>
       </div>
+      <OAuth />
     </form>
   );
 };

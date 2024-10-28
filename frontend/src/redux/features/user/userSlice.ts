@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 // import type { RootState } from "../../store";
-import {
-  IAuthSuccessRes,
-  IAuthErrorRes,
-} from "../../../interface/auth.interface";
+import { IAuthSuccessRes, IAuthErrorRes } from "../../../types/auth.interface";
 
 interface IUserState {
   currentUser: IAuthSuccessRes | null;

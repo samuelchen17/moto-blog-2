@@ -7,9 +7,17 @@ import {
 } from "../services/user.services";
 import { random, authentication } from "../utils/user.utils";
 import { CustomError } from "../utils/errorHandler.utils";
+import {
+  IGoogleAuthPayload,
+  ISignInAuthPayload,
+  ISignUpAuthPayload,
+} from "@shared/types/auth";
 
 export const register = async (
-  req: Request,
+  // first param: route parameters like /:id
+  // second param: query params like ?tab=profile
+  // third param: body of request
+  req: Request<{}, {}, ISignUpAuthPayload>,
   res: Response,
   next: NextFunction
 ) => {
@@ -72,7 +80,7 @@ export const register = async (
 };
 
 export const login = async (
-  req: Request,
+  req: Request<{}, {}, ISignInAuthPayload>,
   res: Response,
   next: NextFunction
 ) => {
@@ -141,5 +149,17 @@ export const login = async (
     });
   } catch (error) {
     next(new CustomError(500, "Failed to log user in"));
+  }
+};
+
+export const googleAuth = async (
+  req: Request<{}, {}, IGoogleAuthPayload>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, name, dpUrl } = req.body;
+  } catch (error) {
+    next(new CustomError(500, "Failed to log user in via Google"));
   }
 };

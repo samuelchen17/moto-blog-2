@@ -4,8 +4,8 @@ import { useAppSelector } from "../../redux/hooks";
 import defaultDP from "/defaultDP.png";
 
 const DashDP = () => {
-  const [dP, setDP] = useState<File | null>(null);
-  const [dPUrl, setDPUrl] = useState<string | null>(null);
+  const [dp, setDP] = useState<File | null>(null);
+  const [dpUrl, setDPUrl] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
