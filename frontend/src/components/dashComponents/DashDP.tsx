@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import defaultDP from "/defaultDP.png";
 
 const DashDP = () => {
   const [dp, setDP] = useState<File | null>(null);
