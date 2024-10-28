@@ -11,6 +11,7 @@ import {
   IGoogleAuthPayload,
   ISignInAuthPayload,
   ISignUpAuthPayload,
+  IAuthSuccessRes,
 } from "@shared/types/auth";
 
 export const register = async (
@@ -18,7 +19,7 @@ export const register = async (
   // second param: query params like ?tab=profile
   // third param: body of request
   req: Request<{}, {}, ISignUpAuthPayload>,
-  res: Response,
+  res: Response<IAuthSuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -68,7 +69,7 @@ export const register = async (
       message: "Successfully registered",
       success: true,
       user: {
-        id: newUser._id,
+        id: newUser._id.toString(),
         username: newUser.username,
         profilePicture: newUser.profilePicture,
         email: newUser.email,
@@ -81,7 +82,7 @@ export const register = async (
 
 export const login = async (
   req: Request<{}, {}, ISignInAuthPayload>,
-  res: Response,
+  res: Response<IAuthSuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -141,7 +142,7 @@ export const login = async (
       message: "Successfully logged in",
       success: true,
       user: {
-        id: user._id,
+        id: user._id.toString(),
         username: user.username,
         profilePicture: user.profilePicture,
         email: user.email,

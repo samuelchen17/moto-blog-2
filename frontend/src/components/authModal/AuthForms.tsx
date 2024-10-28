@@ -17,7 +17,7 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-import { IAuthSuccessRes, IAuthErrorRes } from "../../types/auth.interface";
+import { IAuthSuccessRes, IAuthErrorRes } from "@shared/types/auth";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "@shared/types/auth";
 

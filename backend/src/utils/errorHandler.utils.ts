@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { IAuthErrorRes } from "@shared/types/auth";
 
 // Custom error class to store HTTP status code
 export class CustomError extends Error {
@@ -29,7 +30,7 @@ export const userServiceErrorHandler = (
 export const errorHandler = (
   err: CustomError | Error,
   req: Request,
-  res: Response,
+  res: Response<IAuthErrorRes>,
   next: NextFunction
 ) => {
   console.error(err.message); // Log for backend purposes
