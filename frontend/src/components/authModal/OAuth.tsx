@@ -4,10 +4,8 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from "../../config/firebaseConfig";
 import { useAppDispatch } from "../../redux/hooks";
 import { signInSuccess } from "../../redux/features/user/userSlice";
-import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
 import { IGoogleAuthPayload } from "@shared/types/auth";
-
-// implement display name
+import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
 
 const OAuth = () => {
   const dispatch = useAppDispatch();
@@ -28,18 +26,22 @@ const OAuth = () => {
         dpUrl: googleResults.user.photoURL || "",
       };
 
-      const res = await fetch("/auth/google", {
+      const res: Response = await fetch("/auth/google", {
         method: "POST",
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payload }),
       });
 
-      // implement interface for data
-      const data = await res.json();
+      const data: AuthResponse = await res.json();
 
-      if (res.ok) {
+      if (!res.ok) {
+        throw new Error(data.message || "An unexpected error occurred");
+      }
+
+      if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
-        dispatch(toggleAuthModal());
+      } else {
+        throw new Error(data.message || "An unexpected error occurred");
       }
     } catch (err) {
       console.error("Error:", err);

@@ -21,10 +21,12 @@ import { IAuthSuccessRes, IAuthErrorRes } from "@shared/types/auth";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "@shared/types/auth";
 
-type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
+export type AuthResponse = IAuthSuccessRes | IAuthErrorRes;
 
 // type predicate, if return true, data is IAuthSuccessRes
-const isAuthSuccessResponse = (data: AuthResponse): data is IAuthSuccessRes => {
+export const isAuthSuccessResponse = (
+  data: AuthResponse
+): data is IAuthSuccessRes => {
   return data.success === true;
 };
 
