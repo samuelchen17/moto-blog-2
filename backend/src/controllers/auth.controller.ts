@@ -165,6 +165,8 @@ export const googleAuth = async (
   try {
     const { email, name, dpUrl } = req.body;
 
+    // console.log(dpUrl);
+
     // check if user exists
     const existingUser = await getUserByEmail(email);
     // if user exists, sign user in

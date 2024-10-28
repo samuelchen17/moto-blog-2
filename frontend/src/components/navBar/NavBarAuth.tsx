@@ -25,11 +25,7 @@ const NavBarAuth = () => {
           arrowIcon={false}
           inline
           label={
-            <Avatar
-              alt="user"
-              rounded
-              // img={currentUser.profilePicture} // implement
-            />
+            <Avatar alt="user" rounded img={currentUser.user.profilePicture} />
           }
         >
           <Dropdown.Header>
