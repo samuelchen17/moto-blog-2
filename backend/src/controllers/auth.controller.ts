@@ -13,6 +13,45 @@ import {
   ISignUpAuthPayload,
   IAuthSuccessRes,
 } from "@shared/types/auth";
+import { UserDocument } from "src/models/user.model";
+
+const handleLoginResponse = async (
+  user: UserDocument,
+  res: Response<IAuthSuccessRes>
+) => {
+  // add sessionToken to user in db
+  const salt = random();
+  user.authentication.sessionToken = authentication(salt, user._id.toString());
+
+  // save session token
+  await user.save();
+
+  // deployment
+  // const cookieDomain = process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost';
+
+  res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
+    domain: "localhost",
+    path: "/", // cookie valid for all paths
+    httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
+    secure: false, // set to true if using https
+    // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
+    // sameSite: "Strict", // helps prevent csrf attacks
+    maxAge: 3600000,
+  });
+
+  // console.log(user);
+
+  res.status(200).json({
+    message: "Successfully logged in",
+    success: true,
+    user: {
+      id: user._id.toString(),
+      username: user.username,
+      profilePicture: user.profilePicture,
+      email: user.email,
+    },
+  });
+};
 
 export const register = async (
   // first param: route parameters like /:id
@@ -111,41 +150,8 @@ export const login = async (
       return next(new CustomError(401, "Incorrect email or password"));
     }
 
-    // add sessionToken to user in db
-    const salt = random();
-    user.authentication.sessionToken = authentication(
-      salt,
-      user._id.toString()
-    );
-
-    // save session token
-    await user.save();
-
-    // deployment
-    // const cookieDomain = process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost';
-
-    res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
-      domain: "localhost",
-      path: "/", // cookie valid for all paths
-      httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
-      secure: false, // set to true if using https
-      // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
-      // sameSite: "Strict", // helps prevent csrf attacks
-      maxAge: 3600000,
-    });
-
-    // console.log(user);
-
-    res.status(200).json({
-      message: "Successfully logged in",
-      success: true,
-      user: {
-        id: user._id.toString(),
-        username: user.username,
-        profilePicture: user.profilePicture,
-        email: user.email,
-      },
-    });
+    // sign user in
+    handleLoginResponse(user, res);
   } catch (error) {
     next(new CustomError(500, "Failed to log user in"));
   }
@@ -159,7 +165,6 @@ export const googleAuth = async (
   try {
     const { email, name, dpUrl } = req.body;
 
-    console.log(email);
     // check if user exists
     const existingUser = await getUserByEmail(email);
     // if user exists, sign user in
@@ -173,36 +178,8 @@ export const googleAuth = async (
         return next(new CustomError(401, "User does not exist"));
       }
 
-      // add sessionToken to user in db
-      const salt = random();
-      user.authentication.sessionToken = authentication(
-        salt,
-        user._id.toString()
-      );
-
-      res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
-        domain: "localhost",
-        path: "/", // cookie valid for all paths
-        httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
-        secure: false, // set to true if using https
-        // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
-        // sameSite: "Strict", // helps prevent csrf attacks
-        maxAge: 3600000,
-      });
-
-      res.status(200).json({
-        message: "Successfully logged in",
-        success: true,
-        user: {
-          id: user._id.toString(),
-          username: user.username,
-          profilePicture: user.profilePicture,
-          email: user.email,
-        },
-      });
-
-      // save session token
-      await user.save();
+      // sign user in
+      handleLoginResponse(user, res);
     } else {
       // create account for user
 
@@ -230,16 +207,8 @@ export const googleAuth = async (
         return next(new CustomError(400, "Failed to create account"));
       }
 
-      res.status(201).json({
-        message: "Successfully registered",
-        success: true,
-        user: {
-          id: newUser._id.toString(),
-          username: newUser.username,
-          profilePicture: newUser.profilePicture,
-          email: newUser.email,
-        },
-      });
+      // sign user in
+      handleLoginResponse(newUser, res);
     }
   } catch (error) {
     next(new CustomError(500, "Google Auth failed"));
