@@ -53,8 +53,6 @@ export const register = async (
     const newUser = await createUser({
       email,
       username,
-      profilePicture:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       authentication: {
         salt,
         password: hashedPassword,
@@ -136,7 +134,7 @@ export const login = async (
       maxAge: 3600000,
     });
 
-    console.log(user);
+    // console.log(user);
 
     res.status(200).json({
       message: "Successfully logged in",
@@ -155,12 +153,94 @@ export const login = async (
 
 export const googleAuth = async (
   req: Request<{}, {}, IGoogleAuthPayload>,
-  res: Response,
+  res: Response<IAuthSuccessRes>,
   next: NextFunction
 ) => {
   try {
     const { email, name, dpUrl } = req.body;
+
+    // check if user exists
+    const existingUser = await getUserByEmail(email);
+    // if user exists, sign user in
+    if (existingUser) {
+      const user = await getUserByEmail(
+        email,
+        "email + username + profilePicture + authentication.salt + authentication.password"
+      );
+
+      if (!user) {
+        return next(new CustomError(401, "User does not exist"));
+      }
+
+      // add sessionToken to user in db
+      const salt = random();
+      user.authentication.sessionToken = authentication(
+        salt,
+        user._id.toString()
+      );
+
+      res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
+        domain: "localhost",
+        path: "/", // cookie valid for all paths
+        httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
+        secure: false, // set to true if using https
+        // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
+        // sameSite: "Strict", // helps prevent csrf attacks
+        maxAge: 3600000,
+      });
+
+      res.status(200).json({
+        message: "Successfully logged in",
+        success: true,
+        user: {
+          id: user._id.toString(),
+          username: user.username,
+          profilePicture: user.profilePicture,
+          email: user.email,
+        },
+      });
+
+      // save session token
+      await user.save();
+    } else {
+      // create account for user
+
+      // randomly generate password for user
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const salt = random();
+      const hashedPassword = authentication(salt, generatedPassword);
+
+      // create new account based on google auth
+      const newUser = await createUser({
+        email,
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+        profilePicture: dpUrl,
+        authentication: {
+          salt,
+          password: hashedPassword,
+        },
+      });
+
+      if (!newUser) {
+        return next(new CustomError(400, "Failed to create account"));
+      }
+
+      res.status(201).json({
+        message: "Successfully registered",
+        success: true,
+        user: {
+          id: newUser._id.toString(),
+          username: newUser.username,
+          profilePicture: newUser.profilePicture,
+          email: newUser.email,
+        },
+      });
+    }
   } catch (error) {
-    next(new CustomError(500, "Failed to log user in via Google"));
+    next(new CustomError(500, "Google Auth failed"));
   }
 };
