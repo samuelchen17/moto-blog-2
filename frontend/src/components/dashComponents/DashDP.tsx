@@ -28,7 +28,7 @@ const DashDP = () => {
         <img
           alt="user"
           className="rounded-full w-full h-full object-cover"
-          src={currentUser?.user.profilePicture} // implement
+          src={currentUser?.user.profilePicture}
         />
       </div>
     </div>
