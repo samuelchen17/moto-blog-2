@@ -2,10 +2,14 @@ import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from "../../config/firebaseConfig";
+import { useAppDispatch } from "../../redux/hooks";
+import { signInSuccess } from "../../redux/features/user/userSlice";
+import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
 
 // implement display name
 
 const OAuth = () => {
+  const dispatch = useAppDispatch();
   const auth = getAuth(firebaseApp);
   const handleOAuthClick = async () => {
     const provider = new GoogleAuthProvider();
@@ -25,9 +29,15 @@ const OAuth = () => {
         }),
       });
 
+      // implement interface for data
       const data = await res.json();
+
+      if (res.ok) {
+        dispatch(signInSuccess(data));
+        dispatch(toggleAuthModal());
+      }
     } catch (err) {
-      console.log(err);
+      console.error("Error:", err);
     }
   };
 
