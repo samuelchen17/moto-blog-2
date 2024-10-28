@@ -4,8 +4,9 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from "../../config/firebaseConfig";
 import { useAppDispatch } from "../../redux/hooks";
 import { signInSuccess } from "../../redux/features/user/userSlice";
-import { IGoogleAuthPayload } from "@shared/types/auth";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
+import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
+import { IGoogleAuthPayload } from "@shared/types/auth";
 
 const OAuth = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const OAuth = () => {
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
+        dispatch(toggleAuthModal());
       } else {
         throw new Error(data.message || "An unexpected error occurred");
       }
