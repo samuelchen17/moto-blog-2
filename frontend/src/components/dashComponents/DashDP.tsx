@@ -111,7 +111,7 @@ const DashDP = () => {
           <Alert color="info" className="flex justify-center items-center">
             <Spinner />
             <span className="pl-3">
-              File upload progress:{" "}
+              File upload progress:
               {dpUploadProgress !== null ? dpUploadProgress : 0}%
             </span>
           </Alert>
