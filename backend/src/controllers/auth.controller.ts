@@ -13,7 +13,7 @@ import {
   ISignUpAuthPayload,
   IAuthSuccessRes,
 } from "@shared/types/auth";
-import { UserDocument } from "src/models/user.model";
+import { UserDocument } from "../models/user.model";
 
 const handleLoginResponse = async (
   user: UserDocument,

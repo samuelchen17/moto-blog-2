@@ -8,7 +8,7 @@ import {
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
 import { IUpdateUserPayload } from "@shared/types/auth";
-import { authentication, random } from "src/helpers/user.helpers";
+import { authentication, random } from "../helpers/user.helpers";
 
 export const getAllUsers = async (
   req: Request,
