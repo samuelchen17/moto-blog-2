@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { get, identity, merge } from "lodash";
 import { getUserBySessionToken } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { ObjectId } from "mongoose";
+// import { ObjectId } from "mongoose";
 
 export const isOwner = async (
   req: Request,
@@ -33,19 +33,19 @@ export const isAuthenticated = async (
   next: NextFunction
 ) => {
   try {
+    // retrieve session token from cookies of incoming request, set when user logs in
     const sessionToken = req.cookies["motoBlogAuthToken"];
-
     if (!sessionToken) {
       next(new CustomError(403, "Authentication token is missing"));
     }
 
-    // check if there is existing user by this sessionToken
+    // check if there is existing user by this sessionToken, valid if true
     const existingUser = await getUserBySessionToken(sessionToken);
-
     if (!existingUser) {
       next(new CustomError(403, "User session is invalid or has expired"));
     }
 
+    // data is merged into req object, accessed by req.identity
     merge(req, { identity: existingUser });
 
     return next();
