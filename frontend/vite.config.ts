@@ -5,9 +5,11 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   server: {
     proxy: {
-      "/auth": {
-        target: "http://localhost:3000",
-        secure: false,
+      "/api": {
+        target: "http://localhost:3000", // process.env.VITE_API_BASE_URL || "http://localhost:3000", implement prod
+        secure: false, // remove for prod implement
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""), // remove "/api" before forward
       },
     },
   },

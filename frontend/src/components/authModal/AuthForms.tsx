@@ -58,7 +58,7 @@ export const AuthFormsSignIn = () => {
 
       const payload: ISignInAuthPayload = { ...formData };
 
-      const res: Response = await fetch("/auth/login", {
+      const res: Response = await fetch("/api/auth/login", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
@@ -176,7 +176,7 @@ export const AuthFormsSignUp = () => {
 
       const payload: ISignUpAuthPayload = { ...formData };
 
-      const res: Response = await fetch("/auth/register", {
+      const res: Response = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },

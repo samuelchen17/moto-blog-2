@@ -27,7 +27,7 @@ const OAuth = () => {
         dpUrl: googleResults.user.photoURL || "",
       };
 
-      const res: Response = await fetch("/auth/google", {
+      const res: Response = await fetch("/api/auth/google", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
