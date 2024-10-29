@@ -14,6 +14,12 @@ import {
   IAuthSuccessRes,
 } from "@shared/types/auth";
 import { UserDocument } from "../models/user.model";
+import {
+  getEmailValidationErrMsg,
+  getUsernameValidationErrMsg,
+  validateEmail,
+  validateUsername,
+} from "../helpers/validator.helpers";
 
 const handleLoginResponse = async (
   user: UserDocument,
@@ -68,20 +74,13 @@ export const register = async (
     }
 
     // validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return next(new CustomError(400, "Invalid email format"));
+    if (!validateEmail(email)) {
+      return next(new CustomError(400, getEmailValidationErrMsg()));
     }
 
-    // implement display name?
-    // 3-16 characters,
-    // username: letters, numbers, underscores no spaces [a-z0-9_]
-    // displayname: [a-zA-Z0-9 _-]
-    const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
-    if (!usernameRegex.test(username)) {
-      return next(
-        new CustomError(400, "Invalid username format, implement user feedback")
-      );
+    // validate username format
+    if (!validateUsername(username)) {
+      return next(new CustomError(400, getUsernameValidationErrMsg()));
     }
 
     // check if already exists

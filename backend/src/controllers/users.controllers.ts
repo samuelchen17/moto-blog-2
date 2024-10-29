@@ -9,6 +9,12 @@ import {
 import { CustomError } from "../utils/errorHandler.utils";
 import { IUpdateUserPayload } from "@shared/types/auth";
 import { authentication, random } from "../helpers/user.helpers";
+import {
+  getEmailValidationErrMsg,
+  getUsernameValidationErrMsg,
+  validateEmail,
+  validateUsername,
+} from "../helpers/validator.helpers";
 
 export const getAllUsers = async (
   req: Request,
@@ -61,9 +67,8 @@ export const updateUser = async (
     // update username
     if (username) {
       // validate username format
-      const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
-      if (!usernameRegex.test(username)) {
-        return next(new CustomError(400, "Invalid username format"));
+      if (!validateUsername(username)) {
+        return next(new CustomError(400, getUsernameValidationErrMsg()));
       }
       // check for duplicate username
       const existingUsername = await getUserByUsername(username);
@@ -76,9 +81,8 @@ export const updateUser = async (
     // update email
     if (email) {
       // validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return next(new CustomError(400, "Invalid email format"));
+      if (!validateEmail(email)) {
+        return next(new CustomError(400, getEmailValidationErrMsg()));
       }
       // check for duplicate email
       const existingEmail = await getUserByEmail(username);
