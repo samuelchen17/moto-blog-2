@@ -9,13 +9,14 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { firebaseApp } from "../../config/firebaseConfig";
-import { Alert, Progress } from "flowbite-react";
+import { Alert, Spinner } from "flowbite-react";
 
 const DashDP = () => {
   const [dp, setDP] = useState<File | null>(null);
   const [dpUrl, setDPUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dpUploadProgress, setDPUploadProgress] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -51,6 +52,7 @@ const DashDP = () => {
 
     // clear error message
     setErrorMessage(null);
+    setLoading(true);
 
     const storage = getStorage(firebaseApp);
     const dpName = new Date().getTime() + dp.name;
@@ -68,17 +70,17 @@ const DashDP = () => {
         setDPUploadProgress(null);
         setDP(null);
         setDPUrl(null);
+        setLoading(false);
         throw new Error(`Storage error: ${err.message}`);
       },
       () => {
         getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
           setDPUrl(downloadURL);
         });
+        setLoading(false);
       }
     );
   };
-
-  console.log(dpUploadProgress);
 
   return (
     <div className="flex flex-col gap-4">
@@ -104,20 +106,28 @@ const DashDP = () => {
           Edit
         </button>
       </div>
-      {/* implement loading bar */}
-      {/* {dpUploadProgress && (
-        <Progress
-          progress={dpUploadProgress}
-          // progressLabelPosition="inside"
-          // textLabel="Flowbite"
-          // textLabelPosition="outside"
-          // size="lg"
-          // labelProgress
-          // labelText
-        />
-      )} */}
+      {loading && (
+        <>
+          <Alert color="info" className="flex justify-center items-center">
+            <Spinner />
+            <span className="pl-3">File uploading</span>
+          </Alert>
+        </>
+      )}
 
-      {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+      {!loading && errorMessage && (
+        <Alert color="failure" className="flex items-center">
+          {errorMessage}
+        </Alert>
+      )}
+
+      {loading === false && !errorMessage && (
+        <>
+          <Alert color="success" className="flex items-center">
+            File uploaded successfully
+          </Alert>
+        </>
+      )}
     </div>
   );
 };
