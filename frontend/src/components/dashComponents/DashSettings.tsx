@@ -1,7 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { Label, TextInput } from "flowbite-react";
-import DashDP from "./DashDP";
 
 const DashSettings = () => {
   const { currentUser } = useAppSelector(
@@ -15,18 +14,6 @@ const DashSettings = () => {
       <div className="flex md:flex-row flex-col-reverse">
         <div className="pr-10">
           <form className="flex flex-col">
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="username" value="Username" />
-              </div>
-              <TextInput
-                type="text"
-                id="username"
-                placeholder="username"
-                defaultValue={currentUser?.user.username}
-              />
-            </div>
-
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Email" />
@@ -46,7 +33,6 @@ const DashSettings = () => {
             </div>
           </form>
         </div>
-        <DashDP />
       </div>
       <div>
         <span>Delete Account</span>
