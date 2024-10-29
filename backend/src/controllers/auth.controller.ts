@@ -16,8 +16,10 @@ import {
 import { UserDocument } from "../models/user.model";
 import {
   getEmailValidationErrMsg,
+  getPasswordValidationErrMsg,
   getUsernameValidationErrMsg,
   validateEmail,
+  validatePassword,
   validateUsername,
 } from "../helpers/validator.helpers";
 
@@ -82,6 +84,11 @@ export const register = async (
     if (!validateUsername(username)) {
       return next(new CustomError(400, getUsernameValidationErrMsg()));
     }
+
+    // validate password format implement
+    // if (!validatePassword(password)) {
+    //   return next(new CustomError(400, getPasswordValidationErrMsg()));
+    // }
 
     // check if already exists
     const existingUser = await getUserByEmail(email);

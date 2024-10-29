@@ -11,8 +11,10 @@ import { IUpdateUserPayload } from "@shared/types/auth";
 import { authentication, random } from "../helpers/user.helpers";
 import {
   getEmailValidationErrMsg,
+  getPasswordValidationErrMsg,
   getUsernameValidationErrMsg,
   validateEmail,
+  validatePassword,
   validateUsername,
 } from "../helpers/validator.helpers";
 
@@ -99,6 +101,11 @@ export const updateUser = async (
 
     // update password
     if (password) {
+      // validate password format implement
+      // if (!validatePassword(password)) {
+      //   return next(new CustomError(400, getPasswordValidationErrMsg()));
+      // }
+
       const salt = random();
       const hashedPassword = authentication(salt, password);
       user.authentication.password = hashedPassword;
