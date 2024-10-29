@@ -74,6 +74,18 @@ export const register = async (
       return next(new CustomError(400, "Invalid email format"));
     }
 
+    // implement display name?
+    // 3-16 characters,
+    // username: letters, numbers, underscores no spaces [a-z0-9_]
+    // displayname: [a-zA-Z0-9 _-]
+
+    const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      return next(
+        new CustomError(400, "Invalid username format, implement user feedback")
+      );
+    }
+
     // check if already exists
     const existingUser = await getUserByEmail(email);
     const existingUsername = await getUserByUsername(username);
@@ -123,6 +135,7 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
+    // implement: disable username login, use it as displayname
     const { emailOrUsername, password } = req.body;
 
     if (!emailOrUsername || !password) {
