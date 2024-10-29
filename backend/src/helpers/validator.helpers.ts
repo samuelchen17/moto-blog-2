@@ -18,7 +18,17 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 export const getEmailValidationErrMsg = (): string => {
-  return "Invalid email format";
+  return "Please enter a valid email address in the format: example@domain.com.";
 };
 
 // password validation implement
+export const validatePassword = (password: string): boolean => {
+  // Typical password validation criteria
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+};
+
+export const getPasswordValidationErrMsg = (): string => {
+  return "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, one special character and no spaces.";
+};
