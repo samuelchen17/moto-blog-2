@@ -100,6 +100,8 @@ const DashDP = () => {
           alt="user"
           className="rounded-full w-full h-full object-cover"
           src={dpUrl || currentUser?.user.profilePicture}
+          // fix for cross origin implement
+          // crossOrigin="anonymous"
         />
         <button className="absolute bottom-4 text-lg px-2 py-1 rounded-lg bg-black text-white flex justify-center items-center gap-2 bg-opacity-80">
           <FaEdit />

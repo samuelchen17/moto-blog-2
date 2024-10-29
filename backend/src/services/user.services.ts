@@ -14,10 +14,15 @@ export const getUserByEmail = async (
   selectParameter?: string
 ) => {
   try {
+    // default
+    const defaultFields = "username email profilePicture createdAt";
+
     let query = User.findOne({ email });
 
     if (selectParameter) {
-      query = query.select(selectParameter);
+      query = query.select(`${defaultFields} ${selectParameter}`);
+    } else {
+      query = query.select(defaultFields);
     }
 
     return await query;
@@ -87,12 +92,16 @@ export const getUserByEmailOrUsername = async (
   selectParameter?: string
 ) => {
   try {
+    const defaultFields = "username email profilePicture createdAt";
+
     let query = User.findOne({
       $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
     });
 
     if (selectParameter) {
-      query = query.select(selectParameter);
+      query = query.select(`${defaultFields} ${selectParameter}`);
+    } else {
+      query = query.select(defaultFields);
     }
 
     return await query;

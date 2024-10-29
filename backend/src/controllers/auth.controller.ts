@@ -26,7 +26,7 @@ const handleLoginResponse = async (
   // save session token
   await user.save();
 
-  // deployment
+  // implement prod
   // const cookieDomain = process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost';
 
   res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
@@ -39,8 +39,6 @@ const handleLoginResponse = async (
     maxAge: 3600000,
   });
 
-  // console.log(user);
-
   res.status(200).json({
     message: "Successfully logged in",
     success: true,
@@ -49,6 +47,7 @@ const handleLoginResponse = async (
       username: user.username,
       profilePicture: user.profilePicture,
       email: user.email,
+      dateJoined: user.createdAt,
     },
   });
 };
@@ -122,6 +121,7 @@ export const register = async (
         username: newUser.username,
         profilePicture: newUser.profilePicture,
         email: newUser.email,
+        dateJoined: newUser.createdAt,
       },
     });
   } catch (error) {
@@ -144,7 +144,7 @@ export const login = async (
 
     const user = await getUserByEmailOrUsername(
       emailOrUsername,
-      "email + username + profilePicture + authentication.salt + authentication.password"
+      "authentication.salt authentication.password"
     );
 
     if (!user) {
@@ -178,15 +178,13 @@ export const googleAuth = async (
   try {
     const { email, name, dpUrl } = req.body;
 
-    // console.log(dpUrl);
-
     // check if user exists
     const existingUser = await getUserByEmail(email);
     // if user exists, sign user in
     if (existingUser) {
       const user = await getUserByEmail(
         email,
-        "email + username + profilePicture + authentication.salt + authentication.password"
+        "authentication.salt authentication.password"
       );
 
       if (!user) {

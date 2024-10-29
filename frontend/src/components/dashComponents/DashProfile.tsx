@@ -2,6 +2,7 @@ import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { Button, Label, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
+import { format } from "date-fns";
 
 const DashProfile = () => {
   const { currentUser } = useAppSelector(
@@ -31,7 +32,10 @@ const DashProfile = () => {
           <div className="mb-2 block">
             <Label htmlFor="joined" value="Joined" />
           </div>
-          <span>Add date here, implement</span>
+          <span>
+            {currentUser?.user.dateJoined &&
+              format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
+          </span>
         </div>
         <DashDP />
       </div>

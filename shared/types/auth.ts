@@ -23,8 +23,10 @@ export interface IAuthSuccessRes {
     username: string;
     profilePicture: string;
     email: string;
+    dateJoined: Date;
   };
 }
+
 export interface IAuthErrorRes {
   status: "error";
   success: false;
