@@ -3,7 +3,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { Label, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
 
-const DashProfile = () => {
+const DashSettings = () => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -55,4 +55,4 @@ const DashProfile = () => {
   );
 };
 
-export default DashProfile;
+export default DashSettings;
