@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { get, identity, merge } from "lodash";
+import { get, merge } from "lodash";
 import { getUserBySessionToken } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
 // import { ObjectId } from "mongoose";
 
+// check if current user is the owner of the id param
 export const isOwner = async (
   req: Request,
   res: Response,

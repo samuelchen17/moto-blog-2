@@ -4,7 +4,7 @@ import {
   getAllUsers,
   updateUsername,
 } from "../controllers/users.controllers";
-import { isAuthenticated, isOwner } from "../middlewares/index.middlewares";
+import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
 
 const usersRouter = (router: Router) => {
   router.get("/users", isAuthenticated, getAllUsers);

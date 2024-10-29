@@ -5,7 +5,7 @@ import {
   getUserByEmailOrUsername,
   getUserByUsername,
 } from "../services/user.services";
-import { random, authentication } from "../utils/user.utils";
+import { random, authentication } from "../helpers/user.helpers";
 import { CustomError } from "../utils/errorHandler.utils";
 import {
   IGoogleAuthPayload,
