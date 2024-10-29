@@ -30,7 +30,7 @@ const DashProfile = () => {
             <Button>Update display name</Button>
           </form>
           <div className="mb-2 block">
-            <Label htmlFor="joined" value="Joined" />
+            <Label htmlFor="joined" value="Date joined" />
           </div>
           <span>
             {currentUser?.user.dateJoined &&

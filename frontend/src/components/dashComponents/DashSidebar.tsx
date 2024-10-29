@@ -1,10 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC, SVGProps } from "react";
 import { useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { HiUser } from "react-icons/hi";
-import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
+import { HiUser } from "react-icons/hi";
+import { PiSignOutBold } from "react-icons/pi";
+
+interface ISidebarItems {
+  name: string;
+  path: string;
+  icon: FC<SVGProps<SVGSVGElement>>;
+  label?: string;
+  labelColor?: string;
+}
+
+export const sidebarItems: ISidebarItems[] = [
+  {
+    name: "profile",
+    path: "/dashboard?tab=profile",
+    icon: HiUser,
+    label: "user",
+    labelColor: "dark",
+  },
+  {
+    name: "settings",
+    path: "/dashboard?tab=settings",
+    icon: IoMdSettings,
+  },
+];
 
 const DashSidebar = () => {
   const location = useLocation();
@@ -17,29 +40,6 @@ const DashSidebar = () => {
       setTab(tabFromUrl);
     }
   }, [location.search]);
-
-  interface ISidebarItems {
-    name: string;
-    path: string;
-    icon: React.ElementType;
-    label?: string;
-    labelColor?: string;
-  }
-
-  const sidebarItems: ISidebarItems[] = [
-    {
-      name: "profile",
-      path: "/dashboard?tab=profile",
-      icon: HiUser,
-      label: "user",
-      labelColor: "dark",
-    },
-    {
-      name: "settings",
-      path: "/dashboard?tab=settings",
-      icon: IoMdSettings,
-    },
-  ];
 
   return (
     <div className="w-full md:w-60">

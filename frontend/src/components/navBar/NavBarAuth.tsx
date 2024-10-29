@@ -8,7 +8,7 @@ import {
   openRegister,
   openLogin,
 } from "../../redux/features/modal/authModalSlice";
-import { HiUser } from "react-icons/hi";
+import { sidebarItems } from "../dashComponents/DashSidebar";
 
 const NavBarAuth = () => {
   const { currentUser } = useAppSelector(
@@ -34,11 +34,20 @@ const NavBarAuth = () => {
               {currentUser.user.email}
             </span>
           </Dropdown.Header>
-          <Dropdown.Item as={Link} to={"/dashboard?tab=profile"} icon={HiUser}>
-            Profile
-          </Dropdown.Item>
+
+          {sidebarItems.map((item) => (
+            <Dropdown.Item
+              key={item.name}
+              as={Link}
+              to={item.path}
+              icon={item.icon}
+            >
+              {item.name}
+            </Dropdown.Item>
+          ))}
+
           <Dropdown.Divider />
-          <Dropdown.Item icon={PiSignOutBold}>Log out</Dropdown.Item>
+          <Dropdown.Item icon={PiSignOutBold}>Sign out</Dropdown.Item>
         </Dropdown>
       ) : (
         <>
