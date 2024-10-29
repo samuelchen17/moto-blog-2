@@ -11,7 +11,9 @@ const DashHeader = () => {
     <div className="flex flex-row gap-2 mx-4 my-4">
       <Avatar rounded img={currentUser?.user.profilePicture} />
       <div className="flex flex-col gap">
-        <span className="text-lg font-semibold">Username</span>
+        <span className="text-lg font-semibold">
+          {currentUser?.user.username}
+        </span>
         <span className="text-sm">User Account</span>
       </div>
     </div>
