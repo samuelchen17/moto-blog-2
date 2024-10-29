@@ -9,16 +9,16 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { firebaseApp } from "../../config/firebaseConfig";
-import { Alert } from "flowbite-react";
+import { Alert, Progress } from "flowbite-react";
 
 const DashDP = () => {
   const [dp, setDP] = useState<File | null>(null);
   const [dpUrl, setDPUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [dpUploadProgress, setDPUploadProgress] = useState<number | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const [dpUploadProgress, setDPUploadProgress] = useState<number>(0);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -45,31 +45,37 @@ const DashDP = () => {
   }, [dp]);
 
   const uploadDP = async () => {
-    if (dp) {
-      const storage = getStorage(firebaseApp);
-      const dpName = new Date().getTime() + dp.name;
-      const storageRef = ref(storage, dpName);
-      const uploadDP = uploadBytesResumable(storageRef, dp);
-      uploadDP.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setDPUploadProgress(Math.round(progress));
-        },
-        (err) => {
-          setErrorMessage("Must be an image file and under 2MB");
-          throw new Error(`Storage error: ${err.message}`);
-        },
-        () => {
-          getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
-            setDPUrl(downloadURL);
-          });
-        }
-      );
-    } else {
+    if (!dp) {
       throw new Error("No file was uploaded");
     }
+
+    // clear error message
+    setErrorMessage(null);
+
+    const storage = getStorage(firebaseApp);
+    const dpName = new Date().getTime() + dp.name;
+    const storageRef = ref(storage, dpName);
+    const uploadDP = uploadBytesResumable(storageRef, dp);
+    uploadDP.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setDPUploadProgress(Math.round(progress));
+      },
+      (err) => {
+        setErrorMessage("Must be an image file and under 2MB");
+        setDPUploadProgress(null);
+        setDP(null);
+        setDPUrl(null);
+        throw new Error(`Storage error: ${err.message}`);
+      },
+      () => {
+        getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
+          setDPUrl(downloadURL);
+        });
+      }
+    );
   };
 
   console.log(dpUploadProgress);
@@ -98,6 +104,19 @@ const DashDP = () => {
           Edit
         </button>
       </div>
+      {/* implement loading bar */}
+      {/* {dpUploadProgress && (
+        <Progress
+          progress={dpUploadProgress}
+          // progressLabelPosition="inside"
+          // textLabel="Flowbite"
+          // textLabelPosition="outside"
+          // size="lg"
+          // labelProgress
+          // labelText
+        />
+      )} */}
+
       {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
     </div>
   );
