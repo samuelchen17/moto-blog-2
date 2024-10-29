@@ -33,3 +33,10 @@ export interface IAuthErrorRes {
   statusCode: number;
   message: string;
 }
+
+export interface IUpdateUserPayload {
+  username?: string;
+  profilePicture?: string;
+  email?: string;
+  password?: string;
+}

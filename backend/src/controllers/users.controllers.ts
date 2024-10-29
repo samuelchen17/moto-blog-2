@@ -7,6 +7,8 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
+import { IUpdateUserPayload } from "@shared/types/auth";
+import { authentication, random } from "src/helpers/user.helpers";
 
 export const getAllUsers = async (
   req: Request,
@@ -49,35 +51,63 @@ export const updateUser = async (
 ) => {
   try {
     const { id } = req.params;
-    const { username } = req.body;
-
-    if (!username) {
-      next(new CustomError(404, "Please fill out all fields"));
-    }
-
-    // implement display name?
-    // 3-16 characters,
-    // username: letters, numbers, underscores no spaces [a-z0-9_]
-    // displayname: [a-zA-Z0-9 _-]
-    const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
-    if (!usernameRegex.test(username)) {
-      return next(
-        new CustomError(400, "Invalid username format, implement user feedback")
-      );
-    }
+    const { username, profilePicture, email, password } = req.body;
 
     const user = await getUserById(id);
-
-    const existingUsername = await getUserByUsername(username);
-
-    if (existingUsername) {
-      return next(new CustomError(400, "Username already in use"));
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
     }
 
-    user!.username = username;
-    await user!.save();
+    // update username
+    if (username) {
+      // validate username format
+      const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
+      if (!usernameRegex.test(username)) {
+        return next(new CustomError(400, "Invalid username format"));
+      }
+      // check for duplicate username
+      const existingUsername = await getUserByUsername(username);
+      if (existingUsername) {
+        return next(new CustomError(400, "Username already in use"));
+      }
+      user.username = username;
+    }
 
-    res.status(200).json({ message: "Username updated", user });
+    // update email
+    if (email) {
+      // validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return next(new CustomError(400, "Invalid email format"));
+      }
+      // check for duplicate email
+      const existingEmail = await getUserByEmail(username);
+      if (existingEmail) {
+        return next(new CustomError(400, "Email already in use"));
+      }
+      user.email = email;
+    }
+
+    // update profile picture
+    if (profilePicture) {
+      user.profilePicture = profilePicture;
+    }
+
+    // update password
+    if (password) {
+      const salt = random();
+      const hashedPassword = authentication(salt, password);
+      user.authentication.password = hashedPassword;
+      user.authentication.salt = salt;
+    }
+
+    // save updated details
+    await user.save();
+
+    // send response back to user
+    res
+      .status(200)
+      .json({ message: "User details updated successfully", user });
   } catch (error) {
     next(new CustomError(400, "Unable to update details"));
   }
