@@ -77,7 +77,6 @@ export const register = async (
     // 3-16 characters,
     // username: letters, numbers, underscores no spaces [a-z0-9_]
     // displayname: [a-zA-Z0-9 _-]
-
     const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
     if (!usernameRegex.test(username)) {
       return next(

@@ -42,7 +42,7 @@ export const deleteUser = async (
   }
 };
 
-export const updateUsername = async (
+export const updateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -53,6 +53,17 @@ export const updateUsername = async (
 
     if (!username) {
       next(new CustomError(404, "Please fill out all fields"));
+    }
+
+    // implement display name?
+    // 3-16 characters,
+    // username: letters, numbers, underscores no spaces [a-z0-9_]
+    // displayname: [a-zA-Z0-9 _-]
+    const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      return next(
+        new CustomError(400, "Invalid username format, implement user feedback")
+      );
     }
 
     const user = await getUserById(id);
