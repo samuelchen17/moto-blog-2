@@ -4,15 +4,32 @@ import { Button, Label, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
 import { format } from "date-fns";
 import { useState } from "react";
+import { IUpdateUserPayload } from "@shared/types/user";
 
 const DashProfile = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<IUpdateUserPayload>({});
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
-  const handleUserUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserUpdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // const isFormFilled = () => {
+  //   return Object.values(formData).some((value) => value.trim() !== "");
+  // };
+
+  const handleUserUpdateSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    if (Object.keys(formData).length === 0) {
+      return;
+    }
+    // implement loading, and prevent user from constantly updating
+    try {
+    } catch (err) {}
   };
 
   console.log(formData);
@@ -33,7 +50,7 @@ const DashProfile = () => {
                 id="username"
                 placeholder="username"
                 defaultValue={currentUser?.user.username}
-                onChange={handleUserUpdate}
+                onChange={handleUserUpdateChange}
               />
             </div>
             <Button>Update display name</Button>
