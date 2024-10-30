@@ -13,13 +13,13 @@ import { Alert, Spinner } from "flowbite-react";
 import { IUpdateUserPayload } from "@shared/types/user";
 import React from "react";
 
-interface IDashDpProps {
+interface IDashDPProps {
   formData: IUpdateUserPayload;
   setFormData: React.Dispatch<React.SetStateAction<IUpdateUserPayload>>;
 }
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
-const DashDP = ({ setFormData, formData }: IDashDpProps) => {
+const DashDP = ({ setFormData, formData }: IDashDPProps) => {
   const [dp, setDP] = useState<File | null>(null);
   const [dpUrl, setDPUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

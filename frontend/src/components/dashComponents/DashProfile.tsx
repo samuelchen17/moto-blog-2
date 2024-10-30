@@ -1,45 +1,60 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
 import { format } from "date-fns";
 import { useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";
+import {
+  handleDashFormChange,
+  handleDashFormSubmit,
+} from "../../utils/dashForm.utils";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  // testing
+  // const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFormData({ ...formData, [e.target.id]: e.target.value });
+  // };
 
   // const isFormFilled = () => {
   //   return Object.values(formData).some((value) => value.trim() !== "");
   // };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (Object.keys(formData).length === 0) {
-      return;
-    }
-    // implement loading, and prevent user from constantly updating
-    try {
-    } catch (err) {}
-  };
+  // const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (Object.keys(formData).length === 0) {
+  //     return;
+  //   }
+  //   // implement loading, and prevent user from constantly updating
+  //   try {
+  //   } catch (err) {}
+  // };
 
   console.log(formData);
 
   return (
     <div className="w-full mx-auto px-4">
       <h1 className="text-2xl">Profile</h1>
-      <Button>Save changes</Button>
+
       <hr></hr>
+
       <div className="flex md:flex-row flex-col-reverse">
         <div className="pr-10">
-          <form className="flex flex-col">
+          <form
+            className="flex flex-col"
+            onSubmit={handleDashFormSubmit({
+              formData,
+              setFormData,
+              isLoading,
+              setIsLoading,
+            })}
+          >
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="username" value="Username" />
@@ -49,9 +64,20 @@ const DashProfile = () => {
                 id="username"
                 placeholder="username"
                 defaultValue={currentUser?.user.username}
-                onChange={handleFormChange}
+                onChange={handleDashFormChange({ formData, setFormData })}
               />
             </div>
+
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-2">Loading...</span>{" "}
+                </>
+              ) : (
+                "Save changes"
+              )}
+            </Button>
           </form>
 
           <div className="mb-2 block">
