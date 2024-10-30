@@ -1,6 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -9,12 +9,14 @@ import {
   handleDashFormChange,
   handleDashFormSubmit,
 } from "../../utils/dashForm.utils";
+import { useAppDispatch } from "../../redux/hooks";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
-  const { currentUser } = useAppSelector(
+  const { currentUser, loading, error } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const dispatch = useAppDispatch();
 
   return (
     <div className="w-full mx-auto px-4">
@@ -28,6 +30,7 @@ const DashProfile = () => {
           formData,
           setFormData,
           currentUser,
+          dispatch,
         })}
       >
         <div className="pr-10">
@@ -48,7 +51,7 @@ const DashProfile = () => {
             </div>
 
             <div className="mb-2 block">
-              <Label htmlFor="joined" value="Date joined" />
+              <span>Date Joined</span>
             </div>
             <span>
               {currentUser?.user.dateJoined &&
@@ -56,8 +59,8 @@ const DashProfile = () => {
             </span>
           </div>
         </div>
-        {/* <Button type="submit" disabled={isLoading}>
-          {isLoading ? (
+        <Button type="submit" disabled={loading}>
+          {loading ? (
             <>
               <Spinner size="sm" />
               <span className="pl-2">Loading...</span>{" "}
@@ -65,8 +68,13 @@ const DashProfile = () => {
           ) : (
             "Save changes"
           )}
-        </Button> */}
+        </Button>
       </form>
+      {error ? (
+        <Alert color="failure">{error}</Alert>
+      ) : (
+        <Alert color="success">"Successfully updated"</Alert>
+      )}
       <DashDP formData={formData} setFormData={setFormData} />
     </div>
   );

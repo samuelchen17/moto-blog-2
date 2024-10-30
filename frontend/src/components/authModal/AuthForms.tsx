@@ -47,9 +47,9 @@ export const AuthFormsSignIn = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(signInStart());
-
     try {
+      dispatch(signInStart());
+
       const payload: ISignInAuthPayload = { ...formData };
 
       const res: Response = await fetch("/api/auth/login", {
