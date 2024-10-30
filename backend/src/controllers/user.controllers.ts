@@ -7,7 +7,8 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IUpdateUserPayload, IUserSuccessRes } from "@shared/types/user";
+import { IUpdateUserPayload } from "@shared/types/user";
+import { ISuccessRes } from "@shared/types/res";
 import { authentication, random } from "../helpers/user.helpers";
 import {
   getEmailValidationErrMsg,
@@ -54,7 +55,7 @@ export const deleteUser = async (
 
 export const updateUser = async (
   req: Request<{ id: string }, {}, IUpdateUserPayload>,
-  res: Response<IUserSuccessRes>,
+  res: Response<ISuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -123,6 +124,7 @@ export const updateUser = async (
         username: user.username,
         profilePicture: user.profilePicture,
         email: user.email,
+        dateJoined: user.createdAt,
       },
     });
   } catch (error) {

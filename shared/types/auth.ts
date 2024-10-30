@@ -14,15 +14,3 @@ export interface ISignInAuthPayload {
   emailOrUsername: string;
   password: string;
 }
-
-export interface IAuthSuccessRes {
-  message: string;
-  success: true;
-  user: {
-    id: string;
-    username: string;
-    profilePicture: string;
-    email: string;
-    dateJoined: Date;
-  };
-}

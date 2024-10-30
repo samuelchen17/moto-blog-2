@@ -11,8 +11,8 @@ import {
   IGoogleAuthPayload,
   ISignInAuthPayload,
   ISignUpAuthPayload,
-  IAuthSuccessRes,
 } from "@shared/types/auth";
+import { ISuccessRes } from "@shared/types/res";
 import { UserDocument } from "../models/user.model";
 import {
   getEmailValidationErrMsg,
@@ -25,7 +25,7 @@ import {
 
 const handleLoginResponse = async (
   user: UserDocument,
-  res: Response<IAuthSuccessRes>
+  res: Response<ISuccessRes>
 ) => {
   // add sessionToken to user in db
   const salt = random();
@@ -65,7 +65,7 @@ export const register = async (
   // second param: query params like ?tab=profile
   // third param: body of request
   req: Request<{}, {}, ISignUpAuthPayload>,
-  res: Response<IAuthSuccessRes>,
+  res: Response<ISuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -136,7 +136,7 @@ export const register = async (
 
 export const login = async (
   req: Request<{}, {}, ISignInAuthPayload>,
-  res: Response<IAuthSuccessRes>,
+  res: Response<ISuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -177,7 +177,7 @@ export const login = async (
 
 export const googleAuth = async (
   req: Request<{}, {}, IGoogleAuthPayload>,
-  res: Response<IAuthSuccessRes>,
+  res: Response<ISuccessRes>,
   next: NextFunction
 ) => {
   try {

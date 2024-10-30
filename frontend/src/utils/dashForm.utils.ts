@@ -1,5 +1,6 @@
 import React from "react";
-import { IUpdateUserPayload, IUserSuccessRes } from "@shared/types/user";
+import { IUpdateUserPayload } from "@shared/types/user";
+import { ISuccessRes } from "@shared/types/res";
 
 export interface IDashFormProps {
   formData: IUpdateUserPayload;
@@ -9,10 +10,7 @@ export interface IDashFormProps {
 }
 
 interface IDashSubmitProps extends IDashFormProps {
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  errorMessage: string | null;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
+  currentUser: ISuccessRes | null;
 }
 
 export const handleDashFormChange =
@@ -22,35 +20,34 @@ export const handleDashFormChange =
   };
 
 export const handleDashFormSubmit =
-  ({
-    formData,
-    setFormData,
-    isLoading,
-    setIsLoading,
-    errorMessage,
-    setErrorMessage,
-  }: IDashSubmitProps) =>
+  ({ formData, setFormData, currentUser }: IDashSubmitProps) =>
   async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setErrorMessage(null);
+    // setErrorMessage(null);
 
+    // check if form is empty
     if (Object.keys(formData).length === 0) {
       return console.log("empty");
     }
+
+    if (!currentUser) {
+      throw new Error("no user");
+    }
+
     console.log(formData);
     // implement loading, and prevent user from constantly updating
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const payload: IUpdateUserPayload = { ...formData };
 
-      const res: Response = await fetch("/api/auth/register", {
-        method: "POST",
+      const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
+        method: "PATCH",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
 
-      const data: IUserSuccessRes = await res.json();
+      const data: ISuccessRes = await res.json();
 
       if (!res.ok) {
         // Display the error message from the backend
@@ -62,12 +59,10 @@ export const handleDashFormSubmit =
     } catch (err) {
       console.error("Error:", err);
 
-      if (err instanceof Error) {
-        setErrorMessage(err.message);
-      } else {
-        setErrorMessage("An unknown error occurred");
-      }
-    } finally {
-      setIsLoading(false);
+      // if (err instanceof Error) {
+      //   setErrorMessage(err.message);
+      // } else {
+      //   setErrorMessage("An unknown error occurred");
+      // }
     }
   };

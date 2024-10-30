@@ -12,13 +12,9 @@ import {
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-
-  console.log(formData);
 
   return (
     <div className="w-full mx-auto px-4">
@@ -31,10 +27,7 @@ const DashProfile = () => {
         onSubmit={handleDashFormSubmit({
           formData,
           setFormData,
-          isLoading,
-          setIsLoading,
-          errorMessage,
-          setErrorMessage,
+          currentUser,
         })}
       >
         <div className="pr-10">
@@ -62,9 +55,8 @@ const DashProfile = () => {
                 format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
             </span>
           </div>
-          <DashDP formData={formData} setFormData={setFormData} />
         </div>
-        <Button type="submit" disabled={isLoading}>
+        {/* <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
               <Spinner size="sm" />
@@ -73,8 +65,9 @@ const DashProfile = () => {
           ) : (
             "Save changes"
           )}
-        </Button>
+        </Button> */}
       </form>
+      <DashDP formData={formData} setFormData={setFormData} />
     </div>
   );
 };

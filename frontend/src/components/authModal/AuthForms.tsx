@@ -17,17 +17,16 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-import { IAuthSuccessRes } from "@shared/types/auth";
-import { IErrorRes } from "@shared/types/error";
+import { IErrorRes, ISuccessRes } from "@shared/types/res";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "@shared/types/auth";
 
-export type AuthResponse = IAuthSuccessRes | IErrorRes;
+export type AuthResponse = ISuccessRes | IErrorRes;
 
-// type predicate, if return true, data is IAuthSuccessRes
+// type predicate, if return true, data is ISuccessRes
 export const isAuthSuccessResponse = (
   data: AuthResponse
-): data is IAuthSuccessRes => {
+): data is ISuccessRes => {
   return data.success === true;
 };
 
