@@ -1,5 +1,5 @@
 import React from "react";
-import { IUpdateUserPayload } from "@shared/types/user";
+import { IUpdateUserPayload, IUserSuccessRes } from "@shared/types/user";
 
 export interface IDashFormProps {
   formData: IUpdateUserPayload;
@@ -32,13 +32,42 @@ export const handleDashFormSubmit =
   }: IDashSubmitProps) =>
   async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setErrorMessage(null);
+
     if (Object.keys(formData).length === 0) {
       return console.log("empty");
     }
     console.log(formData);
     // implement loading, and prevent user from constantly updating
     try {
+      setIsLoading(true);
+      const payload: IUpdateUserPayload = { ...formData };
+
+      const res: Response = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data: IUserSuccessRes = await res.json();
+
+      if (!res.ok) {
+        // Display the error message from the backend
+        throw new Error(data.message || "An unexpected error occurred");
+      }
+
       // clear form after submit
       setFormData({});
-    } catch (err) {}
+    } catch (err) {
+      console.error("Error:", err);
+
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };

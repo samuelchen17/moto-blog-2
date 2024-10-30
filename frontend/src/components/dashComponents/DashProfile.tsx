@@ -18,25 +18,6 @@ const DashProfile = () => {
     (state: RootState) => state.persisted.user
   );
 
-  // testing
-  // const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData({ ...formData, [e.target.id]: e.target.value });
-  // };
-
-  // const isFormFilled = () => {
-  //   return Object.values(formData).some((value) => value.trim() !== "");
-  // };
-
-  // const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (Object.keys(formData).length === 0) {
-  //     return;
-  //   }
-  //   // implement loading, and prevent user from constantly updating
-  //   try {
-  //   } catch (err) {}
-  // };
-
   console.log(formData);
 
   return (
