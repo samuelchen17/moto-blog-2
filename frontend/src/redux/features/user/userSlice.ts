@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IAuthSuccessRes, IAuthErrorRes } from "@shared/types/auth";
+import { IAuthSuccessRes } from "@shared/types/auth";
+import { IErrorRes } from "@shared/types/error";
 
 interface IUserState {
   currentUser: IAuthSuccessRes | null;
@@ -29,7 +30,7 @@ const userSlice = createSlice({
     },
     signInFailure: (
       state,
-      action: PayloadAction<IAuthErrorRes["message"] | string>
+      action: PayloadAction<IErrorRes["message"] | string>
     ) => {
       state.loading = false;
       state.error = action.payload;

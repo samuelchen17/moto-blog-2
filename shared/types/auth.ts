@@ -26,11 +26,3 @@ export interface IAuthSuccessRes {
     dateJoined: Date;
   };
 }
-
-// move to error.ts, change to IErrorRes implement
-export interface IAuthErrorRes {
-  status: "error";
-  success: false;
-  statusCode: number;
-  message: string;
-}
