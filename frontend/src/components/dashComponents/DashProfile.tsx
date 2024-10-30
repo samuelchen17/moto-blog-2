@@ -5,7 +5,6 @@ import DashDP from "./DashDP";
 import { format } from "date-fns";
 import { useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";
-import { handleFormChange } from "../../utils/formUtils";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -13,17 +12,15 @@ const DashProfile = () => {
     (state: RootState) => state.persisted.user
   );
 
-  // const handleUserUpdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData({ ...formData, [e.target.id]: e.target.value });
-  // };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
   // const isFormFilled = () => {
   //   return Object.values(formData).some((value) => value.trim() !== "");
   // };
 
-  const handleUserUpdateSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (Object.keys(formData).length === 0) {
       return;
@@ -38,6 +35,7 @@ const DashProfile = () => {
   return (
     <div className="w-full mx-auto px-4">
       <h1 className="text-2xl">Profile</h1>
+      <Button>Save changes</Button>
       <hr></hr>
       <div className="flex md:flex-row flex-col-reverse">
         <div className="pr-10">
@@ -51,10 +49,9 @@ const DashProfile = () => {
                 id="username"
                 placeholder="username"
                 defaultValue={currentUser?.user.username}
-                onChange={handleFormChange(formData, setFormData)}
+                onChange={handleChange}
               />
             </div>
-            <Button>Update display name</Button>
           </form>
 
           <div className="mb-2 block">
@@ -65,7 +62,7 @@ const DashProfile = () => {
               format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
           </span>
         </div>
-        <DashDP />
+        <DashDP formData={formData} setFormData={setFormData} />
       </div>
     </div>
   );
