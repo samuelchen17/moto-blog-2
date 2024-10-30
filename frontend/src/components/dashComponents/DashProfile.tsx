@@ -44,52 +44,53 @@ const DashProfile = () => {
 
       <hr></hr>
 
-      <div className="flex md:flex-row flex-col-reverse">
+      <form
+        className="flex md:flex-row flex-col-reverse"
+        onSubmit={handleDashFormSubmit({
+          formData,
+          setFormData,
+          isLoading,
+          setIsLoading,
+        })}
+      >
         <div className="pr-10">
-          <form
-            className="flex flex-col"
-            onSubmit={handleDashFormSubmit({
-              formData,
-              setFormData,
-              isLoading,
-              setIsLoading,
-            })}
-          >
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="username" value="Username" />
+          <div>
+            <div className="flex flex-col">
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="username" value="Username" />
+                </div>
+                <TextInput
+                  type="text"
+                  id="username"
+                  placeholder="username"
+                  defaultValue={currentUser?.user.username}
+                  onChange={handleDashFormChange({ formData, setFormData })}
+                />
               </div>
-              <TextInput
-                type="text"
-                id="username"
-                placeholder="username"
-                defaultValue={currentUser?.user.username}
-                onChange={handleDashFormChange({ formData, setFormData })}
-              />
             </div>
 
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="pl-2">Loading...</span>{" "}
-                </>
-              ) : (
-                "Save changes"
-              )}
-            </Button>
-          </form>
-
-          <div className="mb-2 block">
-            <Label htmlFor="joined" value="Date joined" />
+            <div className="mb-2 block">
+              <Label htmlFor="joined" value="Date joined" />
+            </div>
+            <span>
+              {currentUser?.user.dateJoined &&
+                format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
+            </span>
           </div>
-          <span>
-            {currentUser?.user.dateJoined &&
-              format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
-          </span>
+          <DashDP formData={formData} setFormData={setFormData} />
         </div>
-        <DashDP formData={formData} setFormData={setFormData} />
-      </div>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner size="sm" />
+              <span className="pl-2">Loading...</span>{" "}
+            </>
+          ) : (
+            "Save changes"
+          )}
+        </Button>
+      </form>
     </div>
   );
 };
