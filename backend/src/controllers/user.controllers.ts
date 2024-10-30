@@ -7,7 +7,7 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IUpdateUserPayload } from "@shared/types/auth";
+import { IUpdateUserPayload, IUserSuccessRes } from "@shared/types/user";
 import { authentication, random } from "../helpers/user.helpers";
 import {
   getEmailValidationErrMsg,
@@ -53,8 +53,8 @@ export const deleteUser = async (
 };
 
 export const updateUser = async (
-  req: Request,
-  res: Response,
+  req: Request<{ id: string }, {}, IUpdateUserPayload>,
+  res: Response<IUserSuccessRes>,
   next: NextFunction
 ) => {
   try {
@@ -87,7 +87,7 @@ export const updateUser = async (
         return next(new CustomError(400, getEmailValidationErrMsg()));
       }
       // check for duplicate email
-      const existingEmail = await getUserByEmail(username);
+      const existingEmail = await getUserByEmail(email);
       if (existingEmail) {
         return next(new CustomError(400, "Email already in use"));
       }
@@ -115,10 +115,16 @@ export const updateUser = async (
     // save updated details
     await user.save();
 
-    // send response back to user
-    res
-      .status(200)
-      .json({ message: "User details updated successfully", user });
+    res.status(200).json({
+      message: "User details updated successfully",
+      success: true,
+      user: {
+        id: user._id.toString(),
+        username: user.username,
+        profilePicture: user.profilePicture,
+        email: user.email,
+      },
+    });
   } catch (error) {
     next(new CustomError(400, "Unable to update details"));
   }

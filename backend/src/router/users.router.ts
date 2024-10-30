@@ -3,7 +3,7 @@ import {
   deleteUser,
   getAllUsers,
   updateUser,
-} from "../controllers/users.controllers";
+} from "../controllers/user.controllers";
 import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
 
 const usersRouter = (router: Router) => {

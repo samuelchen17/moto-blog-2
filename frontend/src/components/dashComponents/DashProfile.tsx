@@ -5,6 +5,7 @@ import DashDP from "./DashDP";
 import { format } from "date-fns";
 import { useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";
+import { handleFormChange } from "../../utils/formUtils";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -12,9 +13,9 @@ const DashProfile = () => {
     (state: RootState) => state.persisted.user
   );
 
-  const handleUserUpdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  // const handleUserUpdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFormData({ ...formData, [e.target.id]: e.target.value });
+  // };
 
   // const isFormFilled = () => {
   //   return Object.values(formData).some((value) => value.trim() !== "");
@@ -50,7 +51,7 @@ const DashProfile = () => {
                 id="username"
                 placeholder="username"
                 defaultValue={currentUser?.user.username}
-                onChange={handleUserUpdateChange}
+                onChange={handleFormChange(formData, setFormData)}
               />
             </div>
             <Button>Update display name</Button>

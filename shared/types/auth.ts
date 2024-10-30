@@ -27,6 +27,7 @@ export interface IAuthSuccessRes {
   };
 }
 
+// move to error.ts, change to IErrorRes implement
 export interface IAuthErrorRes {
   status: "error";
   success: false;

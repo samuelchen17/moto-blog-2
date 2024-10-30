@@ -3,6 +3,7 @@
 // 3-16 characters,
 // username: letters, numbers, underscores no spaces [a-z0-9_]
 // displayname: [a-zA-Z0-9 _-]
+// implement must start with lowercase char
 export const validateUsername = (username: string): boolean => {
   const usernameRegex = /^(?=.{3,16}$)[a-z0-9_]+$/;
   return usernameRegex.test(username);

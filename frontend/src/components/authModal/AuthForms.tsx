@@ -31,15 +31,13 @@ export const isAuthSuccessResponse = (
 };
 
 export const AuthFormsSignIn = () => {
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const { loading: isLoading, error: errorMessage } = useAppSelector(
     (state) => state.persisted.user
   );
 
   const clearForm: ISignInAuthPayload = { emailOrUsername: "", password: "" };
-
   const [formData, setFormData] = useState<ISignInAuthPayload>(clearForm);
+
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,14 +47,9 @@ export const AuthFormsSignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // clear error message
-    // setErrorMessage(null); // replaced by redux
-
     dispatch(signInStart());
 
     try {
-      // setIsLoading(true); // replaced by redux
-
       const payload: ISignInAuthPayload = { ...formData };
 
       const res: Response = await fetch("/api/auth/login", {
@@ -69,7 +62,6 @@ export const AuthFormsSignIn = () => {
 
       if (!res.ok) {
         // Display the error message from the backend
-        // throw new Error(data.message || "An unexpected error occurred"); // replaced by redux
         dispatch(signInFailure(data.message));
         return; // dispatch does not return
       }
