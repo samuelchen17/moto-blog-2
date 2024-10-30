@@ -19,8 +19,9 @@ export const handleDashFormSubmit =
   async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (Object.keys(formData).length === 0) {
-      return;
+      return console.log("empty");
     }
+    console.log(formData);
     // implement loading, and prevent user from constantly updating
     try {
       // clear form after submit
