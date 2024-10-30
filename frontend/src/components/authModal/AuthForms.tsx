@@ -41,11 +41,11 @@ export const AuthFormsSignIn = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     dispatch(signInStart());
@@ -88,7 +88,7 @@ export const AuthFormsSignIn = () => {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form className="space-y-6" onSubmit={handleFormSubmit}>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="emailOrUsername" value="Your email or username" />
@@ -97,7 +97,7 @@ export const AuthFormsSignIn = () => {
           id="emailOrUsername"
           placeholder=""
           // required
-          onChange={handleChange}
+          onChange={handleFormChange}
         />
       </div>
       <div>
@@ -108,7 +108,7 @@ export const AuthFormsSignIn = () => {
           id="password"
           type="password"
           // required
-          onChange={handleChange}
+          onChange={handleFormChange}
         />
       </div>
       <div className="flex justify-between">
@@ -156,11 +156,11 @@ export const AuthFormsSignUp = () => {
   // redux
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // clear error message
@@ -200,7 +200,7 @@ export const AuthFormsSignUp = () => {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form className="space-y-6" onSubmit={handleFormSubmit}>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="username" value="Your username" />
@@ -209,7 +209,7 @@ export const AuthFormsSignUp = () => {
           id="username"
           placeholder=""
           // required
-          onChange={handleChange}
+          onChange={handleFormChange}
         />
       </div>
       <div>
@@ -221,7 +221,7 @@ export const AuthFormsSignUp = () => {
           id="email"
           placeholder="name@company.com"
           // required
-          onChange={handleChange}
+          onChange={handleFormChange}
         />
       </div>
       <div>
@@ -232,7 +232,7 @@ export const AuthFormsSignUp = () => {
           id="password"
           type="password"
           // required
-          onChange={handleChange}
+          onChange={handleFormChange}
         />
       </div>
       {errorMessage && <Alert color="failure">{errorMessage}</Alert>}

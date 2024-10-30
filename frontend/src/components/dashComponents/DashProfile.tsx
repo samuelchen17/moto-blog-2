@@ -12,7 +12,7 @@ const DashProfile = () => {
     (state: RootState) => state.persisted.user
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
@@ -20,7 +20,7 @@ const DashProfile = () => {
   //   return Object.values(formData).some((value) => value.trim() !== "");
   // };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (Object.keys(formData).length === 0) {
       return;
@@ -49,7 +49,7 @@ const DashProfile = () => {
                 id="username"
                 placeholder="username"
                 defaultValue={currentUser?.user.username}
-                onChange={handleChange}
+                onChange={handleFormChange}
               />
             </div>
           </form>
