@@ -13,6 +13,7 @@ import {
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -51,6 +52,8 @@ const DashProfile = () => {
           setFormData,
           isLoading,
           setIsLoading,
+          errorMessage,
+          setErrorMessage,
         })}
       >
         <div className="pr-10">

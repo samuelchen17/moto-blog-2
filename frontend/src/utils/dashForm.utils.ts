@@ -8,6 +8,13 @@ export interface IDashFormProps {
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface IDashSubmitProps extends IDashFormProps {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  errorMessage: string | null;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
 export const handleDashFormChange =
   ({ formData, setFormData }: IDashFormProps) =>
   (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +22,14 @@ export const handleDashFormChange =
   };
 
 export const handleDashFormSubmit =
-  ({ formData, setFormData }: IDashFormProps) =>
+  ({
+    formData,
+    setFormData,
+    isLoading,
+    setIsLoading,
+    errorMessage,
+    setErrorMessage,
+  }: IDashSubmitProps) =>
   async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (Object.keys(formData).length === 0) {
