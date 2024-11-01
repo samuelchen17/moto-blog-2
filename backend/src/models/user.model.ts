@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Document, Types } from "mongoose";
+import config from "../config/config";
 
 export interface IUser {
   username: string;
@@ -28,8 +29,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     profilePicture: {
       type: String,
-      default:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+      default: config.displayPicture.default,
     },
     authentication: {
       password: {
