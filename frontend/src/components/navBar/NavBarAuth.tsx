@@ -9,6 +9,7 @@ import {
   openLogin,
 } from "../../redux/features/modal/authModalSlice";
 import { sidebarItems } from "../dashComponents/DashSidebar";
+import userSignOut from "../../utils/userSignOut.utils";
 
 const NavBarAuth = () => {
   const { currentUser } = useAppSelector(
@@ -41,13 +42,19 @@ const NavBarAuth = () => {
               as={Link}
               to={item.path}
               icon={item.icon}
+              className="capitalize"
             >
               {item.name}
             </Dropdown.Item>
           ))}
 
           <Dropdown.Divider />
-          <Dropdown.Item icon={PiSignOutBold}>Sign out</Dropdown.Item>
+          <Dropdown.Item
+            icon={PiSignOutBold}
+            onClick={() => userSignOut({ dispatch })}
+          >
+            Sign Out
+          </Dropdown.Item>
         </Dropdown>
       ) : (
         <>

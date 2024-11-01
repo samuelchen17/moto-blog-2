@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
 import { HiUser } from "react-icons/hi";
 import { PiSignOutBold } from "react-icons/pi";
+import userSignOut from "../../utils/userSignOut.utils";
+import { useAppDispatch } from "../../redux/hooks";
 
 interface ISidebarItems {
   name: string;
@@ -32,6 +34,7 @@ export const sidebarItems: ISidebarItems[] = [
 const DashSidebar = () => {
   const location = useLocation();
   const [tab, setTab] = useState<string>("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -62,7 +65,11 @@ const DashSidebar = () => {
               </Sidebar.Item>
             ))}
 
-            <Sidebar.Item href="#" icon={PiSignOutBold}>
+            <Sidebar.Item
+              href="#"
+              icon={PiSignOutBold}
+              onClick={() => userSignOut({ dispatch })}
+            >
               Sign Out
             </Sidebar.Item>
           </Sidebar.ItemGroup>
