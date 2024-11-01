@@ -16,6 +16,7 @@ export interface IDashFormProps {
 interface IDashSubmitProps extends IDashFormProps {
   currentUser: ISuccessRes | null;
   dispatch: AppDispatch;
+  setUpdateComplete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // handle update for change
@@ -27,7 +28,13 @@ export const handleDashFormChange =
 
 // handle update data request
 export const handleDashFormSubmit =
-  ({ formData, setFormData, currentUser, dispatch }: IDashSubmitProps) =>
+  ({
+    formData,
+    setFormData,
+    currentUser,
+    dispatch,
+    setUpdateComplete,
+  }: IDashSubmitProps) =>
   async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -61,6 +68,7 @@ export const handleDashFormSubmit =
       }
 
       dispatch(updateSuccess(data));
+      setUpdateComplete(true);
       // clear form after submit
       setFormData({});
     } catch (err) {

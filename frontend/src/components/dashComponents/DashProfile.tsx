@@ -16,6 +16,7 @@ const DashProfile = () => {
   const { currentUser, loading, error } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const [updateComplete, setUpdateComplete] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   return (
@@ -32,6 +33,7 @@ const DashProfile = () => {
             setFormData,
             currentUser,
             dispatch,
+            setUpdateComplete,
           })}
         >
           <div>
@@ -55,7 +57,7 @@ const DashProfile = () => {
             </span>
           </div>
 
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading === true}>
             {loading ? (
               <>
                 <Spinner size="sm" />
@@ -65,10 +67,9 @@ const DashProfile = () => {
               "Save changes"
             )}
           </Button>
-          {error ? (
-            <Alert color="failure">{error}</Alert>
-          ) : (
-            <Alert color="success">"Successfully updated"</Alert>
+          {error && <Alert color="failure">{error}</Alert>}
+          {updateComplete && (
+            <Alert color="success">Successfully updated</Alert>
           )}
         </form>
         <DashDP formData={formData} setFormData={setFormData} />
