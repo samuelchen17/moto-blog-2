@@ -50,9 +50,18 @@ const DashSettings = () => {
             <Label htmlFor="password" value="Change password" />
           </div>
           <TextInput
-            type="text"
+            type="password"
             id="password"
             placeholder="password"
+            onChange={handleDashFormChange({ formData, setFormData })}
+          />
+          <div className="mb-2 block">
+            <Label htmlFor="password" value="Confirm password" />
+          </div>
+          <TextInput
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm password"
             onChange={handleDashFormChange({ formData, setFormData })}
           />
         </div>
@@ -66,8 +75,10 @@ const DashSettings = () => {
             "Save changes"
           )}
         </Button>
-        {error && <Alert color="failure">{error}</Alert>}
-        {updateComplete && <Alert color="success">Successfully updated</Alert>}
+        {error && !loading && <Alert color="failure">{error}</Alert>}
+        {updateComplete && !loading && (
+          <Alert color="success">Successfully updated</Alert>
+        )}
       </form>
 
       <div className="my-2">

@@ -3,4 +3,5 @@ export interface IUpdateUserPayload {
   profilePicture?: string;
   email?: string;
   password?: string;
+  confirmPassword?: string;
 }

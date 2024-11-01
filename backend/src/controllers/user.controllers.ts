@@ -60,7 +60,8 @@ export const updateUser = async (
 ) => {
   try {
     const { id } = req.params;
-    const { username, profilePicture, email, password } = req.body;
+    const { username, profilePicture, email, password, confirmPassword } =
+      req.body;
 
     const user = await getUserById(id);
     if (!user) {
@@ -106,6 +107,14 @@ export const updateUser = async (
       // if (!validatePassword(password)) {
       //   return next(new CustomError(400, getPasswordValidationErrMsg()));
       // }
+
+      if (!confirmPassword) {
+        return next(new CustomError(400, "Please confirm password"));
+      }
+
+      if (password !== confirmPassword) {
+        return next(new CustomError(400, "Password does not match"));
+      }
 
       const salt = random();
       const hashedPassword = authentication(salt, password);
