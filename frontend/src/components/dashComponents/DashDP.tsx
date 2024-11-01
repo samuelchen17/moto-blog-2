@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { RootState } from "../../redux/store";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { FaEdit } from "react-icons/fa";
 import {
   getDownloadURL,
@@ -12,6 +12,7 @@ import { firebaseApp } from "../../config/firebaseConfig";
 import { Alert, Spinner } from "flowbite-react";
 import React from "react";
 import { IDashFormProps } from "../../utils/dashForm.utils";
+import { updateStart, updateStop } from "../../redux/features/user/userSlice";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
 const DashDP = ({ setFormData, formData }: IDashFormProps) => {
@@ -23,6 +24,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const dispatch = useAppDispatch();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -56,6 +58,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
     // clear error message
     setErrorMessage(null);
     setLoading(true);
+    dispatch(updateStart());
 
     const storage = getStorage(firebaseApp);
     const dpName = new Date().getTime() + dp.name;
@@ -74,14 +77,16 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
         setDP(null);
         setDPUrl(null);
         setLoading(false);
+        dispatch(updateStop());
         throw new Error(`Storage error: ${err.message}`);
       },
       () => {
         getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
           setDPUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
+          dispatch(updateStop());
+          setLoading(false);
         });
-        setLoading(false);
       }
     );
   };
@@ -105,7 +110,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
           className="rounded-full w-full h-full object-cover"
           src={dpUrl || currentUser?.user.profilePicture}
           // fix for cross origin implement
-          // crossOrigin="anonymous"
+          // crossOrigin="anonymous" ?
         />
         <button className="absolute bottom-4 text-lg px-2 py-1 rounded-lg bg-black text-white flex justify-center items-center gap-2 bg-opacity-80">
           <FaEdit />

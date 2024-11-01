@@ -44,7 +44,7 @@ const handleLoginResponse = async (
     secure: false, // set to true if using https
     // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
     // sameSite: "Strict", // helps prevent csrf attacks
-    maxAge: 3600000,
+    maxAge: 3600000, // 1 hour
   });
 
   res.status(200).json({

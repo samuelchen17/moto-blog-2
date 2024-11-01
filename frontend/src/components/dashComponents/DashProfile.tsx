@@ -24,58 +24,55 @@ const DashProfile = () => {
 
       <hr></hr>
 
-      <form
-        className="flex md:flex-row flex-col-reverse"
-        onSubmit={handleDashFormSubmit({
-          formData,
-          setFormData,
-          currentUser,
-          dispatch,
-        })}
-      >
-        <div className="pr-10">
+      <div className="flex flex-col-reverse">
+        <form
+          className="flex flex-col gap-2"
+          onSubmit={handleDashFormSubmit({
+            formData,
+            setFormData,
+            currentUser,
+            dispatch,
+          })}
+        >
           <div>
-            <div className="flex flex-col">
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="username" value="Username" />
-                </div>
-                <TextInput
-                  type="text"
-                  id="username"
-                  placeholder="username"
-                  defaultValue={currentUser?.user.username}
-                  onChange={handleDashFormChange({ formData, setFormData })}
-                />
-              </div>
-            </div>
-
             <div className="mb-2 block">
-              <span>Date Joined</span>
+              <Label htmlFor="username" value="Username" />
             </div>
+            <TextInput
+              type="text"
+              id="username"
+              placeholder="username"
+              defaultValue={currentUser?.user.username}
+              onChange={handleDashFormChange({ formData, setFormData })}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <span>Date Joined</span>
             <span>
               {currentUser?.user.dateJoined &&
                 format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
             </span>
           </div>
-        </div>
-        <Button type="submit" disabled={loading}>
-          {loading ? (
-            <>
-              <Spinner size="sm" />
-              <span className="pl-2">Loading...</span>{" "}
-            </>
+
+          <Button type="submit" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner size="sm" />
+                <span className="pl-2">Loading...</span>{" "}
+              </>
+            ) : (
+              "Save changes"
+            )}
+          </Button>
+          {error ? (
+            <Alert color="failure">{error}</Alert>
           ) : (
-            "Save changes"
+            <Alert color="success">"Successfully updated"</Alert>
           )}
-        </Button>
-      </form>
-      {error ? (
-        <Alert color="failure">{error}</Alert>
-      ) : (
-        <Alert color="success">"Successfully updated"</Alert>
-      )}
-      <DashDP formData={formData} setFormData={setFormData} />
+        </form>
+        <DashDP formData={formData} setFormData={setFormData} />
+      </div>
     </div>
   );
 };

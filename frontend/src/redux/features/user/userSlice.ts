@@ -38,6 +38,10 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    updateStop: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
     updateSuccess: (state, action: PayloadAction<ISuccessRes>) => {
       state.currentUser = action.payload;
       state.loading = false;
@@ -60,6 +64,7 @@ export const {
   updateStart,
   updateSuccess,
   updateFailure,
+  updateStop,
 } = userSlice.actions;
 
 export default userSlice.reducer;
