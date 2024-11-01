@@ -7,7 +7,8 @@ import {
   handleDashFormSubmit,
 } from "../../utils/dashForm.utils";
 import { useAppDispatch } from "../../redux/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { updateStop } from "../../redux/features/user/userSlice";
 
 const DashSettings = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -16,6 +17,10 @@ const DashSettings = () => {
     (state: RootState) => state.persisted.user
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(updateStop());
+  }, [dispatch]);
 
   return (
     <div className="w-full mx-auto px-4">

@@ -3,13 +3,14 @@ import { useAppSelector } from "../../redux/hooks";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashDP";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";
 import {
   handleDashFormChange,
   handleDashFormSubmit,
 } from "../../utils/dashForm.utils";
 import { useAppDispatch } from "../../redux/hooks";
+import { updateStop } from "../../redux/features/user/userSlice";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -18,6 +19,10 @@ const DashProfile = () => {
   );
   const [updateComplete, setUpdateComplete] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(updateStop());
+  }, [dispatch]);
 
   return (
     <div className="w-full mx-auto px-4">

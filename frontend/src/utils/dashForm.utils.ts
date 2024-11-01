@@ -40,7 +40,8 @@ export const handleDashFormSubmit =
 
     // check if form is empty
     if (Object.keys(formData).length === 0) {
-      return console.log("empty");
+      dispatch(updateFailure("No changes were made"));
+      return;
     }
 
     if (!currentUser) {
