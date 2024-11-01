@@ -53,6 +53,17 @@ export const deleteUser = async (
   }
 };
 
+export const signOut = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res
+      .clearCookie("motoBlogAuthToken")
+      .status(200)
+      .json("User has been signed out");
+  } catch (error) {
+    next(new CustomError(400, "Unable to sign user out"));
+  }
+};
+
 export const updateUser = async (
   req: Request<{ id: string }, {}, IUpdateUserPayload>,
   res: Response<ISuccessRes>,
