@@ -11,6 +11,7 @@ export interface IUser {
     salt?: string;
     sessionToken?: string;
   };
+  isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -45,6 +46,10 @@ const userSchema = new mongoose.Schema<IUser>(
         type: String,
         select: false,
       },
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

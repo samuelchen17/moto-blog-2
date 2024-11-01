@@ -56,6 +56,7 @@ const handleLoginResponse = async (
       profilePicture: user.profilePicture,
       email: user.email,
       dateJoined: user.createdAt,
+      admin: user.isAdmin,
     },
   });
 };
@@ -127,6 +128,7 @@ export const register = async (
         profilePicture: newUser.profilePicture,
         email: newUser.email,
         dateJoined: newUser.createdAt,
+        admin: newUser.isAdmin,
       },
     });
   } catch (error) {

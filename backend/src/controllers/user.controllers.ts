@@ -145,6 +145,7 @@ export const updateUser = async (
         profilePicture: user.profilePicture,
         email: user.email,
         dateJoined: user.createdAt,
+        admin: user.isAdmin,
       },
     });
   } catch (error) {

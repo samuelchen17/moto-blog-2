@@ -7,6 +7,7 @@ export interface ISuccessRes {
     profilePicture: string;
     email: string;
     dateJoined: Date;
+    admin: boolean;
   };
 }
 
