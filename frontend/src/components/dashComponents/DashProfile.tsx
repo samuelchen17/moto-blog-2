@@ -1,7 +1,7 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import DashDP from "./DashDP";
+import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";

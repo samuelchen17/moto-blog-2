@@ -9,6 +9,7 @@ import {
 import { useAppDispatch } from "../../redux/hooks";
 import { useEffect, useState } from "react";
 import { updateStop } from "../../redux/features/user/userSlice";
+import DashSettingsDeleteUser from "./DashSettingsDeleteUser";
 
 const DashSettings = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -86,9 +87,7 @@ const DashSettings = () => {
         )}
       </form>
 
-      <div className="my-2">
-        <span className="text-red-700">Delete Account</span>
-      </div>
+      <DashSettingsDeleteUser />
     </div>
   );
 };
