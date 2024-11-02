@@ -36,17 +36,19 @@ const NavBarAuth = () => {
             </span>
           </Dropdown.Header>
 
-          {sidebarItems.map((item) => (
-            <Dropdown.Item
-              key={item.name}
-              as={Link}
-              to={item.path}
-              icon={item.icon}
-              className="capitalize"
-            >
-              {item.name}
-            </Dropdown.Item>
-          ))}
+          {sidebarItems
+            .filter((item) => !item.admin || currentUser?.user.admin)
+            .map((item) => (
+              <Dropdown.Item
+                key={item.name}
+                as={Link}
+                to={item.path}
+                icon={item.icon}
+                className="capitalize"
+              >
+                {item.name}
+              </Dropdown.Item>
+            ))}
 
           <Dropdown.Divider />
           <Dropdown.Item

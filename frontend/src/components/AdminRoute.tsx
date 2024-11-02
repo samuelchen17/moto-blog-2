@@ -4,7 +4,7 @@ import { RootState } from "../redux/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { toggleAuthModal } from "../redux/features/modal/authModalSlice";
 
-const AuthRoute = () => {
+const AdminRoute = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { currentUser } = useAppSelector(
@@ -18,7 +18,7 @@ const AuthRoute = () => {
     }
   }, [currentUser, dispatch, navigate]);
 
-  return currentUser ? <Outlet /> : null;
+  return currentUser?.user.admin ? <Outlet /> : null;
 };
 
-export default AuthRoute;
+export default AdminRoute;
