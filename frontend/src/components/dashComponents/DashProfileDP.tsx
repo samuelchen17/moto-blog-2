@@ -8,7 +8,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { firebaseApp } from "../../config/firebaseConfig";
+import { firebaseApp } from "../../config/firebase.config";
 import { Alert, Spinner } from "flowbite-react";
 import React from "react";
 import { IDashFormProps } from "../../utils/dashForm.utils";

@@ -1,7 +1,7 @@
 import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { firebaseApp } from "../../config/firebaseConfig";
+import { firebaseApp } from "../../config/firebase.config";
 import { useAppDispatch } from "../../redux/hooks";
 import { signInSuccess } from "../../redux/features/user/userSlice";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";

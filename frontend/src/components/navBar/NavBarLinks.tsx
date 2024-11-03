@@ -1,29 +1,6 @@
 import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
-
-interface INavLinks {
-  name: string;
-  path: string;
-}
-
-const navLinks: INavLinks[] = [
-  {
-    name: "home",
-    path: "/home",
-  },
-  {
-    name: "blogs",
-    path: "/blogs",
-  },
-  {
-    name: "about",
-    path: "/about",
-  },
-  {
-    name: "dash",
-    path: "/dashboard",
-  },
-];
+import { navLinks } from "../../config/navLinks.config";
 
 // const NavBarLinks: React.FC<INavBarLinksProps> = ({ currentPath }) => {
 const NavBarLinks = ({ currentPath }: { currentPath: string }) => {

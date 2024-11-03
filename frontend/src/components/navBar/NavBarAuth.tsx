@@ -8,7 +8,7 @@ import {
   openRegister,
   openLogin,
 } from "../../redux/features/modal/authModalSlice";
-import { sidebarItems } from "../dashComponents/DashSidebar";
+import { dashNavItems } from "../../config/dashNavItems.config";
 import userSignOut from "../../utils/userSignOut.utils";
 
 const NavBarAuth = () => {
@@ -36,7 +36,7 @@ const NavBarAuth = () => {
             </span>
           </Dropdown.Header>
 
-          {sidebarItems
+          {dashNavItems
             .filter((item) => !item.admin || currentUser?.user.admin)
             .map((item) => (
               <Dropdown.Item
