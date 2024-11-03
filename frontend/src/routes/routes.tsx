@@ -10,6 +10,7 @@ import BlogsPage from "../pages/BlogsPage";
 import AboutPage from "../pages/AboutPage";
 import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
+import CreatePostPage from "../pages/CreatePostPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +21,7 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<DashboardPage />} />
         {/* for admins only */}
         <Route element={<AdminRoute />}>
-          <Route path="create-post" element={<DashboardPage />} />
+          <Route path="create-post" element={<CreatePostPage />} />
         </Route>
       </Route>
       <Route path="blogs" element={<BlogsPage />} />

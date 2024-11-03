@@ -18,7 +18,7 @@ const AdminRoute = () => {
     }
   }, [currentUser, dispatch, navigate]);
 
-  return currentUser?.user.admin ? <Outlet /> : null;
+  return currentUser && currentUser?.user.admin ? <Outlet /> : null;
 };
 
 export default AdminRoute;
