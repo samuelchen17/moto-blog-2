@@ -1,5 +1,5 @@
 import { FC, SVGProps } from "react";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdOutlinePostAdd, MdSpaceDashboard } from "react-icons/md";
 import { BiSolidCommentDetail } from "react-icons/bi";
 import { HiDocumentText } from "react-icons/hi2";
 import { IoMdSettings } from "react-icons/io";
@@ -44,6 +44,12 @@ export const dashNavItems: IDashNavItems[] = [
     name: "Users",
     path: "/",
     icon: PiUsersFourFill,
+    admin: true,
+  },
+  {
+    name: "Write",
+    path: "/create-post",
+    icon: MdOutlinePostAdd,
     admin: true,
   },
   {
