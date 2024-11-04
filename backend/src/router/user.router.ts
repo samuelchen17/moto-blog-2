@@ -4,7 +4,7 @@ import {
   getAllUsers,
   signOut,
   updateUser,
-} from "../controllers/user.controllers";
+} from "../controllers/user.controller";
 import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
 
 const userRouter = (router: Router) => {

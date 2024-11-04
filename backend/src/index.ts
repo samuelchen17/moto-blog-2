@@ -35,6 +35,7 @@ server.listen(config.server.port, () => {
 
 connectDB(); // connect to DB
 
+// all routes
 app.use("/", router());
 
 app.use(errorHandler);
