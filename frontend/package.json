@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",
+    "@tiptap/pm": "^2.9.1",
+    "@tiptap/react": "^2.9.1",
+    "@tiptap/starter-kit": "^2.9.1",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.1",
     "flowbite-react": "^0.10.2",
