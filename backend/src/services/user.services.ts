@@ -113,3 +113,15 @@ export const getUserByEmailOrUsername = async (
     userServiceErrorHandler(error, "Unable to get user by email or username");
   }
 };
+
+// returns value of isAdmin property
+export const checkAdminById = async (
+  id: string
+): Promise<boolean | undefined> => {
+  try {
+    const user = await User.findById(id);
+    return user?.isAdmin;
+  } catch (error) {
+    userServiceErrorHandler(error, "Unable to check if user is an admin");
+  }
+};

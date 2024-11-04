@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { get, merge } from "lodash";
-import { getUserBySessionToken } from "../services/user.services";
+import {
+  checkAdminById,
+  getUserBySessionToken,
+} from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
 // import { ObjectId } from "mongoose";
 
@@ -52,5 +55,27 @@ export const isAuthenticated = async (
     return next();
   } catch (error) {
     next(new CustomError(400, "User is not authenticated"));
+  }
+};
+
+// check if current user is admin
+export const isAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const admin = await checkAdminById(id);
+
+    if (admin) {
+      next();
+    } else {
+      next(
+        new CustomError(403, "User is not authorized to perform this action")
+      );
+    }
+  } catch (error) {
+    next(new CustomError(500, "An error occurred while checking admin status"));
   }
 };
