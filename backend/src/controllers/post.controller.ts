@@ -14,17 +14,20 @@ export const createPost = async (
 
     // url friendly version of title
     const slug = req.body.title
-      .split("")
-      .join("-")
       .toLowerCase()
-      .replace(/[^a-zA-Z0-9-]/g, "-");
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
-    const newPost = new Post({ ...req.body, slug, createdBy: req.params._id });
+    const newPost = new Post({ ...req.body, slug, createdBy: req.params.id });
 
     const savedPost = await newPost.save();
 
+    // mongodb unique issue, implement
     res.status(201).json(savedPost);
   } catch (err) {
+    console.error("Error creating post:", err);
     next(new CustomError(500, "Failed to create post"));
   }
 };

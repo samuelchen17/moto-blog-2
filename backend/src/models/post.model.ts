@@ -38,6 +38,7 @@ const postSchema = new mongoose.Schema<IPost>(
     },
     slug: {
       type: String,
+      required: true,
       unique: true,
     },
   },

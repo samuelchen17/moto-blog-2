@@ -131,7 +131,8 @@ export const register = async (
         admin: newUser.isAdmin,
       },
     });
-  } catch (error) {
+  } catch (err) {
+    console.error("Error creating post:", err);
     next(new CustomError(500, "Internal server error"));
   }
 };
