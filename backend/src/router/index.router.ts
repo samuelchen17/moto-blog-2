@@ -9,6 +9,5 @@ export default (): Router => {
   authRouter(router);
   userRouter(router);
   postRouter(router);
-
   return router;
 };

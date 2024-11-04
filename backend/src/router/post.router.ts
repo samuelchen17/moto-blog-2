@@ -7,7 +7,13 @@ import {
 import { createPost } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
-  router.post("/posts/create", isAuthenticated, isOwner, isAdmin, createPost);
+  router.post(
+    "/post/create/:id",
+    isAuthenticated,
+    isOwner,
+    isAdmin,
+    createPost
+  );
 };
 
 export default postRouter;

@@ -28,7 +28,9 @@ const postSchema = new mongoose.Schema<IPost>(
     },
     image: {
       type: String,
-      default: "",
+      // implement default photo
+      default:
+        "https://www.shutterstock.com/image-photo/motorcycle-parked-alone-on-asphalt-260nw-2153911847.jpg",
     },
     category: {
       type: String,
