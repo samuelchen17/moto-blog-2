@@ -5,7 +5,8 @@ const CreatePostPage = () => {
   return (
     <div>
       <h1>Create a post</h1>
-      <form>
+      <hr />
+      <form className="flex flex-col gap-4">
         <TextInput type="text" required id="title" placeholder="Title" />
         <Select>
           <option value="placeholder">Placeholder</option>

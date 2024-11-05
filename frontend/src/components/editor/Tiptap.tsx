@@ -1,35 +1,33 @@
 // src/Tiptap.tsx
-import {
-  useEditor,
-  EditorContent,
-  FloatingMenu,
-  BubbleMenu,
-} from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Button } from "flowbite-react";
-import { BsTypeH1 } from "react-icons/bs";
-import { FaBold } from "react-icons/fa";
+
+import MenuBar from "./MenuBar";
 
 // define your extension array
 const extensions = [
   StarterKit.configure({
     heading: { levels: [1, 2, 3] },
+    codeBlock: false,
+    code: false,
+    bulletList: {
+      keepMarks: true,
+      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+    },
   }),
 ];
 
-const content = "<p>Hello World!</p>";
-
 const editorProps = {
   attributes: {
-    class: "rounded-md border min-h-[150px] border-input bg-back",
+    class: "rounded-md border h-[12rem] border-input bg-back overflow-y-auto",
   },
 };
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions,
-    content,
+    content: "<p>Hello World!</p>",
     editorProps,
+    extensions,
   });
 
   if (!editor) {
@@ -38,19 +36,8 @@ const Tiptap = () => {
 
   return (
     <div className="">
-      <EditorContent className="h-52" editor={editor} />
-      <FloatingMenu className="flex flex-row" editor={editor}>
-        <Button>
-          <BsTypeH1 />
-        </Button>
-        <Button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "is-active" : ""}
-        >
-          bold
-        </Button>
-      </FloatingMenu>
+      <MenuBar editor={editor}></MenuBar>
+      <EditorContent editor={editor} />
       <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
     </div>
   );
