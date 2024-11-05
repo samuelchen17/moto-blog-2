@@ -1,18 +1,53 @@
 import { Button, FileInput, Label, Select, TextInput } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Editor } from "@tiptap/react";
+import { IPublishPostPayload } from "@shared/types/post";
+
+// need to prevent injection attacks
 
 const CreatePostPage = () => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<Editor | null>(null);
+  const clearForm: IPublishPostPayload = { title: "", content: "" };
+  const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
+
+  const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const content = editorRef.current?.getHTML() || "";
+
+    const updatedFormData = { ...formData, content };
+    setFormData(updatedFormData);
+    console.log(formData);
+    try {
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
 
   return (
     <div>
       <h1>Create a post</h1>
       <hr />
-      <form className="flex flex-col gap-4">
-        <TextInput type="text" required id="title" placeholder="Title" />
+      <form className="flex flex-col gap-4" onSubmit={handlePostPublish}>
+        <TextInput
+          type="text"
+          required
+          id="title"
+          placeholder="Title"
+          onChange={handlePostChange}
+        />
         <Select>
-          <option value="placeholder">Placeholder</option>
+          <option value="placeholder" disabled>
+            Category
+          </option>
+          <option value="placeholder" id="category">
+            create config implement
+          </option>
         </Select>
         {/* file upload */}
         <div className="flex w-full items-center justify-center">
@@ -50,7 +85,7 @@ const CreatePostPage = () => {
         {/* Text editing */}
         <Tiptap editorRef={editorRef} />
 
-        <Button>Publish</Button>
+        <Button type="submit">Publish</Button>
       </form>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 
@@ -25,20 +25,22 @@ const editorProps = {
   },
 };
 
-const Tiptap = ({ editorRef }: { editorRef: React.MutableRefObject<null> }) => {
+const Tiptap = ({
+  editorRef,
+}: {
+  editorRef: React.MutableRefObject<Editor | null>;
+}) => {
   const editor = useEditor({
     content: "<p>Hello World!</p>",
     editorProps,
     extensions,
   });
 
-  if (!editor) {
-    return null;
-  }
-
   if (editorRef) {
     editorRef.current = editor;
   }
+
+  if (!editor) return null;
 
   return (
     <div className="">

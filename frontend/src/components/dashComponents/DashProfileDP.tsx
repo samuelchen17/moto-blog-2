@@ -61,7 +61,8 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
     dispatch(updateStart());
 
     const storage = getStorage(firebaseApp);
-    const dpName = new Date().getTime() + dp.name;
+    // const dpName = new Date().getTime() + dp.name;
+    const dpName = `profilePicture/${new Date().getTime()}_${dp.name}`;
     const storageRef = ref(storage, dpName);
     const uploadDP = uploadBytesResumable(storageRef, dp);
     uploadDP.on(
