@@ -22,52 +22,46 @@ const MenuBar = ({ editor }: IMenuBar) => {
     <div className="border rounded-md flex items-center flex-wrap gap-x-4 p-4">
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={
-          editor.isActive("heading", { level: 1 }) ? "tiptap-is-active" : ""
-        }
+        className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
       >
         <BsTypeH1 size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={
-          editor.isActive("heading", { level: 2 }) ? "tiptap-is-active" : ""
-        }
+        className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
       >
         <BsTypeH2 size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={
-          editor.isActive("heading", { level: 3 }) ? "tiptap-is-active" : ""
-        }
+        className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
       >
         <BsTypeH3 size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? "tiptap-is-active" : ""}
+        className={editor.isActive("bold") ? "is-active" : ""}
       >
         <MdFormatBold size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={editor.isActive("italic") ? "tiptap-is-active" : ""}
+        className={editor.isActive("italic") ? "is-active" : ""}
       >
         <MdFormatItalic size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={editor.isActive("underline") ? "tiptap-is-active" : ""}
+        className={editor.isActive("underline") ? "is-active" : ""}
       >
         <MdFormatUnderlined size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={editor.isActive("strike") ? "tiptap-is-active" : ""}
+        className={editor.isActive("strike") ? "is-active" : ""}
       >
         <MdFormatStrikethrough size={menuItemSize} />
       </button>
@@ -93,26 +87,26 @@ const MenuBar = ({ editor }: IMenuBar) => {
       </button>
       {/* <button
         onClick={() => editor.chain().focus().setParagraph().run()}
-        className={editor.isActive("paragraph") ? "tiptap-is-active" : ""}
+        className={editor.isActive("paragraph") ? "is-active" : ""}
       >
         Paragraph
       </button> */}
 
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive("bulletList") ? "tiptap-is-active" : ""}
+        className={editor.isActive("bulletList") ? "is-active" : ""}
       >
         Bullet list
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive("orderedList") ? "tiptap-is-active" : ""}
+        className={editor.isActive("orderedList") ? "is-active" : ""}
       >
         Ordered list
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive("blockquote") ? "tiptap-is-active" : ""}
+        className={editor.isActive("blockquote") ? "is-active" : ""}
       >
         Blockquote
       </button>

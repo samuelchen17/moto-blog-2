@@ -1,7 +1,10 @@
 import { Button, FileInput, Label, Select, TextInput } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
+import { useRef } from "react";
 
 const CreatePostPage = () => {
+  const editorRef = useRef(null);
+
   return (
     <div>
       <h1>Create a post</h1>
@@ -45,7 +48,7 @@ const CreatePostPage = () => {
           </Label>
         </div>
         {/* Text editing */}
-        <Tiptap />
+        <Tiptap editorRef={editorRef} />
 
         <Button>Publish</Button>
       </form>

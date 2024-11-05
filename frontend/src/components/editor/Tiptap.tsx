@@ -20,11 +20,12 @@ const extensions = [
 
 const editorProps = {
   attributes: {
-    class: "rounded-md border h-[12rem] border-input bg-back overflow-y-auto",
+    class:
+      "rounded-md border h-[12rem] border-input bg-back overflow-y-auto prose max-w-none",
   },
 };
 
-const Tiptap = () => {
+const Tiptap = ({ editorRef }: { editorRef: React.MutableRefObject<null> }) => {
   const editor = useEditor({
     content: "<p>Hello World!</p>",
     editorProps,
@@ -33,6 +34,10 @@ const Tiptap = () => {
 
   if (!editor) {
     return null;
+  }
+
+  if (editorRef) {
+    editorRef.current = editor;
   }
 
   return (
