@@ -1,6 +1,6 @@
-// src/Tiptap.tsx
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
 
 import MenuBar from "./MenuBar";
 
@@ -15,6 +15,7 @@ const extensions = [
       keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
     },
   }),
+  Underline,
 ];
 
 const editorProps = {

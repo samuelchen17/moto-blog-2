@@ -1,8 +1,17 @@
 import { Editor } from "@tiptap/react";
+import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdFormatStrikethrough,
+  MdFormatUnderlined,
+} from "react-icons/md";
 
 interface IMenuBar {
   editor: Editor;
 }
+
+const menuItemSize = 30;
 
 const MenuBar = ({ editor }: IMenuBar) => {
   if (!editor) {
@@ -12,45 +21,12 @@ const MenuBar = ({ editor }: IMenuBar) => {
   return (
     <div className="border rounded-md flex items-center flex-wrap gap-x-4 p-4">
       <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? "tiptap-is-active" : ""}
-      >
-        Bold
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={editor.isActive("italic") ? "tiptap-is-active" : ""}
-      >
-        Italic
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={editor.isActive("strike") ? "tiptap-is-active" : ""}
-      >
-        Strike
-      </button>
-      <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-        Clear marks
-      </button>
-      <button onClick={() => editor.chain().focus().clearNodes().run()}>
-        Clear nodes
-      </button>
-      <button
-        onClick={() => editor.chain().focus().setParagraph().run()}
-        className={editor.isActive("paragraph") ? "tiptap-is-active" : ""}
-      >
-        Paragraph
-      </button>
-      <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={
           editor.isActive("heading", { level: 1 }) ? "tiptap-is-active" : ""
         }
       >
-        H1
+        <BsTypeH1 size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -58,7 +34,7 @@ const MenuBar = ({ editor }: IMenuBar) => {
           editor.isActive("heading", { level: 2 }) ? "tiptap-is-active" : ""
         }
       >
-        H2
+        <BsTypeH2 size={menuItemSize} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
@@ -66,8 +42,62 @@ const MenuBar = ({ editor }: IMenuBar) => {
           editor.isActive("heading", { level: 3 }) ? "tiptap-is-active" : ""
         }
       >
-        H3
+        <BsTypeH3 size={menuItemSize} />
       </button>
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        className={editor.isActive("bold") ? "tiptap-is-active" : ""}
+      >
+        <MdFormatBold size={menuItemSize} />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        className={editor.isActive("italic") ? "tiptap-is-active" : ""}
+      >
+        <MdFormatItalic size={menuItemSize} />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={editor.isActive("underline") ? "tiptap-is-active" : ""}
+      >
+        <MdFormatUnderlined size={menuItemSize} />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        className={editor.isActive("strike") ? "tiptap-is-active" : ""}
+      >
+        <MdFormatStrikethrough size={menuItemSize} />
+      </button>
+
+      <button
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().chain().focus().undo().run()}
+      >
+        Undo
+      </button>
+      <button
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().chain().focus().redo().run()}
+      >
+        Redo
+      </button>
+
+      <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+        Clear marks
+      </button>
+      <button onClick={() => editor.chain().focus().clearNodes().run()}>
+        Clear nodes
+      </button>
+      {/* <button
+        onClick={() => editor.chain().focus().setParagraph().run()}
+        className={editor.isActive("paragraph") ? "tiptap-is-active" : ""}
+      >
+        Paragraph
+      </button> */}
+
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={editor.isActive("bulletList") ? "tiptap-is-active" : ""}
@@ -91,18 +121,6 @@ const MenuBar = ({ editor }: IMenuBar) => {
       </button>
       <button onClick={() => editor.chain().focus().setHardBreak().run()}>
         Hard break
-      </button>
-      <button
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-      >
-        Undo
-      </button>
-      <button
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-      >
-        Redo
       </button>
     </div>
   );
