@@ -9,7 +9,9 @@ export const createPost = async (
 ) => {
   try {
     if (!req.body.title || !req.body.content) {
-      next(new CustomError(400, "Please fill out all required fields"));
+      next(
+        new CustomError(400, "Please fill out all required fields for post")
+      );
     }
 
     // url friendly version of title

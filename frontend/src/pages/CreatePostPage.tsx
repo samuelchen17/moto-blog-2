@@ -37,6 +37,8 @@ const CreatePostPage = () => {
 
     const payload: IPublishPostPayload = { ...formData };
 
+    console.log(payload);
+
     const res: Response = await fetch(
       `/api/post/create/${currentUser.user.id}`,
       {
