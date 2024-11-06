@@ -24,10 +24,6 @@ const Tiptap = ({ editorRef, setFormData }: ITiptapProps) => {
     },
   });
 
-  // if (editorRef) {
-  //   editorRef.current = editor;
-  // }
-
   useEffect(() => {
     if (editor) {
       editorRef.current = editor;
@@ -36,6 +32,10 @@ const Tiptap = ({ editorRef, setFormData }: ITiptapProps) => {
       editorRef.current = null;
     };
   }, [editor, editorRef]);
+
+  // if (editorRef) {
+  //   editorRef.current = editor;
+  // }
 
   if (!editor) return null;
 

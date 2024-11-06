@@ -10,10 +10,10 @@ import { RootState } from "../redux/store";
 // need to prevent injection attacks
 
 // type PostResponse = ISuccessRes | IErrorRes;
+const clearForm: IPublishPostPayload = { title: "", content: "" };
 
 const CreatePostPage = () => {
   const editorRef = useRef<Editor | null>(null);
-  const clearForm: IPublishPostPayload = { title: "", content: "" };
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
