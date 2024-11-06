@@ -1,6 +1,5 @@
 import { useEditor, EditorContent, BubbleMenu, Editor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
+import { extensions, editorProps } from "../../config/tiptap.config";
 import { IPublishPostPayload } from "@shared/types/post";
 
 import MenuBar from "./MenuBar";
@@ -11,30 +10,9 @@ interface ITiptapProps {
   setFormData: React.Dispatch<React.SetStateAction<IPublishPostPayload>>;
 }
 
-// define your extension array
-const extensions = [
-  StarterKit.configure({
-    heading: { levels: [1, 2, 3] },
-    codeBlock: false,
-    code: false,
-    bulletList: {
-      keepMarks: true,
-      keepAttributes: false,
-    },
-  }),
-  Underline,
-];
-
-const editorProps = {
-  attributes: {
-    class:
-      "rounded-md border h-[12rem] border-input bg-back overflow-y-auto prose max-w-none",
-  },
-};
-
 const Tiptap = ({ editorRef, setFormData }: ITiptapProps) => {
   const editor = useEditor({
-    content: "<p>Hello World!</p>",
+    // content: "<p>Hello World!</p>",
     editorProps,
     extensions,
     onUpdate: ({ editor }) => {
