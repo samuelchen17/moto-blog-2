@@ -57,6 +57,7 @@ const CreatePostPage = () => {
     }
   };
 
+  console.log(formData);
   return (
     <div>
       <h1>Create a post</h1>
@@ -111,7 +112,7 @@ const CreatePostPage = () => {
           </Label>
         </div>
         {/* Text editing */}
-        <Tiptap editorRef={editorRef} />
+        <Tiptap editorRef={editorRef} setFormData={setFormData} />
 
         <Button type="submit">Publish</Button>
       </form>

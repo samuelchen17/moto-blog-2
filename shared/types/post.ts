@@ -4,3 +4,5 @@ export interface IPublishPostPayload {
   image?: string;
   category?: string;
 }
+
+export interface IPostSuccess {}
