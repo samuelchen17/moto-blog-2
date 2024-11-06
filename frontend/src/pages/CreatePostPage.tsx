@@ -3,13 +3,25 @@ import Tiptap from "../components/editor/Tiptap";
 import { useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { IPublishPostPayload } from "@shared/types/post";
+import { IErrorRes } from "@shared/types/res";
+import { useAppSelector } from "../redux/hooks";
+import { RootState } from "../redux/store";
 
 // need to prevent injection attacks
+
+// type PostResponse = ISuccessRes | IErrorRes;
 
 const CreatePostPage = () => {
   const editorRef = useRef<Editor | null>(null);
   const clearForm: IPublishPostPayload = { title: "", content: "" };
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
+
+  if (!currentUser) {
+    throw new Error("Auth missing");
+  }
 
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -22,7 +34,21 @@ const CreatePostPage = () => {
 
     const updatedFormData = { ...formData, content };
     setFormData(updatedFormData);
-    console.log(formData);
+
+    const payload: IPublishPostPayload = { ...formData };
+
+    const res: Response = await fetch(
+      `/api/post/create/${currentUser.user.id}`,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    const data = await res.json();
+    console.log(data);
+
     try {
     } catch (err) {
       console.error("Error:", err);
@@ -46,7 +72,7 @@ const CreatePostPage = () => {
             Category
           </option>
           <option value="placeholder" id="category">
-            create config implement
+            create config .map implement
           </option>
         </Select>
         {/* file upload */}
