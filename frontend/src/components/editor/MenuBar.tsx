@@ -18,6 +18,7 @@ const MenuBar = ({ editor }: IMenuBar) => {
     return null;
   }
 
+  // ensure button is set to type="button" to prevent accidental submits
   return (
     <div className="border rounded-md flex items-center flex-wrap gap-x-4 p-4">
       <button
@@ -79,10 +80,16 @@ const MenuBar = ({ editor }: IMenuBar) => {
         Redo
       </button>
 
-      <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().unsetAllMarks().run()}
+      >
         Clear marks
       </button>
-      <button onClick={() => editor.chain().focus().clearNodes().run()}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().clearNodes().run()}
+      >
         Clear nodes
       </button>
       {/* <button
@@ -110,10 +117,16 @@ const MenuBar = ({ editor }: IMenuBar) => {
       >
         Blockquote
       </button>
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+      >
         Horizontal rule
       </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setHardBreak().run()}
+      >
         Hard break
       </button>
     </div>

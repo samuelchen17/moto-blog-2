@@ -33,6 +33,7 @@ const CreatePostPage = () => {
   const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    console.log("submitting post");
     try {
       // get html content from tiptap and prevent xss
       const rawContent = editorRef.current?.getHTML() || "";
@@ -69,7 +70,6 @@ const CreatePostPage = () => {
     }
   };
 
-  console.log(formData);
   return (
     <div>
       <h1>Create a post</h1>
