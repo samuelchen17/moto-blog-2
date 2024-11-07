@@ -11,7 +11,7 @@ const RootLayout = () => {
         </nav>
       </header>
 
-      <main className="max-w-screen-xl mx-auto">
+      <main className="max-w-screen-xl mx-auto p-4">
         <Outlet />
       </main>
 

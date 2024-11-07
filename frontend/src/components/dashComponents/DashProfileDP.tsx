@@ -3,6 +3,7 @@ import { RootState } from "../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { FaEdit } from "react-icons/fa";
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -21,6 +22,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dpUploadProgress, setDPUploadProgress] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
+  // const [tempImagePath, setTempImagePath] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -81,16 +83,35 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
         dispatch(updateStop());
         throw new Error(`Storage error: ${err.message}`);
       },
-      () => {
+      async () => {
         getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
           setDPUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
+          // setTempImagePath(storageRef.fullPath);
           dispatch(updateStop());
           setLoading(false);
         });
       }
     );
   };
+
+  // implement, firebase auth
+  // delete image if not submitted
+  // useEffect(() => {
+  //   return () => {
+  //     if (tempImagePath) {
+  //       const storage = getStorage(firebaseApp);
+  //       const imageRef = ref(storage, tempImagePath);
+  //       deleteObject(imageRef)
+  //         .then(() => {
+  //           console.log("Temporary image deleted successfully");
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error deleting temporary image:", error);
+  //         });
+  //     }
+  //   };
+  // }, [tempImagePath]);
 
   return (
     <div className="flex flex-col gap-4">

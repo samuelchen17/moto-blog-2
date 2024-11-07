@@ -6,8 +6,10 @@ import { IPublishPostPayload } from "@shared/types/post";
 import { IErrorRes } from "@shared/types/res";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
+import DOMPurify from "dompurify";
 
 // need to prevent injection attacks
+// implement dom purify
 
 // type PostResponse = ISuccessRes | IErrorRes;
 const clearForm: IPublishPostPayload = { title: "", content: "" };
@@ -30,9 +32,17 @@ const CreatePostPage = () => {
   const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const content = editorRef.current?.getHTML() || "";
+    // get html content from tiptap
+    const rawContent = editorRef.current?.getHTML() || "";
+    const sanitizedContent = DOMPurify.sanitize(rawContent);
 
-    const updatedFormData = { ...formData, content };
+    // more specific rules for sanitization
+    // const clean = DOMPurify.sanitize(dirty, {
+    //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
+    //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
+    //   });
+
+    const updatedFormData = { ...formData, content: sanitizedContent };
     setFormData(updatedFormData);
 
     const payload: IPublishPostPayload = { ...formData };
