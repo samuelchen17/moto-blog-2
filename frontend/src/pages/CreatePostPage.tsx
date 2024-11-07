@@ -7,6 +7,7 @@ import { IErrorRes } from "@shared/types/res";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
+import { postCategory } from "../config/postCategory.config";
 
 // need to prevent injection attacks
 // implement dom purify
@@ -32,36 +33,37 @@ const CreatePostPage = () => {
   const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // get html content from tiptap
-    const rawContent = editorRef.current?.getHTML() || "";
-    const sanitizedContent = DOMPurify.sanitize(rawContent);
-
-    // more specific rules for sanitization
-    // const clean = DOMPurify.sanitize(dirty, {
-    //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
-    //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
-    //   });
-
-    const updatedFormData = { ...formData, content: sanitizedContent };
-    setFormData(updatedFormData);
-
-    const payload: IPublishPostPayload = { ...formData };
-
-    console.log(payload);
-
-    const res: Response = await fetch(
-      `/api/post/create/${currentUser.user.id}`,
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-
-    const data = await res.json();
-    console.log(data);
-
     try {
+      // get html content from tiptap and prevent xss
+      const rawContent = editorRef.current?.getHTML() || "";
+      const sanitizedContent = DOMPurify.sanitize(rawContent);
+
+      // more specific rules for sanitization
+      // const clean = DOMPurify.sanitize(dirty, {
+      //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
+      //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
+      //   });
+
+      const updatedFormData = { ...formData, content: sanitizedContent };
+      setFormData(updatedFormData);
+
+      const payload: IPublishPostPayload = { ...formData };
+
+      const res: Response = await fetch(
+        `/api/post/create/${currentUser.user.id}`,
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+      console.log(data);
     } catch (err) {
       console.error("Error:", err);
     }
@@ -80,13 +82,16 @@ const CreatePostPage = () => {
           placeholder="Title"
           onChange={handlePostChange}
         />
-        <Select>
-          <option value="placeholder" disabled>
-            Category
-          </option>
-          <option value="placeholder" id="category">
-            create config .map implement
-          </option>
+        <Select
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setFormData({ ...formData, category: e.target.value });
+          }}
+        >
+          {postCategory.map((item) => (
+            <option key={item.name} value={item.value}>
+              {item.name}
+            </option>
+          ))}
         </Select>
         {/* file upload */}
         <div className="flex w-full items-center justify-center">
