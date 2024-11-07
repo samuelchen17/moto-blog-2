@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
+import { JSDOM } from "jsdom";
+import DOMPurify from "dompurify";
+
+const window = new JSDOM("").window;
+const purify = DOMPurify(window);
 
 export const createPost = async (
   req: Request,
@@ -14,6 +19,9 @@ export const createPost = async (
       );
     }
 
+    // prevent xss
+    const sanitizedContent = purify.sanitize(req.body.content);
+
     // url friendly version of title
     const slug = req.body.title
       .toLowerCase()
@@ -22,7 +30,12 @@ export const createPost = async (
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-    const newPost = new Post({ ...req.body, slug, createdBy: req.params.id });
+    const newPost = new Post({
+      ...req.body,
+      content: sanitizedContent,
+      slug,
+      createdBy: req.params.id,
+    });
 
     const savedPost = await newPost.save();
 
