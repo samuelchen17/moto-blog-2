@@ -1,4 +1,11 @@
-import { Button, FileInput, Label, Select, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  FileInput,
+  Label,
+  Select,
+  TextInput,
+} from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
 import { useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
@@ -18,6 +25,7 @@ const clearForm: IPublishPostPayload = { title: "", content: "" };
 const CreatePostPage = () => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
+  const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -33,7 +41,6 @@ const CreatePostPage = () => {
   const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("submitting post");
     try {
       // get html content from tiptap and prevent xss
       const rawContent = editorRef.current?.getHTML() || "";
@@ -62,11 +69,18 @@ const CreatePostPage = () => {
       const data = await res.json();
 
       if (!res.ok) {
+        setPublishErrMsg(data.message);
         throw new Error(data.message);
       }
       console.log(data);
     } catch (err) {
       console.error("Error:", err);
+
+      if (err instanceof Error) {
+        setPublishErrMsg(err.message);
+      } else {
+        setPublishErrMsg("An unknown error occurred");
+      }
     }
   };
 
@@ -130,6 +144,8 @@ const CreatePostPage = () => {
         <Tiptap editorRef={editorRef} setFormData={setFormData} />
 
         <Button type="submit">Publish</Button>
+
+        {publishErrMsg && <Alert color="failure">{publishErrMsg}</Alert>}
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ import { RootState } from "../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { FaEdit } from "react-icons/fa";
 import {
-  deleteObject,
+  // deleteObject,
   getDownloadURL,
   getStorage,
   ref,

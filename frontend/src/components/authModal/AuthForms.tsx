@@ -12,6 +12,7 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
+  signUpSuccess,
 } from "../../redux/features/user/userSlice";
 import {
   toggleAuthModal,
@@ -31,9 +32,11 @@ export const isAuthSuccessResponse = (
 };
 
 export const AuthFormsSignIn = () => {
-  const { loading: isLoading, error: errorMessage } = useAppSelector(
-    (state) => state.persisted.user
-  );
+  const {
+    loading: isLoading,
+    error: errorMessage,
+    success: successMessage,
+  } = useAppSelector((state) => state.persisted.user);
 
   const clearForm: ISignInAuthPayload = { emailOrUsername: "", password: "" };
   const [formData, setFormData] = useState<ISignInAuthPayload>(clearForm);
@@ -123,6 +126,9 @@ export const AuthFormsSignIn = () => {
         </a>
       </div>
       {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+      {successMessage && (
+        <Alert color="success">Account created successfully</Alert>
+      )}
       <div className="w-full">
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
@@ -183,6 +189,7 @@ export const AuthFormsSignUp = () => {
         throw new Error(data.message || "An unexpected error occurred");
       }
 
+      dispatch(signUpSuccess());
       // redirect to log in
       dispatch(toggleAuthMode());
     } catch (err) {

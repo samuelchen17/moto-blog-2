@@ -5,12 +5,14 @@ import { IErrorRes, ISuccessRes } from "@shared/types/res";
 interface IUserState {
   currentUser: ISuccessRes | null;
   error: string | null;
+  success: boolean | null;
   loading: boolean;
 }
 
 const initialState: IUserState = {
   currentUser: null,
   error: null,
+  success: null,
   loading: false,
 };
 
@@ -18,9 +20,19 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    signUpStart: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
+    signUpSuccess: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = true;
+    },
     signInStart: (state) => {
       state.loading = true;
       state.error = null;
+      state.success = null;
     },
     signInSuccess: (state, action: PayloadAction<ISuccessRes>) => {
       state.currentUser = action.payload;
@@ -79,6 +91,8 @@ const userSlice = createSlice({
 });
 
 export const {
+  signUpStart,
+  signUpSuccess,
   signInStart,
   signInSuccess,
   signInFailure,
