@@ -61,18 +61,79 @@ export const createPost = async (
   }
 };
 
+interface IPostQuery {
+  createdBy?: string;
+  category?: string;
+  slug?: string;
+  _id?: string;
+  $or?: Array<
+    | { title?: { $regex: string; $options: string } }
+    | { content?: { $regex: string; $options: string } }
+  >;
+}
+
 export const getPosts = async (
-  req: Request<{}, { query: string }, {}>,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 9;
+  // 1 = asc, -1 = desc
+  const sortDirection = req.query.order === "asc" ? 1 : -1;
+
   try {
-    const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
-    // 1 = asc, -1 = desc
-    const sortDirection = req.query.order === "asc" ? 1 : -1;
-    const posts = await Post.find(...(req.query.userId && { user }));
-  } catch (error) {
-    next(new CustomError(400, "Unable to get users"));
+    const query: IPostQuery = {};
+
+    if (req.query.createdBy) {
+      query.createdBy = req.query.createdBy as string;
+    }
+
+    if (req.query.category) {
+      query.category = req.query.category as string;
+    }
+
+    if (req.query.slug) {
+      query.slug = req.query.slug as string;
+    }
+
+    if (req.query.postId) {
+      query._id = req.query.postId as string;
+    }
+
+    if (req.query.searchTerm) {
+      query.$or = [
+        { title: { $regex: req.query.searchTerm as string, $options: "i" } },
+        { content: { $regex: req.query.searchTerm as string, $options: "i" } },
+      ];
+    }
+
+    const posts = await Post.find(query)
+      .skip(startIndex)
+      .limit(limit)
+      .sort({ updatedAt: sortDirection });
+
+    const totalPosts = await Post.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthPosts = await Post.countDocuments({
+      createAT: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      posts,
+      totalPosts,
+      lastMonthPosts,
+    });
+  } catch (err) {
+    console.error("Error fetching posts:", err);
+    next(new CustomError(500, "Failed to retrieve posts"));
   }
 };
