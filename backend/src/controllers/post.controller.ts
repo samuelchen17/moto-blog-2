@@ -62,7 +62,17 @@ export const createPost = async (
 };
 
 export const getPosts = async (
-  req: Request,
+  req: Request<{}, { query: string }, {}>,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    // 1 = asc, -1 = desc
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+    const posts = await Post.find(...(req.query.userId && { user }));
+  } catch (error) {
+    next(new CustomError(400, "Unable to get users"));
+  }
+};
