@@ -124,7 +124,7 @@ export const getPosts = async (
     );
 
     const lastMonthPosts = await Post.countDocuments({
-      createAT: { $gte: oneMonthAgo },
+      createAt: { $gte: oneMonthAgo },
     });
 
     res.status(200).json({
