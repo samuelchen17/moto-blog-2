@@ -15,6 +15,7 @@ import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
 import { postCategory } from "../config/postCategory.config";
+import { useNavigate } from "react-router-dom";
 
 // need to prevent injection attacks
 // implement dom purify
@@ -29,6 +30,7 @@ const CreatePostPage = () => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const navigate = useNavigate();
 
   if (!currentUser) {
     throw new Error("Auth missing");
@@ -72,7 +74,9 @@ const CreatePostPage = () => {
         setPublishErrMsg(data.message);
         throw new Error(data.message);
       }
-      console.log(data);
+
+      setPublishErrMsg(null);
+      navigate(`/blogs/${data.slug}`);
     } catch (err) {
       console.error("Error:", err);
 
