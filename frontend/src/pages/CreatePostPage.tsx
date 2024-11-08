@@ -10,7 +10,6 @@ import Tiptap from "../components/editor/Tiptap";
 import { useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { IPublishPostPayload } from "@shared/types/post";
-import { IErrorRes } from "@shared/types/res";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";

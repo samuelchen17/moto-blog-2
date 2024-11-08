@@ -17,8 +17,8 @@ interface IDashNavItems {
 
 export const dashNavItems: IDashNavItems[] = [
   {
-    name: "Dashboard",
-    path: "/dash",
+    name: "dashboard",
+    path: "/dashboard/?tab=dashboard",
     icon: MdSpaceDashboard,
     admin: true,
   },
@@ -35,26 +35,26 @@ export const dashNavItems: IDashNavItems[] = [
     icon: IoMdSettings,
   },
   {
-    name: "Comments",
-    path: "/comments",
+    name: "comments",
+    path: "/dashboard/?tab=comments",
     icon: BiSolidCommentDetail,
     admin: true,
   },
   {
-    name: "Users",
-    path: "/users",
+    name: "users",
+    path: "/dashboard/?tab=users",
     icon: PiUsersFourFill,
     admin: true,
   },
   {
-    name: "Write",
+    name: "write",
     path: "/create-post",
     icon: MdOutlinePostAdd,
     admin: true,
   },
   {
-    name: "Posts",
-    path: "/posts",
+    name: "posts",
+    path: "/dashboard/?tab=posts",
     icon: HiDocumentText,
     admin: true,
   },

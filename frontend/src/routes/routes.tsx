@@ -11,10 +11,6 @@ import AboutPage from "../pages/AboutPage";
 import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
 import CreatePostPage from "../pages/CreatePostPage";
-import Dashboard from "../components/dashComponents/dashAdminComponents/Dashboard";
-import DashComments from "../components/dashComponents/dashAdminComponents/DashComments";
-import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";
-import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,10 +22,6 @@ const router = createBrowserRouter(
         {/* for admins only */}
         <Route element={<AdminRoute />}>
           <Route path="create-post" element={<CreatePostPage />} />
-          <Route path="dash" element={<Dashboard />} />
-          <Route path="comments" element={<DashComments />} />
-          <Route path="posts" element={<DashPosts />} />
-          <Route path="users" element={<DashUsers />} />
         </Route>
       </Route>
       <Route path="blogs" element={<BlogsPage />} />
