@@ -19,6 +19,14 @@ export const createPost = async (
       );
     }
 
+    // check duplicate title
+    const existingPost = await Post.findOne({ title: req.body.title });
+    if (existingPost) {
+      return next(
+        new CustomError(400, "A post with this title already exists")
+      );
+    }
+
     // prevent xss
     const sanitizedContent = purify.sanitize(req.body.content);
 
