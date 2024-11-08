@@ -38,6 +38,12 @@ export const createPost = async (
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
+    // check existing slug
+    const existingSlug = await Post.findOne({ slug: slug });
+    if (existingSlug) {
+      return next(new CustomError(400, "Slug for post already exists"));
+    }
+
     const newPost = new Post({
       ...req.body,
       content: sanitizedContent,
