@@ -4,7 +4,7 @@ import {
   isOwner,
   isAdmin,
 } from "../middlewares/user.middlewares";
-import { createPost } from "../controllers/post.controller";
+import { createPost, getPosts } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
   router.post(
@@ -14,6 +14,7 @@ const postRouter = (router: Router) => {
     isAdmin,
     createPost
   );
+  router.get("/post/getposts", getPosts);
 };
 
 export default postRouter;

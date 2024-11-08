@@ -60,3 +60,9 @@ export const createPost = async (
     next(new CustomError(500, "Failed to create post"));
   }
 };
+
+export const getPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
