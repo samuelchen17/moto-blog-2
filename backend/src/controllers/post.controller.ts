@@ -145,6 +145,14 @@ export const createPost = async (
 
 export const deletePost = async (
   req: Request,
-  res: Response<IPostResponse>,
+  res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("Post has been deleted");
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    next(new CustomError(500, "Failed to delete post"));
+  }
+};
