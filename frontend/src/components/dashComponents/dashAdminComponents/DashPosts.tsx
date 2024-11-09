@@ -6,11 +6,12 @@ interface IPosts {}
 
 const DashPosts = () => {
   // implement, type array of data.posts
-  const [posts, setPosts] = useState([]);
+  const [userAdminPosts, setUserAdminPosts] = useState([]);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
+  console.log(userAdminPosts);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -20,10 +21,12 @@ const DashPosts = () => {
         // implement api response type
         const data = await res.json();
         if (res.ok) {
-          setPosts(data.posts);
+          setUserAdminPosts(data.posts);
         }
       } catch (err) {}
     };
+
+    fetchPosts();
   }, [currentUser?.user.id]);
 
   return <div>DashPosts</div>;

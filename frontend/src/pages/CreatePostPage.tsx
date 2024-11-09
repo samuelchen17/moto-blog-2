@@ -76,7 +76,8 @@ const CreatePostPage = () => {
 
       setPublishErrMsg(null);
       // redirect needs to be fixed implement
-      navigate(`/blogs/${data.slug}`);
+      // navigate(`/blogs/${data.slug}`);
+      navigate(`/blogs`);
     } catch (err) {
       console.error("Error:", err);
 
