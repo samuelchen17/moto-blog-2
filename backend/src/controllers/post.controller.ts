@@ -56,7 +56,7 @@ export const getPosts = async (
       ];
     }
 
-    const posts = await Post.find(query)
+    const posts = await Post.find<IPost>(query)
       .skip(startIndex)
       .limit(limit)
       .sort({ updatedAt: sortDirection });
@@ -88,7 +88,7 @@ export const getPosts = async (
 
 export const createPost = async (
   req: Request,
-  res: Response,
+  res: Response<IPost>,
   next: NextFunction
 ) => {
   try {
@@ -123,7 +123,7 @@ export const createPost = async (
       return next(new CustomError(400, "Slug for post already exists"));
     }
 
-    const newPost = new Post({
+    const newPost = new Post<IPost>({
       ...req.body,
       content: sanitizedContent,
       slug,
@@ -132,8 +132,11 @@ export const createPost = async (
 
     const savedPost = await newPost.save();
 
-    // mongodb unique issue, implement
-    res.status(201).json(savedPost);
+    res.status(201).json({
+      ...savedPost.toObject(),
+      // cast _id as string, instead of ObjectId, to fix ts error for IPost
+      _id: savedPost._id.toString(),
+    });
   } catch (err) {
     console.error("Error creating post:", err);
     next(new CustomError(500, "Failed to create post"));

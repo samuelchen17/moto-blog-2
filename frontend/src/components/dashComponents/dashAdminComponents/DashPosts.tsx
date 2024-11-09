@@ -6,7 +6,7 @@ import { IPostResponse, IPost } from "@shared/types/post";
 
 const DashPosts = () => {
   // implement, type array of data.posts
-  const [userAdminPosts, setUserAdminPosts] = useState([]);
+  const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
