@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { Alert, Table } from "flowbite-react";
+import { Alert, Button, Modal, Table } from "flowbite-react";
 import { IPostResponse, IPost } from "@shared/types/post";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
 const DashPosts = () => {
   // implement, type array of data.posts
   const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -62,6 +64,10 @@ const DashPosts = () => {
     }
   };
 
+  const handleDeletePost = () => {
+    console.log("deleted");
+  };
+
   return (
     <div className="w-full">
       {currentUser?.user.admin && userAdminPosts.length > 0 ? (
@@ -104,12 +110,12 @@ const DashPosts = () => {
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
                     {/* implement delete route */}
-                    <a
-                      href="#"
+                    <button
+                      onClick={() => setOpenModal(true)}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
                     >
                       Delete
-                    </a>
+                    </button>
                   </Table.Cell>
                   <Table.Cell>
                     <Link
@@ -137,6 +143,33 @@ const DashPosts = () => {
       ) : (
         <p>No posts created yet!</p>
       )}
+
+      {/* delete post modal */}
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+        dismissible
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete your account
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeletePost}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setOpenModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
