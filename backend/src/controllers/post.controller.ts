@@ -83,6 +83,7 @@ export const getPosts = async (
   const sortDirection = req.query.order === "asc" ? 1 : -1;
 
   try {
+    // construct the query as needed
     const query: IPostQuery = {};
 
     if (req.query.createdBy) {
