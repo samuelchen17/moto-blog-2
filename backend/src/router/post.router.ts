@@ -20,7 +20,7 @@ const postRouter = (router: Router) => {
   );
   router.get("/post/getposts", getPosts);
   router.delete(
-    "/post/delete/:postId/:userId",
+    "/post/delete/:postId/:id",
     isAuthenticated,
     isOwner,
     isAdmin,

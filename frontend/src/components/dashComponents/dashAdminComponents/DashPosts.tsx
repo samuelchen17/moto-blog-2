@@ -13,6 +13,7 @@ const DashPosts = () => {
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -64,8 +65,33 @@ const DashPosts = () => {
     }
   };
 
-  const handleDeletePost = () => {
-    console.log("deleted");
+  const handleDeletePost = async () => {
+    setOpenModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      setUserAdminPosts((prev) =>
+        prev.filter((post) => post._id !== postIdToDelete)
+      );
+    } catch (err) {
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    }
   };
 
   return (
@@ -109,9 +135,11 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
-                    {/* implement delete route */}
                     <button
-                      onClick={() => setOpenModal(true)}
+                      onClick={() => {
+                        setOpenModal(true);
+                        setPostIdToDelete(post._id);
+                      }}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
                     >
                       Delete
@@ -138,7 +166,14 @@ const DashPosts = () => {
               Show more
             </button>
           )}
-          {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+          {errorMessage && (
+            <Alert
+              color="failure"
+              className="text-center justify-center items-center"
+            >
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       ) : (
         <p>No posts created yet!</p>
@@ -157,7 +192,7 @@ const DashPosts = () => {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete your account
+              Are you sure you want to delete this post?
             </h3>
             <div className="flex justify-center gap-4">
               <Button color="failure" onClick={handleDeletePost}>

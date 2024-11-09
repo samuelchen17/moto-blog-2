@@ -6,7 +6,7 @@ export interface IPublishPostPayload {
 }
 
 export interface IPost {
-  _id?: string;
+  _id: string;
   createdBy: string;
   title: string;
   slug: string;
