@@ -26,7 +26,9 @@ const DashPosts = () => {
       } catch (err) {}
     };
 
-    fetchPosts();
+    if (currentUser?.user.admin) {
+      fetchPosts();
+    }
   }, [currentUser?.user.id]);
 
   return <div>DashPosts</div>;
