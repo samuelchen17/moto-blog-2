@@ -3,6 +3,8 @@ import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Table } from "flowbite-react";
 import { IPostResponse, IPost } from "@shared/types/post";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 const DashPosts = () => {
   // implement, type array of data.posts
@@ -32,8 +34,9 @@ const DashPosts = () => {
   }, [currentUser?.user.id]);
 
   return (
-    <div>
+    <div className="w-full">
       {currentUser?.user.admin && userAdminPosts.length > 0 ? (
+        // implement tailwind-scrollbar? for mobile
         <div className="overflow-x-auto">
           <Table hoverable>
             <Table.Head>
@@ -41,7 +44,6 @@ const DashPosts = () => {
               <Table.HeadCell>Image</Table.HeadCell>
               <Table.HeadCell>Title</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
               <Table.HeadCell>
                 <span className="sr-only">Delete</span>
               </Table.HeadCell>
@@ -51,14 +53,26 @@ const DashPosts = () => {
             </Table.Head>
             <Table.Body className="divide-y">
               {userAdminPosts.map((post) => (
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Row
+                  key={post.slug}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {'Apple MacBook Pro 17"'}
+                    {format(new Date(post.updatedAt), "dd MMM yyyy")}
                   </Table.Cell>
-                  <Table.Cell>Sliver</Table.Cell>
-                  <Table.Cell>{post.title}</Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/post/${post.slug}`}>
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-20 h-10 object-cover bg-gray-500"
+                      />
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                  </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>$2999</Table.Cell>
                   <Table.Cell>
                     <a
                       href="#"
@@ -68,12 +82,12 @@ const DashPosts = () => {
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <a
-                      href="#"
+                    <Link
+                      to={`/update-post/${post._id}`}
                       className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                     >
                       Edit
-                    </a>
+                    </Link>
                   </Table.Cell>
                 </Table.Row>
               ))}
