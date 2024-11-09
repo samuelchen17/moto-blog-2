@@ -15,7 +15,6 @@ const DashPosts = () => {
     (state: RootState) => state.persisted.user
   );
 
-  console.log(userAdminPosts);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -104,9 +103,10 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
+                    {/* implement delete route */}
                     <a
                       href="#"
-                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                      className="font-medium text-red-600 hover:underline dark:text-red-500"
                     >
                       Delete
                     </a>

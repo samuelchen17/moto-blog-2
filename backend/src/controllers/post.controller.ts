@@ -142,3 +142,9 @@ export const createPost = async (
     next(new CustomError(500, "Failed to create post"));
   }
 };
+
+export const deletePost = async (
+  req: Request,
+  res: Response<IPostResponse>,
+  next: NextFunction
+) => {};

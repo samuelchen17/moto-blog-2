@@ -4,7 +4,11 @@ import {
   isOwner,
   isAdmin,
 } from "../middlewares/user.middlewares";
-import { createPost, getPosts } from "../controllers/post.controller";
+import {
+  createPost,
+  getPosts,
+  deletePost,
+} from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
   router.post(
@@ -15,6 +19,13 @@ const postRouter = (router: Router) => {
     createPost
   );
   router.get("/post/getposts", getPosts);
+  router.delete(
+    "/post/delete/:postId/:userId",
+    isAuthenticated,
+    isOwner,
+    isAdmin,
+    deletePost
+  );
 };
 
 export default postRouter;
