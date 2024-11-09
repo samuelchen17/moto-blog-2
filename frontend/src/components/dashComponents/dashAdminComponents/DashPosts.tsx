@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { Table } from "flowbite-react";
+import { Alert, Table } from "flowbite-react";
 import { IPostResponse, IPost } from "@shared/types/post";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 const DashPosts = () => {
   // implement, type array of data.posts
   const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
+  const [showMore, setShowMore] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -17,6 +19,7 @@ const DashPosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setErrorMessage(null);
         const res = await fetch(
           `/api/post/getposts?createdBy=${currentUser?.user.id}`
         );
@@ -24,14 +27,41 @@ const DashPosts = () => {
         const data: IPostResponse = await res.json();
         if (res.ok) {
           setUserAdminPosts(data.posts);
+          if (data.posts.length < 9) {
+            setShowMore(false);
+          }
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error("Error:", err);
+        setErrorMessage("Failed to fetch posts, internal error");
+      }
     };
 
     if (currentUser?.user.admin) {
       fetchPosts();
     }
   }, [currentUser?.user.id]);
+
+  const handleShowMore = async () => {
+    const startIndex = userAdminPosts.length;
+    try {
+      setErrorMessage(null);
+      const res = await fetch(
+        `/api/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
+      );
+      const data: IPostResponse = await res.json();
+
+      if (res.ok) {
+        setUserAdminPosts((prev) => [...prev, ...data.posts]);
+        if (data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      setErrorMessage("Failed to show more, internal error");
+    }
+  };
 
   return (
     <div className="w-full">
@@ -93,6 +123,16 @@ const DashPosts = () => {
               ))}
             </Table.Body>
           </Table>
+          {showMore && (
+            // implement style button
+            <button
+              onClick={handleShowMore}
+              className="self-center w-full text-red-500 py-6"
+            >
+              Show more
+            </button>
+          )}
+          {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
         </div>
       ) : (
         <p>No posts created yet!</p>
