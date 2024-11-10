@@ -8,13 +8,10 @@ import React from "react";
 import { IDashFormProps } from "../../utils/dashForm.utils";
 import { updateStart, updateStop } from "../../redux/features/user/userSlice";
 import { storage } from "../../config/firebase.config";
+import { setTempImagePath } from "../../redux/features/image/imageSlice";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
-const DashDP = ({
-  setFormData,
-  formData,
-  setTempImagePath,
-}: IDashFormProps) => {
+const DashDP = ({ setFormData, formData }: IDashFormProps) => {
   const [dp, setDP] = useState<File | null>(null);
   const [dpUrl, setDPUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -85,9 +82,7 @@ const DashDP = ({
         getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
           setDPUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
-          if (setTempImagePath) {
-            setTempImagePath(storageRef.fullPath);
-          }
+          dispatch(setTempImagePath(storageRef.fullPath));
           dispatch(updateStop());
           setLoading(false);
         });
