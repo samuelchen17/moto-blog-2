@@ -4,6 +4,7 @@ import {
   FileInput,
   Label,
   Select,
+  Spinner,
   TextInput,
 } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
@@ -18,10 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { storage } from "../config/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-// need to prevent injection attacks
-// implement dom purify
-
-// type PostResponse = ISuccessRes | IErrorRes;
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
 const CreatePostPage = () => {
@@ -29,6 +26,7 @@ const CreatePostPage = () => {
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const [tempImagePath, setTempImagePath] = useState<string | null>(null);
+  const [imageUploading, setImageUploading] = useState<boolean>(false);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -47,8 +45,8 @@ const CreatePostPage = () => {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     try {
+      setImageUploading(true);
       const imageRef = ref(
         storage,
         `posts/${currentUser.user.id}/${file.name}`
@@ -60,6 +58,8 @@ const CreatePostPage = () => {
     } catch (err) {
       console.error("Error uploading image:", err);
       setPublishErrMsg("Failed to upload image.");
+    } finally {
+      setImageUploading(false);
     }
   };
 
@@ -144,36 +144,45 @@ const CreatePostPage = () => {
             htmlFor="dropzone-file"
             className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
-            <div className="flex flex-col items-center justify-center pb-6 pt-5">
-              <svg
-                className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 16"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            {imageUploading ? (
+              <div className="flex justify-center items-center text-center gap-2">
+                <span>Uploading...</span>
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                  <svg
+                    className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 16"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                    />
+                  </svg>
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <FileInput
+                  id="dropzone-file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
                 />
-              </svg>
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
-              </p>
-            </div>
-            <FileInput
-              id="dropzone-file"
-              className="hidden"
-              accept="image/*"
-              onChange={handleImageUpload}
-            />
+              </>
+            )}
           </Label>
         </div>
 
