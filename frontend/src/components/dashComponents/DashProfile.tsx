@@ -11,9 +11,12 @@ import {
 } from "../../utils/dashForm.utils";
 import { useAppDispatch } from "../../redux/hooks";
 import { updateStop } from "../../redux/features/user/userSlice";
+import { deleteObject, ref } from "firebase/storage";
+import { storage } from "../../config/firebase.config";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
+  const [tempImagePath, setTempImagePath] = useState<string | null>(null);
   const { currentUser, loading, error } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -23,6 +26,22 @@ const DashProfile = () => {
   useEffect(() => {
     dispatch(updateStop());
   }, [dispatch]);
+
+  // delete image if not submitted
+  useEffect(() => {
+    return () => {
+      if (tempImagePath) {
+        const imageRef = ref(storage, tempImagePath);
+        deleteObject(imageRef)
+          .then(() => {
+            console.log("Temporary image deleted successfully");
+          })
+          .catch((error) => {
+            console.error("Error deleting temporary image:", error);
+          });
+      }
+    };
+  }, [tempImagePath]);
 
   return (
     <div className="w-full mx-auto px-4">
@@ -77,7 +96,11 @@ const DashProfile = () => {
             <Alert color="success">Successfully updated</Alert>
           )}
         </form>
-        <DashDP formData={formData} setFormData={setFormData} />
+        <DashDP
+          formData={formData}
+          setFormData={setFormData}
+          setTempImagePath={setTempImagePath}
+        />
       </div>
     </div>
   );

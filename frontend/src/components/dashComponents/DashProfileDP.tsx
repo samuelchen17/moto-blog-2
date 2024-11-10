@@ -2,27 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import { RootState } from "../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { FaEdit } from "react-icons/fa";
-import {
-  // deleteObject,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import { firebaseApp } from "../../config/firebase.config";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Alert, Spinner } from "flowbite-react";
 import React from "react";
 import { IDashFormProps } from "../../utils/dashForm.utils";
 import { updateStart, updateStop } from "../../redux/features/user/userSlice";
+import { storage } from "../../config/firebase.config";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
-const DashDP = ({ setFormData, formData }: IDashFormProps) => {
+const DashDP = ({
+  setFormData,
+  formData,
+  setTempImagePath,
+}: IDashFormProps) => {
   const [dp, setDP] = useState<File | null>(null);
   const [dpUrl, setDPUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dpUploadProgress, setDPUploadProgress] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
-  // const [tempImagePath, setTempImagePath] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -62,9 +59,10 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
     setLoading(true);
     dispatch(updateStart());
 
-    const storage = getStorage(firebaseApp);
     // const dpName = new Date().getTime() + dp.name;
-    const dpName = `profilePicture/${new Date().getTime()}_${dp.name}`;
+    const dpName = `profilePicture/${
+      currentUser?.user.id
+    }/${new Date().getTime()}_${dp.name}`;
     const storageRef = ref(storage, dpName);
     const uploadDP = uploadBytesResumable(storageRef, dp);
     uploadDP.on(
@@ -87,31 +85,15 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
         getDownloadURL(uploadDP.snapshot.ref).then((downloadURL) => {
           setDPUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
-          // setTempImagePath(storageRef.fullPath);
+          if (setTempImagePath) {
+            setTempImagePath(storageRef.fullPath);
+          }
           dispatch(updateStop());
           setLoading(false);
         });
       }
     );
   };
-
-  // implement, firebase auth
-  // delete image if not submitted
-  // useEffect(() => {
-  //   return () => {
-  //     if (tempImagePath) {
-  //       const storage = getStorage(firebaseApp);
-  //       const imageRef = ref(storage, tempImagePath);
-  //       deleteObject(imageRef)
-  //         .then(() => {
-  //           console.log("Temporary image deleted successfully");
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error deleting temporary image:", error);
-  //         });
-  //     }
-  //   };
-  // }, [tempImagePath]);
 
   return (
     <div className="flex flex-col gap-4">

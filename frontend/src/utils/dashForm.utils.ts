@@ -11,6 +11,7 @@ import { AppDispatch } from "../redux/store";
 export interface IDashFormProps {
   formData: IUpdateUserPayload;
   setFormData: React.Dispatch<React.SetStateAction<IUpdateUserPayload>>;
+  setTempImagePath?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 interface IDashSubmitProps extends IDashFormProps {
