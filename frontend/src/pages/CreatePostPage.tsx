@@ -15,6 +15,8 @@ import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
 import { postCategory } from "../config/postCategory.config";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../config/firebase.config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 // need to prevent injection attacks
 // implement dom purify
@@ -26,6 +28,7 @@ const CreatePostPage = () => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
+  const [tempImagePath, setTempImagePath] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -35,10 +38,32 @@ const CreatePostPage = () => {
     throw new Error("Auth missing");
   }
 
+  // handle title and category changes
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
+  // handle image upload
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const imageRef = ref(
+        storage,
+        `posts/${currentUser.user.id}/${file.name}`
+      );
+      const snapshot = await uploadBytes(imageRef, file);
+
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setFormData((prevData) => ({ ...prevData, image: downloadURL }));
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      setPublishErrMsg("Failed to upload image.");
+    }
+  };
+
+  // handle form submission
   const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -112,6 +137,7 @@ const CreatePostPage = () => {
             </option>
           ))}
         </Select>
+
         {/* file upload */}
         <div className="flex w-full items-center justify-center">
           <Label
@@ -142,9 +168,24 @@ const CreatePostPage = () => {
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
-            <FileInput id="dropzone-file" className="hidden" accept="image/*" />
+            <FileInput
+              id="dropzone-file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
           </Label>
         </div>
+
+        {/* preview image */}
+        {formData.image && (
+          <img
+            src={formData.image}
+            alt="Selected image"
+            className="image-preview"
+          />
+        )}
+
         {/* Text editing */}
         <Tiptap editorRef={editorRef} setFormData={setFormData} />
 

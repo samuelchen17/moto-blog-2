@@ -51,12 +51,12 @@ export const handleDashFormSubmit =
       throw new Error("no user");
     }
 
-    // implement loading, and prevent user from constantly updating
     try {
       dispatch(updateStart());
 
       if (formData.profilePicture) {
         const prevDpLink = currentUser.user.profilePicture;
+
         const imageRef = ref(storage, prevDpLink);
         deleteObject(imageRef)
           .then(() => {
