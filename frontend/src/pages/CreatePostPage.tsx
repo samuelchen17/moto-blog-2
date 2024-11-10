@@ -49,7 +49,7 @@ const CreatePostPage = () => {
       setImageUploading(true);
       const imageRef = ref(
         storage,
-        `posts/${currentUser.user.id}/${file.name}`
+        `posts/${currentUser.user.id}/${new Date().getTime()}_${file.name}`
       );
       const snapshot = await uploadBytes(imageRef, file);
 
@@ -198,7 +198,9 @@ const CreatePostPage = () => {
         {/* Text editing */}
         <Tiptap editorRef={editorRef} setFormData={setFormData} />
 
-        <Button type="submit">Publish</Button>
+        <Button type="submit" disabled={imageUploading}>
+          Publish
+        </Button>
 
         {publishErrMsg && <Alert color="failure">{publishErrMsg}</Alert>}
       </form>
