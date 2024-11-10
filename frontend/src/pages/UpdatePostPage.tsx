@@ -40,22 +40,22 @@ const UpdatePostPage = () => {
   useEffect(() => {
     const fetchPostById = async () => {
       try {
-        // setErrorMessage(null);
-        const res = await fetch(`/api/post/getposts?_id=${postId}`);
+        setPublishErrMsg(null);
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
         const data: IPostResponse = await res.json();
         if (res.ok) {
-          console.log(data);
+          setFormData(data.posts[0]);
         }
       } catch (err) {
         console.error("Error:", err);
-        // setErrorMessage("Failed to fetch posts, internal error");
+        setPublishErrMsg("Failed to find post, internal error");
       }
     };
 
     if (currentUser?.user.admin) {
       fetchPostById();
     }
-  }, [currentUser?.user.id]);
+  }, [postId]);
 
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -116,11 +116,13 @@ const UpdatePostPage = () => {
           id="title"
           placeholder="Title"
           onChange={handlePostChange}
+          value={formData.title}
         />
         <Select
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setFormData({ ...formData, category: e.target.value });
           }}
+          value={formData.category}
         >
           {postCategory.map((item) => (
             <option key={item.name} value={item.value}>
@@ -162,7 +164,11 @@ const UpdatePostPage = () => {
           </Label>
         </div>
         {/* Text editing */}
-        <Tiptap editorRef={editorRef} setFormData={setFormData} />
+        <Tiptap
+          editorRef={editorRef}
+          setFormData={setFormData}
+          formContent={formData.content}
+        />
 
         <Button type="submit">Publish</Button>
 

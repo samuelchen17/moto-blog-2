@@ -8,11 +8,12 @@ import { useEffect } from "react";
 interface ITiptapProps {
   editorRef: React.MutableRefObject<Editor | null>;
   setFormData: React.Dispatch<React.SetStateAction<IPublishPostPayload>>;
+  formContent?: string;
 }
 
-const Tiptap = ({ editorRef, setFormData }: ITiptapProps) => {
+const Tiptap = ({ editorRef, setFormData, formContent }: ITiptapProps) => {
   const editor = useEditor({
-    // content: "<p>Hello World!</p>",
+    content: formContent || "",
     editorProps,
     extensions,
     onUpdate: ({ editor }) => {
@@ -27,11 +28,15 @@ const Tiptap = ({ editorRef, setFormData }: ITiptapProps) => {
   useEffect(() => {
     if (editor) {
       editorRef.current = editor;
+      if (formContent) {
+        editor.commands.setContent(formContent);
+      }
     }
+
     return () => {
       editorRef.current = null;
     };
-  }, [editor, editorRef]);
+  }, [editor, editorRef, formContent]);
 
   // if (editorRef) {
   //   editorRef.current = editor;
