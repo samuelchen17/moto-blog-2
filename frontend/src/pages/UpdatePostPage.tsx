@@ -7,14 +7,14 @@ import {
   TextInput,
 } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Editor } from "@tiptap/react";
-import { IPublishPostPayload } from "@shared/types/post";
+import { IPostResponse, IPublishPostPayload } from "@shared/types/post";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
 import { postCategory } from "../config/postCategory.config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // need to prevent injection attacks
 // implement dom purify
@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 // type PostResponse = ISuccessRes | IErrorRes;
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
-const CreatePostPage = () => {
+const UpdatePostPage = () => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
@@ -30,10 +30,32 @@ const CreatePostPage = () => {
     (state: RootState) => state.persisted.user
   );
   const navigate = useNavigate();
+  const { postId } = useParams();
 
   if (!currentUser) {
     throw new Error("Auth missing");
   }
+
+  // fetch post data
+  useEffect(() => {
+    const fetchPostById = async () => {
+      try {
+        // setErrorMessage(null);
+        const res = await fetch(`/api/post/getposts?_id=${postId}`);
+        const data: IPostResponse = await res.json();
+        if (res.ok) {
+          console.log(data);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        // setErrorMessage("Failed to fetch posts, internal error");
+      }
+    };
+
+    if (currentUser?.user.admin) {
+      fetchPostById();
+    }
+  }, [currentUser?.user.id]);
 
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -46,12 +68,6 @@ const CreatePostPage = () => {
       // get html content from tiptap and prevent xss
       const rawContent = editorRef.current?.getHTML() || "";
       const sanitizedContent = DOMPurify.sanitize(rawContent);
-
-      // more specific rules for sanitization
-      // const clean = DOMPurify.sanitize(dirty, {
-      //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
-      //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
-      //   });
 
       const updatedFormData = { ...formData, content: sanitizedContent };
       setFormData(updatedFormData);
@@ -91,7 +107,7 @@ const CreatePostPage = () => {
 
   return (
     <div>
-      <h1>Create post</h1>
+      <h1>Update post</h1>
       <hr />
       <form className="flex flex-col gap-4" onSubmit={handlePostPublish}>
         <TextInput
@@ -156,4 +172,4 @@ const CreatePostPage = () => {
   );
 };
 
-export default CreatePostPage;
+export default UpdatePostPage;

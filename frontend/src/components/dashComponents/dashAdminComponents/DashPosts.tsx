@@ -25,7 +25,6 @@ const DashPosts = () => {
         const res = await fetch(
           `/api/post/getposts?createdBy=${currentUser?.user.id}`
         );
-        // implement api response type
         const data: IPostResponse = await res.json();
         if (res.ok) {
           setUserAdminPosts(data.posts);
