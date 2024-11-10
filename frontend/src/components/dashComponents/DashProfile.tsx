@@ -3,7 +3,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IUpdateUserPayload } from "@shared/types/user";
 import {
   handleDashFormChange,
@@ -13,10 +13,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { updateStop } from "../../redux/features/user/userSlice";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../../config/firebase.config";
-import {
-  setTempImagePath,
-  deleteTempImageSuccess,
-} from "../../redux/features/image/imageSlice";
+import { deleteTempImageSuccess } from "../../redux/features/image/imageSlice";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -27,6 +24,9 @@ const DashProfile = () => {
     (state: RootState) => state.persisted.image
   );
   const [updateComplete, setUpdateComplete] = useState<boolean>(false);
+
+  const hasSubmittedRef = useRef(false);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const DashProfile = () => {
   // delete image if not submitted
   useEffect(() => {
     return () => {
-      if (tempImagePath) {
+      if (tempImagePath && !hasSubmittedRef.current) {
         const imageRef = ref(storage, tempImagePath);
         deleteObject(imageRef)
           .then(() => {
@@ -45,8 +45,10 @@ const DashProfile = () => {
           })
           .catch((error) => {
             console.error("Error deleting temporary image:", error);
+            dispatch(deleteTempImageSuccess());
           });
       }
+      hasSubmittedRef.current = false;
     };
   }, [tempImagePath]);
 
@@ -88,7 +90,11 @@ const DashProfile = () => {
             </span>
           </div>
 
-          <Button type="submit" disabled={loading === true}>
+          <Button
+            type="submit"
+            disabled={loading === true}
+            onClick={() => (hasSubmittedRef.current = true)}
+          >
             {loading ? (
               <>
                 <Spinner size="sm" />

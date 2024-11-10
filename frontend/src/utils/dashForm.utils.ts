@@ -6,7 +6,10 @@ import {
   updateStart,
   updateSuccess,
 } from "../redux/features/user/userSlice";
+import { deleteTempImageSuccess } from "../redux/features/image/imageSlice";
 import { AppDispatch } from "../redux/store";
+import { storage } from "../config/firebase.config";
+import { deleteObject, ref } from "firebase/storage";
 
 export interface IDashFormProps {
   formData: IUpdateUserPayload;
@@ -52,6 +55,20 @@ export const handleDashFormSubmit =
     try {
       dispatch(updateStart());
 
+      if (formData.profilePicture) {
+        const prevDpLink = currentUser.user.profilePicture;
+        const imageRef = ref(storage, prevDpLink);
+        deleteObject(imageRef)
+          .then(() => {
+            console.log("Previous dp deleted successfully");
+            dispatch(deleteTempImageSuccess());
+          })
+          .catch((error) => {
+            console.error("Error deleting previous dp:", error);
+            dispatch(deleteTempImageSuccess());
+          });
+      }
+
       const payload: IUpdateUserPayload = { ...formData };
 
       const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
@@ -68,6 +85,7 @@ export const handleDashFormSubmit =
         return;
       }
 
+      dispatch(deleteTempImageSuccess());
       dispatch(updateSuccess(data));
       setUpdateComplete(true);
       // clear form after submit

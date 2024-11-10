@@ -8,7 +8,10 @@ import React from "react";
 import { IDashFormProps } from "../../utils/dashForm.utils";
 import { updateStart, updateStop } from "../../redux/features/user/userSlice";
 import { storage } from "../../config/firebase.config";
-import { setTempImagePath } from "../../redux/features/image/imageSlice";
+import {
+  setTempImagePath,
+  deleteTempImageSuccess,
+} from "../../redux/features/image/imageSlice";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
 const DashDP = ({ setFormData, formData }: IDashFormProps) => {
@@ -55,6 +58,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
     setErrorMessage(null);
     setLoading(true);
     dispatch(updateStart());
+    dispatch(deleteTempImageSuccess());
 
     // const dpName = new Date().getTime() + dp.name;
     const dpName = `profilePicture/${
