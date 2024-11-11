@@ -163,18 +163,26 @@ export const updatePost = async (
   next: NextFunction
 ) => {
   try {
+    const { postId } = req.params;
+    if (!postId) {
+      next(new CustomError(400, "Post ID is required"));
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
-      {
-        $set: {
-          title: req.body.title,
-          content: req.body.content,
-          category: req.body.category,
-          image: req.body.image,
-        },
-      },
+      // {
+      //   $set: {
+      //     title: req.body.title,
+      //     content: req.body.content,
+      //     category: req.body.category,
+      //     image: req.body.image,
+      //   },
+      // },
+      { $set: { ...req.body } }, // partial updates
       { new: true }
     );
+
+    res.status(200).json(updatedPost);
   } catch (err) {
     console.error("Error updating post:", err);
     next(new CustomError(500, "Failed to update post"));

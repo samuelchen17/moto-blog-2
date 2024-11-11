@@ -150,7 +150,7 @@ const PostFormPage = () => {
           required
           id="title"
           placeholder="Title"
-          value={formData.title}
+          //   value={formData.title}
           onChange={handlePostChange}
         />
         <Select
@@ -224,12 +224,12 @@ const PostFormPage = () => {
         )}
 
         {/* Text editing */}
-        {/* <Tiptap editorRef={editorRef} setFormData={setFormData} /> */}
-        <Tiptap
+        <Tiptap editorRef={editorRef} setFormData={setFormData} />
+        {/* <Tiptap
           editorRef={editorRef}
           setFormData={setFormData}
           formContent={formData.content}
-        />
+        /> */}
 
         <Button type="submit" disabled={imageUploading}>
           {postId ? "Update Post" : "Publish"}
@@ -242,3 +242,7 @@ const PostFormPage = () => {
 };
 
 export default PostFormPage;
+
+//update post not working,
+// cant use space in text areas
+// tiptap menu submits form

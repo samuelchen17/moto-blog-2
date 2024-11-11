@@ -10,8 +10,6 @@ import BlogsPage from "../pages/BlogsPage";
 import AboutPage from "../pages/AboutPage";
 import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
-import CreatePostPage from "../pages/CreatePostPage";
-import UpdatePostPage from "../pages/UpdatePostPage";
 import PostFormPage from "../pages/PostFormPage";
 
 const router = createBrowserRouter(
@@ -23,10 +21,12 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<DashboardPage />} />
         {/* for admins only */}
         <Route element={<AdminRoute />}>
-          {/* <Route path="create-post" element={<CreatePostPage />} />
-          <Route path="update-post/:postId" element={<UpdatePostPage />} /> */}
-          <Route path="create-post" element={<PostFormPage />} />
-          <Route path="update-post/:postId" element={<PostFormPage />} />
+          {/* key prop will force react to re render component */}
+          <Route path="create-post" element={<PostFormPage key="create" />} />
+          <Route
+            path="update-post/:postId"
+            element={<PostFormPage key="update" />}
+          />
         </Route>
       </Route>
       <Route path="blogs" element={<BlogsPage />} />
