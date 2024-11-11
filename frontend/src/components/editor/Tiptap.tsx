@@ -12,6 +12,7 @@ interface ITiptapProps {
 }
 
 const Tiptap = ({ editorRef, setFormData, formContent }: ITiptapProps) => {
+  console.log(formContent);
   const editor = useEditor({
     content: formContent || "",
     editorProps,
@@ -25,10 +26,11 @@ const Tiptap = ({ editorRef, setFormData, formContent }: ITiptapProps) => {
     },
   });
 
+  // useEffect to set initial form content
   useEffect(() => {
-    if (editor) {
-      editorRef.current = editor;
-      if (formContent) {
+    if (editor && formContent) {
+      // Only set content if it's not already set
+      if (editor.getHTML() !== formContent) {
         editor.commands.setContent(formContent);
       }
     }
@@ -36,7 +38,7 @@ const Tiptap = ({ editorRef, setFormData, formContent }: ITiptapProps) => {
     return () => {
       editorRef.current = null;
     };
-  }, [editor, editorRef, formContent]);
+  }, [editor, formContent]);
 
   // if (editorRef) {
   //   editorRef.current = editor;
