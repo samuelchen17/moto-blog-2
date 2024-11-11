@@ -48,7 +48,7 @@ const UpdatePostPage = () => {
         }
       } catch (err) {
         console.error("Error:", err);
-        setPublishErrMsg("Failed to find post, internal error");
+        setPublishErrMsg("Failed to load post data, internal error");
       }
     };
 
@@ -179,3 +179,6 @@ const UpdatePostPage = () => {
 };
 
 export default UpdatePostPage;
+
+// if there is param, set the values to display existing post,
+// change postpublish to post update

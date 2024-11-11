@@ -8,6 +8,7 @@ import {
   createPost,
   getPosts,
   deletePost,
+  updatePost,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
@@ -25,6 +26,13 @@ const postRouter = (router: Router) => {
     isOwner,
     isAdmin,
     deletePost
+  );
+  router.patch(
+    "/post/update/:postId/:id",
+    isAuthenticated,
+    isOwner,
+    isAdmin,
+    updatePost
   );
 };
 

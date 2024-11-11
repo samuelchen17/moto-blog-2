@@ -1,3 +1,4 @@
+// implement IPostPayload
 export interface IPublishPostPayload {
   title: string;
   content: string;

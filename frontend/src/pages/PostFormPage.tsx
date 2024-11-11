@@ -8,24 +8,25 @@ import {
   TextInput,
 } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
-import { IPublishPostPayload } from "@shared/types/post";
+import { IPostResponse, IPublishPostPayload } from "@shared/types/post";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
 import { postCategory } from "../config/postCategory.config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../config/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
-const CreatePostPage = () => {
+const PostFormPage = () => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const [imageUploading, setImageUploading] = useState<boolean>(false);
+  const { postId } = useParams<{ postId: string }>();
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -34,6 +35,29 @@ const CreatePostPage = () => {
   if (!currentUser) {
     throw new Error("Auth missing");
   }
+
+  // fetch post data if there is a param
+  useEffect(() => {
+    const fetchPostById = async () => {
+      if (postId) {
+        try {
+          setPublishErrMsg(null);
+          const res = await fetch(`/api/post/getposts?postId=${postId}`);
+          const data: IPostResponse = await res.json();
+          if (res.ok) {
+            setFormData(data.posts[0]);
+          }
+        } catch (err) {
+          console.error("Error:", err);
+          setPublishErrMsg("Failed to load post data, internal error");
+        }
+      }
+    };
+
+    if (postId && currentUser?.user.admin) {
+      fetchPostById();
+    }
+  }, [postId, currentUser]);
 
   // handle title and category changes
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +88,7 @@ const CreatePostPage = () => {
   };
 
   // handle form submission
-  const handlePostPublish = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -79,18 +103,20 @@ const CreatePostPage = () => {
       //   });
 
       const updatedFormData = { ...formData, content: sanitizedContent };
+
       setFormData(updatedFormData);
 
       const payload: IPublishPostPayload = { ...formData };
+      const url = postId
+        ? `/api/post/update/${postId}/${currentUser.user.id}`
+        : `/api/post/create/${currentUser.user.id}`;
+      const method = postId ? "PATCH" : "POST";
 
-      const res: Response = await fetch(
-        `/api/post/create/${currentUser.user.id}`,
-        {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res: Response = await fetch(url, {
+        method,
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      });
 
       const data = await res.json();
 
@@ -118,18 +144,20 @@ const CreatePostPage = () => {
     <div>
       <h1>Create post</h1>
       <hr />
-      <form className="flex flex-col gap-4" onSubmit={handlePostPublish}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <TextInput
           type="text"
           required
           id="title"
           placeholder="Title"
+          value={formData.title}
           onChange={handlePostChange}
         />
         <Select
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setFormData({ ...formData, category: e.target.value });
           }}
+          value={formData.category}
         >
           {postCategory.map((item) => (
             <option key={item.name} value={item.value}>
@@ -196,10 +224,15 @@ const CreatePostPage = () => {
         )}
 
         {/* Text editing */}
-        <Tiptap editorRef={editorRef} setFormData={setFormData} />
+        {/* <Tiptap editorRef={editorRef} setFormData={setFormData} /> */}
+        <Tiptap
+          editorRef={editorRef}
+          setFormData={setFormData}
+          formContent={formData.content}
+        />
 
         <Button type="submit" disabled={imageUploading}>
-          Publish
+          {postId ? "Update Post" : "Publish"}
         </Button>
 
         {publishErrMsg && <Alert color="failure">{publishErrMsg}</Alert>}
@@ -208,4 +241,4 @@ const CreatePostPage = () => {
   );
 };
 
-export default CreatePostPage;
+export default PostFormPage;
