@@ -57,11 +57,11 @@ const PostFormPage = () => {
     if (postId && currentUser?.user.admin) {
       fetchPostById();
     }
-  }, [postId, currentUser]);
+  }, [postId]);
 
   // handle title and category changes
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   // handle image upload
@@ -140,6 +140,7 @@ const PostFormPage = () => {
     }
   };
 
+  console.log(formData);
   return (
     <div>
       <h1>Create post</h1>
@@ -150,7 +151,7 @@ const PostFormPage = () => {
           required
           id="title"
           placeholder="Title"
-          //   value={formData.title}
+          value={formData.title}
           onChange={handlePostChange}
         />
         <Select
@@ -225,11 +226,11 @@ const PostFormPage = () => {
 
         {/* Text editing */}
         <Tiptap editorRef={editorRef} setFormData={setFormData} />
-        {/* <Tiptap
+        <Tiptap
           editorRef={editorRef}
           setFormData={setFormData}
           formContent={formData.content}
-        /> */}
+        />
 
         <Button type="submit" disabled={imageUploading}>
           {postId ? "Update Post" : "Publish"}
@@ -243,6 +244,4 @@ const PostFormPage = () => {
 
 export default PostFormPage;
 
-//update post not working,
-// cant use space in text areas
 // tiptap menu submits form
