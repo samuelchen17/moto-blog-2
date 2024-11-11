@@ -156,3 +156,27 @@ export const deletePost = async (
     next(new CustomError(500, "Failed to delete post"));
   }
 };
+
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          category: req.body.category,
+          image: req.body.image,
+        },
+      },
+      { new: true }
+    );
+  } catch (err) {
+    console.error("Error updating post:", err);
+    next(new CustomError(500, "Failed to update post"));
+  }
+};
