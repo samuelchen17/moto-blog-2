@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import { IPostResponse, IPost } from "@shared/types/post";
+import { IGetUser, IGetUserResponse } from "@shared/types/user";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
 const DashUsers = () => {
-  const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
+  const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -18,16 +18,14 @@ const DashUsers = () => {
   );
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchUsers = async () => {
       try {
         setErrorMessage(null);
-        const res = await fetch(
-          `/api/post/getposts?createdBy=${currentUser?.user.id}`
-        );
-        const data: IPostResponse = await res.json();
+        const res = await fetch(`/api/user/${currentUser?.user.id}`);
+        const data: IGetUserResponse = await res.json();
         if (res.ok) {
-          setUserAdminPosts(data.posts);
-          if (data.posts.length < 9) {
+          setAllUsers(data.users);
+          if (data.users.length < 9) {
             setShowMore(false);
           }
         }
@@ -38,22 +36,22 @@ const DashUsers = () => {
     };
 
     if (currentUser?.user.admin) {
-      fetchPosts();
+      fetchUsers();
     }
   }, [currentUser?.user.id]);
 
   const handleShowMore = async () => {
-    const startIndex = userAdminPosts.length;
+    const startIndex = allUsers.length;
     try {
       setErrorMessage(null);
       const res = await fetch(
-        `/api/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
+        `/api/user/${currentUser?.user.id}&startIndex=${startIndex}`
       );
-      const data: IPostResponse = await res.json();
+      const data: IGetUserResponse = await res.json();
 
       if (res.ok) {
-        setUserAdminPosts((prev) => [...prev, ...data.posts]);
-        if (data.posts.length < 9) {
+        setAllUsers((prev) => [...prev, ...data.users]);
+        if (data.users.length < 9) {
           setShowMore(false);
         }
       }
@@ -64,38 +62,38 @@ const DashUsers = () => {
   };
 
   // change to handle delete user
-  const handleDeletePost = async () => {
-    setOpenModal(false);
-    try {
-      const res = await fetch(
-        `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+  // const handleDeleteUser = async () => {
+  //   setOpenModal(false);
+  //   try {
+  //     const res = await fetch(
+  //       `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
+  //     if (!res.ok) {
+  //       throw new Error(data.message);
+  //     }
 
-      setUserAdminPosts((prev) =>
-        prev.filter((post) => post._id !== postIdToDelete)
-      );
-    } catch (err) {
-      console.error("Error:", err);
-      if (err instanceof Error) {
-        setErrorMessage(err.message);
-      } else {
-        setErrorMessage("An unknown error occurred");
-      }
-    }
-  };
+  //     setUserAdminPosts((prev) =>
+  //       prev.filter((post) => post._id !== postIdToDelete)
+  //     );
+  //   } catch (err) {
+  //     console.error("Error:", err);
+  //     if (err instanceof Error) {
+  //       setErrorMessage(err.message);
+  //     } else {
+  //       setErrorMessage("An unknown error occurred");
+  //     }
+  //   }
+  // };
 
   return (
     <div className="w-full">
-      {currentUser?.user.admin && userAdminPosts.length > 0 ? (
+      {currentUser?.user.admin && allUsers.length > 0 ? (
         // implement tailwind-scrollbar? for mobile
         <div className="overflow-x-auto">
           <Table hoverable>
@@ -110,45 +108,40 @@ const DashUsers = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {userAdminPosts.map((post) => (
+              {allUsers.map((user) => (
                 <Table.Row
-                  key={post.slug}
+                  key={user._id}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {format(new Date(post.updatedAt), "dd MMM yyyy")}
+                    {format(new Date(user.createdAt), "dd MMM yyyy")}
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500"
-                      />
-                    </Link>
+                    {/* <Link to={`/post/${post.slug}`}> */}
+                    <img
+                      src={user.profilePicture}
+                      alt={user.username}
+                      className="w-20 h-10 object-cover bg-gray-500"
+                    />
+                    {/* </Link> */}
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                    {/* <Link to={`/post/${post.slug}`}> */}
+                    {user.username}
+                    {/* </Link> */}
                   </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell>{user.email}</Table.Cell>
+                  <Table.Cell>{user.isAdmin}</Table.Cell>
                   <Table.Cell>
-                    <button
+                    {/* <button
                       onClick={() => {
                         setOpenModal(true);
                         setPostIdToDelete(post._id);
                       }}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      to={`/update-post/${post._id}`}
-                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    >
-                      Edit
-                    </Link>
+                    > */}
+                    Delete
+                    {/* </button> */}
                   </Table.Cell>
                 </Table.Row>
               ))}
@@ -189,12 +182,12 @@ const DashUsers = () => {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this post?
+              Are you sure you want to delete this user?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeletePost}>
+              {/* <Button color="failure" onClick={handleDeletePost}>
                 {"Yes, I'm sure"}
-              </Button>
+              </Button> */}
               <Button color="gray" onClick={() => setOpenModal(false)}>
                 No, cancel
               </Button>

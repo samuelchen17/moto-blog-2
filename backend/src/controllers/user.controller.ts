@@ -53,7 +53,6 @@ export const getAllUsers = async (
     });
 
     res.status(200).json({
-      message: "Got all users",
       users,
       totalUsers,
       lastMonthUsers,
