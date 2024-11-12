@@ -28,7 +28,7 @@ export const getAllUsers = async (
   const startIndex = parseInt(req.query.startIndex as string) || 0;
   const limit = parseInt(req.query.limit as string) || 9;
   // 1 = asc, -1 = desc
-  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const sortDirection = req.query.order === "asc" ? -1 : 1;
 
   try {
     // const users = await getUsers();
@@ -68,9 +68,9 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const { deleteId } = req.params;
 
-    const deletedUser = await deleteUserById(id);
+    const deletedUser = await deleteUserById(deleteId);
 
     if (!deletedUser) {
       next(new CustomError(404, "User does not exist"));

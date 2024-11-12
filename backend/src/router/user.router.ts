@@ -13,7 +13,13 @@ import {
 
 const userRouter = (router: Router) => {
   router.get("/user/:id", isAuthenticated, isAdmin, getAllUsers);
-  router.delete("/user/:id", isAuthenticated, isOwner, deleteUser);
+  router.delete("/user/:id/:deleteId", isAuthenticated, isOwner, deleteUser);
+  router.delete(
+    "/user/admin/:id/:deleteId",
+    isAuthenticated,
+    isAdmin,
+    deleteUser
+  );
   router.patch("/user/:id", isAuthenticated, isOwner, updateUser);
   router.post("/user", signOut);
 };

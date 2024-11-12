@@ -4,7 +4,6 @@ import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
 import { IGetUser, IGetUserResponse } from "@shared/types/user";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
@@ -65,31 +64,33 @@ const DashUsers = () => {
   // change to handle delete user
   const handleDeleteUser = async () => {
     setOpenModal(false);
-    // try {
-    //   const res = await fetch(
-    //     `/api/post/delete/${userIdToDelete}/${currentUser?.user.id}`,
-    //     {
-    //       method: "DELETE",
-    //     }
-    //   );
+    try {
+      const res = await fetch(
+        `/user/admin/${currentUser?.user.id}/${userIdToDelete}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    //   const data = await res.json();
+      const data = await res.json();
 
-    //   if (!res.ok) {
-    //     throw new Error(data.message);
-    //   }
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
 
-    //   setUserIdToDelete((prev) =>
-    //     prev.filter((post) => post._id !== postIdToDelete)
-    //   );
-    // } catch (err) {
-    //   console.error("Error:", err);
-    //   if (err instanceof Error) {
-    //     setErrorMessage(err.message);
-    //   } else {
-    //     setErrorMessage("An unknown error occurred");
-    //   }
-    // }
+      setUserIdToDelete(null);
+
+      // setUserIdToDelete((prev) =>
+      //   prev.filter((post) => post._id !== postIdToDelete)
+      // );
+    } catch (err) {
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    }
   };
 
   return (
