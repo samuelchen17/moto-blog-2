@@ -18,16 +18,46 @@ import {
   validatePassword,
   validateUsername,
 } from "../helpers/validator.helpers";
+import { User } from "../models/user.model";
 
 export const getAllUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const users = await getUsers();
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 9;
+  // 1 = asc, -1 = desc
+  const sortDirection = req.query.order === "asc" ? 1 : -1;
 
-    res.status(200).json({ message: "Got all users", users: users });
+  try {
+    // const users = await getUsers();
+
+    const users = await User.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalUsers = await User.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      message: "Got all users",
+      users,
+      totalUsers,
+      lastMonthUsers,
+    });
   } catch (error) {
     next(new CustomError(400, "Unable to get users"));
   }

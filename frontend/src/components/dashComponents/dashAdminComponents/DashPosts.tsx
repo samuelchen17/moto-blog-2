@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
 const DashPosts = () => {
-  // implement, type array of data.posts
   const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
