@@ -38,7 +38,7 @@ const DashUsers = () => {
     if (currentUser?.user.admin) {
       fetchUsers();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, allUsers]);
 
   const handleShowMore = async () => {
     const startIndex = allUsers.length;
@@ -66,7 +66,7 @@ const DashUsers = () => {
     setOpenModal(false);
     try {
       const res = await fetch(
-        `/user/admin/${currentUser?.user.id}/${userIdToDelete}`,
+        `/api/user/admin/${currentUser?.user.id}/${userIdToDelete}`,
         {
           method: "DELETE",
         }
@@ -79,10 +79,6 @@ const DashUsers = () => {
       }
 
       setUserIdToDelete(null);
-
-      // setUserIdToDelete((prev) =>
-      //   prev.filter((post) => post._id !== postIdToDelete)
-      // );
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
