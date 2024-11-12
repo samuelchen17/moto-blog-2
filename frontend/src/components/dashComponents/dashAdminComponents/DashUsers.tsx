@@ -12,7 +12,7 @@ const DashUsers = () => {
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
+  const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -62,34 +62,34 @@ const DashUsers = () => {
   };
 
   // change to handle delete user
-  // const handleDeleteUser = async () => {
-  //   setOpenModal(false);
-  //   try {
-  //     const res = await fetch(
-  //       `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
+  const handleDeleteUser = async () => {
+    setOpenModal(false);
+    // try {
+    //   const res = await fetch(
+    //     `/api/post/delete/${userIdToDelete}/${currentUser?.user.id}`,
+    //     {
+    //       method: "DELETE",
+    //     }
+    //   );
 
-  //     const data = await res.json();
+    //   const data = await res.json();
 
-  //     if (!res.ok) {
-  //       throw new Error(data.message);
-  //     }
+    //   if (!res.ok) {
+    //     throw new Error(data.message);
+    //   }
 
-  //     setUserAdminPosts((prev) =>
-  //       prev.filter((post) => post._id !== postIdToDelete)
-  //     );
-  //   } catch (err) {
-  //     console.error("Error:", err);
-  //     if (err instanceof Error) {
-  //       setErrorMessage(err.message);
-  //     } else {
-  //       setErrorMessage("An unknown error occurred");
-  //     }
-  //   }
-  // };
+    //   setUserIdToDelete((prev) =>
+    //     prev.filter((post) => post._id !== postIdToDelete)
+    //   );
+    // } catch (err) {
+    //   console.error("Error:", err);
+    //   if (err instanceof Error) {
+    //     setErrorMessage(err.message);
+    //   } else {
+    //     setErrorMessage("An unknown error occurred");
+    //   }
+    // }
+  };
 
   return (
     <div className="w-full">
@@ -117,31 +117,25 @@ const DashUsers = () => {
                     {format(new Date(user.createdAt), "dd MMM yyyy")}
                   </Table.Cell>
                   <Table.Cell>
-                    {/* <Link to={`/post/${post.slug}`}> */}
                     <img
                       src={user.profilePicture}
                       alt={user.username}
                       className="w-20 h-10 object-cover bg-gray-500"
                     />
-                    {/* </Link> */}
                   </Table.Cell>
-                  <Table.Cell>
-                    {/* <Link to={`/post/${post.slug}`}> */}
-                    {user.username}
-                    {/* </Link> */}
-                  </Table.Cell>
+                  <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>{user.isAdmin}</Table.Cell>
                   <Table.Cell>
-                    {/* <button
+                    <button
                       onClick={() => {
                         setOpenModal(true);
-                        setPostIdToDelete(post._id);
+                        setUserIdToDelete(user._id);
                       }}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    > */}
-                    Delete
-                    {/* </button> */}
+                    >
+                      Delete
+                    </button>
                   </Table.Cell>
                 </Table.Row>
               ))}
@@ -166,10 +160,10 @@ const DashUsers = () => {
           )}
         </div>
       ) : (
-        <p>No posts created yet!</p>
+        <p>No users created yet!</p>
       )}
 
-      {/* delete post modal */}
+      {/* delete user modal */}
       <Modal
         show={openModal}
         size="md"
@@ -185,9 +179,9 @@ const DashUsers = () => {
               Are you sure you want to delete this user?
             </h3>
             <div className="flex justify-center gap-4">
-              {/* <Button color="failure" onClick={handleDeletePost}>
+              <Button color="failure" onClick={handleDeleteUser}>
                 {"Yes, I'm sure"}
-              </Button> */}
+              </Button>
               <Button color="gray" onClick={() => setOpenModal(false)}>
                 No, cancel
               </Button>
