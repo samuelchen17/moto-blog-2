@@ -6,6 +6,7 @@ import { IGetUser, IGetUserResponse } from "@shared/types/user";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const DashUsers = () => {
   const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
@@ -120,12 +121,18 @@ const DashUsers = () => {
                     <img
                       src={user.profilePicture}
                       alt={user.username}
-                      className="w-20 h-10 object-cover bg-gray-500"
+                      className="w-10 h-10 rounded-full object-cover bg-gray-500"
                     />
                   </Table.Cell>
                   <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell>{user.isAdmin}</Table.Cell>
+                  <Table.Cell>
+                    {user.isAdmin ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
                   <Table.Cell>
                     <button
                       onClick={() => {
