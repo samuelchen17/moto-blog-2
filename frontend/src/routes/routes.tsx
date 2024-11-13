@@ -12,6 +12,7 @@ import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
 import PostFormPage from "../pages/PostFormPage";
 import { navLinks } from "../config/navLinks.config";
+import PostPage from "../pages/PostPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +31,8 @@ const router = createBrowserRouter(
           />
         </Route>
       </Route>
-      <Route path="blogs/:postSlug" element={<BlogsPage />} />
+      <Route path="blogs" element={<BlogsPage />} />
+      <Route path="blogs/post/:postSlug" element={<PostPage />} />
       <Route path={navLinks[2].path} element={<AboutPage />} />
     </Route>
   )
