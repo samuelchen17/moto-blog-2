@@ -11,11 +11,12 @@ import AboutPage from "../pages/AboutPage";
 import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
 import PostFormPage from "../pages/PostFormPage";
+import { navLinks } from "../config/navLinks.config";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route path="home" element={<HomePage />} />
+      <Route path={navLinks[0].path} element={<HomePage />} />
       {/* for logged in  users */}
       <Route element={<AuthRoute />}>
         <Route path="dashboard" element={<DashboardPage />} />
@@ -29,8 +30,8 @@ const router = createBrowserRouter(
           />
         </Route>
       </Route>
-      <Route path="blogs" element={<BlogsPage />} />
-      <Route path="about" element={<AboutPage />} />
+      <Route path="blogs/:postSlug" element={<BlogsPage />} />
+      <Route path={navLinks[2].path} element={<AboutPage />} />
     </Route>
   )
 );

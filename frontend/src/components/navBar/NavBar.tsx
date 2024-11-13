@@ -11,7 +11,7 @@ const NavBar = () => {
 
   return (
     <Navbar className="border-b-2">
-      <Navbar.Brand className="flex gap-2" as={Link} to="/">
+      <Navbar.Brand className="flex gap-2" as={Link} to="/home">
         <img src={helmetIcon} className="sm:h-[60px] h-[30px] dark:invert" />
         <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
           SC MOTO
