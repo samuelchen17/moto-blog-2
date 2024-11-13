@@ -15,15 +15,17 @@ const PostPage = () => {
         const data = await res.json();
 
         if (!res.ok) {
-          setLoading(false);
           setError(true);
+          setLoading(false);
           throw new Error("Failed response");
         }
 
         setPost(data.posts[0]);
-        setLoading(false);
         setError(false);
+        setLoading(false);
       } catch (err) {
+        setError(true);
+        setLoading(false);
         console.error(err);
       }
     };
@@ -31,6 +33,9 @@ const PostPage = () => {
   }, [postSlug]);
 
   console.log(post);
+
+  if (loading) return <div>Loading...</div>;
+
   return <div>PostPage</div>;
 };
 
