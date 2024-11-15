@@ -4,7 +4,7 @@ import { RootState } from "../../redux/store";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
 import CommentSectionAddComment from "./CommentSectionAddComment";
 
-interface ICommentSection {
+export interface ICommentSection {
   postId: string;
 }
 
@@ -49,7 +49,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
       )}
 
       {/* comment form  */}
-      {currentUser && <CommentSectionAddComment />}
+      {currentUser && <CommentSectionAddComment postId={postId} />}
     </div>
   );
 };

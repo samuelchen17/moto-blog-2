@@ -1,8 +1,14 @@
 import { Button, Textarea } from "flowbite-react";
 import { useState } from "react";
+import { ICommentSection } from "./CommentSection";
+import { useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../redux/store";
 
-const CommentSectionAddComment = () => {
+const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   const [comment, setComment] = useState<string>("");
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
@@ -10,8 +16,29 @@ const CommentSectionAddComment = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (comment.length > 200) {
+      return;
+    }
+
     try {
-      console.log(comment);
+      const res = await fetch("/api/comment/postcomment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postId,
+          content: comment,
+          commentBy: currentUser?.user.id,
+        }),
+      });
+
+      const data = res.json();
+
+      if (res.ok) {
+        setComment("");
+      }
+
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
