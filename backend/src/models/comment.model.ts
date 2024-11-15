@@ -4,7 +4,7 @@ interface IComment {
   content: string;
   postId: string;
   commentBy: string;
-  //   likes: string[];
+  likes: string[];
   numberOfLikes: number;
   createdAt: Date;
   updatedAt: Date;
@@ -24,10 +24,10 @@ const commentSchema = new mongoose.Schema<IComment>(
       type: String,
       required: true,
     },
-    // likes: {
-    //   type: Array,
-    //   default: [],
-    // },
+    likes: {
+      type: Array,
+      default: [],
+    },
     numberOfLikes: {
       type: Number,
       default: 0,
