@@ -15,7 +15,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div>
+    <div className="outline-red-500 outline">
       {/* user info + sign in redirect */}
       {currentUser ? (
         <div className="flex flex-row items-center gap-2">
