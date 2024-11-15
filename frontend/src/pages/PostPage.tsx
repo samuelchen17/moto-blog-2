@@ -51,7 +51,7 @@ const PostPage = () => {
       <main>
         {/* post banner */}
         <div className="bg-gray-600 w-full rounded-lg px-4 py-6">
-          <h1 className="md:text-4xl max-w-2xl">{post.title}</h1>
+          <h1 className="md:text-4xl">{post.title}</h1>
 
           <div className="bg-gray-500 rounded-lg">
             <div className="flex flex-row">
@@ -82,7 +82,10 @@ const PostPage = () => {
         </div>
 
         <div>
-          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          <div
+            className="post-content w-full mx-auto"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          ></div>
           <div>other posts</div>
         </div>
       </main>
