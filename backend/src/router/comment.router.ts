@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { createComment } from "../controllers/comment.controller";
 
 const commentRouter = (router: Router) => {
-  router.post("/auth/register", register);
+  router.post("/comment/create", createComment);
 };
 
 export default commentRouter;
