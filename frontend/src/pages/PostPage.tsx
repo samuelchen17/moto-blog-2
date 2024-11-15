@@ -46,12 +46,12 @@ const PostPage = () => {
       </div>
     );
 
-  if (post) {
+  if (post && !loading) {
     return (
       <main>
         {/* post banner */}
         <div className="bg-gray-600 w-full rounded-lg px-4 py-6">
-          <h1 className="text-4xl">{post.title}</h1>
+          <h1 className="md:text-4xl max-w-2xl">{post.title}</h1>
 
           <div className="bg-gray-500 rounded-lg">
             <div className="flex flex-row">
@@ -73,6 +73,7 @@ const PostPage = () => {
             </div>
           </div>
 
+          {/* implement loading for image */}
           <img
             alt="post image"
             src={post.image}
@@ -81,7 +82,7 @@ const PostPage = () => {
         </div>
 
         <div>
-          <div>{post.content}</div>
+          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
           <div>other posts</div>
         </div>
       </main>
