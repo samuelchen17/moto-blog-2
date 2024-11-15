@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
-import { Button, Textarea } from "flowbite-react";
+import CommentSectionAddComment from "./CommentSectionAddComment";
 
 interface ICommentSection {
   postId: string;
@@ -49,13 +49,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
       )}
 
       {/* comment form  */}
-      {currentUser && (
-        <form>
-          <Textarea placeholder="Add a comment..." />
-          <span>200 characters remaining</span>
-          <Button>Submit</Button>
-        </form>
-      )}
+      {currentUser && <CommentSectionAddComment />}
     </div>
   );
 };
