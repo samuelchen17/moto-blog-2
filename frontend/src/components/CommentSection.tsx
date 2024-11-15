@@ -20,7 +20,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
         <div className="flex flex-row items-center gap-2">
           <p>Signed in as:</p>
           <Link
-            to="/dashboard?tag=profile"
+            to="/dashboard?tab=profile"
             className="flex flex-row items-center gap-1"
           >
             <img
@@ -28,7 +28,9 @@ const CommentSection = ({ postId }: ICommentSection) => {
               alt={currentUser.user.username}
               className="h-7 w-7-cover rounded-full"
             />
-            <div>@{currentUser.user.username}</div>
+            <div className="hover:underline text-blue-500">
+              @{currentUser.user.username}
+            </div>
           </Link>
         </div>
       ) : (
