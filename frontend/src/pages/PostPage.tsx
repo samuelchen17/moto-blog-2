@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPost } from "@shared/types/post";
 import { format } from "date-fns";
-import CommentSection from "../components/CommentSection";
+import CommentSection from "../components/commentSection/CommentSection";
 
 const PostPage = () => {
   const { postSlug } = useParams();
