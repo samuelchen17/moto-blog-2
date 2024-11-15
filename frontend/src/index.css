@@ -17,37 +17,6 @@
   font-weight: bold;
 }
 
-/* .post-content p {
-  margin-bottom: 0.5rem;
-}
-
-.post-content h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  font-family: sans-serif;
-} */
-/* 
-.post-content {
-  p {
-    margin-bottom: 0.5rem;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 1.5rem 0;
-  }
-  .dark h1 {
-    font-size: 14rem;
-    font-weight: 600;
-    margin: 1.5rem 0;
-  }
-  h2 {
-    font-size: 1.5rem;
-    margin: 1.5rem 0;
-  }
-} */
-
 .post-content {
   margin: auto;
   line-height: 1.6;
@@ -129,30 +98,44 @@
     line-height: 1.5;
   }
 
-  /* Code Blocks
-  pre {
-    background-color: #f4f4f4;
-    padding: 1rem;
-    overflow: auto;
-    border-radius: 4px;
-    margin: 1.5rem 0;
-    font-size: 0.875rem;
-    color: #333;
-    font-family: "Courier New", monospace;
-  }
-
-  code {
-    background-color: #f4f4f4;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    color: #333;
-  } */
-
   /* hr */
   hr {
     border: 0;
     border-top: 1px solid #ccc;
     margin: 1.5rem 0;
+  }
+}
+
+/* Dark Mode Overrides */
+.dark .post-content {
+  color: #e0e0e0;
+
+  h1,
+  h2,
+  h3 {
+    color: #e0e0e0;
+  }
+
+  p {
+    color: #cccccc;
+  }
+
+  a {
+    color: #82b1ff;
+
+    &:hover,
+    &:focus {
+      color: #3399ff;
+    }
+  }
+
+  blockquote {
+    color: #aaa;
+    border-left-color: #3399ff;
+    background: #2a2a2a;
+  }
+
+  hr {
+    border-top: 1px solid #555;
   }
 }
