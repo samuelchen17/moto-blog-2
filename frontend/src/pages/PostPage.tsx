@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPost } from "@shared/types/post";
 import { format } from "date-fns";
+import CommentSection from "../components/CommentSection";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -88,6 +89,7 @@ const PostPage = () => {
           ></div>
           <div>other posts</div>
         </div>
+        <CommentSection postId={post._id} />
       </main>
     );
   }
