@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { Avatar } from "flowbite-react";
+import { openLogin } from "../redux/features/modal/authModalSlice";
 
 interface ICommentSection {
   postId: string;
@@ -11,24 +12,37 @@ const CommentSection = ({ postId }: ICommentSection) => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const dispatch = useAppDispatch();
 
   return (
     <div>
       {currentUser ? (
-        <div className="flex flex-row">
+        <div className="flex flex-row items-center gap-2">
           <p>Signed in as:</p>
-          <Link to="/dashboard?tag=profile" className="flex flex-row">
-            <Avatar
-              img={currentUser.user.profilePicture}
-              rounded
+          <Link
+            to="/dashboard?tag=profile"
+            className="flex flex-row items-center gap-1"
+          >
+            <img
+              src={currentUser.user.profilePicture}
               alt={currentUser.user.username}
-              className=""
+              className="h-7 w-7-cover rounded-full"
             />
             <div>@{currentUser.user.username}</div>
           </Link>
         </div>
       ) : (
-        <div>Sign in to comment</div>
+        <div className="flex flex-row">
+          <div>
+            <button
+              onClick={() => dispatch(openLogin())}
+              className="text-cyan-700 hover:underline dark:text-cyan-500"
+            >
+              Sign in
+            </button>{" "}
+            to comment
+          </div>
+        </div>
       )}
     </div>
   );
