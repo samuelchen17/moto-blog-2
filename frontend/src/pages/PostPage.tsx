@@ -89,6 +89,8 @@ const PostPage = () => {
           ></div>
           <div>other posts</div>
         </div>
+
+        {/* add comment and display comments */}
         <CommentSection postId={post._id} />
       </main>
     );

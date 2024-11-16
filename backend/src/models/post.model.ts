@@ -1,17 +1,18 @@
 import mongoose from "mongoose";
+import { IPost } from "@shared/types/post";
 
 // implement, refactor all interfaces to use for response type and frontend type
 
-export interface IPost extends Document {
-  createdBy: string;
-  title: string;
-  content: string;
-  image: string;
-  category: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// interface IPost extends Document {
+//   createdBy: string;
+//   title: string;
+//   content: string;
+//   image: string;
+//   category: string;
+//   slug: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 
 const postSchema = new mongoose.Schema<IPost>(
   {
