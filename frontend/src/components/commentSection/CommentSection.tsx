@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
 import CommentSectionAddComment from "./CommentSectionAddComment";
+import CommentSectionComments from "./CommentSectionComments";
 
 export interface ICommentSection {
   postId: string;
@@ -50,6 +51,9 @@ const CommentSection = ({ postId }: ICommentSection) => {
 
       {/* comment form  */}
       {currentUser && <CommentSectionAddComment postId={postId} />}
+
+      {/* display comments */}
+      <CommentSectionComments postId={postId} />
     </div>
   );
 };
