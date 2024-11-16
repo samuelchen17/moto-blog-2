@@ -24,3 +24,5 @@ export const createComment = async (
     next(new CustomError(500, "Failed to post comment"));
   }
 };
+
+export const getComments = async () => {};
