@@ -4,7 +4,7 @@ import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
 
 const commentRouter = (router: Router) => {
   router.post("/comment/postcomment", isAuthenticated, createComment);
-  router.get("/comment/getcomments", getComments);
+  router.get("/comment/getcomments/:postId", getComments);
   // implement
   // router.delete(
   //   "/comment/deleteComment",
