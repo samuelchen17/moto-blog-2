@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+// implement, refactor all interfaces to use for response type and frontend type
+
 export interface IPost extends Document {
   createdBy: string;
   title: string;

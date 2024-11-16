@@ -37,6 +37,7 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
         const data = res.json(); // never used, implement
         // implement to update ui without another fetch request
         // CommentSectionComments((prevComments) => [...prevComments, data]);
+        // move comment and comments state to redux implement
         setComment("");
       }
     } catch (err) {

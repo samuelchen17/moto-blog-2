@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import CommentSectionComment from "./CommentSectionComment";
+import { IComment } from "@shared/types/comment";
 
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   // useState for displaying comments
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<IComment[]>([]);
 
   useEffect(() => {
     const getComments = async () => {
@@ -13,7 +14,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
 
         if (res.ok) {
           // move all data inside res.ok implement
-          const data = await res.json();
+          const data: IComment[] = await res.json();
           setComments(data);
         }
       } catch (err) {

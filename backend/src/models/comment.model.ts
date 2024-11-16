@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
+import { IComment } from "@shared/types/comment";
 
-interface IComment {
-  content: string;
-  postId: string;
-  commentBy: string;
-  likes: string[];
-  numberOfLikes: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// interface IComment {
+//   content: string;
+//   postId: string;
+//   commentBy: string;
+//   likes: string[];
+//   numberOfLikes: number;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 
 const commentSchema = new mongoose.Schema<IComment>(
   {
