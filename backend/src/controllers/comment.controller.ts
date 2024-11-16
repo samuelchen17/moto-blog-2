@@ -25,4 +25,19 @@ export const createComment = async (
   }
 };
 
-export const getComments = async () => {};
+export const getComments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const comments = await Comment.find({ postId: req.params.postId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(comments);
+  } catch (err) {
+    console.error("Error getting comments:", err);
+    next(new CustomError(500, "Failed to get comments"));
+  }
+};
