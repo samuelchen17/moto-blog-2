@@ -33,13 +33,10 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
         }),
       });
 
-      const data = res.json();
-
       if (res.ok) {
+        const data = res.json(); // never used, implement
         setComment("");
       }
-
-      console.log(data);
     } catch (err) {
       if (err instanceof Error) {
         setErrorMessage(err.message);
