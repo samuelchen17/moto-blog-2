@@ -1,4 +1,4 @@
-import { Button, Textarea } from "flowbite-react";
+import { Alert, Button, Textarea } from "flowbite-react";
 import { useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import { useAppSelector } from "../../redux/hooks";
@@ -6,6 +6,7 @@ import { RootState } from "../../redux/store";
 
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   const [comment, setComment] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -40,29 +41,41 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
 
       console.log(data);
     } catch (err) {
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
       console.log(err);
     }
   };
 
   return (
-    <form
-      className="border border-teal-500 rounded-md p-3"
-      onSubmit={handleSubmit}
-    >
-      <Textarea
-        placeholder="Add a comment..."
-        rows={3}
-        maxLength={200}
-        onChange={handleOnChange}
-        value={comment}
-      />
-      <div className="flex justify-between items-center mt-5">
-        <span className="text-gray-500 text-xs">
-          {200 - comment.length} characters remaining
-        </span>
-        <Button type="submit">Submit</Button>
-      </div>
-    </form>
+    <>
+      <form
+        className="border border-teal-500 rounded-md p-3"
+        onSubmit={handleSubmit}
+      >
+        <Textarea
+          placeholder="Add a comment..."
+          rows={3}
+          maxLength={200}
+          onChange={handleOnChange}
+          value={comment}
+        />
+        <div className="flex justify-between items-center mt-5">
+          <span className="text-gray-500 text-xs">
+            {200 - comment.length} characters remaining
+          </span>
+          <Button type="submit">Submit</Button>
+        </div>
+      </form>
+      {errorMessage && (
+        <Alert color="failure" className=" mt-2">
+          {errorMessage}
+        </Alert>
+      )}
+    </>
   );
 };
 
