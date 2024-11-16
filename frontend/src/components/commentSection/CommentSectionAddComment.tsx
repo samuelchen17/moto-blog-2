@@ -35,6 +35,8 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
 
       if (res.ok) {
         const data = res.json(); // never used, implement
+        // implement to update ui without another fetch request
+        // CommentSectionComments((prevComments) => [...prevComments, data]);
         setComment("");
       }
     } catch (err) {

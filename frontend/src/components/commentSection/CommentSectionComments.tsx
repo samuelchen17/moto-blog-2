@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ICommentSection } from "./CommentSection";
+import CommentSectionComment from "./CommentSectionComment";
 
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   // useState for displaying comments
@@ -35,6 +36,9 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
           <div className="outline py-1 px-2">{comments.length}</div>
         </div>
       )}
+      {comments.map((comment) => (
+        <CommentSectionComment key={comment._id} />
+      ))}
     </>
   );
 };
