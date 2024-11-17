@@ -38,7 +38,7 @@ const PostPage = () => {
     fetchPost();
   }, [postSlug]);
 
-  //   console.log(post);
+  console.log(error);
 
   if (loading)
     return (
