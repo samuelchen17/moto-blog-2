@@ -23,12 +23,12 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
           dispatch(setComments(data));
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
     getComments();
-  }, [postId]); // add comment here so it updates user comment
+  }, [postId]); // add comment here so it updates user comment, changed to show in state to prevent unnecessary fetch requests
 
   return (
     <>

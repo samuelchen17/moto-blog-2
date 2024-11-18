@@ -41,8 +41,7 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
       });
       const data = await res.json();
       if (res.ok) {
-        console.log(data);
-        // implement to update ui without another fetch request
+        // update using state instead of fetching data again
         dispatch(addComment(data));
         dispatch(setComment(""));
       }
