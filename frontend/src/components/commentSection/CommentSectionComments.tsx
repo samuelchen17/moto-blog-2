@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import CommentSectionComment from "./CommentSectionComment";
 import { IComment } from "@shared/types/comment";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../redux/store";
+import { setComments } from "../../redux/features/comment/commentSlice";
 
 const CommentSectionComments = ({ postId }: ICommentSection) => {
-  // useState for displaying comments
-  const [comments, setComments] = useState<IComment[]>([]);
+  //   const [comments, setComments] = useState<IComment[]>([]);
+  const { comment, comments } = useAppSelector(
+    (state: RootState) => state.comment
+  );
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getComments = async () => {
@@ -15,7 +22,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         if (res.ok) {
           // move all data inside res.ok implement
           const data: IComment[] = await res.json();
-          setComments(data);
+          dispatch(setComments(data));
         }
       } catch (err) {
         console.log(err);
@@ -23,7 +30,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
     };
 
     getComments();
-  }, [postId]); // add comment here so it updates user comment
+  }, [postId, comment]); // add comment here so it updates user comment
 
   console.log(comments);
   return (

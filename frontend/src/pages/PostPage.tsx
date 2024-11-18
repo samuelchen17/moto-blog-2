@@ -38,8 +38,6 @@ const PostPage = () => {
     fetchPost();
   }, [postSlug]);
 
-  console.log(error);
-
   if (loading)
     return (
       <div className="flex justify-center items-center min-h-dvh">
