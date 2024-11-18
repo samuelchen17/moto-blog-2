@@ -23,7 +23,7 @@ const userRouter = (router: Router) => {
   );
   router.patch("/user/:id", isAuthenticated, isOwner, updateUser);
   router.post("/user", signOut);
-  router.get("/:id", getUser);
+  router.get("/:commentBy", getUser);
 };
 
 export default userRouter;
