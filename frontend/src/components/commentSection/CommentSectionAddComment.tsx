@@ -3,7 +3,10 @@ import { useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { setComment } from "../../redux/features/comment/commentSlice";
+import {
+  addComment,
+  setComment,
+} from "../../redux/features/comment/commentSlice";
 
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   //   const [comment, setComment] = useState<string>("");
@@ -11,9 +14,7 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const { comment, comments } = useAppSelector(
-    (state: RootState) => state.comment
-  );
+  const { comment } = useAppSelector((state: RootState) => state.comment);
 
   const dispatch = useAppDispatch();
 
@@ -38,12 +39,11 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
           commentBy: currentUser?.user.id,
         }),
       });
-
+      const data = await res.json();
       if (res.ok) {
-        const data = res.json(); // never used, implement
+        console.log(data);
         // implement to update ui without another fetch request
-        // CommentSectionComments((prevComments) => [...prevComments, data]);
-        // move comment and comments state to redux implement
+        dispatch(addComment(data));
         dispatch(setComment(""));
       }
     } catch (err) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ICommentSection } from "./CommentSection";
 import CommentSectionComment from "./CommentSectionComment";
 import { IComment } from "@shared/types/comment";
@@ -8,9 +8,7 @@ import { setComments } from "../../redux/features/comment/commentSlice";
 
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   //   const [comments, setComments] = useState<IComment[]>([]);
-  const { comment, comments } = useAppSelector(
-    (state: RootState) => state.comment
-  );
+  const { comments } = useAppSelector((state: RootState) => state.comment);
 
   const dispatch = useAppDispatch();
 
@@ -30,9 +28,8 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
     };
 
     getComments();
-  }, [postId, comment]); // add comment here so it updates user comment
+  }, [postId]); // add comment here so it updates user comment
 
-  console.log(comments);
   return (
     <>
       {/* display comment number */}
@@ -45,7 +42,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         </div>
       )}
       {comments.map((comment) => (
-        <CommentSectionComment key={comment._id} />
+        <CommentSectionComment key={comment._id} comment={comment} />
       ))}
     </>
   );
