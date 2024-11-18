@@ -181,3 +181,10 @@ export const updateUser = async (
     next(new CustomError(400, "Unable to update details"));
   }
 };
+
+// get singular user
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};

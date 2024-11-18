@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deleteUser,
   getAllUsers,
+  getUser,
   signOut,
   updateUser,
 } from "../controllers/user.controller";
@@ -22,6 +23,7 @@ const userRouter = (router: Router) => {
   );
   router.patch("/user/:id", isAuthenticated, isOwner, updateUser);
   router.post("/user", signOut);
+  router.get("/:id", getUser);
 };
 
 export default userRouter;
