@@ -3,7 +3,6 @@ import { Document, Types } from "mongoose";
 import config from "../config/config";
 
 export interface IUser {
-  _id: string;
   username: string;
   email: string;
   profilePicture: string;

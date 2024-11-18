@@ -1,18 +1,24 @@
 import { Alert, Button, Textarea } from "flowbite-react";
 import { useState } from "react";
 import { ICommentSection } from "./CommentSection";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
+import { setComment } from "../../redux/features/comment/commentSlice";
 
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
-  const [comment, setComment] = useState<string>("");
+  //   const [comment, setComment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const { comment, comments } = useAppSelector(
+    (state: RootState) => state.comment
+  );
+
+  const dispatch = useAppDispatch();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
+    dispatch(setComment(e.target.value));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
