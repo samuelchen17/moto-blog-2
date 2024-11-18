@@ -5,6 +5,7 @@ import themeReducer from "./features/theme/themeSlice";
 import imageReducer from "./features/image/imageSlice";
 import storage from "redux-persist/lib/storage";
 import authModalReducer from "./features/modal/authModalSlice";
+import commentReducer from "./features/comment/commentSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -24,6 +25,7 @@ export const store = configureStore({
   reducer: {
     persisted: persistedReducer,
     authModal: authModalReducer,
+    comment: commentReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
