@@ -7,30 +7,6 @@ import {
 import { CustomError } from "../utils/errorHandler.utils";
 // import { ObjectId } from "mongoose";
 
-// check if current user is the owner of the id param
-export const isOwner = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const currentUserId = get(req, "identity._id") as string | undefined;
-
-    if (!currentUserId) {
-      return next(new CustomError(403, "User ID is missing"));
-    }
-
-    if (currentUserId.toString() !== id) {
-      next(new CustomError(403, "User is not authorized"));
-    }
-
-    next();
-  } catch (error) {
-    next(new CustomError(400, "User is not authenticated"));
-  }
-};
-
 export const isAuthenticated = async (
   req: Request,
   res: Response,
@@ -58,6 +34,30 @@ export const isAuthenticated = async (
   }
 };
 
+// check if current user is the owner of the id param
+export const isOwner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const currentUserId = get(req, "identity._id") as string | undefined;
+
+    if (!currentUserId) {
+      return next(new CustomError(403, "User ID is missing"));
+    }
+
+    if (currentUserId.toString() !== id) {
+      next(new CustomError(403, "User is not authorized"));
+    }
+
+    next();
+  } catch (error) {
+    next(new CustomError(400, "User is not authenticated"));
+  }
+};
+
 // check if current user is admin
 export const isAdmin = async (
   req: Request,
@@ -71,11 +71,17 @@ export const isAdmin = async (
     if (admin) {
       next();
     } else {
-      next(
-        new CustomError(403, "User is not authorized to perform this action")
-      );
+      next(new CustomError(403, "User is not an admin"));
     }
   } catch (error) {
     next(new CustomError(500, "An error occurred while checking admin status"));
   }
+};
+
+export const isAdminOrOwner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
 };

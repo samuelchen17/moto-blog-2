@@ -1,10 +1,15 @@
 import { Router } from "express";
 import {
   createComment,
+  deleteComment,
+  editComment,
   getComments,
   likeComment,
 } from "../controllers/comment.controller";
-import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
+import {
+  isAdminOrOwner,
+  isAuthenticated,
+} from "../middlewares/user.middlewares";
 
 const commentRouter = (router: Router) => {
   router.post("/comment/postcomment", isAuthenticated, createComment);
@@ -14,13 +19,20 @@ const commentRouter = (router: Router) => {
     isAuthenticated,
     likeComment
   );
-  // implement
-  // router.delete(
-  //   "/comment/deleteComment",
-  //   isAuthenticated,
-  //   isOwner,
-  //   deleteComment
-  // );
+
+  // edit comment
+  router.patch(
+    "/comment/edit/:commentId/:id",
+    isAuthenticated,
+    isAdminOrOwner,
+    editComment
+  );
+  router.delete(
+    "/comment/delete/:commentId/:id",
+    isAuthenticated,
+    isAdminOrOwner,
+    deleteComment
+  );
 };
 
 export default commentRouter;

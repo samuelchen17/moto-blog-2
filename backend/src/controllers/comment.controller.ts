@@ -76,3 +76,73 @@ export const likeComment = async (
     next(new CustomError(500, "Failed to like comment"));
   }
 };
+
+export const editComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { commentId, userId } = req.params;
+
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return next(new CustomError(404, "Comment not found"));
+    }
+
+    // using indexOf so that like can be removed based on index
+    // returns -1 if not found
+    const userIndex = comment.likes.indexOf(userId);
+
+    if (userIndex !== -1) {
+      comment.numberOfLikes -= 1;
+      comment.likes.splice(userIndex, 1);
+    } else {
+      comment.numberOfLikes += 1;
+      comment.likes.push(userId);
+    }
+
+    await comment.save();
+
+    res.status(200).json(comment);
+  } catch (err) {
+    console.error("Error liking comment:", err);
+    next(new CustomError(500, "Failed to like comment"));
+  }
+};
+
+export const deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { commentId, userId } = req.params;
+
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return next(new CustomError(404, "Comment not found"));
+    }
+
+    // using indexOf so that like can be removed based on index
+    // returns -1 if not found
+    const userIndex = comment.likes.indexOf(userId);
+
+    if (userIndex !== -1) {
+      comment.numberOfLikes -= 1;
+      comment.likes.splice(userIndex, 1);
+    } else {
+      comment.numberOfLikes += 1;
+      comment.likes.push(userId);
+    }
+
+    await comment.save();
+
+    res.status(200).json(comment);
+  } catch (err) {
+    console.error("Error liking comment:", err);
+    next(new CustomError(500, "Failed to like comment"));
+  }
+};
