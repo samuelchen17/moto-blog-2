@@ -73,7 +73,7 @@ const CommentSectionComment = ({
             }`}
             onClick={() => handleLike(comment._id)}
           >
-            <FaThumbsUp className="text-xs" />
+            <FaThumbsUp className="" />
           </button>
           <p className="text-gray-400">
             {comment.numberOfLikes > 0 &&
