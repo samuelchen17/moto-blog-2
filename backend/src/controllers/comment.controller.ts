@@ -112,7 +112,7 @@ export const deleteComment = async (
   next: NextFunction
 ) => {
   try {
-    const { commentId, userId } = req.params;
+    const { commentId } = req.params;
 
     const comment = await Comment.findById(commentId);
 
@@ -120,23 +120,10 @@ export const deleteComment = async (
       return next(new CustomError(404, "Comment not found"));
     }
 
-    // using indexOf so that like can be removed based on index
-    // returns -1 if not found
-    const userIndex = comment.likes.indexOf(userId);
-
-    if (userIndex !== -1) {
-      comment.numberOfLikes -= 1;
-      comment.likes.splice(userIndex, 1);
-    } else {
-      comment.numberOfLikes += 1;
-      comment.likes.push(userId);
-    }
-
-    await comment.save();
-
-    res.status(200).json(comment);
+    await Comment.findByIdAndDelete(commentId);
+    res.status(200).json("Comment has been deleted");
   } catch (err) {
-    console.error("Error liking comment:", err);
-    next(new CustomError(500, "Failed to like comment"));
+    console.error("Error deleting comment:", err);
+    next(new CustomError(500, "Failed to delete comment"));
   }
 };
