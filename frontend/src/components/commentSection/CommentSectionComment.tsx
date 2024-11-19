@@ -21,6 +21,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
   const [editedContent, setEditedContent] = useState<string>(comment.content);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -30,6 +31,13 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
   const dispatch = useAppDispatch();
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    // this is so that if user doesn't save, it still displays original content
+    setEditedContent(comment.content);
+  };
+
+  // edit comment logic
   const handleSave = async (commentId: string) => {
     try {
       const res = await fetch(
@@ -61,12 +69,6 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    // this is so that if user doesn't save, it still displays original content
-    setEditedContent(comment.content);
   };
 
   // comment like logic
@@ -104,6 +106,11 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  // delete comment logic
+  const handleDelete = async (commentId: string) => {
+    setShowModal(true);
   };
 
   useEffect(() => {
@@ -192,12 +199,20 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
               {currentUser &&
                 (currentUser.user.id === comment.commentBy ||
                   currentUser.user.admin) && (
-                  <button
-                    className="text-gray-400 hover:underline hover:text-blue-500"
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      className="text-gray-400 hover:underline hover:text-blue-500"
+                      onClick={handleEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-gray-400 hover:underline hover:text-red-500"
+                      onClick={() => handleDelete}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>
