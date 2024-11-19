@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  adminOrOwnerTest,
   createComment,
   deleteComment,
   editComment,
@@ -14,6 +15,7 @@ import {
 const commentRouter = (router: Router) => {
   router.post("/comment/postcomment", isAuthenticated, createComment);
   router.get("/comment/getcomments/:postId", getComments);
+
   router.patch(
     "/comment/like/:commentId/:userId",
     isAuthenticated,
@@ -33,6 +35,8 @@ const commentRouter = (router: Router) => {
     isAdminOrOwner,
     deleteComment
   );
+
+  router.get("/test/:id", isAuthenticated, isAdminOrOwner, adminOrOwnerTest);
 };
 
 export default commentRouter;

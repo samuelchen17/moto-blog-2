@@ -27,12 +27,9 @@ const DashSettingsDeleteUser = () => {
         return;
       }
 
-      const res: Response = await fetch(
-        `/api/user/${currentUser.user.id}/${currentUser.user.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
+        method: "DELETE",
+      });
 
       const data = await res.json();
 

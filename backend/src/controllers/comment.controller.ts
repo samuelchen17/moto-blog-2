@@ -146,3 +146,11 @@ export const deleteComment = async (
     next(new CustomError(500, "Failed to like comment"));
   }
 };
+
+export const adminOrOwnerTest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  res.status(200).json({ message: "Authorized" });
+};

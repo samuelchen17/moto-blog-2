@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteUser,
+  deleteUserAdmin,
   getAllUsers,
   getUser,
   signOut,
@@ -14,15 +15,23 @@ import {
 
 const userRouter = (router: Router) => {
   router.get("/user/:id", isAuthenticated, isAdmin, getAllUsers);
-  router.delete("/user/:id/:deleteId", isAuthenticated, isOwner, deleteUser);
+
+  // delete own account
+  router.delete("/user/:id", isAuthenticated, isOwner, deleteUser);
+
+  // admin delete route
   router.delete(
     "/user/admin/:id/:deleteId",
     isAuthenticated,
+    isOwner,
     isAdmin,
-    deleteUser
+    deleteUserAdmin
   );
+
+  // update user info
   router.patch("/user/:id", isAuthenticated, isOwner, updateUser);
   router.post("/user", signOut);
+  // get comment by user info
   router.get("/:commentBy", getUser);
 };
 

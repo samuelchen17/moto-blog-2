@@ -68,6 +68,26 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
+    const { id } = req.params;
+
+    const deletedUser = await deleteUserById(id);
+
+    if (!deletedUser) {
+      next(new CustomError(404, "User does not exist"));
+    }
+
+    res.status(200).json({ message: "User deleted", deletedUser: deletedUser });
+  } catch (error) {
+    next(new CustomError(400, "Unable to delete user"));
+  }
+};
+
+export const deleteUserAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
     const { deleteId } = req.params;
 
     const deletedUser = await deleteUserById(deleteId);
