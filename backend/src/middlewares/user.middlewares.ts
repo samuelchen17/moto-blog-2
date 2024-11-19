@@ -78,13 +78,14 @@ export const isAdmin = async (
   }
 };
 
-export const isAdminOrOwner = async (
+export const isAdminOrCommentOwner = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const { id, commentBy } = req.params;
+
     // this will get the identity from the req token
     const currentUserId = get(req, "identity._id") as string | undefined;
     const isAdmin = get(req, "identity.isAdmin") as boolean | undefined;
@@ -93,7 +94,7 @@ export const isAdminOrOwner = async (
       return next(new CustomError(403, "User ID is missing"));
     }
 
-    if (currentUserId.toString() === id) {
+    if (currentUserId.toString() === id && id === commentBy) {
       return next();
     }
 

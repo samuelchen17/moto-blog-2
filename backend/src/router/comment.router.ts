@@ -7,7 +7,7 @@ import {
   likeComment,
 } from "../controllers/comment.controller";
 import {
-  isAdminOrOwner,
+  isAdminOrCommentOwner,
   isAuthenticated,
 } from "../middlewares/user.middlewares";
 
@@ -23,15 +23,15 @@ const commentRouter = (router: Router) => {
 
   // edit comment
   router.patch(
-    "/comment/edit/:commentId/:id",
+    "/comment/edit/:commentId/:id/:commentBy",
     isAuthenticated,
-    isAdminOrOwner,
+    isAdminOrCommentOwner,
     editComment
   );
   router.delete(
     "/comment/delete/:commentId/:id",
     isAuthenticated,
-    isAdminOrOwner,
+    isAdminOrCommentOwner,
     deleteComment
   );
 };

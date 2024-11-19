@@ -33,7 +33,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const handleSave = async (commentId: string) => {
     try {
       const res = await fetch(
-        `/api/comment/edit/${comment._id}/${currentUser?.user.id}`,
+        `/api/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
         {
           method: "PATCH",
           headers: {
@@ -188,14 +188,6 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
                     " " +
                     (comment.numberOfLikes === 1 ? "like" : "likes")}
               </p>
-
-              {/* for testing */}
-              <button
-                className="text-gray-400 hover:underline hover:text-blue-500"
-                onClick={handleEdit}
-              >
-                Edit
-              </button>
 
               {currentUser &&
                 (currentUser.user.id === comment.commentBy ||
