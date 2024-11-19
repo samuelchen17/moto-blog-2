@@ -30,6 +30,20 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
 
       if (res.ok) {
         const data = await res.json();
+
+        // loop through comments to find a match
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  // add likes and numberOfLikes to comment
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        );
       }
     } catch (err) {
       console.error(err);
