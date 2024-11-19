@@ -3,6 +3,8 @@ import { IGetUser } from "@shared/types/user";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
+import { useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../redux/store";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -20,6 +22,10 @@ const CommentSectionComment = ({
   handleLike: (commentId: string) => Promise<void>;
 }) => {
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
+
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
 
   console.log(commentBy);
 
@@ -58,14 +64,25 @@ const CommentSectionComment = ({
 
         <p className="text-gray-500 mb-2">{comment.content}</p>
 
-        <div className="">
+        {/* max-w-fit useful for fitting to size */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            className="text-gray-400 hover:text-blue-500"
+            className={`text-gray-400 hover:text-blue-500 ${
+              currentUser &&
+              comment.likes.includes(currentUser.user.id) &&
+              "!text-blue-500"
+            }`}
             onClick={() => handleLike(comment._id)}
           >
             <FaThumbsUp className="text-xs" />
           </button>
+          <p className="text-gray-400">
+            {comment.numberOfLikes > 0 &&
+              comment.numberOfLikes +
+                " " +
+                (comment.numberOfLikes === 1 ? "like" : "likes")}
+          </p>
         </div>
       </div>
     </div>
