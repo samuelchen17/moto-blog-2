@@ -32,6 +32,8 @@ const CommentSectionComment = ({
 
   const handleEdit = async () => {
     setIsEditing(true);
+    // this is so that if user doesn't save, it still displays original content
+    setEditedContent(comment.content);
   };
 
   useEffect(() => {
