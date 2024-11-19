@@ -3,9 +3,11 @@ import { IGetUser } from "@shared/types/user";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { Button, Textarea } from "flowbite-react";
+import { openLogin } from "../../redux/features/modal/authModalSlice";
+import { setComments } from "../../redux/features/comment/commentSlice";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -15,13 +17,7 @@ const TimeAgo = ({ date }: { date: string | Date }) => {
   );
 };
 
-const CommentSectionComment = ({
-  comment,
-  handleLike,
-}: {
-  comment: IComment;
-  handleLike: (commentId: string) => Promise<void>;
-}) => {
+const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
   const [editedContent, setEditedContent] = useState<string>(comment.content);
@@ -30,10 +26,50 @@ const CommentSectionComment = ({
     (state: RootState) => state.persisted.user
   );
 
+  const { comments } = useAppSelector((state: RootState) => state.comment);
+
+  const dispatch = useAppDispatch();
+
   const handleEdit = async () => {
     setIsEditing(true);
     // this is so that if user doesn't save, it still displays original content
     setEditedContent(comment.content);
+  };
+
+  const handleLike = async (commentId: string) => {
+    try {
+      if (!currentUser) {
+        dispatch(openLogin());
+        return;
+      }
+
+      const res = await fetch(
+        `/api/comment/like/${commentId}/${currentUser.user.id}`,
+        { method: "PATCH" }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+
+        // loop through comments to find a match
+        dispatch(
+          setComments(
+            comments.map((comment) =>
+              comment._id === commentId
+                ? {
+                    // add likes and numberOfLikes to comment
+                    ...comment,
+                    likes: data.likes,
+                    numberOfLikes: data.likes.length,
+                  }
+                : comment
+            )
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
