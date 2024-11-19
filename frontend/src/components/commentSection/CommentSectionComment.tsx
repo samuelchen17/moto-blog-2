@@ -5,9 +5,10 @@ import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { Button, Textarea } from "flowbite-react";
+import { Button, Modal, Textarea } from "flowbite-react";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
 import { setComments } from "../../redux/features/comment/commentSlice";
+import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -21,7 +22,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
   const [editedContent, setEditedContent] = useState<string>(comment.content);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -110,7 +111,29 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
   // delete comment logic
   const handleDelete = async (commentId: string) => {
-    setShowModal(true);
+    try {
+      if (!currentUser) {
+        dispatch(openLogin());
+        return;
+      }
+
+      const res = await fetch(
+        `/api/comment/delete/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        dispatch(
+          setComments(comments.filter((comment) => comment._id !== commentId))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -208,7 +231,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
                     </button>
                     <button
                       className="text-gray-400 hover:underline hover:text-red-500"
-                      onClick={() => handleDelete}
+                      onClick={() => setOpenModal(true)}
                     >
                       Delete
                     </button>
@@ -218,6 +241,41 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
           </>
         )}
       </div>
+
+      {/* delete confirmation modal */}
+      {openModal && (
+        <Modal
+          show={openModal}
+          size="md"
+          onClose={() => setOpenModal(false)}
+          dismissible
+          popup
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this comment?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <Button
+                  color="failure"
+                  onClick={() => {
+                    setOpenModal(false);
+                    handleDelete(comment._id);
+                  }}
+                >
+                  {"Yes, I'm sure"}
+                </Button>
+                <Button color="gray" onClick={() => setOpenModal(false)}>
+                  No, cancel
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   );
 };
