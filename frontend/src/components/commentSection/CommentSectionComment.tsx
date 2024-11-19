@@ -5,6 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
+import { Textarea } from "flowbite-react";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -21,11 +22,17 @@ const CommentSectionComment = ({
   comment: IComment;
   handleLike: (commentId: string) => Promise<void>;
 }) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
+  const [editedContent, setEditedContent] = useState<string>(comment.content);
 
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+
+  const handleEdit = async () => {
+    setIsEditing(true);
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -60,28 +67,50 @@ const CommentSectionComment = ({
           <TimeAgo date={comment.createdAt} />
         </div>
 
-        <p className="text-gray-500 mb-2">{comment.content}</p>
-
-        {/* max-w-fit useful for fitting to size */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className={`text-gray-400 hover:text-blue-500 ${
-              currentUser &&
-              comment.likes.includes(currentUser.user.id) &&
-              "!text-blue-500"
-            }`}
-            onClick={() => handleLike(comment._id)}
-          >
-            <FaThumbsUp className="" />
-          </button>
-          <p className="text-gray-400">
-            {comment.numberOfLikes > 0 &&
-              comment.numberOfLikes +
-                " " +
-                (comment.numberOfLikes === 1 ? "like" : "likes")}
-          </p>
-        </div>
+        {/* text area for editing */}
+        {isEditing ? (
+          <Textarea
+            className="w-full rounded-md"
+            rows={3}
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+          />
+        ) : (
+          <>
+            {" "}
+            <p className="text-gray-500 mb-2">{comment.content}</p>
+            {/* max-w-fit useful for fitting to size */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className={`text-gray-400 hover:text-blue-500 ${
+                  currentUser &&
+                  comment.likes.includes(currentUser.user.id) &&
+                  "!text-blue-500"
+                }`}
+                onClick={() => handleLike(comment._id)}
+              >
+                <FaThumbsUp className="" />
+              </button>
+              <p className="text-gray-400">
+                {comment.numberOfLikes > 0 &&
+                  comment.numberOfLikes +
+                    " " +
+                    (comment.numberOfLikes === 1 ? "like" : "likes")}
+              </p>
+              {currentUser &&
+                (currentUser.user.id === comment.commentBy ||
+                  currentUser.user.admin) && (
+                  <button
+                    className="text-gray-400 hover:underline hover:text-blue-500"
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </button>
+                )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
