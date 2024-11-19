@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { Textarea } from "flowbite-react";
+import { Button, Textarea } from "flowbite-react";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -69,12 +69,26 @@ const CommentSectionComment = ({
 
         {/* text area for editing */}
         {isEditing ? (
-          <Textarea
-            className="w-full rounded-md"
-            rows={3}
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-          />
+          <form className="flex flex-col gap-2">
+            <Textarea
+              className="w-full rounded-md"
+              rows={3}
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+            />
+            <div className="flex justify-end gap-2 text-xs">
+              <Button type="button" size="sm">
+                Save
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
         ) : (
           <>
             {" "}
