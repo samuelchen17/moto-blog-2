@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  adminOrOwnerTest,
   createComment,
   deleteComment,
   editComment,
@@ -35,8 +34,6 @@ const commentRouter = (router: Router) => {
     isAdminOrOwner,
     deleteComment
   );
-
-  router.get("/test/:id", isAuthenticated, isAdminOrOwner, adminOrOwnerTest);
 };
 
 export default commentRouter;

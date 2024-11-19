@@ -83,7 +83,7 @@ export const editComment = async (
   next: NextFunction
 ) => {
   try {
-    const { commentId, userId } = req.params;
+    const { commentId } = req.params;
 
     const comment = await Comment.findById(commentId);
 
@@ -91,24 +91,18 @@ export const editComment = async (
       return next(new CustomError(404, "Comment not found"));
     }
 
-    // using indexOf so that like can be removed based on index
-    // returns -1 if not found
-    const userIndex = comment.likes.indexOf(userId);
+    const editedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      {
+        content: req.body.content,
+      },
+      { new: true }
+    );
 
-    if (userIndex !== -1) {
-      comment.numberOfLikes -= 1;
-      comment.likes.splice(userIndex, 1);
-    } else {
-      comment.numberOfLikes += 1;
-      comment.likes.push(userId);
-    }
-
-    await comment.save();
-
-    res.status(200).json(comment);
+    res.status(200).json(editedComment);
   } catch (err) {
-    console.error("Error liking comment:", err);
-    next(new CustomError(500, "Failed to like comment"));
+    console.error("Error editing comment:", err);
+    next(new CustomError(500, "Failed to edit comment"));
   }
 };
 
@@ -145,12 +139,4 @@ export const deleteComment = async (
     console.error("Error liking comment:", err);
     next(new CustomError(500, "Failed to like comment"));
   }
-};
-
-export const adminOrOwnerTest = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  res.status(200).json({ message: "Authorized" });
 };
