@@ -17,6 +17,7 @@ const CommentSectionComment = ({
   handleLike,
 }: {
   comment: IComment;
+  handleLike: (commentId: string) => Promise<void>;
 }) => {
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
 

@@ -22,6 +22,15 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         dispatch(openLogin());
         return;
       }
+
+      const res = await fetch(
+        `/api/comment/like/${commentId}/${currentUser.user.id}`,
+        { method: "PATCH" }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+      }
     } catch (err) {
       console.error(err);
     }
