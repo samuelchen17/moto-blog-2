@@ -5,12 +5,27 @@ import { IComment } from "@shared/types/comment";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { setComments } from "../../redux/features/comment/commentSlice";
+import { openLogin } from "../../redux/features/modal/authModalSlice";
 
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   //   const [comments, setComments] = useState<IComment[]>([]);
   const { comments } = useAppSelector((state: RootState) => state.comment);
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
 
   const dispatch = useAppDispatch();
+
+  const handleLike = async (commentId: string) => {
+    try {
+      if (!currentUser) {
+        dispatch(openLogin());
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const getComments = async () => {
@@ -42,7 +57,11 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         </div>
       )}
       {comments.map((comment) => (
-        <CommentSectionComment key={comment._id} comment={comment} />
+        <CommentSectionComment
+          key={comment._id}
+          comment={comment}
+          handleLike={handleLike}
+        />
       ))}
     </>
   );

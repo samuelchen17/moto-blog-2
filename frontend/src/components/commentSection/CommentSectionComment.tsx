@@ -2,6 +2,7 @@ import { IComment } from "@shared/types/comment";
 import { IGetUser } from "@shared/types/user";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { FaThumbsUp } from "react-icons/fa";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -11,7 +12,12 @@ const TimeAgo = ({ date }: { date: string | Date }) => {
   );
 };
 
-const CommentSectionComment = ({ comment }: { comment: IComment }) => {
+const CommentSectionComment = ({
+  comment,
+  handleLike,
+}: {
+  comment: IComment;
+}) => {
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
 
   console.log(commentBy);
@@ -50,6 +56,16 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         </div>
 
         <p className="text-gray-500 mb-2">{comment.content}</p>
+
+        <div className="">
+          <button
+            type="button"
+            className="text-gray-400 hover:text-blue-500"
+            onClick={() => handleLike(comment._id)}
+          >
+            <FaThumbsUp className="text-xs" />
+          </button>
+        </div>
       </div>
     </div>
   );
