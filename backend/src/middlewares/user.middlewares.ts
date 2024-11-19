@@ -83,5 +83,29 @@ export const isAdminOrOwner = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    // this will get the identity from the req token
+    const currentUserId = get(req, "identity._id") as string | undefined;
+    const isAdmin = get(req, "identity.isAdmin") as boolean | undefined;
+
+    if (!currentUserId) {
+      return next(new CustomError(403, "User ID is missing"));
+    }
+
+    if (currentUserId.toString() === id) {
+      return next();
+    }
+
+    if (isAdmin) {
+      const admin = await checkAdminById(id);
+      if (admin) {
+        return next();
+      }
+    }
+
+    next(new CustomError(403, "User is not authorized"));
+  } catch (err) {
+    next(new CustomError(500, "An error occurred"));
+  }
 };
