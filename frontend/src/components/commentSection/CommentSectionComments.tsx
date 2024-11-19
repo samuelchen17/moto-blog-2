@@ -32,16 +32,18 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         const data = await res.json();
 
         // loop through comments to find a match
-        setComments(
-          comments.map((comment) =>
-            comment._id === commentId
-              ? {
-                  // add likes and numberOfLikes to comment
-                  ...comment,
-                  likes: data.likes,
-                  numberOfLikes: data.likes.length,
-                }
-              : comment
+        dispatch(
+          setComments(
+            comments.map((comment) =>
+              comment._id === commentId
+                ? {
+                    // add likes and numberOfLikes to comment
+                    ...comment,
+                    likes: data.likes,
+                    numberOfLikes: data.likes.length,
+                  }
+                : comment
+            )
           )
         );
       }

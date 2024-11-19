@@ -27,8 +27,6 @@ const CommentSectionComment = ({
     (state: RootState) => state.persisted.user
   );
 
-  console.log(commentBy);
-
   useEffect(() => {
     const getUser = async () => {
       try {
