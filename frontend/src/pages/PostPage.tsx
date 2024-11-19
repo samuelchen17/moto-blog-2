@@ -45,7 +45,11 @@ const PostPage = () => {
       </div>
     );
 
-  if (post && !loading) {
+  if (error) {
+    return <div>Post could not be retrieved</div>;
+  }
+
+  if (post && !loading && !error) {
     return (
       <main>
         {/* post banner */}
