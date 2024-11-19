@@ -89,7 +89,9 @@ const PostPage = () => {
         </div>
 
         {/* add comment and display comments */}
-        <CommentSection postId={post._id} />
+        <div className="flex justify-center">
+          <CommentSection postId={post._id} />
+        </div>
       </main>
     );
   }

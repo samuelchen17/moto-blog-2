@@ -41,3 +41,26 @@ export const getComments = async (
     next(new CustomError(500, "Failed to get comments"));
   }
 };
+
+export const likeComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+
+    if (!comment) {
+      next(new CustomError(404, "Comment not found"));
+    }
+
+    // using indexOf so that like can be removed based on index
+    // returns -1 if not found
+    const userIndex = comment?.likes.indexOf(req.user.id);
+    if (comment?.likes.includes(req.user.id)) {
+    }
+  } catch (err) {
+    console.error("Error liking comment:", err);
+    next(new CustomError(500, "Failed to like comment"));
+  }
+};
