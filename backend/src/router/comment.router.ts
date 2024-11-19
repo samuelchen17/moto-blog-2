@@ -9,7 +9,11 @@ import { isAuthenticated, isOwner } from "../middlewares/user.middlewares";
 const commentRouter = (router: Router) => {
   router.post("/comment/postcomment", isAuthenticated, createComment);
   router.get("/comment/getcomments/:postId", getComments);
-  router.patch("/comment/like/:commentId", isAuthenticated, likeComment);
+  router.patch(
+    "/comment/like/:commentId/:userId",
+    isAuthenticated,
+    likeComment
+  );
   // implement
   // router.delete(
   //   "/comment/deleteComment",
