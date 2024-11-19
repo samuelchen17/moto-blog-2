@@ -29,7 +29,7 @@ const commentRouter = (router: Router) => {
     editComment
   );
   router.delete(
-    "/comment/delete/:commentId/:id",
+    "/comment/delete/:commentId/:id/:commentBy",
     isAuthenticated,
     isAdminOrCommentOwner,
     deleteComment
