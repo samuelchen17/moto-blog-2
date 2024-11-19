@@ -30,12 +30,35 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
   const dispatch = useAppDispatch();
 
-  const handleEdit = async () => {
+  const handleSave = async () => {
+    try {
+      const res = await fetch(
+        `/api/comment/edit/${comment._id}/${currentUser?.user.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: editedContent }),
+        }
+      );
+
+      if (res.ok) {
+        setIsEditing(false);
+        // onEdit(comment, editedContetn) for updating state live
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleEdit = () => {
     setIsEditing(true);
     // this is so that if user doesn't save, it still displays original content
     setEditedContent(comment.content);
   };
 
+  // comment like logic
   const handleLike = async (commentId: string) => {
     try {
       if (!currentUser) {
@@ -87,6 +110,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
     getUser();
   }, [comment]);
+
   return (
     <div className="flex p-4 border-b dark:border-gray-600 text-sm">
       <div className="flex-shrink-0 mr-3">
@@ -107,7 +131,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
         {/* text area for editing */}
         {isEditing ? (
-          <form className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <Textarea
               className="w-full rounded-md"
               rows={3}
@@ -115,7 +139,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
               onChange={(e) => setEditedContent(e.target.value)}
             />
             <div className="flex justify-end gap-2 text-xs">
-              <Button type="button" size="sm">
+              <Button type="button" size="sm" onClick={handleSave}>
                 Save
               </Button>
               <Button
@@ -126,10 +150,9 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
                 Cancel
               </Button>
             </div>
-          </form>
+          </div>
         ) : (
           <>
-            {" "}
             <p className="text-gray-500 mb-2">{comment.content}</p>
             {/* max-w-fit useful for fitting to size */}
             <div className="flex items-center gap-2">
