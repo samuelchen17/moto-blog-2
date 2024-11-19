@@ -30,7 +30,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
   const dispatch = useAppDispatch();
 
-  const handleSave = async () => {
+  const handleSave = async (commentId: string) => {
     try {
       const res = await fetch(
         `/api/comment/edit/${comment._id}/${currentUser?.user.id}`,
@@ -45,7 +45,18 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
       if (res.ok) {
         setIsEditing(false);
-        // onEdit(comment, editedContetn) for updating state live
+        dispatch(
+          setComments(
+            comments.map((comment) =>
+              comment._id === commentId
+                ? {
+                    ...comment,
+                    content: editedContent,
+                  }
+                : comment
+            )
+          )
+        );
       }
     } catch (err) {
       console.error(err);
@@ -139,7 +150,11 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
               onChange={(e) => setEditedContent(e.target.value)}
             />
             <div className="flex justify-end gap-2 text-xs">
-              <Button type="button" size="sm" onClick={handleSave}>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => handleSave(comment._id)}
+              >
                 Save
               </Button>
               <Button
@@ -173,6 +188,15 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
                     " " +
                     (comment.numberOfLikes === 1 ? "like" : "likes")}
               </p>
+
+              {/* for testing */}
+              <button
+                className="text-gray-400 hover:underline hover:text-blue-500"
+                onClick={handleEdit}
+              >
+                Edit
+              </button>
+
               {currentUser &&
                 (currentUser.user.id === comment.commentBy ||
                   currentUser.user.admin) && (
