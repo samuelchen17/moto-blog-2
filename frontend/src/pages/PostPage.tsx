@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { IPost } from "@shared/types/post";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
+import RecentPosts from "../components/recentPosts/RecentPosts";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -95,6 +96,11 @@ const PostPage = () => {
         {/* add comment and display comments */}
         <div className="flex justify-center">
           <CommentSection postId={post._id} />
+        </div>
+
+        <div className="flex flex-col justify-center items-center">
+          <h1 className="text-xl ">You may be interested in</h1>
+          <RecentPosts />
         </div>
       </main>
     );
