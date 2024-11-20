@@ -25,7 +25,7 @@ const RecentPosts = () => {
   console.log(recentPosts);
 
   return (
-    <div>
+    <div className="flex flex-col md:flex-row">
       {recentPosts &&
         recentPosts.map((post) => (
           <RecentPostCard key={post._id} post={post} />

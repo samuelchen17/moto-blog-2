@@ -54,19 +54,26 @@ export const handleDashFormSubmit =
     try {
       dispatch(updateStart());
 
+      // delete previous dp
       if (formData.profilePicture) {
         const prevDpLink = currentUser.user.profilePicture;
 
-        const imageRef = ref(storage, prevDpLink);
-        deleteObject(imageRef)
-          .then(() => {
-            console.log("Previous dp deleted successfully");
-            dispatch(deleteTempImageSuccess());
-          })
-          .catch((error) => {
-            console.error("Error deleting previous dp:", error);
-            dispatch(deleteTempImageSuccess());
-          });
+        // skip delete if default dp
+        if (
+          prevDpLink !==
+          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        ) {
+          const imageRef = ref(storage, prevDpLink);
+          deleteObject(imageRef)
+            .then(() => {
+              console.log("Previous dp deleted successfully");
+              dispatch(deleteTempImageSuccess());
+            })
+            .catch((error) => {
+              console.error("Error deleting previous dp:", error);
+              dispatch(deleteTempImageSuccess());
+            });
+        }
       }
 
       const payload: IUpdateUserPayload = { ...formData };
