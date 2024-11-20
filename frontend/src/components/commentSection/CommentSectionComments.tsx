@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { setComments } from "../../redux/features/comment/commentSlice";
 
+// implement collapse comment section!!
+
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   //   const [comments, setComments] = useState<IComment[]>([]);
   const { comments } = useAppSelector((state: RootState) => state.comment);

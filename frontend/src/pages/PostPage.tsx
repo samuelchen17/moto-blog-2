@@ -98,7 +98,7 @@ const PostPage = () => {
           <CommentSection postId={post._id} />
         </div>
 
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center ">
           <h1 className="text-xl ">You may be interested in</h1>
           <RecentPosts />
         </div>

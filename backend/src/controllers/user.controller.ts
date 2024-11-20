@@ -203,20 +203,35 @@ export const updateUser = async (
 };
 
 // get singular user
+// export const getUser = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const user = await User.findById(req.params.commentBy);
+
+//     if (!user) {
+//       next(new CustomError(400, "User not found"));
+//     }
+
+//     res.status(200).json(user);
+//   } catch (err) {
+//     next(new CustomError(400, "failed to get user"));
+//   }
+// };
+
+// if user is deleted, still send success
 export const getUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const user = await User.findById(req.params.commentBy);
+  const user = await User.findById(req.params.commentBy);
 
-    if (!user) {
-      next(new CustomError(400, "User not found"));
-    }
-
-    res.status(200).json(user);
-  } catch (err) {
-    next(new CustomError(400, "failed to get user"));
+  if (!user) {
+    res.status(200);
   }
+
+  res.status(200).json(user);
 };
