@@ -16,8 +16,8 @@ export const navLinks: INavLinks[] = [
     name: "about",
     path: "/about",
   },
-  {
-    name: "dash",
-    path: "/dashboard",
-  },
+  // {
+  //   name: "dashboard",
+  //   path: "/dashboard/?tab=dashboard",
+  // },
 ];
