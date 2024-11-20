@@ -15,10 +15,14 @@ const RecentPosts = () => {
           setRecentPosts(data.posts);
         }
       };
+
+      fetchRecentPosts();
     } catch (err) {
       console.error(err);
     }
   }, []);
+
+  console.log(recentPosts);
 
   return (
     <div>
