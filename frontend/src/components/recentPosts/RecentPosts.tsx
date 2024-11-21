@@ -25,7 +25,7 @@ const RecentPosts = () => {
   console.log(recentPosts);
 
   return (
-    <div className="flex flex-col md:flex-row justify-between ">
+    <div className="grid lg:grid-cols-3">
       {recentPosts &&
         recentPosts.map((post) => (
           <RecentPostCard key={post._id} post={post} />
