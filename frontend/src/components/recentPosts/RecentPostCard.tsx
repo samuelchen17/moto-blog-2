@@ -2,6 +2,7 @@ import { IPost } from "@shared/types/post";
 import { IGetUser } from "@shared/types/user";
 import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { FaComment, FaSave, FaThumbsUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const RecentPostCard = ({ post }: { post: IPost }) => {
@@ -36,19 +37,27 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
         />
       </Link>
       {/* implement link to authors page */}
-      <div className="flex items-center gap-2 mt-4">
-        <img
-          src={author?.profilePicture}
-          className="h-5 w-5 object-cover rounded-full bg-blue-500"
-        />
-        <span className="font-semibold">{author?.username}</span>
-        <span className="rounded-full bg-slate-600 px-3 text-white">
-          {post.category}
-        </span>
+      <div className="flex mt-4 justify-between">
+        <div className="flex items-center gap-2">
+          <img
+            src={author?.profilePicture}
+            className="h-5 w-5 object-cover rounded-full bg-blue-500"
+          />
+          <span className="font-semibold">{author?.username}</span>
+        </div>
+        <div className="flex gap-2 items-center ">
+          {/* implement */}
+          <FaThumbsUp />
+          <FaComment />
+          <FaSave />
+        </div>
       </div>
 
       <div>
         <p className="font-bold text-2xl">{post.title}</p>
+        <span className="rounded-full bg-slate-600 px-3 text-white">
+          {post.category}
+        </span>
       </div>
       <Button>Read more</Button>
     </div>
