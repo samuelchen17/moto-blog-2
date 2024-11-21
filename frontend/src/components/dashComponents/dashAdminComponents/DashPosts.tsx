@@ -120,7 +120,7 @@ const DashPosts = () => {
                     {format(new Date(post.updatedAt), "dd MMM yyyy")}
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
+                    <Link to={`/blogs/post/${post.slug}`}>
                       <img
                         src={post.image}
                         alt={post.title}
@@ -129,7 +129,7 @@ const DashPosts = () => {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                    <Link to={`/blogs/post/${post.slug}`}>{post.title}</Link>
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
