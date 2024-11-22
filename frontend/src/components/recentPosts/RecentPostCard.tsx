@@ -26,7 +26,6 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
     }
   }, [post]);
 
-  console.log(author);
   return (
     <div className="outline p-4 rounded-md m-2">
       <Link to={`/blogs/post/${post.slug}`}>
@@ -59,7 +58,9 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
           {post.category}
         </span>
       </div>
-      <Button>Read more</Button>
+      <Button as={Link} to={`/blogs/post/${post.slug}`}>
+        Read more
+      </Button>
     </div>
   );
 };

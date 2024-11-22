@@ -6,6 +6,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
   theme: {
     extend: {
+      colors: { background: " #121212" },
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {

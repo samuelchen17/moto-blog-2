@@ -9,7 +9,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const { theme } = useAppSelector((state) => state.persisted.theme);
   return (
     <div className={theme}>
-      <div className="bg-white text-black dark:text-white dark:bg-black min-h-screen">
+      <div className="bg-white text-black dark:text-white dark:bg-background min-h-screen">
         {children}
       </div>
     </div>
