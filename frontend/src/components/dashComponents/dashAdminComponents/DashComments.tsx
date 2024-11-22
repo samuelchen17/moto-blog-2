@@ -2,56 +2,59 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import { IGetUser, IGetUserResponse } from "@shared/types/user";
+import { IGetUserResponse } from "@shared/types/user";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { IComment } from "@shared/types/comment";
 
 const DashComments = () => {
-  const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
+  const [allComments, setAllComments] = useState<IComment[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
+  const [idToDelete, setIdToDelete] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchComments = async () => {
       try {
         setErrorMessage(null);
-        const res = await fetch(`/api/user/${currentUser?.user.id}`);
-        const data: IGetUserResponse = await res.json();
+        const res = await fetch(
+          `/api/comment/getallcomments/${currentUser?.user.id}`
+        );
+        const data: IComment[] = await res.json();
         if (res.ok) {
-          setAllUsers(data.users);
-          if (data.users.length < 9) {
+          setAllComments(data);
+          if (data.length < 9) {
             setShowMore(false);
           }
         }
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to fetch posts, internal error");
+        setErrorMessage("Failed to fetch comments, internal error");
       }
     };
 
     if (currentUser?.user.admin) {
-      fetchUsers();
+      fetchComments();
     }
-  }, [currentUser?.user.id, allUsers]);
+  }, [currentUser?.user.id, allComments]);
 
   const handleShowMore = async () => {
-    const startIndex = allUsers.length;
+    const startIndex = allComments.length;
     try {
       setErrorMessage(null);
       const res = await fetch(
         `/api/user/${currentUser?.user.id}&startIndex=${startIndex}`
       );
-      const data: IGetUserResponse = await res.json();
+      const data: IComment[] = await res.json();
 
       if (res.ok) {
-        setAllUsers((prev) => [...prev, ...data.users]);
-        if (data.users.length < 9) {
+        setAllComments((prev) => [...prev, ...data]);
+        if (data.length < 9) {
           setShowMore(false);
         }
       }
@@ -66,7 +69,7 @@ const DashComments = () => {
     setOpenModal(false);
     try {
       const res = await fetch(
-        `/api/user/admin/${currentUser?.user.id}/${userIdToDelete}`,
+        `/api/user/admin/${currentUser?.user.id}/${idToDelete}`,
         {
           method: "DELETE",
         }
@@ -78,7 +81,7 @@ const DashComments = () => {
         throw new Error(data.message);
       }
 
-      setUserIdToDelete(null);
+      setIdToDelete(null);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
@@ -91,7 +94,7 @@ const DashComments = () => {
 
   return (
     <div className="w-full">
-      {currentUser?.user.admin && allUsers.length > 0 ? (
+      {currentUser?.user.admin && allComments.length > 0 ? (
         // implement tailwind-scrollbar? for mobile
         <div className="overflow-x-auto">
           <Table hoverable>
@@ -106,7 +109,7 @@ const DashComments = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {allUsers.map((user) => (
+              {allComments.map((user) => (
                 <Table.Row
                   key={user._id}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -134,7 +137,7 @@ const DashComments = () => {
                     <button
                       onClick={() => {
                         setOpenModal(true);
-                        setUserIdToDelete(user._id);
+                        setIdToDelete(user._id);
                       }}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
                     >

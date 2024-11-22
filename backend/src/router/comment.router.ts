@@ -3,10 +3,12 @@ import {
   createComment,
   deleteComment,
   editComment,
+  getAllComments,
   getComments,
   likeComment,
 } from "../controllers/comment.controller";
 import {
+  isAdmin,
   isAdminOrCommentOwner,
   isAuthenticated,
 } from "../middlewares/user.middlewares";
@@ -19,6 +21,12 @@ const commentRouter = (router: Router) => {
     "/comment/like/:commentId/:userId",
     isAuthenticated,
     likeComment
+  );
+  router.get(
+    "/comment/getallcomments/:id",
+    isAuthenticated,
+    isAdmin,
+    getAllComments
   );
 
   // edit comment

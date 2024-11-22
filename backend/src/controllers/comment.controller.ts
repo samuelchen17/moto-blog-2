@@ -127,3 +127,5 @@ export const deleteComment = async (
     next(new CustomError(500, "Failed to delete comment"));
   }
 };
+
+export const getAllComments = async () => {};

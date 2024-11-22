@@ -31,7 +31,7 @@ const DashUsers = () => {
         }
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to fetch posts, internal error");
+        setErrorMessage("Failed to fetch users, internal error");
       }
     };
 
