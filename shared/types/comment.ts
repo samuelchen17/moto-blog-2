@@ -8,3 +8,9 @@ export interface IComment {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ICommentResponse {
+  comments: IComment[];
+  totalComments: number;
+  lastMonthComments: number;
+}

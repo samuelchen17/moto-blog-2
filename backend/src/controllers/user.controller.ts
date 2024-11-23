@@ -7,7 +7,7 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IUpdateUserPayload } from "@shared/types/user";
+import { IGetUserResponse, IUpdateUserPayload } from "@shared/types/user";
 import { ISuccessRes } from "@shared/types/res";
 import { authentication, random } from "../helpers/user.helpers";
 import {

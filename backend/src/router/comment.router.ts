@@ -11,6 +11,7 @@ import {
   isAdmin,
   isAdminOrCommentOwner,
   isAuthenticated,
+  isOwner,
 } from "../middlewares/user.middlewares";
 
 const commentRouter = (router: Router) => {

@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import { IGetUserResponse } from "@shared/types/user";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
-import { FaCheck, FaTimes } from "react-icons/fa";
-import { IComment } from "@shared/types/comment";
+import { IComment, ICommentResponse } from "@shared/types/comment";
 
 const DashComments = () => {
   const [allComments, setAllComments] = useState<IComment[]>([]);
@@ -25,10 +23,10 @@ const DashComments = () => {
         const res = await fetch(
           `/api/comment/getallcomments/${currentUser?.user.id}`
         );
-        const data: IComment[] = await res.json();
+        const data: ICommentResponse = await res.json();
         if (res.ok) {
-          setAllComments(data);
-          if (data.length < 9) {
+          setAllComments(data.comments);
+          if (data.comments.length < 9) {
             setShowMore(false);
           }
         }
@@ -41,20 +39,20 @@ const DashComments = () => {
     if (currentUser?.user.admin) {
       fetchComments();
     }
-  }, [currentUser?.user.id, allComments]);
+  }, [currentUser?.user.id]);
 
   const handleShowMore = async () => {
     const startIndex = allComments.length;
     try {
       setErrorMessage(null);
       const res = await fetch(
-        `/api/user/${currentUser?.user.id}&startIndex=${startIndex}`
+        `/api/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
       );
-      const data: IComment[] = await res.json();
+      const data: ICommentResponse = await res.json();
 
       if (res.ok) {
-        setAllComments((prev) => [...prev, ...data]);
-        if (data.length < 9) {
+        setAllComments((prev) => [...prev, ...data.comments]);
+        if (data.comments.length < 9) {
           setShowMore(false);
         }
       }
@@ -65,11 +63,11 @@ const DashComments = () => {
   };
 
   // change to handle delete user
-  const handleDeleteUser = async () => {
+  const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
       const res = await fetch(
-        `/api/user/admin/${currentUser?.user.id}/${idToDelete}`,
+        `/api/comment/delete/${idToDelete}/${currentUser?.user.id}`,
         {
           method: "DELETE",
         }
@@ -103,41 +101,27 @@ const DashComments = () => {
               <Table.HeadCell>comment</Table.HeadCell>
               <Table.HeadCell>likes</Table.HeadCell>
               <Table.HeadCell>posted by</Table.HeadCell>
-              <Table.HeadCell>Admin</Table.HeadCell>
               <Table.HeadCell>
                 <span className="sr-only">Delete</span>
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {allComments.map((user) => (
+              {allComments.map((comment) => (
                 <Table.Row
-                  key={user._id}
+                  key={comment._id}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {format(new Date(user.createdAt), "dd MMM yyyy")}
+                    {format(new Date(comment.updatedAt), "dd MMM yyyy")}
                   </Table.Cell>
-                  <Table.Cell>
-                    <img
-                      src={user.profilePicture}
-                      alt={user.username}
-                      className="w-10 h-10 rounded-full object-cover bg-gray-500"
-                    />
-                  </Table.Cell>
-                  <Table.Cell>{user.username}</Table.Cell>
-                  <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell>
-                    {user.isAdmin ? (
-                      <FaCheck className="text-green-500" />
-                    ) : (
-                      <FaTimes className="text-red-500" />
-                    )}
-                  </Table.Cell>
+                  <Table.Cell>{comment.content}</Table.Cell>
+                  <Table.Cell>{comment.likes}</Table.Cell>
+                  <Table.Cell>{comment.commentBy}</Table.Cell>
                   <Table.Cell>
                     <button
                       onClick={() => {
                         setOpenModal(true);
-                        setIdToDelete(user._id);
+                        setIdToDelete(comment._id);
                       }}
                       className="font-medium text-red-600 hover:underline dark:text-red-500"
                     >
@@ -167,10 +151,10 @@ const DashComments = () => {
           )}
         </div>
       ) : (
-        <p>No users created yet!</p>
+        <p>No comments created yet!</p>
       )}
 
-      {/* delete user modal */}
+      {/* delete comment modal */}
       <Modal
         show={openModal}
         size="md"
@@ -183,10 +167,10 @@ const DashComments = () => {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this user?
+              Are you sure you want to delete this comment?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeleteUser}>
+              <Button color="failure" onClick={handleDeleteComment}>
                 {"Yes, I'm sure"}
               </Button>
               <Button color="gray" onClick={() => setOpenModal(false)}>

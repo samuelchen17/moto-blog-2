@@ -38,14 +38,14 @@ const DashUsers = () => {
     if (currentUser?.user.admin) {
       fetchUsers();
     }
-  }, [currentUser?.user.id, allUsers]);
+  }, [currentUser?.user.id]);
 
   const handleShowMore = async () => {
     const startIndex = allUsers.length;
     try {
       setErrorMessage(null);
       const res = await fetch(
-        `/api/user/${currentUser?.user.id}&startIndex=${startIndex}`
+        `/api/user/${currentUser?.user.id}?startIndex=${startIndex}`
       );
       const data: IGetUserResponse = await res.json();
 
@@ -61,6 +61,7 @@ const DashUsers = () => {
     }
   };
 
+  console.log(allUsers);
   // change to handle delete user
   const handleDeleteUser = async () => {
     setOpenModal(false);
