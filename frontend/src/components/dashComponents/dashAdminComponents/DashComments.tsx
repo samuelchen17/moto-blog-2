@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { IComment, ICommentResponse } from "@shared/types/comment";
 
+// implement accordion for post and comments
+
 const DashComments = () => {
   const [allComments, setAllComments] = useState<IComment[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
@@ -78,6 +80,10 @@ const DashComments = () => {
       if (!res.ok) {
         throw new Error(data.message);
       }
+
+      setAllComments((prev) =>
+        prev.filter((comment) => comment._id !== idToDelete)
+      );
 
       setIdToDelete(null);
     } catch (err) {

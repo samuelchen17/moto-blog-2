@@ -43,6 +43,14 @@ const commentRouter = (router: Router) => {
     isAdminOrCommentOwner,
     deleteComment
   );
+
+  // admin only delete
+  router.delete(
+    "/comment/delete/:commentId/:id",
+    isAuthenticated,
+    isAdmin,
+    deleteComment
+  );
 };
 
 export default commentRouter;
