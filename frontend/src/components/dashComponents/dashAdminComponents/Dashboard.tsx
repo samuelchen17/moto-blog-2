@@ -148,4 +148,14 @@ const Dashboard = () => {
   );
 };
 
+// layout
+{
+  /* <div class="order-1 md:order-1">x1</div>
+<div class="order-2 md:order-4">x2</div>
+<div class="order-3 md:order-2">y1</div>
+<div class="order-4 md:order-5">y2</div>
+<div class="order-5 md:order-3">z1</div>
+<div class="order-6 md:order-6">z2</div> */
+}
+
 export default Dashboard;
