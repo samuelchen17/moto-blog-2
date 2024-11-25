@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import { IPost } from "@shared/types/post";
 
-// implement, refactor all interfaces to use for response type and frontend type
-
 // interface IPost extends Document {
 //   createdBy: string;
 //   title: string;

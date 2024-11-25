@@ -1,3 +1,5 @@
+// Implement Icomment payload
+
 export interface IComment {
   _id: string;
   content: string;
