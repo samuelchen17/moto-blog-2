@@ -1,5 +1,11 @@
+import RecentPosts from "../components/recentPosts/RecentPosts";
+
 const HomePage = () => {
-  return <div className="max-w-screen-xl mx-auto p-4"></div>;
+  return (
+    <div>
+      <RecentPosts />
+    </div>
+  );
 };
 
 export default HomePage;
