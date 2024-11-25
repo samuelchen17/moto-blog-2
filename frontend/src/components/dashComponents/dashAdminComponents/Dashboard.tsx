@@ -4,7 +4,9 @@ import { RootState } from "../../../redux/store";
 import { IGetUser, IGetUserResponse } from "@shared/types/user";
 import { IComment, ICommentResponse } from "@shared/types/comment";
 import { IPost, IPostResponse } from "@shared/types/post";
-import { Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
+
+// implement styles
 
 const Dashboard = () => {
   const [users, setUsers] = useState<IGetUser[]>([]);
@@ -74,17 +76,41 @@ const Dashboard = () => {
   }, [currentUser]);
 
   return (
-    <div>
-      <div>
-        <div>Users</div>
-        <div>Comments</div>
-        <div>posts</div>
+    <div className="grid md:grid-cols-2 md:grid-rows-3 gap-4 grid-cols-1 w-full">
+      <div className=" outline">
+        <h2>Total Users</h2>
+        <p>{totalUsers}</p>
+        <p>{lastMonthUsers} Last month</p>
       </div>
+      <div className="outline">
+        <Button>See all</Button>
+        {users.map((user) => (
+          <>
+            <img
+              className="h-10 w-10 object-cover rounded-full"
+              src={user.profilePicture}
+            />
+            <div>{user.username}</div>
+          </>
+        ))}
+      </div>
+      <div className=" ">
+        <h2>Total comments</h2>
+        <p>{totalUsers}</p>
+        <p>{lastMonthUsers} Last month</p>
+      </div>
+      <div>content comments</div>
+      <div className=" ">
+        <h2>Total posts</h2>
+        <p>{totalUsers}</p>
+        <p>{lastMonthUsers} Last month</p>
+      </div>
+      <div>content posts</div>
 
-      <div className="overflow-x-auto">
+      {/* <div className="overflow-x-auto">
         <Table>
           <Table.Head>
-            <Table.HeadCell>Product name</Table.HeadCell>
+            <Table.HeadCell></Table.HeadCell>
             <Table.HeadCell>Color</Table.HeadCell>
             <Table.HeadCell>Category</Table.HeadCell>
             <Table.HeadCell>Price</Table.HeadCell>
@@ -143,7 +169,7 @@ const Dashboard = () => {
             </Table.Row>
           </Table.Body>
         </Table>
-      </div>
+      </div> */}
     </div>
   );
 };
