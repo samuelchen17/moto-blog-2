@@ -6,7 +6,7 @@ import { IComment, ICommentResponse } from "@shared/types/comment";
 import { IPost, IPostResponse } from "@shared/types/post";
 import { Button, Table } from "flowbite-react";
 
-// implement styles
+// implement styles, fix dashboard
 
 const Dashboard = () => {
   const [users, setUsers] = useState<IGetUser[]>([]);
