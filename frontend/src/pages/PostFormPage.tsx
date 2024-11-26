@@ -9,7 +9,7 @@ import {
 } from "flowbite-react";
 import Tiptap from "../components/editor/Tiptap";
 import { useEffect, useRef, useState } from "react";
-import { Editor } from "@tiptap/react";
+import { Content, Editor } from "@tiptap/react";
 import { IPostResponse, IPublishPostPayload } from "@shared/types/post";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
@@ -18,6 +18,7 @@ import { postCategory } from "../config/postCategory.config";
 import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../config/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
@@ -27,6 +28,7 @@ const PostFormPage = () => {
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const [imageUploading, setImageUploading] = useState<boolean>(false);
   const { postId } = useParams<{ postId: string }>();
+
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -62,6 +64,13 @@ const PostFormPage = () => {
   // handle title and category changes
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleContentChange = (newContent: any) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      content: newContent,
+    }));
   };
 
   // handle image upload
@@ -225,10 +234,22 @@ const PostFormPage = () => {
 
         {/* Text editing */}
         {/* <Tiptap editorRef={editorRef} setFormData={setFormData} /> */}
-        <Tiptap
+        {/* <Tiptap
           editorRef={editorRef}
           setFormData={setFormData}
           formContent={formData.content}
+        /> */}
+
+        <MinimalTiptapEditor
+          value={formData.content}
+          onChange={handleContentChange}
+          className="w-full"
+          editorContentClassName="p-5"
+          output="html"
+          placeholder="Type your description here..."
+          autofocus={true}
+          editable={true}
+          editorClassName="focus:outline-none"
         />
 
         <Button type="submit" disabled={imageUploading}>

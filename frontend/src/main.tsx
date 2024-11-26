@@ -8,13 +8,16 @@ import { PersistGate } from "redux-persist/integration/react";
 import ThemeProvider from "./components/ThemeProvider.tsx";
 import { Flowbite } from "flowbite-react";
 import flowbiteTheme from "./theme/flowbite.theme.ts";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate persistor={persistor} loading={null}>
       <ThemeProvider>
         <Flowbite theme={{ theme: flowbiteTheme }}>
-          <App />
+          <TooltipProvider>
+            <App />
+          </TooltipProvider>
         </Flowbite>
       </ThemeProvider>
     </PersistGate>
