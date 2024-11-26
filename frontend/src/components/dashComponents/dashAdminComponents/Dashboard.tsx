@@ -85,13 +85,13 @@ const Dashboard = () => {
       <div className="outline">
         <Button>See all</Button>
         {users.map((user) => (
-          <>
+          <div key={user._id}>
             <img
               className="h-10 w-10 object-cover rounded-full"
               src={user.profilePicture}
             />
             <div>{user.username}</div>
-          </>
+          </div>
         ))}
       </div>
       <div className=" ">
