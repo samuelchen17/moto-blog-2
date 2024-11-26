@@ -7,9 +7,8 @@ import {
   Spinner,
   TextInput,
 } from "flowbite-react";
-import Tiptap from "../components/editor/Tiptap";
 import { useEffect, useRef, useState } from "react";
-import { Content, Editor } from "@tiptap/react";
+import { Editor } from "@tiptap/react";
 import { IPostResponse, IPublishPostPayload } from "@shared/types/post";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
@@ -233,13 +232,6 @@ const PostFormPage = () => {
         )}
 
         {/* Text editing */}
-        {/* <Tiptap editorRef={editorRef} setFormData={setFormData} /> */}
-        {/* <Tiptap
-          editorRef={editorRef}
-          setFormData={setFormData}
-          formContent={formData.content}
-        /> */}
-
         <MinimalTiptapEditor
           value={formData.content}
           onChange={handleContentChange}
