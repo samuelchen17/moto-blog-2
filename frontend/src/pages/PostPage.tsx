@@ -85,12 +85,12 @@ const PostPage = () => {
           />
         </div>
 
-        <div>
+        {/* blog content */}
+        <div className="flex justify-center">
           <div
-            className="post-content w-full mx-auto"
+            className="post-content max-w-3xl"
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
-          <div>other posts</div>
         </div>
 
         {/* add comment and display comments */}
