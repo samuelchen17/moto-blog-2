@@ -2,13 +2,13 @@ import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
 import RecentPostCard from "./RecentPostCard";
 
-const RecentPosts = () => {
+const RecentPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
 
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch(`/api/post/getposts?limit=3`);
+        const res = await fetch(`/api/post/getposts?limit=${limit}`);
         const data: IPostResponse = await res.json();
 
         if (res.ok) {
@@ -22,10 +22,8 @@ const RecentPosts = () => {
     }
   }, []);
 
-  console.log(recentPosts);
-
   return (
-    <div className="grid lg:grid-cols-3">
+    <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-2">
       {recentPosts &&
         recentPosts.map((post) => (
           <RecentPostCard key={post._id} post={post} />

@@ -36,7 +36,7 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   }, [post]);
 
   return (
-    <Card className="m-2">
+    <Card className="">
       <Link to={`/blogs/post/${post.slug}`}>
         <img
           src={post.image}
@@ -46,10 +46,10 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
       </Link>
       <CardHeader>
         <CardDescription className="flex justify-between">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <img
               src={author?.profilePicture}
-              className="h-5 w-5 object-cover rounded-full bg-blue-500"
+              className="h-6 w-6 object-cover rounded-full bg-gray-500"
             />
             <span className="font-semibold">{author?.username}</span>
           </div>
@@ -61,14 +61,16 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
             <FaSave />
           </div>
         </CardDescription>
-        <CardTitle className="capitalize">{post.title}</CardTitle>
+        <CardTitle className="capitalize pt-1">{post.title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <Badge className="uppercase mx-auto">{post.category}</Badge>
+      <CardContent className="">
+        <Badge variant="outline" className="uppercase mx-auto">
+          {post.category}
+        </Badge>
       </CardContent>
 
       <CardFooter>
-        <Button variant="outline">
+        <Button>
           <Link to={`/blogs/post/${post.slug}`}>Read more</Link>
         </Button>
       </CardFooter>
