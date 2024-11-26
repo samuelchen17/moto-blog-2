@@ -255,5 +255,3 @@ const PostFormPage = () => {
 };
 
 export default PostFormPage;
-
-// tiptap menu submits form
