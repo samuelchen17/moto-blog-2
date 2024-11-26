@@ -3,7 +3,7 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 const HomePage = () => {
   return (
     <div>
-      <RecentPosts />
+      <RecentPosts limit={6} />
     </div>
   );
 };

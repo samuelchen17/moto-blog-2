@@ -100,7 +100,7 @@ const PostPage = () => {
 
         <div className="flex flex-col justify-center items-center ">
           <h1 className="text-xl ">You may be interested in</h1>
-          <RecentPosts />
+          <RecentPosts limit={3} />
         </div>
       </main>
     );
