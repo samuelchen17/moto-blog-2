@@ -21,9 +21,10 @@
     "noFallthroughCasesInSwitch": true,
 
     /* Path alias for shared folder */
-    // "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["../shared/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
