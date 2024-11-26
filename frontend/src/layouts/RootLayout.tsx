@@ -30,7 +30,7 @@ const RootLayout = () => {
           </div>
         )}
 
-        <main className="max-w-screen-xl mx-auto p-4">
+        <main className="mx-auto">
           <Outlet />
         </main>
 

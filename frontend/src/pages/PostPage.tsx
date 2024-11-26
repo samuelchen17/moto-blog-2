@@ -52,7 +52,7 @@ const PostPage = () => {
 
   if (post && !loading && !error) {
     return (
-      <main>
+      <div>
         {/* post banner */}
         <div className="bg-gray-600 w-full rounded-lg px-4 py-6">
           <h1 className="md:text-4xl">{post.title}</h1>
@@ -85,10 +85,16 @@ const PostPage = () => {
           />
         </div>
 
+        <img
+          alt="post image"
+          src={post.image}
+          className="w-full object-cover"
+        />
+
         {/* blog content */}
         <div className="flex justify-center">
           <div
-            className="post-content max-w-3xl"
+            className="post-content max-w-screen-md"
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
         </div>
@@ -102,7 +108,7 @@ const PostPage = () => {
           <h1 className="text-xl ">You may be interested in</h1>
           <RecentPosts limit={3} />
         </div>
-      </main>
+      </div>
     );
   }
 };
