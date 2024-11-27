@@ -93,21 +93,23 @@ const PostPage = () => {
         </div>
 
         {/* blog content */}
-        <div className="flex justify-center">
-          <div
-            className="post-content max-w-screen-md"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          ></div>
-        </div>
+        <div className="m-6">
+          <div className="flex justify-center">
+            <div
+              className="post-content max-w-screen-md"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            ></div>
+          </div>
 
-        {/* add comment and display comments */}
-        <div className="flex justify-center">
-          <CommentSection postId={post._id} />
-        </div>
+          {/* add comment and display comments */}
+          <div className="flex justify-center">
+            <CommentSection postId={post._id} />
+          </div>
 
-        <div className="flex flex-col justify-center items-center ">
-          <h1 className="text-xl ">You may be interested in</h1>
-          <RecentPosts limit={3} />
+          <div className="flex flex-col justify-center items-center ">
+            <h1 className="text-xl ">You may be interested in</h1>
+            <RecentPosts limit={3} />
+          </div>
         </div>
       </div>
     );
