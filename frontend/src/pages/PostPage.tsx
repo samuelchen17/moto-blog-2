@@ -78,18 +78,19 @@ const PostPage = () => {
           </div>
 
           {/* implement loading for image */}
+        </div>
+
+        <div className="relative">
+          <h1 className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl flex items-center justify-center uppercase font-bold  text-white">
+            {post.title}
+          </h1>
+
           <img
             alt="post image"
             src={post.image}
-            className="rounded-lg mx-auto"
+            className="w-full object-cover h-[300px] md:h-full"
           />
         </div>
-
-        <img
-          alt="post image"
-          src={post.image}
-          className="w-full object-cover"
-        />
 
         {/* blog content */}
         <div className="flex justify-center">
