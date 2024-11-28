@@ -1,7 +1,7 @@
 import { Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IPost } from "@shared/types/post";
+import { IPost, IPostResponse } from "@shared/types/post";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
@@ -11,6 +11,7 @@ const PostPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
+  const [author, setAuthor] = useState(null);
 
   // implement fetch author from api
 
@@ -18,22 +19,35 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
-        const data = await res.json();
+        const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
+        const postData: IPostResponse = await postRes.json();
 
-        if (!res.ok) {
+        if (!postRes.ok) {
           setError(true);
-          setLoading(false);
           throw new Error("Failed response");
         }
 
-        setPost(data.posts[0]);
+        setPost(postData.posts[0]);
+
+        const authorId = postData.posts[0].createdBy;
+
+        if (authorId) {
+          const authorRes = await fetch(`/api/`);
+          const authorData = await authorRes.json();
+
+          if (!authorRes.ok) {
+            setError(true);
+            throw new Error("Failed to fetch author");
+          }
+
+          setAuthor(authorData.)
+        }
         setError(false);
-        setLoading(false);
       } catch (err) {
         setError(true);
-        setLoading(false);
         console.error(err);
+      } finally {
+        setLoading(false)
       }
     };
     fetchPost();
@@ -83,23 +97,28 @@ const PostPage = () => {
 
         {/* banner */}
         <div className="relative">
-          <h1 className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl flex items-center justify-center uppercase font-bold  text-white">
+          <h1 className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl flex items-center justify-center uppercase font-bold  text-white z-10">
             {post.title}
           </h1>
 
           <img
             alt="post image"
             src={post.image}
-            className="w-full object-cover h-[300px] md:h-full"
+            className="w-full object-cover h-[300px] md:h-full filter contrast-125 brightness-75"
           />
+          <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
         </div>
 
         {/* blog content */}
         <div className="m-6">
           {/* author section */}
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-black"></div>
-            <div>author</div>
+          <div className="max-w-screen-md mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 rounded-full bg-black"></div>
+              <div>author</div>
+            </div>
+
+            <div>Date: </div>
           </div>
 
           <div className="flex justify-center">
