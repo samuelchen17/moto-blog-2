@@ -2,7 +2,7 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col gap-6 m-20">
+    <div className="flex flex-col gap-6 my-20 mx-6">
       <h1 className="text-3xl uppercase font-bold items-center justify-center flex underline">
         Latest Posts
       </h1>

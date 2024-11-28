@@ -80,6 +80,7 @@ const PostPage = () => {
           {/* implement loading for image */}
         </div>
 
+        {/* banner */}
         <div className="relative">
           <h1 className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl flex items-center justify-center uppercase font-bold  text-white">
             {post.title}
@@ -94,6 +95,12 @@ const PostPage = () => {
 
         {/* blog content */}
         <div className="m-6">
+          {/* author section */}
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-full bg-black"></div>
+            <div>author</div>
+          </div>
+
           <div className="flex justify-center">
             <div
               className="post-content max-w-screen-md"
