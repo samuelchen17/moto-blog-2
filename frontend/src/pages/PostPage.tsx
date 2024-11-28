@@ -5,13 +5,14 @@ import { IPost, IPostResponse } from "@shared/types/post";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
+import { IGetUser } from "@shared/types/user";
 
 const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
-  const [author, setAuthor] = useState(null);
+  const [author, setAuthor] = useState<IGetUser | null>(null);
 
   // implement fetch author from api
 
@@ -31,23 +32,25 @@ const PostPage = () => {
 
         const authorId = postData.posts[0].createdBy;
 
+        // get author information
         if (authorId) {
-          const authorRes = await fetch(`/api/`);
-          const authorData = await authorRes.json();
+          const authorRes = await fetch(`/api/${authorId}`);
+          const authorData: IGetUser = await authorRes.json();
 
           if (!authorRes.ok) {
             setError(true);
             throw new Error("Failed to fetch author");
           }
 
-          setAuthor(authorData.)
+          setAuthor(authorData);
         }
+
         setError(false);
       } catch (err) {
         setError(true);
         console.error(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
     fetchPost();
@@ -114,8 +117,12 @@ const PostPage = () => {
           {/* author section */}
           <div className="max-w-screen-md mx-auto flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-full bg-black"></div>
-              <div>author</div>
+              <img
+                className="h-10 w-10 rounded-full bg-gray-500"
+                src={author?.profilePicture}
+                alt={author?.username}
+              />
+              <div>{author?.username}</div>
             </div>
 
             <div>Date: </div>

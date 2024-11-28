@@ -31,7 +31,8 @@ const userRouter = (router: Router) => {
   // update user info
   router.patch("/user/:id", isAuthenticated, isOwner, updateUser);
   router.post("/user", signOut);
-  // get comment by user info
+
+  // get user info by id
   router.get("/:commentBy", getUser);
 };
 
