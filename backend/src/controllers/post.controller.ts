@@ -171,6 +171,23 @@ export const updatePost = async (
       next(new CustomError(400, "Post ID is required"));
     }
 
+    const updates = { ...req.body };
+
+    if (req.body.title) {
+      updates.slug = req.body.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/[\s_-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+      // check existing slug
+      const existingSlug = await Post.findOne({ slug: updates.slug });
+      if (existingSlug) {
+        return next(new CustomError(400, "Slug for post already exists"));
+      }
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
       // {
@@ -181,7 +198,7 @@ export const updatePost = async (
       //     image: req.body.image,
       //   },
       // },
-      { $set: { ...req.body } }, // partial updates
+      { $set: { updates } }, // partial updates
       { new: true }
     );
 
