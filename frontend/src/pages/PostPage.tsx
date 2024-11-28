@@ -100,10 +100,26 @@ const PostPage = () => {
 
         {/* banner */}
         <div className="relative">
-          <h1 className="absolute inset-0 text-4xl sm:text-6xl md:text-8xl flex items-center justify-center uppercase font-bold  text-white z-10">
-            {post.title}
-          </h1>
+          <div className="absolute inset-0 z-10 flex items-center justify-center flex-col">
+            {/* post title */}
+            <h1 className="text-4xl sm:text-6xl md:text-8xl uppercase font-bold  text-white z-10">
+              {post.title}
+            </h1>
 
+            {/* author */}
+            <div className="flex items-center gap-2">
+              <img
+                className="h-10 w-10 rounded-full bg-gray-500"
+                src={author?.profilePicture}
+                alt={author?.username}
+              />
+              <div className="text-white uppercase font-semibold text-2xl">
+                {author?.username}
+              </div>
+            </div>
+          </div>
+
+          {/* banner image */}
           <img
             alt="post image"
             src={post.image}
@@ -116,15 +132,6 @@ const PostPage = () => {
         <div className="m-6">
           {/* author section */}
           <div className="max-w-screen-md mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <img
-                className="h-10 w-10 rounded-full bg-gray-500"
-                src={author?.profilePicture}
-                alt={author?.username}
-              />
-              <div>{author?.username}</div>
-            </div>
-
             <div>Date: </div>
           </div>
 
