@@ -160,6 +160,38 @@ export const deletePost = async (
   }
 };
 
+// export const updatePost = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { postId } = req.params;
+//     if (!postId) {
+//       next(new CustomError(400, "Post ID is required"));
+//     }
+
+//     const updatedPost = await Post.findByIdAndUpdate(
+//       req.params.postId,
+//       // {
+//       //   $set: {
+//       //     title: req.body.title,
+//       //     content: req.body.content,
+//       //     category: req.body.category,
+//       //     image: req.body.image,
+//       //   },
+//       // },
+//       { $set: { ...req.body } }, // partial updates
+//       { new: true }
+//     );
+
+//     res.status(200).json(updatedPost);
+//   } catch (err) {
+//     console.error("Error updating post:", err);
+//     next(new CustomError(500, "Failed to update post"));
+//   }
+// };
+
 export const updatePost = async (
   req: Request,
   res: Response,
@@ -173,6 +205,7 @@ export const updatePost = async (
 
     const updates = { ...req.body };
 
+    // if title is changed, update slug also
     if (req.body.title) {
       updates.slug = req.body.title
         .toLowerCase()
@@ -182,7 +215,10 @@ export const updatePost = async (
         .replace(/^-+|-+$/g, "");
 
       // check existing slug
-      const existingSlug = await Post.findOne({ slug: updates.slug });
+      const existingSlug = await Post.findOne({
+        slug: updates.slug,
+        _id: { $ne: postId }, // Exclude the current post
+      });
       if (existingSlug) {
         return next(new CustomError(400, "Slug for post already exists"));
       }
@@ -198,9 +234,13 @@ export const updatePost = async (
       //     image: req.body.image,
       //   },
       // },
-      { $set: { updates } }, // partial updates
+      { $set: updates }, // partial updates
       { new: true }
     );
+
+    if (!updatedPost) {
+      return next(new CustomError(404, "Post not found"));
+    }
 
     res.status(200).json(updatedPost);
   } catch (err) {

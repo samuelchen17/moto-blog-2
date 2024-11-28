@@ -50,6 +50,7 @@ const PostPage = () => {
     return <div>Post could not be retrieved</div>;
   }
 
+  console.log(post);
   if (post && !loading && !error) {
     return (
       <div>
