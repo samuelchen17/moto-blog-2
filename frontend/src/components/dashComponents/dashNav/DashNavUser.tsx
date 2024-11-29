@@ -16,6 +16,7 @@ export default function DashNavUser({}) {
   );
 
   const { isMobile } = useSidebar();
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
