@@ -16,7 +16,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="outline-red-500 outline max-w-screen-md w-full">
+    <div className="max-w-screen-md w-full">
       {/* user info + sign in redirect */}
       {currentUser ? (
         <div className="flex flex-row items-center gap-2">

@@ -71,39 +71,12 @@ const PostPage = () => {
   if (post && !loading && !error) {
     return (
       <div>
-        {/* post banner */}
-        <div className="bg-gray-600 w-full rounded-lg px-4 py-6">
-          <h1 className="md:text-4xl">{post.title}</h1>
-
-          <div className="bg-gray-500 rounded-lg">
-            <div className="flex flex-row">
-              <div>dp icon</div>
-              <div>By {post._id}</div>
-            </div>
-            <div>
-              Posted:{" "}
-              {post.createdAt &&
-                format(new Date(post.createdAt), "MMMM dd, yyyy")}
-            </div>
-            <div>
-              {/* {if(post.createdAt !== p){
-
-                }} */}
-              Updated:{" "}
-              {post.createdAt &&
-                format(new Date(post.updatedAt), "MMMM dd, yyyy")}
-            </div>
-          </div>
-
-          {/* implement loading for image */}
-        </div>
-
         {/* banner */}
         <div className="relative flex">
           <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-screen-md mx-auto p-6">
             {/* post title */}
-            <h1 className="text-4xl md:text-6xl uppercase font-bold  text-white">
-              {post.title} {post.category} Review
+            <h1 className="text-4xl lg:text-6xl uppercase font-bold text-white">
+              {post.title} | {post.category} Review
             </h1>
 
             {/* author */}
@@ -115,6 +88,18 @@ const PostPage = () => {
               />
               {"by "}
               {author?.username}
+            </div>
+
+            <div>
+              {post.createdAt === post.updatedAt ? (
+                <div>
+                  Posted: {format(new Date(post.createdAt), "MMMM dd, yyyy")}
+                </div>
+              ) : (
+                <div>
+                  Updated: {format(new Date(post.updatedAt), "MMMM dd, yyyy")}
+                </div>
+              )}
             </div>
           </div>
 
@@ -128,26 +113,23 @@ const PostPage = () => {
         </div>
 
         {/* blog content */}
-        <div className="m-6">
-          {/* author section */}
-          <div className="max-w-screen-md mx-auto flex justify-between items-center">
-            <div>Date: </div>
-          </div>
-
-          <div className="flex justify-center">
+        <div className="mx-6">
+          <div className="flex justify-center py-24 outline">
             <div
               className="post-content max-w-screen-md"
               dangerouslySetInnerHTML={{ __html: post.content }}
-            ></div>
+            />
           </div>
 
+          <hr className="max-w-screen-md mx-auto" />
+
           {/* add comment and display comments */}
-          <div className="flex justify-center">
+          <div className="flex justify-center py-24 outline">
             <CommentSection postId={post._id} />
           </div>
 
-          <div className="flex flex-col justify-center items-center ">
-            <h1 className="text-xl ">You may be interested in</h1>
+          <div className="flex flex-col justify-center items-center py-24 outline">
+            <h1 className="text-xl ">You might also like</h1>
             <RecentPosts limit={3} />
           </div>
         </div>

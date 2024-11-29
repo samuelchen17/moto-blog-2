@@ -30,22 +30,24 @@ const DashboardPage = () => {
 
         <DashSidebar />
         {/* dashboard */}
-        {tab === "dashboard" && <Dashboard />}
+        <div className="w-full max-w-screen-xl mx-auto">
+          {tab === "dashboard" && <Dashboard />}
 
-        {/* profile */}
-        {tab === "profile" && <DashProfile />}
+          {/* profile */}
+          {tab === "profile" && <DashProfile />}
 
-        {/* settings */}
-        {tab === "settings" && <DashSettings />}
+          {/* settings */}
+          {tab === "settings" && <DashSettings />}
 
-        {/* comments */}
-        {tab === "comments" && <DashComments />}
+          {/* comments */}
+          {tab === "comments" && <DashComments />}
 
-        {/* posts */}
-        {tab === "posts" && <DashPosts />}
+          {/* posts */}
+          {tab === "posts" && <DashPosts />}
 
-        {/* users */}
-        {tab === "users" && <DashUsers />}
+          {/* users */}
+          {tab === "users" && <DashUsers />}
+        </div>
       </div>
     </div>
   );
