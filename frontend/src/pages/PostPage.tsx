@@ -1,16 +1,18 @@
 import { Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IPost } from "@shared/types/post";
+import { IPost, IPostResponse } from "@shared/types/post";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
+import { IGetUser } from "@shared/types/user";
 
 const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
+  const [author, setAuthor] = useState<IGetUser | null>(null);
 
   // implement fetch author from api
 
@@ -18,22 +20,37 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
-        const data = await res.json();
+        const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
+        const postData: IPostResponse = await postRes.json();
 
-        if (!res.ok) {
+        if (!postRes.ok) {
           setError(true);
-          setLoading(false);
           throw new Error("Failed response");
         }
 
-        setPost(data.posts[0]);
+        setPost(postData.posts[0]);
+
+        const authorId = postData.posts[0].createdBy;
+
+        // get author information
+        if (authorId) {
+          const authorRes = await fetch(`/api/${authorId}`);
+          const authorData: IGetUser = await authorRes.json();
+
+          if (!authorRes.ok) {
+            setError(true);
+            throw new Error("Failed to fetch author");
+          }
+
+          setAuthor(authorData);
+        }
+
         setError(false);
-        setLoading(false);
       } catch (err) {
         setError(true);
-        setLoading(false);
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPost();
@@ -50,63 +67,71 @@ const PostPage = () => {
     return <div>Post could not be retrieved</div>;
   }
 
+  console.log(post);
   if (post && !loading && !error) {
     return (
       <div>
-        {/* post banner */}
-        <div className="bg-gray-600 w-full rounded-lg px-4 py-6">
-          <h1 className="md:text-4xl">{post.title}</h1>
+        {/* banner */}
+        <div className="relative flex">
+          <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-screen-md mx-auto p-6">
+            {/* post title */}
+            <h1 className="text-4xl lg:text-6xl uppercase font-bold text-white">
+              {post.title} | {post.category} Review
+            </h1>
 
-          <div className="bg-gray-500 rounded-lg">
-            <div className="flex flex-row">
-              <div>dp icon</div>
-              <div>By {post._id}</div>
+            {/* author */}
+            <div className="flex items-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
+              <img
+                className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
+                src={author?.profilePicture}
+                alt={author?.username}
+              />
+              {"by "}
+              {author?.username}
             </div>
-            <div>
-              Posted:{" "}
-              {post.createdAt &&
-                format(new Date(post.createdAt), "MMMM dd, yyyy")}
-            </div>
-            <div>
-              {/* {if(post.createdAt !== p){
 
-                }} */}
-              Updated:{" "}
-              {post.createdAt &&
-                format(new Date(post.updatedAt), "MMMM dd, yyyy")}
+            <div>
+              {post.createdAt === post.updatedAt ? (
+                <div>
+                  Posted: {format(new Date(post.createdAt), "MMMM dd, yyyy")}
+                </div>
+              ) : (
+                <div>
+                  Updated: {format(new Date(post.updatedAt), "MMMM dd, yyyy")}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* implement loading for image */}
+          {/* banner image */}
           <img
             alt="post image"
             src={post.image}
-            className="rounded-lg mx-auto"
+            className="w-full object-cover h-[300px] max-h-[500px] md:h-full filter contrast-125 brightness-75"
           />
+          <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
         </div>
-
-        <img
-          alt="post image"
-          src={post.image}
-          className="w-full object-cover"
-        />
 
         {/* blog content */}
-        <div className="flex justify-center">
-          <div
-            className="post-content max-w-screen-md"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          ></div>
-        </div>
+        <div className="mx-6">
+          <div className="flex justify-center py-24 outline">
+            <div
+              className="post-content max-w-screen-md"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+          </div>
 
-        {/* add comment and display comments */}
-        <div className="flex justify-center">
-          <CommentSection postId={post._id} />
-        </div>
+          <hr className="max-w-screen-md mx-auto" />
 
-        <div className="flex flex-col justify-center items-center ">
-          <h1 className="text-xl ">You may be interested in</h1>
-          <RecentPosts limit={3} />
+          {/* add comment and display comments */}
+          <div className="flex justify-center py-24 outline">
+            <CommentSection postId={post._id} />
+          </div>
+
+          <div className="flex flex-col justify-center items-center py-24 outline">
+            <h1 className="text-xl ">You might also like</h1>
+            <RecentPosts limit={3} />
+          </div>
         </div>
       </div>
     );
