@@ -80,7 +80,7 @@ const PostPage = () => {
             </h1>
 
             {/* author */}
-            <div className="flex items-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
+            <div className="flex items-center text-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
               <img
                 className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
                 src={author?.profilePicture}
@@ -90,14 +90,14 @@ const PostPage = () => {
               {author?.username}
             </div>
 
-            <div>
+            <div className="text-slate-300 font-semibold uppercase">
               {post.createdAt === post.updatedAt ? (
                 <div>
-                  Posted: {format(new Date(post.createdAt), "MMMM dd, yyyy")}
+                  Posted: {format(new Date(post.createdAt), "dd MMM yyyy")}
                 </div>
               ) : (
                 <div>
-                  Updated: {format(new Date(post.updatedAt), "MMMM dd, yyyy")}
+                  Updated: {format(new Date(post.updatedAt), "dd MMM yyyy")}
                 </div>
               )}
             </div>
