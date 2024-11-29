@@ -99,23 +99,22 @@ const PostPage = () => {
         </div>
 
         {/* banner */}
-        <div className="relative">
-          <div className="absolute inset-0 z-10 flex items-center justify-center flex-col">
+        <div className="relative flex">
+          <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-screen-md mx-auto p-6">
             {/* post title */}
-            <h1 className="text-4xl sm:text-6xl md:text-8xl uppercase font-bold  text-white z-10">
-              {post.title}
+            <h1 className="text-4xl md:text-6xl uppercase font-bold  text-white">
+              {post.title} {post.category} Review
             </h1>
 
             {/* author */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
               <img
-                className="h-10 w-10 rounded-full bg-gray-500"
+                className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
                 src={author?.profilePicture}
                 alt={author?.username}
               />
-              <div className="text-white uppercase font-semibold text-2xl">
-                {author?.username}
-              </div>
+              {"by "}
+              {author?.username}
             </div>
           </div>
 
@@ -123,7 +122,7 @@ const PostPage = () => {
           <img
             alt="post image"
             src={post.image}
-            className="w-full object-cover h-[300px] md:h-full filter contrast-125 brightness-75"
+            className="w-full object-cover h-[300px] max-h-[500px] md:h-full filter contrast-125 brightness-75"
           />
           <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
         </div>
