@@ -73,8 +73,8 @@ const PostPage = () => {
     return (
       <div>
         {/* banner */}
-        <div className="relative flex">
-          <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-screen-md mx-auto p-6">
+        <ImageBanner img={post.image}>
+          <div className="flex flex-col justify-center max-w-screen-md mx-auto p-6">
             {/* post title */}
             <h1 className="text-4xl lg:text-6xl uppercase font-bold text-white">
               {post.title} | {post.category} Review
@@ -103,10 +103,7 @@ const PostPage = () => {
               )}
             </div>
           </div>
-
-          {/* banner image */}
-          <ImageBanner img={post.image} />
-        </div>
+        </ImageBanner>
 
         {/* blog content */}
         <div className="mx-6">
