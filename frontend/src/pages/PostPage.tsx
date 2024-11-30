@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
 import { IGetUser } from "@shared/types/user";
+import ImageBanner from "@/components/ImageBanner";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -104,12 +105,7 @@ const PostPage = () => {
           </div>
 
           {/* banner image */}
-          <img
-            alt="post image"
-            src={post.image}
-            className="w-full object-cover h-[300px] max-h-[500px] md:h-full filter contrast-125 brightness-75"
-          />
-          <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
+          <ImageBanner img={post.image} />
         </div>
 
         {/* blog content */}
