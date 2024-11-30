@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.tiptap {
+/* .tiptap {
   p.is-editor-empty:first-child::before {
     color: var(--gray-4);
     content: attr(data-placeholder);
@@ -10,7 +10,7 @@
     height: 0;
     pointer-events: none;
   }
-}
+} */
 
 .is-active {
   background-color: #ddd;

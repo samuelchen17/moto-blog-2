@@ -6,7 +6,7 @@ const HomePage = () => {
       <h1 className="text-3xl uppercase font-bold items-center justify-center flex underline">
         Latest Posts
       </h1>
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-lg mx-auto">
         {/* make recent posts a carousel? implement */}
         <RecentPosts limit={6} />
       </div>

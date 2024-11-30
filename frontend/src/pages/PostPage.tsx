@@ -122,7 +122,7 @@ const PostPage = () => {
           </div>
 
           <div className="flex flex-col justify-center py-24 max-w-screen-md mx-auto">
-            <h2 className="font-bold text-3xl mb-6">You might also like</h2>
+            <h2 className="font-bold text-2xl mb-6">You might also like</h2>
             <RecentPosts limit={2} />
           </div>
         </div>

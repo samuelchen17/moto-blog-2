@@ -155,7 +155,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   }, [comment]);
 
   return (
-    <div className="flex py-6 border-b dark:border-gray-600 text-sm">
+    <div className="flex py-6 border-b dark:border-gray-800 text-sm">
       <div className="flex-shrink-0 mr-3">
         <img
           src={commentBy?.profilePicture}

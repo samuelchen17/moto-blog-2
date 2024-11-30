@@ -41,7 +41,7 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
         <img
           src={post.image}
           alt={post.title}
-          className="h-[260px] w-full object-cover rounded-t-md"
+          className="h-[260px] w-full object-cover rounded-t-md border-b"
         />
       </Link>
       <CardHeader>
