@@ -26,23 +26,6 @@ export const createComment = async (
   }
 };
 
-export const getComments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const comments = await Comment.find({ postId: req.params.postId }).sort({
-      createdAt: -1,
-    });
-
-    res.status(200).json(comments);
-  } catch (err) {
-    console.error("Error getting comments:", err);
-    next(new CustomError(500, "Failed to get comments"));
-  }
-};
-
 export const likeComment = async (
   req: Request,
   res: Response,
@@ -166,3 +149,42 @@ export const getAllComments = async (
     next(new CustomError(500, "Failed to get all comment"));
   }
 };
+
+export const getComments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const startIndex = parseInt(req.query.startIndex as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 3;
+    const sortDirection = req.query.order === "asc" ? -1 : 1;
+
+    const comments = await Comment.find({ postId: req.params.postId })
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    res.status(200).json(comments);
+  } catch (err) {
+    console.error("Error getting comments:", err);
+    next(new CustomError(500, "Failed to get comments"));
+  }
+};
+
+// export const getComments = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const comments = await Comment.find({ postId: req.params.postId }).sort({
+//       createdAt: -1,
+//     });
+
+//     res.status(200).json(comments);
+//   } catch (err) {
+//     console.error("Error getting comments:", err);
+//     next(new CustomError(500, "Failed to get comments"));
+//   }
+// };
