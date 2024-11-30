@@ -117,12 +117,13 @@ const PostPage = () => {
           <hr className="max-w-screen-md mx-auto" />
 
           {/* add comment and display comments */}
-          <div className="flex justify-center py-24">
+          <div className="flex flex-col justify-center py-14 max-w-screen-md w-full mx-auto">
+            <h2 className="font-bold capitalize text-3xl mb-6">comments</h2>
             <CommentSection postId={post._id} />
           </div>
 
-          <div className="flex flex-col justify-center items-center py-24">
-            <h1 className="text-xl ">You might also like</h1>
+          <div className="flex flex-col justify-center py-24 max-w-screen-md mx-auto">
+            <h2 className="font-bold text-3xl mb-6">You might also like</h2>
             <RecentPosts limit={2} />
           </div>
         </div>
