@@ -107,7 +107,7 @@ const PostPage = () => {
 
         {/* blog content */}
         <div className="mx-6">
-          <div className="flex justify-center py-24 outline">
+          <div className="flex justify-center py-24">
             <div
               className="post-content max-w-screen-md"
               dangerouslySetInnerHTML={{ __html: post.content }}
@@ -117,13 +117,13 @@ const PostPage = () => {
           <hr className="max-w-screen-md mx-auto" />
 
           {/* add comment and display comments */}
-          <div className="flex justify-center py-24 outline">
+          <div className="flex justify-center py-24">
             <CommentSection postId={post._id} />
           </div>
 
-          <div className="flex flex-col justify-center items-center py-24 outline">
+          <div className="flex flex-col justify-center items-center py-24">
             <h1 className="text-xl ">You might also like</h1>
-            <RecentPosts limit={3} />
+            <RecentPosts limit={2} />
           </div>
         </div>
       </div>

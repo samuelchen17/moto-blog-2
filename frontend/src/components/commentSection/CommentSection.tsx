@@ -17,6 +17,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
 
   return (
     <div className="max-w-screen-md w-full">
+      <h2 className="font-bold capitalize text-2xl mb-6">comments</h2>
       {/* user info + sign in redirect */}
       {currentUser ? (
         <div className="flex flex-row items-center gap-2">
@@ -28,7 +29,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
             <img
               src={currentUser.user.profilePicture}
               alt={currentUser.user.username}
-              className="h-7 w-7-cover rounded-full"
+              className="h-7 w-7 object-cover rounded-full"
             />
             <div className="hover:underline text-blue-500">
               @{currentUser.user.username}
