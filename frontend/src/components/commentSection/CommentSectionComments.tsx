@@ -35,14 +35,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
   return (
     <>
       {/* display comment number */}
-      {comments.length === 0 ? (
-        <p>No comments on this post</p>
-      ) : (
-        <div className="flex gap-2 items-center">
-          <p>Comments</p>
-          <div className="outline py-1 px-2">{comments.length}</div>
-        </div>
-      )}
+      {comments.length === 0 && <p>No comments on this post</p>}
       {comments.map((comment) => (
         <CommentSectionComment key={comment._id} comment={comment} />
       ))}

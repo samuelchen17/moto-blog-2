@@ -118,7 +118,6 @@ const PostPage = () => {
 
           {/* add comment and display comments */}
           <div className="flex flex-col justify-center py-14 max-w-screen-md w-full mx-auto">
-            <h2 className="font-bold capitalize text-3xl mb-6">comments</h2>
             <CommentSection postId={post._id} />
           </div>
 

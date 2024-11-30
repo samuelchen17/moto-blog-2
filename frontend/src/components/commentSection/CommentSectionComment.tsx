@@ -5,10 +5,12 @@ import { formatDistanceToNow } from "date-fns";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { Button, Modal, Textarea } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
 import { setComments } from "../../redux/features/comment/commentSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 const TimeAgo = ({ date }: { date: string | Date }) => {
   return (
@@ -153,7 +155,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   }, [comment]);
 
   return (
-    <div className="flex p-4 border-b dark:border-gray-600 text-sm">
+    <div className="flex py-6 border-b dark:border-gray-600 text-sm">
       <div className="flex-shrink-0 mr-3">
         <img
           src={commentBy?.profilePicture}
@@ -176,22 +178,15 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
             <Textarea
               className="w-full rounded-md"
               rows={3}
+              maxLength={200}
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
             />
             <div className="flex justify-end gap-2 text-xs">
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => handleSave(comment._id)}
-              >
+              <Button type="button" onClick={() => handleSave(comment._id)}>
                 Save
               </Button>
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => setIsEditing(false)}
-              >
+              <Button type="button" onClick={() => setIsEditing(false)}>
                 Cancel
               </Button>
             </div>

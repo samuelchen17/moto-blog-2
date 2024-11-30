@@ -1,4 +1,6 @@
-import { Alert, Button, Textarea } from "flowbite-react";
+import { Alert } from "flowbite-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "../ui/button";
 import { useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -57,18 +59,16 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
 
   return (
     <>
-      <form
-        className="border border-teal-500 rounded-md p-3"
-        onSubmit={handleSubmit}
-      >
+      <form className="" onSubmit={handleSubmit}>
         <Textarea
           placeholder="Add a comment..."
+          className="focus:ring-gray-700 focus:border-gray-700"
           rows={3}
           maxLength={200}
           onChange={handleOnChange}
           value={comment}
         />
-        <div className="flex justify-between items-center mt-5">
+        <div className="flex justify-between items-center mt-4">
           <span className="text-gray-500 text-xs">
             {200 - comment.length} characters remaining
           </span>
@@ -80,6 +80,7 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
           {errorMessage}
         </Alert>
       )}
+      <hr className="mt-12" />
     </>
   );
 };
