@@ -37,26 +37,26 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
     getComments();
   }, [postId]); // add comment here so it updates user comment, changed to show in state to prevent unnecessary fetch requests
 
-  // const handleShowMore = async () => {
-  //   const startIndex = comments.length;
-  //   try {
-  //     setErrorMessage(null);
-  //     const res = await fetch(
-  //       `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
-  //     );
-  //     const data: IComment[] = await res.json();
+  const handleShowMore = async () => {
+    const startIndex = comments.length;
+    try {
+      const res = await fetch(
+        `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
+      );
+      const data: IComment[] = await res.json();
 
-  //     if (res.ok) {
-  //       dispatch(setComments((prev) => [...prev, ...data.comments]));
-  //       if (data.length < 3) {
-  //         setShowMore(false);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.error("Error:", err);
-  //     setErrorMessage("Failed to show more, internal error");
-  //   }
-  // };
+      if (res.ok) {
+        dispatch(setComments([...comments, ...data]));
+        if (data.length < 3) {
+          setShowMore(false);
+        }
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  // implement pages for comments? show more to show everything?
 
   return (
     <>
@@ -65,6 +65,15 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
       {comments.map((comment) => (
         <CommentSectionComment key={comment._id} comment={comment} />
       ))}
+      {showMore && (
+        // implement style button
+        <button
+          onClick={handleShowMore}
+          className="self-center w-full text-red-500 py-6"
+        >
+          Show more
+        </button>
+      )}
     </>
   );
 };
