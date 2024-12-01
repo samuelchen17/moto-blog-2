@@ -34,29 +34,29 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
       }
     };
 
-    const handleShowMore = async () => {
-      const startIndex = allComments.length;
-      try {
-        setErrorMessage(null);
-        const res = await fetch(
-          `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
-        );
-        const data: IComment[] = await res.json();
-
-        if (res.ok) {
-          setAllComments((prev) => [...prev, ...data.comments]);
-          if (data.comments.length < 9) {
-            setShowMore(false);
-          }
-        }
-      } catch (err) {
-        console.error("Error:", err);
-        setErrorMessage("Failed to show more, internal error");
-      }
-    };
-
     getComments();
   }, [postId]); // add comment here so it updates user comment, changed to show in state to prevent unnecessary fetch requests
+
+  // const handleShowMore = async () => {
+  //   const startIndex = comments.length;
+  //   try {
+  //     setErrorMessage(null);
+  //     const res = await fetch(
+  //       `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
+  //     );
+  //     const data: IComment[] = await res.json();
+
+  //     if (res.ok) {
+  //       dispatch(setComments((prev) => [...prev, ...data.comments]));
+  //       if (data.length < 3) {
+  //         setShowMore(false);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.error("Error:", err);
+  //     setErrorMessage("Failed to show more, internal error");
+  //   }
+  // };
 
   return (
     <>
