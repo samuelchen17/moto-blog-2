@@ -14,14 +14,16 @@ const CommentSection = ({ postId }: ICommentSection) => {
     (state: RootState) => state.persisted.user
   );
 
-  const { comments } = useAppSelector((state: RootState) => state.comment);
+  const { comments, totalComments } = useAppSelector(
+    (state: RootState) => state.comment
+  );
 
   const dispatch = useAppDispatch();
 
   return (
     <div className="">
       <h2 className="font-bold capitalize text-2xl mb-6">
-        comments ({comments.length})
+        comments ({totalComments})
       </h2>
 
       {/* user info + sign in redirect */}

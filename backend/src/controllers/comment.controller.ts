@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
-import { ICommentResponse } from "@shared/types/comment";
+import { ICommentResponse, IAllCommentResponse } from "@shared/types/comment";
 
 export const createComment = async (
   req: Request,
@@ -114,7 +114,7 @@ export const deleteComment = async (
 
 export const getAllComments = async (
   req: Request,
-  res: Response<ICommentResponse>,
+  res: Response<IAllCommentResponse>,
   next: NextFunction
 ) => {
   try {
@@ -152,7 +152,7 @@ export const getAllComments = async (
 
 export const getComments = async (
   req: Request,
-  res: Response,
+  res: Response<ICommentResponse>,
   next: NextFunction
 ) => {
   try {
@@ -165,7 +165,11 @@ export const getComments = async (
       .skip(startIndex)
       .limit(limit);
 
-    res.status(200).json(comments);
+    const totalComments = await Comment.countDocuments({
+      postId: req.params.postId,
+    });
+
+    res.status(200).json({ comments, totalComments });
   } catch (err) {
     console.error("Error getting comments:", err);
     next(new CustomError(500, "Failed to get comments"));

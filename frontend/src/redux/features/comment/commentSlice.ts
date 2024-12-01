@@ -5,11 +5,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 interface ICommentState {
   comment: string;
   comments: IComment[];
+  totalComments: number;
 }
 
 const initialState: ICommentState = {
   comment: "",
   comments: [],
+  totalComments: 0,
 };
 
 const commentSlice = createSlice({
@@ -25,9 +27,13 @@ const commentSlice = createSlice({
     addComment: (state, action: PayloadAction<IComment>) => {
       state.comments.unshift(action.payload);
     },
+    setTotalComments: (state, action: PayloadAction<number>) => {
+      state.totalComments = action.payload;
+    },
   },
 });
 
-export const { setComment, setComments, addComment } = commentSlice.actions;
+export const { setComment, setComments, addComment, setTotalComments } =
+  commentSlice.actions;
 
 export default commentSlice.reducer;

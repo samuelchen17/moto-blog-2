@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import CommentSectionComment from "./CommentSectionComment";
-import { IComment } from "@shared/types/comment";
+import { IComment, ICommentResponse } from "@shared/types/comment";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { setComments } from "../../redux/features/comment/commentSlice";
+import {
+  setComments,
+  setTotalComments,
+} from "../../redux/features/comment/commentSlice";
 
 // implement collapse comment section!!
 
@@ -22,10 +25,11 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
 
         if (res.ok) {
           // move all data inside res.ok implement
-          const data: IComment[] = await res.json();
-          dispatch(setComments(data));
+          const data: ICommentResponse = await res.json();
+          dispatch(setComments(data.comments));
+          dispatch(setTotalComments(data.totalComments));
 
-          if (data.length < 3) {
+          if (data.comments.length < 3) {
             setShowMore(false);
           }
         }
@@ -43,11 +47,11 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
       const res = await fetch(
         `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
       );
-      const data: IComment[] = await res.json();
+      const data: ICommentResponse = await res.json();
 
       if (res.ok) {
-        dispatch(setComments([...comments, ...data]));
-        if (data.length < 3) {
+        dispatch(setComments([...comments, ...data.comments]));
+        if (data.comments.length < 3) {
           setShowMore(false);
         }
       }
