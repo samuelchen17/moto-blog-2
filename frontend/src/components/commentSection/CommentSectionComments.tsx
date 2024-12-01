@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ICommentSection } from "./CommentSection";
 import CommentSectionComment from "./CommentSectionComment";
-import { IComment, ICommentResponse } from "@shared/types/comment";
+import { ICommentResponse } from "@shared/types/comment";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import {

@@ -14,9 +14,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
     (state: RootState) => state.persisted.user
   );
 
-  const { comments, totalComments } = useAppSelector(
-    (state: RootState) => state.comment
-  );
+  const { totalComments } = useAppSelector((state: RootState) => state.comment);
 
   const dispatch = useAppDispatch();
 
