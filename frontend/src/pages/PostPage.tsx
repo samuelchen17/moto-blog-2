@@ -107,23 +107,25 @@ const PostPage = () => {
 
         {/* blog content */}
         <div className="mx-6">
-          <div className="flex justify-center py-24">
-            <div
-              className="post-content max-w-screen-md"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </div>
+          <div>
+            <div className="flex justify-center py-24 outline">
+              <div
+                className="post-content max-w-screen-md"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            </div>
 
-          <hr className="max-w-screen-md mx-auto" />
+            <hr className="max-w-screen-md mx-auto" />
 
-          {/* add comment and display comments */}
-          <div className="flex flex-col justify-center py-14 max-w-screen-md w-full mx-auto">
-            <CommentSection postId={post._id} />
-          </div>
+            {/* add comment and display comments */}
+            <div className="flex flex-col justify-center py-14 max-w-screen-md w-full mx-auto">
+              <CommentSection postId={post._id} />
+            </div>
 
-          <div className="flex flex-col justify-center py-24 max-w-screen-md mx-auto">
-            <h2 className="font-bold text-2xl mb-6">You might also like</h2>
-            <RecentPosts limit={4} />
+            <div className="flex flex-col justify-center py-24 max-w-screen-md mx-auto">
+              <h2 className="font-bold text-2xl mb-6">You might also like</h2>
+              <RecentPosts limit={4} />
+            </div>
           </div>
         </div>
       </div>
