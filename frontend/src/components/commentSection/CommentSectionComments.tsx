@@ -65,7 +65,9 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
   return (
     <>
       {/* display comment number */}
-      {comments.length === 0 && <p>No comments on this post</p>}
+      {comments.length === 0 && (
+        <p className="pt-4">No comments on this post.</p>
+      )}
       {comments.map((comment) => (
         <CommentSectionComment key={comment._id} comment={comment} />
       ))}

@@ -157,7 +157,7 @@ const DashComments = () => {
           )}
         </div>
       ) : (
-        <p>No comments created yet!</p>
+        <p className="">No comments created yet!</p>
       )}
 
       {/* delete comment modal */}

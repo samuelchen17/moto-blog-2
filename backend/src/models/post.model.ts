@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { IPost } from "@shared/types/post";
+import config from "../config/config";
 
 // interface IPost extends Document {
 //   createdBy: string;
@@ -30,8 +31,7 @@ const postSchema = new mongoose.Schema<IPost>(
     image: {
       type: String,
       // implement default photo
-      default:
-        "https://www.shutterstock.com/image-photo/motorcycle-parked-alone-on-asphalt-260nw-2153911847.jpg",
+      default: config.postImage.default,
     },
     category: {
       type: String,
