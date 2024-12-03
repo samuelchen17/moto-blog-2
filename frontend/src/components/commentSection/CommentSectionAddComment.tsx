@@ -8,6 +8,7 @@ import { RootState } from "../../redux/store";
 import {
   addComment,
   setComment,
+  setTotalComments,
 } from "../../redux/features/comment/commentSlice";
 
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
@@ -16,7 +17,9 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const { comment } = useAppSelector((state: RootState) => state.comment);
+  const { comment, totalComments } = useAppSelector(
+    (state: RootState) => state.comment
+  );
 
   const dispatch = useAppDispatch();
 
@@ -46,6 +49,7 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
         // update using state instead of fetching data again
         dispatch(addComment(data));
         dispatch(setComment(""));
+        dispatch(setTotalComments(totalComments + 1));
       }
     } catch (err) {
       if (err instanceof Error) {

@@ -143,9 +143,9 @@ const PostPage = () => {
         </ImageBanner>
 
         {/* content of page */}
-        <div className="max-w-screen-xl mx-auto outline">
+        <div className="max-w-screen-xl mx-auto my-24">
           {/* blog content */}
-          <div className="flex flex-row max-w-screen-xl justify-between mt-8 gap-6 outline">
+          <div className="flex flex-row max-w-screen-xl justify-between mt-8 gap-6 ">
             <TableOfContents toc={tableOfContents} />
 
             <main>

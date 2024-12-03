@@ -158,7 +158,7 @@ export const getComments = async (
   try {
     const startIndex = parseInt(req.query.startIndex as string) || 0;
     const limit = parseInt(req.query.limit as string) || 3;
-    const sortDirection = req.query.order === "asc" ? -1 : 1;
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
 
     const comments = await Comment.find({ postId: req.params.postId })
       .sort({ createdAt: sortDirection })

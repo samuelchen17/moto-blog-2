@@ -6,18 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
 const TableOfContents = ({ toc }: { toc: { id: string; text: string }[] }) => {
   return (
-    <aside className="min-w-[300px] h-auto overflow-y-auto sticky top-16 self-start">
+    <aside className="min-w-[300px] max-h-[400px] overflow-y-auto sticky top-16 self-start border rounded-md mr-14">
       <nav>
-        <Card>
+        <Card className="border-none">
           <CardHeader>
             <CardTitle>Table of Contents</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-2">
+            <ul className="space-y-6">
               {toc.map((heading) => (
                 <li key={heading.id}>
                   <a className="hover:font-bold" href={`#${heading.id}`}>
