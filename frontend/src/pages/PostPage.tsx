@@ -148,12 +148,12 @@ const PostPage = () => {
           <div className="flex flex-row max-w-screen-xl justify-between mt-8 gap-6 ">
             <TableOfContents toc={tableOfContents} />
 
-            <main>
+            <main className="w-full">
               <div
-                className="post-content w-full"
+                className="post-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
-              <hr className="max-w-screen-md mx-auto" />
+              <hr className="mx-auto" />
 
               {/* add comment and display comments */}
               <div className="flex flex-col justify-center py-14">
