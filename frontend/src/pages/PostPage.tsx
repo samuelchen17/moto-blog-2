@@ -15,7 +15,9 @@ const PostPage = () => {
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
   const [author, setAuthor] = useState<IGetUser | null>(null);
-  const [tableOfContents, setTableOfContents] = useState<string[]>([]);
+  const [tableOfContents, setTableOfContents] = useState<
+    { id: string; text: string }[]
+  >([]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -29,7 +31,12 @@ const PostPage = () => {
           throw new Error("Failed response");
         }
 
-        setPost(postData.posts[0]);
+        const { updatedContent, toc } = processContentAndExtractHeaders(
+          postData.posts[0].content
+        );
+
+        setPost({ ...postData.posts[0], content: updatedContent });
+        setTableOfContents(toc);
 
         const authorId = postData.posts[0].createdBy;
 
@@ -46,8 +53,6 @@ const PostPage = () => {
           setAuthor(authorData);
         }
 
-        extractHeadersFromContent(postData.posts[0].content);
-
         setError(false);
       } catch (err) {
         setError(true);
@@ -57,24 +62,37 @@ const PostPage = () => {
       }
     };
 
-    const extractHeadersFromContent = (content: string) => {
-      // create temp div to store the html content from db
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = content;
-
-      // get headers from content
-      const headers = tempDiv.querySelectorAll("h2, h3, h4, h5, h6");
-
-      // Map to table of contents format
-      const toc = Array.from(headers)
-        .map((header) => header.getAttribute("data-id"))
-        .filter(Boolean) as string[];
-
-      setTableOfContents(toc);
-    };
-
     fetchPost();
   }, [postSlug]);
+
+  const processContentAndExtractHeaders = (content: string) => {
+    // Create a temp dom to manipulate HTML
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = content;
+
+    // Extract headers for the table of contents
+    const headers = tempDiv.querySelectorAll(
+      "h2[data-id], h3[data-id], h4[data-id], h5[data-id], h6[data-id]"
+    );
+
+    const toc = Array.from(headers).map((header) => {
+      const dataId = header.getAttribute("data-id");
+      if (dataId) {
+        header.setAttribute("id", dataId); // Set id = data-id
+      }
+      return {
+        id: dataId || "",
+        text: header.textContent || "",
+      };
+    });
+
+    return {
+      updatedContent: tempDiv.innerHTML,
+      toc,
+    };
+  };
+
+  console.log(tableOfContents);
 
   if (loading)
     return (
