@@ -36,7 +36,7 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   }, [post]);
 
   return (
-    <Card className="">
+    <Card>
       <Link to={`/blogs/post/${post.slug}`}>
         <img
           src={post.image}

@@ -46,7 +46,7 @@ const RecentPosts = ({ limit }: { limit: number }) => {
       <CarouselContent>
         {recentPosts &&
           recentPosts.map((post) => (
-            <CarouselItem className="basis-1/3" key={post._id}>
+            <CarouselItem className="lg:basis-1/3 md:basis-1/2" key={post._id}>
               <RecentPostCard post={post} />
             </CarouselItem>
           ))}

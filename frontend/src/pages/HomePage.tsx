@@ -2,12 +2,9 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col gap-6 my-20 mx-6">
-      <h1 className="text-3xl uppercase font-bold items-center justify-center flex underline">
-        Latest Posts
-      </h1>
-      <div className="max-w-screen-xl mx-auto">
-        {/* make recent posts a carousel? implement */}
+    <div className="flex flex-col gap-6 my-20 px-6 max-w-screen-lg mx-auto">
+      <div className="flex flex-col justify-center py-24">
+        <h2 className="font-bold text-2xl mb-6">You might also like</h2>
         <RecentPosts limit={9} />
       </div>
 
