@@ -109,6 +109,11 @@ export const createPost = async (
     // prevent xss
     const sanitizedContent = purify.sanitize(req.body.content);
 
+    // implement preserve id
+    // const sanitizedContent = purify(req.body.content, {
+    //   ADD_ATTR: ["id"], // Preserve `id` attributes
+    // });
+
     // url friendly version of title
     const slug = req.body.title
       .toLowerCase()

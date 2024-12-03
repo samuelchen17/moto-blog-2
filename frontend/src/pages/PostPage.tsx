@@ -14,8 +14,9 @@ const PostPage = () => {
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
   const [author, setAuthor] = useState<IGetUser | null>(null);
-
-  // implement fetch author from api
+  const [tableOfContents, setTableOfContents] = useState<
+    { id: string; text: string }[]
+  >([]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -46,6 +47,8 @@ const PostPage = () => {
           setAuthor(authorData);
         }
 
+        extractHeadersFromContent(postData.posts[0].content);
+
         setError(false);
       } catch (err) {
         setError(true);
@@ -54,6 +57,26 @@ const PostPage = () => {
         setLoading(false);
       }
     };
+
+    const extractHeadersFromContent = (content: string) => {
+      // create temp div to store the html content from db
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = content;
+
+      // get headers from content
+      const headers = tempDiv.querySelectorAll("h2, h3, h4, h5, h6");
+
+      // Map to table of contents format
+      const toc = Array.from(headers).map((header) => {
+        const id =
+          header.id || header.textContent?.replace(/\s+/g, "-").toLowerCase();
+        if (id) header.id = id; // Set ID if missing
+        return { id, text: header.textContent || "" };
+      });
+
+      setTableOfContents(toc);
+    };
+
     fetchPost();
   }, [postSlug]);
 
@@ -108,7 +131,7 @@ const PostPage = () => {
         {/* blog content */}
         <div className="mx-6">
           <div>
-            <div className="flex justify-center py-24 outline">
+            <div className="flex justify-center py-24 ">
               <div
                 className="post-content max-w-screen-md"
                 dangerouslySetInnerHTML={{ __html: post.content }}
