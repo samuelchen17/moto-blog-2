@@ -145,21 +145,21 @@ const PostPage = () => {
         {/* content of page */}
         <div className="max-w-screen-xl mx-auto outline">
           {/* blog content */}
-          <div className="flex flex-row max-w-screen-lg mx-auto mt-8 gap-6">
+          <div className="flex flex-row max-w-screen-xl justify-between mt-8 gap-6 outline">
             <TableOfContents toc={tableOfContents} />
+
             <main>
               <div
-                className="post-content max-w-screen-md"
+                className="post-content w-full"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
+              <hr className="max-w-screen-md mx-auto" />
+
+              {/* add comment and display comments */}
+              <div className="flex flex-col justify-center py-14">
+                <CommentSection postId={post._id} />
+              </div>
             </main>
-          </div>
-
-          <hr className="max-w-screen-md mx-auto" />
-
-          {/* add comment and display comments */}
-          <div className="flex flex-col justify-center py-14">
-            <CommentSection postId={post._id} />
           </div>
 
           <div className="flex flex-col justify-center py-24">
