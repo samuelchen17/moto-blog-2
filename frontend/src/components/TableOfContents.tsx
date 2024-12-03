@@ -1,6 +1,4 @@
-import React from "react";
-
-const TableOfContents = () => {
+const TableOfContents = ({ toc }: { toc: string[] }) => {
   return <div>TableOfContents</div>;
 };
 

@@ -7,6 +7,7 @@ import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
 import { IGetUser } from "@shared/types/user";
 import ImageBanner from "@/components/ImageBanner";
+import TableOfContents from "@/components/TableOfContents";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -14,9 +15,7 @@ const PostPage = () => {
   const [error, setError] = useState<boolean>(false);
   const [post, setPost] = useState<IPost | null>(null);
   const [author, setAuthor] = useState<IGetUser | null>(null);
-  const [tableOfContents, setTableOfContents] = useState<
-    { id: string; text: string }[]
-  >([]);
+  const [tableOfContents, setTableOfContents] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -67,12 +66,9 @@ const PostPage = () => {
       const headers = tempDiv.querySelectorAll("h2, h3, h4, h5, h6");
 
       // Map to table of contents format
-      const toc = Array.from(headers).map((header) => {
-        const id =
-          header.id || header.textContent?.replace(/\s+/g, "-").toLowerCase();
-        if (id) header.id = id; // Set ID if missing
-        return { id, text: header.textContent || "" };
-      });
+      const toc = Array.from(headers)
+        .map((header) => header.getAttribute("data-id"))
+        .filter(Boolean) as string[];
 
       setTableOfContents(toc);
     };
@@ -127,6 +123,8 @@ const PostPage = () => {
             </div>
           </div>
         </ImageBanner>
+
+        <TableOfContents toc={tableOfContents} />
 
         {/* blog content */}
         <div className="mx-6">
