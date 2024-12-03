@@ -142,29 +142,29 @@ const PostPage = () => {
           </div>
         </ImageBanner>
 
-        <TableOfContents toc={tableOfContents} />
-
-        {/* blog content */}
-        <div className="mx-6">
-          <div>
-            <div className="flex justify-center py-24 ">
+        {/* content of page */}
+        <div className="max-w-screen-xl mx-auto outline">
+          {/* blog content */}
+          <div className="flex flex-row max-w-screen-lg mx-auto mt-8 gap-6">
+            <TableOfContents toc={tableOfContents} />
+            <main>
               <div
                 className="post-content max-w-screen-md"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
-            </div>
+            </main>
+          </div>
 
-            <hr className="max-w-screen-md mx-auto" />
+          <hr className="max-w-screen-md mx-auto" />
 
-            {/* add comment and display comments */}
-            <div className="flex flex-col justify-center py-14 max-w-screen-md w-full mx-auto">
-              <CommentSection postId={post._id} />
-            </div>
+          {/* add comment and display comments */}
+          <div className="flex flex-col justify-center py-14">
+            <CommentSection postId={post._id} />
+          </div>
 
-            <div className="flex flex-col justify-center py-24 max-w-screen-md mx-auto">
-              <h2 className="font-bold text-2xl mb-6">You might also like</h2>
-              <RecentPosts limit={4} />
-            </div>
+          <div className="flex flex-col justify-center py-24">
+            <h2 className="font-bold text-2xl mb-6">You might also like</h2>
+            <RecentPosts limit={4} />
           </div>
         </div>
       </div>
