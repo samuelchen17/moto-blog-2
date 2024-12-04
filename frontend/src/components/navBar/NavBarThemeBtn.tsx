@@ -1,4 +1,4 @@
-import { Button } from "flowbite-react";
+// import { Button } from "flowbite-react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toggleTheme } from "../../redux/features/theme/themeSlice";
@@ -14,7 +14,7 @@ const NavBarThemeBtn = () => {
     <div className="flex items-center gap-2">
       {theme === "dark" ? <FaSun /> : <FaMoon />}
       <Switch
-        className="dark:bg-white"
+        className="dark:bg-white bg-black"
         onClick={() => dispatch(toggleTheme())}
       />
     </div>
