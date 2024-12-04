@@ -14,5 +14,8 @@ export interface IComment {
 export interface ICommentResponse {
   comments: IComment[];
   totalComments: number;
+}
+
+export interface IAllCommentResponse extends ICommentResponse {
   lastMonthComments: number;
 }

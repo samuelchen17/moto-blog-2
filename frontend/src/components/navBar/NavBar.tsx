@@ -1,10 +1,11 @@
 import { Navbar } from "flowbite-react";
 import helmetIcon from "/helmet.svg";
 import { Link, useLocation } from "react-router-dom";
-// import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 import NavBarLinks from "./NavBarLinks";
 import NavBarAuth from "./NavBarAuth";
 import NavBarThemeBtn from "./NavBarThemeBtn";
+import { Button } from "../ui/button";
 
 const NavBar = () => {
   const path = useLocation().pathname;
@@ -19,6 +20,10 @@ const NavBar = () => {
       </Navbar.Brand>
       <div className="flex gap-2 md:order-last">
         <NavBarThemeBtn />
+
+        <Button className="rounded-full" color="gray">
+          <AiOutlineSearch />
+        </Button>
         {/* authentication links */}
         <NavBarAuth />
       </div>

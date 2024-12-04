@@ -13,13 +13,20 @@ const CommentSection = ({ postId }: ICommentSection) => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+
+  const { totalComments } = useAppSelector((state: RootState) => state.comment);
+
   const dispatch = useAppDispatch();
 
   return (
-    <div className="max-w-screen-md w-full">
+    <div className="">
+      <h2 className="font-bold capitalize text-2xl mb-6">
+        comments ({totalComments})
+      </h2>
+
       {/* user info + sign in redirect */}
       {currentUser ? (
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2 mb-3">
           <p>Signed in as:</p>
           <Link
             to="/dashboard?tab=profile"
@@ -28,7 +35,7 @@ const CommentSection = ({ postId }: ICommentSection) => {
             <img
               src={currentUser.user.profilePicture}
               alt={currentUser.user.username}
-              className="h-7 w-7-cover rounded-full"
+              className="h-7 w-7 object-cover rounded-full"
             />
             <div className="hover:underline text-blue-500">
               @{currentUser.user.username}
@@ -53,7 +60,9 @@ const CommentSection = ({ postId }: ICommentSection) => {
       {currentUser && <CommentSectionAddComment postId={postId} />}
 
       {/* display comments */}
-      <CommentSectionComments postId={postId} />
+      <div className="">
+        <CommentSectionComments postId={postId} />
+      </div>
     </div>
   );
 };

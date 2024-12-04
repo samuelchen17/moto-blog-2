@@ -61,7 +61,7 @@ export const handleDashFormSubmit =
         // skip delete if default dp
         if (
           prevDpLink !==
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png"
         ) {
           const imageRef = ref(storage, prevDpLink);
           deleteObject(imageRef)

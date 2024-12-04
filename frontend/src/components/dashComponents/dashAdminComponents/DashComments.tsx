@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
-import { IComment, ICommentResponse } from "@shared/types/comment";
+import { IComment, IAllCommentResponse } from "@shared/types/comment";
 
 // implement accordion for post and comments
 
@@ -25,7 +25,7 @@ const DashComments = () => {
         const res = await fetch(
           `/api/comment/getallcomments/${currentUser?.user.id}`
         );
-        const data: ICommentResponse = await res.json();
+        const data: IAllCommentResponse = await res.json();
         if (res.ok) {
           setAllComments(data.comments);
           if (data.comments.length < 9) {
@@ -50,7 +50,7 @@ const DashComments = () => {
       const res = await fetch(
         `/api/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
       );
-      const data: ICommentResponse = await res.json();
+      const data: IAllCommentResponse = await res.json();
 
       if (res.ok) {
         setAllComments((prev) => [...prev, ...data.comments]);
@@ -157,7 +157,7 @@ const DashComments = () => {
           )}
         </div>
       ) : (
-        <p>No comments created yet!</p>
+        <p className="">No comments created yet!</p>
       )}
 
       {/* delete comment modal */}

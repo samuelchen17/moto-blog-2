@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { IGetUser, IGetUserResponse } from "@shared/types/user";
-import { IComment, ICommentResponse } from "@shared/types/comment";
+import { IComment, IAllCommentResponse } from "@shared/types/comment";
 import { IPost, IPostResponse } from "@shared/types/post";
 import { Button, Table } from "flowbite-react";
 
@@ -43,7 +43,7 @@ const Dashboard = () => {
         const res = await fetch(
           `/api/comment/getallcomments/${currentUser?.user.id}?limit=5`
         );
-        const data: ICommentResponse = await res.json();
+        const data: IAllCommentResponse = await res.json();
 
         if (res.ok) {
           setComments(data.comments);

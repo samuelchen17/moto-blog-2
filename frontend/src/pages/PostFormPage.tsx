@@ -148,8 +148,10 @@ const PostFormPage = () => {
     }
   };
 
+  console.log(formData);
+
   return (
-    <div>
+    <div className="max-w-screen-lg mx-auto">
       <h1>Create post</h1>
       <hr />
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
-import { ICommentResponse } from "@shared/types/comment";
+import { ICommentResponse, IAllCommentResponse } from "@shared/types/comment";
 
 export const createComment = async (
   req: Request,
@@ -23,23 +23,6 @@ export const createComment = async (
   } catch (err) {
     console.error("Error posting comment:", err);
     next(new CustomError(500, "Failed to post comment"));
-  }
-};
-
-export const getComments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const comments = await Comment.find({ postId: req.params.postId }).sort({
-      createdAt: -1,
-    });
-
-    res.status(200).json(comments);
-  } catch (err) {
-    console.error("Error getting comments:", err);
-    next(new CustomError(500, "Failed to get comments"));
   }
 };
 
@@ -131,7 +114,7 @@ export const deleteComment = async (
 
 export const getAllComments = async (
   req: Request,
-  res: Response<ICommentResponse>,
+  res: Response<IAllCommentResponse>,
   next: NextFunction
 ) => {
   try {
@@ -166,3 +149,46 @@ export const getAllComments = async (
     next(new CustomError(500, "Failed to get all comment"));
   }
 };
+
+export const getComments = async (
+  req: Request,
+  res: Response<ICommentResponse>,
+  next: NextFunction
+) => {
+  try {
+    const startIndex = parseInt(req.query.startIndex as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 3;
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+
+    const comments = await Comment.find({ postId: req.params.postId })
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalComments = await Comment.countDocuments({
+      postId: req.params.postId,
+    });
+
+    res.status(200).json({ comments, totalComments });
+  } catch (err) {
+    console.error("Error getting comments:", err);
+    next(new CustomError(500, "Failed to get comments"));
+  }
+};
+
+// export const getComments = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const comments = await Comment.find({ postId: req.params.postId }).sort({
+//       createdAt: -1,
+//     });
+
+//     res.status(200).json(comments);
+//   } catch (err) {
+//     console.error("Error getting comments:", err);
+//     next(new CustomError(500, "Failed to get comments"));
+//   }
+// };

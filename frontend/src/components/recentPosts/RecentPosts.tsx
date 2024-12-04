@@ -1,6 +1,13 @@
 import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
 import RecentPostCard from "./RecentPostCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const RecentPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -23,12 +30,30 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-2">
-      {recentPosts &&
-        recentPosts.map((post) => (
-          <RecentPostCard key={post._id} post={post} />
-        ))}
-    </div>
+    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+    //   {recentPosts &&
+    //     recentPosts.map((post) => (
+    //       <RecentPostCard key={post._id} post={post} />
+    //     ))}
+    // </div>
+
+    <Carousel
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+    >
+      <CarouselContent>
+        {recentPosts &&
+          recentPosts.map((post) => (
+            <CarouselItem className="lg:basis-1/3 md:basis-1/2" key={post._id}>
+              <RecentPostCard post={post} />
+            </CarouselItem>
+          ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 };
 

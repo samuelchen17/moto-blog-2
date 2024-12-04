@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { fileToBase64, getOutput, randomId } from "../utils";
 import { useThrottle } from "../hooks/use-throttle";
 import { toast } from "sonner";
+import UniqueID from "@tiptap-pro/extension-unique-id";
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content;
@@ -45,6 +46,7 @@ const createExtensions = (placeholder: string) => [
     code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
     dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
   }),
+  UniqueID.configure({ types: ["heading"] }),
   Link,
   Underline,
   Image.configure({
@@ -52,6 +54,7 @@ const createExtensions = (placeholder: string) => [
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async (file) => {
+      // implement tiptap upload function
       // NOTE: This is a fake upload function. Replace this with your own upload logic.
       // This function should return the uploaded image URL.
 

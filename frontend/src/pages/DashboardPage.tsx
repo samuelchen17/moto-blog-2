@@ -8,6 +8,7 @@ import Dashboard from "../components/dashComponents/dashAdminComponents/Dashboar
 import DashComments from "../components/dashComponents/dashAdminComponents/DashComments";
 import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";
 import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const DashboardPage = () => {
   const location = useLocation();
@@ -22,13 +23,13 @@ const DashboardPage = () => {
   }, [location.search]);
 
   return (
-    <div>
+    <SidebarProvider className="flex flex-col">
       <DashHeader />
 
       <div className="min-h-screen flex flex-col md:flex-row">
         {/* sidebar */}
-
         <DashSidebar />
+
         {/* dashboard */}
         <div className="w-full max-w-screen-xl mx-auto">
           {tab === "dashboard" && <Dashboard />}
@@ -49,7 +50,7 @@ const DashboardPage = () => {
           {tab === "users" && <DashUsers />}
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
