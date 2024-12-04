@@ -11,13 +11,13 @@ const NavBar = () => {
   const path = useLocation().pathname;
 
   return (
-    <Navbar className="border-b-2">
-      <Navbar.Brand className="flex gap-2" as={Link} to="/home">
-        <img src={helmetIcon} className="sm:h-[60px] h-[30px] dark:invert" />
+    <nav className="flex flex-row justify-between max-w-screen-xl mx-auto h-[80px] items-center">
+      <Link className="flex gap-2" to="/home">
+        <img src={helmetIcon} className="sm:h-[50px] h-[30px] dark:invert" />
         <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
           SC MOTO
         </span>
-      </Navbar.Brand>
+      </Link>
       <div className="flex gap-2 md:order-last">
         <NavBarThemeBtn />
 
@@ -29,7 +29,7 @@ const NavBar = () => {
       </div>
       {/* navigation links */}
       <NavBarLinks currentPath={path} />
-    </Navbar>
+    </nav>
   );
 };
 

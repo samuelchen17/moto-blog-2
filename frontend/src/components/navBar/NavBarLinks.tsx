@@ -11,19 +11,18 @@ const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
   );
 
   return (
-    <Navbar.Collapse>
+    <div>
       {navLinks.map((link) => (
-        <Navbar.Link
+        <Link
           className="capitalize"
           key={link.path}
-          as={Link}
           to={link.path}
-          active={currentPath === link.path}
+          // active={currentPath === link.path}
         >
           {link.name}
-        </Navbar.Link>
+        </Link>
       ))}
-      {currentUser?.user.admin && (
+      {/* {currentUser?.user.admin && (
         <Navbar.Link
           className="capitalize"
           as={Link}
@@ -32,8 +31,8 @@ const NavBarLinks = ({ currentPath }: { currentPath: string }) => {
         >
           dashboard
         </Navbar.Link>
-      )}
-    </Navbar.Collapse>
+      )} */}
+    </div>
   );
 };
 

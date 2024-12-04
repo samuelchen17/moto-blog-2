@@ -73,7 +73,7 @@ const NavBarAuth = () => {
         </>
       )}
 
-      <Navbar.Toggle />
+      {/* <Navbar.Toggle /> */}
 
       {/* authentication modal */}
       <AuthModal />
