@@ -80,47 +80,6 @@ const NavBarAuth = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar
-                alt="user"
-                rounded
-                img={currentUser.user.profilePicture}
-              />
-            }
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">{currentUser.user.username}</span>
-              <span className="block truncate text-sm font-medium">
-                {currentUser.user.email}
-              </span>
-            </Dropdown.Header>
-
-            {dashNavItems
-              .filter((item) => !item.admin || currentUser?.user.admin)
-              .map((item) => (
-                <Dropdown.Item
-                  key={item.name}
-                  as={Link}
-                  to={item.path}
-                  icon={item.icon}
-                  className="capitalize"
-                >
-                  {item.name}
-                </Dropdown.Item>
-              ))}
-
-            <Dropdown.Divider />
-            <Dropdown.Item
-              icon={PiSignOutBold}
-              onClick={() => userSignOut({ dispatch })}
-            >
-              Sign Out
-            </Dropdown.Item>
-          </Dropdown>
         </>
       ) : (
         <>
@@ -149,3 +108,46 @@ const NavBarAuth = () => {
 };
 
 export default NavBarAuth;
+
+{
+  /* <Dropdown
+arrowIcon={false}
+inline
+label={
+  <Avatar
+    alt="user"
+    rounded
+    img={currentUser.user.profilePicture}
+  />
+}
+>
+<Dropdown.Header>
+  <span className="block text-sm">{currentUser.user.username}</span>
+  <span className="block truncate text-sm font-medium">
+    {currentUser.user.email}
+  </span>
+</Dropdown.Header>
+
+{dashNavItems
+  .filter((item) => !item.admin || currentUser?.user.admin)
+  .map((item) => (
+    <Dropdown.Item
+      key={item.name}
+      as={Link}
+      to={item.path}
+      icon={item.icon}
+      className="capitalize"
+    >
+      {item.name}
+    </Dropdown.Item>
+  ))}
+
+<Dropdown.Divider />
+<Dropdown.Item
+  icon={PiSignOutBold}
+  onClick={() => userSignOut({ dispatch })}
+>
+  Sign Out
+</Dropdown.Item>
+</Dropdown> */
+}

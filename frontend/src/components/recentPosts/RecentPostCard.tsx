@@ -36,12 +36,12 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   }, [post]);
 
   return (
-    <Card>
+    <Card className="">
       <Link to={`/blogs/post/${post.slug}`}>
         <img
           src={post.image}
           alt={post.title}
-          className="h-[260px] w-full object-cover rounded-t-md border-b"
+          className="h-[160px] w-full object-cover rounded-t-md border-b"
         />
       </Link>
       <CardHeader>
