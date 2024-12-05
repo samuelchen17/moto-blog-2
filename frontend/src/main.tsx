@@ -16,7 +16,9 @@ createRoot(document.getElementById("root")!).render(
       <ThemeProvider>
         <Flowbite theme={{ theme: flowbiteTheme }}>
           <TooltipProvider>
-            <App />
+            <div id="app-portal-root">
+              <App />
+            </div>
           </TooltipProvider>
         </Flowbite>
       </ThemeProvider>

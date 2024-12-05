@@ -6,6 +6,8 @@ import { IoMdSettings } from "react-icons/io";
 import { HiUser } from "react-icons/hi";
 import { PiUsersFourFill } from "react-icons/pi";
 
+import { LayoutDashboard } from "lucide-react";
+
 interface IDashNavItems {
   name: string;
   path: string;
@@ -19,7 +21,7 @@ export const dashNavItems: IDashNavItems[] = [
   {
     name: "dashboard",
     path: "/dashboard/?tab=dashboard",
-    icon: MdSpaceDashboard,
+    icon: LayoutDashboard,
     admin: true,
   },
   {

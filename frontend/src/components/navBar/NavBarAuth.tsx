@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
+import React from "react";
 
 const NavBarAuth = () => {
   const { currentUser } = useAppSelector(
@@ -52,20 +53,29 @@ const NavBarAuth = () => {
                   {currentUser.user.email}
                 </span>
               </DropdownMenuLabel>
+
               <DropdownMenuSeparator />
+
+              {/* main */}
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <User />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                {dashNavItems
+                  .filter((item) => !item.admin || currentUser?.user.admin)
+                  .map((item) => (
+                    <Link to={item.path}>
+                      <DropdownMenuItem key={item.name} className="capitalize">
+                        {item.icon &&
+                          React.createElement(item.icon, {
+                            className: "mr-1 h-4 w-4",
+                          })}
+                        <span> {item.name}</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  ))}
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut />
+              <DropdownMenuItem onClick={() => userSignOut({ dispatch })}>
+                <LogOut className="mr-1" />
                 <span>Sign Out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>

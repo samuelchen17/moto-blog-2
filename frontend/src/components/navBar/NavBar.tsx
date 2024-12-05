@@ -26,7 +26,7 @@ const NavBar = () => {
       <div className="flex gap-2 md:order-last">
         <NavBarThemeBtn />
 
-        <Button className="rounded-full" color="gray">
+        <Button className="rounded-full">
           <AiOutlineSearch />
         </Button>
         {/* authentication links */}
