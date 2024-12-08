@@ -1,4 +1,4 @@
-import { Navbar } from "flowbite-react";
+// import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { navLinks } from "../../config/navLinks.config";
 import { useAppSelector } from "../../redux/hooks";

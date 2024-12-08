@@ -1,9 +1,9 @@
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import { Avatar } from "flowbite-react";
 import { Button } from "../ui/button";
 import AuthModal from "../authModal/AuthModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { PiSignOutBold } from "react-icons/pi";
+// import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
   openRegister,
@@ -21,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import React from "react";
 
 const NavBarAuth = () => {
