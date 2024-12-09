@@ -21,7 +21,7 @@ const AuthModal = () => {
 
   return (
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
-      <Modal.Header />
+      <Modal.Header className="" />
       <Modal.Body>
         <AuthLayout isSignIn={isSignIn} />
       </Modal.Body>

@@ -1,6 +1,15 @@
 import { Button } from "@/components/ui/button";
 import RecentPosts from "../components/recentPosts/RecentPosts";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 const HomePage = () => {
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
@@ -20,6 +29,19 @@ const HomePage = () => {
           <span>Group Rides</span>
           <p>We have riding sessions every Tuesday and Thursday nights.</p>
           <Button variant="secondary">Join</Button>
+
+          <Dialog>
+            <DialogTrigger>Open</DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>

@@ -1,11 +1,5 @@
-import {
-  Checkbox,
-  Button,
-  Label,
-  TextInput,
-  Alert,
-  Spinner,
-} from "flowbite-react";
+import { Checkbox, Label, TextInput, Alert, Spinner } from "flowbite-react";
+import { Button } from "../ui/button";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -118,10 +112,7 @@ export const AuthFormsSignIn = () => {
           <Checkbox id="remember" />
           <Label htmlFor="remember">Remember me</Label>
         </div>
-        <a
-          href="#"
-          className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
-        >
+        <a href="#" className="text-sm text-black underline dark:text-white">
           Lost Password?
         </a>
       </div>
