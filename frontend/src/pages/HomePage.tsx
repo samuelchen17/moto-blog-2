@@ -9,10 +9,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import HotPosts from "@/components/HotPosts";
 
 const HomePage = () => {
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
+      {/* hot posts */}
+      <div>
+        <h2 className="font-bold text-2xl mb-6">Hot Posts</h2>
+        <HotPosts />
+      </div>
+
+      {/* recent posts */}
       <div className="flex flex-col justify-center py-12 mb-12">
         <h2 className="font-bold text-2xl mb-6">You might also like</h2>
         <RecentPosts limit={9} />
