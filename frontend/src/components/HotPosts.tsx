@@ -23,9 +23,9 @@ const HotPosts = ({ limit }: { limit: number }) => {
 
   if (recentPosts) {
     return (
-      <div className="flex w-full gap-4 h-[600px]">
+      <div className="flex w-full gap-4 h-[600px] flex-col lg:flex-row">
         {/* main article */}
-        <div className="h-full w-3/5 relative rounded-md overflow-hidden border">
+        <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border">
           <img
             className="object-cover h-full w-full"
             src={recentPosts[0].image}
@@ -39,7 +39,9 @@ const HotPosts = ({ limit }: { limit: number }) => {
             <div>button for read more</div>
           </div>
         </div>
-        <div className="w-2/5 flex flex-col gap-4">
+
+        {/* side articles */}
+        <div className="lg:w-2/5 flex lg:flex-col gap-4">
           {recentPosts &&
             recentPosts.slice(1).map((post) => (
               <div
