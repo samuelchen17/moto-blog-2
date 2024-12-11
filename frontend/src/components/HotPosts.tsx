@@ -1,5 +1,6 @@
 import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 const HotPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -32,8 +33,10 @@ const HotPosts = ({ limit }: { limit: number }) => {
             src={recentPosts[0].image}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
-            <span>{recentPosts[0].title}</span>
+            <span className="text-4xl pb-4">{recentPosts[0].title}</span>
+            <span>By {recentPosts[0].createdBy}</span>
             <div>button for read more</div>
+            <Button className="bg-white text-black">Read more</Button>
           </div>
         </div>
 

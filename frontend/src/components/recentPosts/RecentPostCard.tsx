@@ -2,7 +2,7 @@ import { IPost } from "@shared/types/post";
 import { IGetUser } from "@shared/types/user";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { FaComment, FaSave, FaThumbsUp } from "react-icons/fa";
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -56,9 +56,10 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
 
           <div className="flex gap-2 items-center ">
             {/* implement */}
-            <FaThumbsUp />
+            {/* <FaThumbsUp />
             <FaComment />
-            <FaSave />
+            <FaSave /> */}
+            {format(new Date(post.createdAt), "dd MMM yyyy")}
           </div>
         </CardDescription>
         <CardTitle className="capitalize pt-1">{post.title}</CardTitle>
