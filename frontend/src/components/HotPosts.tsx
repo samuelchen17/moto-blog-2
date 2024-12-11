@@ -21,22 +21,24 @@ const HotPosts = ({ limit }: { limit: number }) => {
     }
   }, []);
 
-  return (
-    <div className="flex w-full gap-4 h-[500px]">
-      <div className="h-full w-3/5 outline">
-        <img className="object-cover h-full" src={recentPosts[0].image} />
+  if (recentPosts) {
+    return (
+      <div className="flex w-full gap-4 h-[500px]">
+        <div className="h-full w-3/5 outline">
+          <img className="object-cover h-full" src={recentPosts[0].image} />
+        </div>
+        <div className="w-2/5 h-full">
+          {recentPosts &&
+            recentPosts.slice(1).map((post) => (
+              <div key={post._id} className="flex">
+                <img src={post.image} className="object-cover" />
+                <span>post</span>
+              </div>
+            ))}
+        </div>
       </div>
-      <div className="w-2/5 h-full">
-        {recentPosts &&
-          recentPosts.slice(1).map((post) => (
-            <div key={post._id} className="flex">
-              <img src={post.image} className="object-cover" />
-              <span>post</span>
-            </div>
-          ))}
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default HotPosts;
