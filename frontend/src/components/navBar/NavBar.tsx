@@ -6,7 +6,6 @@ import NavBarLinks from "./NavBarLinks";
 import NavBarAuth from "./NavBarAuth";
 import NavBarThemeBtn from "./NavBarThemeBtn";
 import { Button } from "../ui/button";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { Menu } from "lucide-react";
 
 const NavBar = () => {

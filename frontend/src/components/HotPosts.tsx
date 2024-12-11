@@ -23,25 +23,22 @@ const HotPosts = ({ limit }: { limit: number }) => {
 
   if (recentPosts) {
     return (
-      <div className="flex w-full gap-4 h-[600px] flex-col lg:flex-row">
+      <div className="flex w-full gap-4 lg:h-[600px] flex-col lg:flex-row">
         {/* main article */}
-        <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border">
+        <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border min-h-[300px]">
           <img
-            className="object-cover h-full w-full"
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            alt="post-image"
             src={recentPosts[0].image}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
-            <div>
-              Read more here fasdlk jfdlksajf lksdaj flksdja kljaslk jflk
-              ljfaslkj l;fkasjd lkjfaslk jfl;kasj kljafsd;lk fjlk;asj
-              flkaj;lfjasl;k jfiolawej ilfjasi lfjaskldj fiaej
-            </div>
+            <span>{recentPosts[0].title}</span>
             <div>button for read more</div>
           </div>
         </div>
 
         {/* side articles */}
-        <div className="lg:w-2/5 flex lg:flex-col gap-4">
+        <div className="lg:w-2/5 lg:flex-col gap-4 hidden lg:flex">
           {recentPosts &&
             recentPosts.slice(1).map((post) => (
               <div

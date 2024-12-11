@@ -91,7 +91,7 @@ const NavBarAuth = () => {
             Log In
           </Button>
           <Button
-            className="rounded-full"
+            className="rounded-full hidden lg:block"
             onClick={() => dispatch(openRegister())}
           >
             Sign Up
