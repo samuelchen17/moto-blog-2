@@ -29,7 +29,7 @@ const HotPosts = ({ limit }: { limit: number }) => {
         <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border min-h-[400px]">
           <img
             className="absolute top-0 left-0 w-full h-full object-cover"
-            alt="post-image"
+            alt="Post Thumbnail"
             src={recentPosts[0].image}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
@@ -50,7 +50,11 @@ const HotPosts = ({ limit }: { limit: number }) => {
                 key={post._id}
                 className="flex h-1/3 overflow-hidden border rounded-md"
               >
-                <img src={post.image} className="object-cover w-1/2" />
+                <img
+                  src={post.image}
+                  className="object-cover h-full w-1/2 object-center"
+                  alt="Post Thumbnail"
+                />
                 <div className="w-1/2">These are the authors words</div>
               </div>
             ))}

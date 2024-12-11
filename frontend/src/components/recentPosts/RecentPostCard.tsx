@@ -6,9 +6,9 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
