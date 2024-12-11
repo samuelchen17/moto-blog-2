@@ -36,7 +36,7 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   }, [post]);
 
   return (
-    <Card className="">
+    <Card className="min-h-[430px]">
       <Link to={`/blogs/post/${post.slug}`}>
         <img
           src={post.image}
@@ -62,19 +62,19 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
             {format(new Date(post.createdAt), "dd MMM yyyy")}
           </div>
         </CardDescription>
-        <CardTitle className="capitalize pt-1">{post.title}</CardTitle>
+        <CardTitle className="capitalize pt-3">{post.title}</CardTitle>
       </CardHeader>
-      <CardContent className="">
-        <Badge variant="outline" className="uppercase mx-auto">
+      {/* <CardContent className=""></CardContent> */}
+      <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
+        <Badge variant="outline" className="uppercase mr-auto">
           {post.category}
         </Badge>
-      </CardContent>
-
-      <CardFooter>
+        {/* <CardFooter className="outline"> */}
         <Button>
           <Link to={`/blogs/post/${post.slug}`}>Read more</Link>
         </Button>
-      </CardFooter>
+        {/* </CardFooter> */}
+      </div>
     </Card>
   );
 };

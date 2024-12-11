@@ -26,14 +26,16 @@ const HotPosts = ({ limit }: { limit: number }) => {
     return (
       <div className="flex w-full gap-4 lg:h-[600px] flex-col lg:flex-row">
         {/* main article */}
-        <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border min-h-[300px]">
+        <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border min-h-[400px]">
           <img
             className="absolute top-0 left-0 w-full h-full object-cover"
             alt="post-image"
             src={recentPosts[0].image}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
-            <span className="text-4xl pb-4">{recentPosts[0].title}</span>
+            <span className="lg:text-4xl text-xl font-bold pb-4">
+              {recentPosts[0].title}
+            </span>
             <span>By {recentPosts[0].createdBy}</span>
             <div>button for read more</div>
             <Button className="bg-white text-black">Read more</Button>

@@ -5,6 +5,7 @@ interface IPostCategory {
 
 export const postCategory: IPostCategory[] = [
   { name: "select a category", value: "uncategorized" },
-  { name: "motorcycle", value: "motorcycle" },
-  { name: "gear", value: "gear" },
+  { name: "Motorcycle", value: "motorcycle" },
+  { name: "Gear", value: "gear" },
+  { name: "Accessories", value: "accessories" },
 ];
