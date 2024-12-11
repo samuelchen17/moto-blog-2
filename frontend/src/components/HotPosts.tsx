@@ -23,16 +23,31 @@ const HotPosts = ({ limit }: { limit: number }) => {
 
   if (recentPosts) {
     return (
-      <div className="flex w-full gap-4 h-[500px]">
-        <div className="h-full w-3/5 outline">
-          <img className="object-cover h-full" src={recentPosts[0].image} />
+      <div className="flex w-full gap-4 h-[600px]">
+        {/* main article */}
+        <div className="h-full w-3/5 relative rounded-md overflow-hidden border">
+          <img
+            className="object-cover h-full w-full"
+            src={recentPosts[0].image}
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
+            <div>
+              Read more here fasdlk jfdlksajf lksdaj flksdja kljaslk jflk
+              ljfaslkj l;fkasjd lkjfaslk jfl;kasj kljafsd;lk fjlk;asj
+              flkaj;lfjasl;k jfiolawej ilfjasi lfjaskldj fiaej
+            </div>
+            <div>button for read more</div>
+          </div>
         </div>
-        <div className="w-2/5 h-full">
+        <div className="w-2/5 flex flex-col gap-4">
           {recentPosts &&
             recentPosts.slice(1).map((post) => (
-              <div key={post._id} className="flex">
-                <img src={post.image} className="object-cover" />
-                <span>post</span>
+              <div
+                key={post._id}
+                className="flex h-1/3 overflow-hidden border rounded-md"
+              >
+                <img src={post.image} className="object-cover w-1/2" />
+                <div className="w-1/2">These are the authors words</div>
               </div>
             ))}
         </div>
