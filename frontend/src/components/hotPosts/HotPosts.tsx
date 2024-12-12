@@ -1,6 +1,8 @@
 import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { format } from "date-fns";
+import HotPostCard from "./HotPostCard";
 
 const HotPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -24,7 +26,7 @@ const HotPosts = ({ limit }: { limit: number }) => {
 
   if (recentPosts) {
     return (
-      <div className="flex w-full gap-4 lg:h-[600px] flex-col lg:flex-row">
+      <div className="flex w-full gap-4 lg:h-[650px] flex-col lg:flex-row">
         {/* main article */}
         <div className="h-full lg:w-3/5 relative rounded-md overflow-hidden border min-h-[400px]">
           <img
@@ -50,12 +52,7 @@ const HotPosts = ({ limit }: { limit: number }) => {
                 key={post._id}
                 className="flex h-1/3 overflow-hidden border rounded-md"
               >
-                <img
-                  src={post.image}
-                  className="object-cover h-full w-1/2 object-center"
-                  alt="Post Thumbnail"
-                />
-                <div className="w-1/2">These are the authors words</div>
+                <HotPostCard post={post} />
               </div>
             ))}
         </div>
