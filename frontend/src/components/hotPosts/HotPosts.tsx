@@ -45,12 +45,12 @@ const HotPosts = ({ limit }: { limit: number }) => {
         </div>
 
         {/* side articles */}
-        <div className="lg:w-2/5 lg:flex-col gap-4 hidden lg:flex">
+        <div className="lg:w-2/5 flex-col gap-4 flex">
           {recentPosts &&
             recentPosts.slice(1).map((post) => (
               <div
                 key={post._id}
-                className="flex h-1/3 overflow-hidden border rounded-md"
+                className="flex lg:h-1/3 h-[220px] overflow-hidden border rounded-md"
               >
                 <HotPostCard post={post} />
               </div>
