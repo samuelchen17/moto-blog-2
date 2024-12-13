@@ -14,7 +14,10 @@ const NavBar = () => {
   return (
     <nav className="flex flex-row justify-between max-w-screen-xl mx-auto h-[80px] items-center px-4">
       <div className="flex items-center gap-2">
+        {/* navbar collapse */}
         <Menu className="md:hidden" size={30} />
+
+        {/* navbar icon */}
         <Link className="flex gap-2" to="/home">
           <img src={helmetIcon} className="sm:h-[50px] h-[30px] dark:invert" />
           <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
