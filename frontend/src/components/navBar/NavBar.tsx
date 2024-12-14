@@ -26,7 +26,7 @@ const NavBar = () => {
         </Link>
       </div>
 
-      <div className="flex gap-2 md:order-last outline">
+      <div className="flex gap-2 md:order-last">
         <NavBarThemeBtn />
 
         <Button className="rounded-full">
