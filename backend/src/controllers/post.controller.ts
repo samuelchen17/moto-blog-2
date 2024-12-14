@@ -262,14 +262,14 @@ export const getHotPosts = async (
 ) => {
   try {
     // construct the query as needed
-    const hotPosts = await Config.findOne({ _id: "hot_articles" });
+    const config = await Config.findOne({ _id: "config" });
 
-    if (!hotPosts) {
-      return next(new CustomError(404, "Hot articles configuration not found"));
+    if (!config) {
+      return next(new CustomError(404, "Configuration not found"));
     }
 
     // extract post ids
-    const postIds = hotPosts.post_ids;
+    const postIds = config.hot_articles;
 
     const posts = await Post.find({
       _id: { $in: postIds },
