@@ -13,6 +13,7 @@ import AdminRoute from "../components/AdminRoute";
 import PostFormPage from "../pages/PostFormPage";
 import { navLinks } from "../config/navLinks.config";
 import PostPage from "../pages/PostPage";
+import SearchPage from "@/pages/SearchPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="blogs" element={<BlogsPage />} />
       <Route path="blogs/post/:postSlug" element={<PostPage />} />
+      <Route path="search" element={<SearchPage />} />
       <Route path={navLinks[2].path} element={<AboutPage />} />
     </Route>
   )

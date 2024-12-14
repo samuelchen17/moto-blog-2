@@ -1,12 +1,11 @@
 // import { Navbar } from "flowbite-react";
 import helmetIcon from "/helmet.svg";
 import { Link, useLocation } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
 import NavBarLinks from "./NavBarLinks";
 import NavBarAuth from "./NavBarAuth";
 import NavBarThemeBtn from "./NavBarThemeBtn";
 import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 
 const NavBar = () => {
   const path = useLocation().pathname;
@@ -30,7 +29,9 @@ const NavBar = () => {
         <NavBarThemeBtn />
 
         <Button className="rounded-full">
-          <AiOutlineSearch />
+          <Link to="/search">
+            <Search />
+          </Link>
         </Button>
         {/* authentication links */}
         <NavBarAuth />
