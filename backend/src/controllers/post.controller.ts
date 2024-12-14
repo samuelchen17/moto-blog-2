@@ -4,6 +4,7 @@ import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 import { IPostResponse, IPost } from "@shared/types/post";
+import { Config } from "../models/config.model";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -256,67 +257,33 @@ export const updatePost = async (
 
 export const getHotPosts = async (
   req: Request,
-  res: Response<IPostResponse>,
+  res: Response,
   next: NextFunction
 ) => {
-  const startIndex = parseInt(req.query.startIndex as string) || 0;
-  const limit = parseInt(req.query.limit as string) || 9;
-  // 1 = asc, -1 = desc
-  const sortDirection = req.query.order === "asc" ? 1 : -1;
-
   try {
     // construct the query as needed
-    const query: IPostQuery = {};
+    const hotPosts = await Config.findOne({ _id: "hot_articles" });
 
-    if (req.query.createdBy) {
-      query.createdBy = req.query.createdBy as string;
+    if (!hotPosts) {
+      return res
+        .status(404)
+        .json({ message: "Hot articles configuration not found" });
     }
 
-    if (req.query.category) {
-      query.category = req.query.category as string;
-    }
+    // extract post ids
+    const postIds = hotPosts.post_ids;
 
-    if (req.query.slug) {
-      query.slug = req.query.slug as string;
-    }
-
-    if (req.query.postId) {
-      query._id = req.query.postId as string;
-    }
-
-    if (req.query.searchTerm) {
-      query.$or = [
-        { title: { $regex: req.query.searchTerm as string, $options: "i" } },
-        { content: { $regex: req.query.searchTerm as string, $options: "i" } },
-      ];
-    }
-
-    const posts = await Post.find<IPost>(query)
-      .skip(startIndex)
-      .limit(limit)
-      .sort({ updatedAt: sortDirection });
-
-    const totalPosts = await Post.countDocuments();
-
-    const now = new Date();
-
-    const oneMonthAgo = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      now.getDate()
-    );
-
-    const lastMonthPosts = await Post.countDocuments({
-      createdAt: { $gte: oneMonthAgo },
+    const posts = await Post.find({
+      _id: { $in: postIds },
     });
 
-    res.status(200).json({
-      posts,
-      totalPosts,
-      lastMonthPosts,
-    });
+    if (posts.length === 0) {
+      return res.status(404).json({ message: "No hot articles found" });
+    }
+
+    res.status(200).json(posts);
   } catch (err) {
-    console.error("Error fetching posts:", err);
-    next(new CustomError(500, "Failed to retrieve posts"));
+    console.error("Error fetching hot articles:", err);
+    next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };
