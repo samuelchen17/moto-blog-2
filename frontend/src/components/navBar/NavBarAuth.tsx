@@ -21,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import React from "react";
 
 const NavBarAuth = () => {
@@ -85,7 +85,7 @@ const NavBarAuth = () => {
         <>
           <Button
             variant="ghost"
-            className="rounded-full"
+            className="rounded-full sm:block hidden"
             onClick={() => dispatch(openLogin())}
           >
             Log In
@@ -96,6 +96,9 @@ const NavBarAuth = () => {
           >
             Sign Up
           </Button>
+          <button onClick={() => dispatch(openLogin())}>
+            <User className=" sm:hidden " size={24} />
+          </button>
         </>
       )}
 
