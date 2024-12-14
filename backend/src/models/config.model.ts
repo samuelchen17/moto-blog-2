@@ -6,4 +6,4 @@ const configSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-export const Config = mongoose.model("Comment", configSchema);
+export const Config = mongoose.model("Config", configSchema);

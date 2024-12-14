@@ -9,6 +9,7 @@ import {
   getPosts,
   deletePost,
   updatePost,
+  getHotPosts,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
@@ -34,6 +35,7 @@ const postRouter = (router: Router) => {
     isAdmin,
     updatePost
   );
+  router.get("/post/gethotposts", getHotPosts);
 };
 
 export default postRouter;

@@ -265,9 +265,7 @@ export const getHotPosts = async (
     const hotPosts = await Config.findOne({ _id: "hot_articles" });
 
     if (!hotPosts) {
-      return res
-        .status(404)
-        .json({ message: "Hot articles configuration not found" });
+      return next(new CustomError(404, "Hot articles configuration not found"));
     }
 
     // extract post ids
@@ -278,7 +276,7 @@ export const getHotPosts = async (
     });
 
     if (posts.length === 0) {
-      return res.status(404).json({ message: "No hot articles found" });
+      return next(new CustomError(404, "No hot articles found"));
     }
 
     res.status(200).json(posts);
