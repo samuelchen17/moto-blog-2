@@ -1,20 +1,20 @@
-import { IPost, IPostResponse } from "@shared/types/post";
+import { IPost } from "@shared/types/post";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import HotPostCard from "./HotPostCard";
 
-const HotPosts = ({ limit }: { limit: number }) => {
+const HotPosts = () => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
 
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch(`/api/post/getposts?limit=${limit}`);
-        const data: IPostResponse = await res.json();
+        const res = await fetch(`/api/post/gethotposts`);
+        const data: IPost[] = await res.json();
 
         if (res.ok) {
-          setRecentPosts(data.posts);
+          setRecentPosts(data);
         }
       };
 

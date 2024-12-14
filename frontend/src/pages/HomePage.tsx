@@ -17,7 +17,7 @@ const HomePage = () => {
       {/* hot posts */}
       <div>
         <h2 className="font-bold text-2xl mb-6">Hot posts</h2>
-        <HotPosts limit={4} />
+        <HotPosts />
       </div>
 
       {/* recent posts */}
