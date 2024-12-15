@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MessageCircle, ThumbsUp } from "lucide-react";
 
 const SearchPage = () => {
   return (
@@ -40,14 +41,33 @@ const SearchPage = () => {
         </div>
 
         {/* search */}
-        <div>
-          <div className="mt-12 flex gap-2 items-center mb-5">
-            <div className="bg-red-500 h-5 w-5 rounded-full" />
-            <span className="text-sm">Guest Author</span>
+        <div className="flex w-full outline mt-12">
+          {/* search item information */}
+          <div>
+            <div className=" flex gap-2 items-center mb-5">
+              <div className="bg-red-500 h-5 w-5 rounded-full" />
+              <span className="text-sm">Guest Author</span>
+            </div>
+
+            <h2 className="text-xl font-bold mb-1">Ai is killing coding</h2>
+            <p className="text-gray-500">Content of the post, goes here ...</p>
+
+            <div className="flex gap-6 items-center">
+              <span className="text-xs text-gray-500">5d ago</span>
+
+              <div className="flex gap-1 items-center text-gray-500">
+                <ThumbsUp size={16} className="" />
+                <span className="text-xs">72</span>
+              </div>
+              <div className="flex gap-1 items-center text-gray-500">
+                <MessageCircle size={16} />
+                <span className="text-xs">13</span>
+              </div>
+            </div>
           </div>
 
-          <h2 className="text-xl font-bold mb-1">Ai is killing coding</h2>
-          <p className="text-gray-500">Content of the post, goes here ...</p>
+          {/* search item image */}
+          <div className="outline w-[100px]"></div>
         </div>
       </div>
     </div>
