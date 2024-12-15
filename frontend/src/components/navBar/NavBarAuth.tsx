@@ -61,8 +61,8 @@ const NavBarAuth = () => {
                 {dashNavItems
                   .filter((item) => !item.admin || currentUser?.user.admin)
                   .map((item) => (
-                    <Link to={item.path}>
-                      <DropdownMenuItem key={item.name} className="capitalize">
+                    <Link to={item.path} key={item.name}>
+                      <DropdownMenuItem className="capitalize">
                         {item.icon &&
                           React.createElement(item.icon, {
                             className: "mr-1 h-4 w-4",
