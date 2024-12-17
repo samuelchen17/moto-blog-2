@@ -1,3 +1,4 @@
+import SearchBar from "@/components/searchComponent/SearchBar";
 import SearchItem from "@/components/searchComponent/SearchItem";
 import {
   Select,
@@ -10,8 +11,11 @@ import {
 const SearchPage = () => {
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
-      <input></input>
-      {/* hot posts */}
+      {/* mobile screen search */}
+      <div className="sm:hidden">
+        <SearchBar />
+      </div>
+
       <div>
         <h1 className="font-bold text-2xl mb-6 flex">
           <div className="text-gray-500">Results for</div> &nbsp;search

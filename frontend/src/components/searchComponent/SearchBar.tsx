@@ -1,7 +1,6 @@
-import { Button } from "../ui/button";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 
 const SearchBar = () => {
@@ -30,13 +29,9 @@ const SearchBar = () => {
   };
 
   return (
-    // <Button className="rounded-full">
-    //   <Link to="/search">
-    //     <Search />
-    //   </Link>
-    // </Button>
     <form onSubmit={handleSubmit}>
       <Input
+        startIcon={Search}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
