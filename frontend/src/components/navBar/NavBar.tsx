@@ -4,8 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import NavBarLinks from "./NavBarLinks";
 import NavBarAuth from "./NavBarAuth";
 import NavBarThemeBtn from "./NavBarThemeBtn";
-import { Button } from "../ui/button";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
+import SearchBar from "../searchComponent/SearchBar";
 
 const NavBar = () => {
   const path = useLocation().pathname;
@@ -28,11 +28,9 @@ const NavBar = () => {
       <div className="flex gap-2 md:order-last">
         <NavBarThemeBtn />
 
-        <Button className="rounded-full">
-          <Link to="/search">
-            <Search />
-          </Link>
-        </Button>
+        {/* search component */}
+        <SearchBar />
+
         {/* authentication links */}
         <NavBarAuth />
       </div>
