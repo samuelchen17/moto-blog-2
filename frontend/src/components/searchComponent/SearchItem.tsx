@@ -1,7 +1,9 @@
 import { Separator } from "@/components/ui/separator";
+import { IPost } from "@shared/types/post";
 import { MessageCircle, ThumbsUp } from "lucide-react";
+import TimeAgo from "../TimeAgo";
 
-const SearchItem = () => {
+const SearchItem = ({ post }: { post: IPost }) => {
   return (
     <>
       <div className="flex flex-col w-full mt-12">
@@ -12,21 +14,18 @@ const SearchItem = () => {
         </div>
 
         {/* title and content */}
-        <div className="flex flex-row">
+        <div className="flex md:flex-row justify-between flex-col">
           <div className="mb-2 mr-6">
-            <h2 className="text-xl font-bold mt-2 mb-1">
-              Ai is killing coding
-            </h2>
-            <p className="text-gray-500 mb-4">
-              Content of the post, goes here jfjdsl alks jflkdsaj klfsjadkl
-              fjaslk jflksdajf lkajsfklsdjklsd fjkldsja lkfjdslk jfaskl jflksadj
-              flkasjdflk;djsal;k fjeiolwaj ilejf lesj fljasfile jaf
-              iaewjfijioewa jfioawej fliaewjf ioawjfil
-              jwiajfoiwjjfklsdjflewjifjwej...
-            </p>
+            <h2 className="text-xl font-bold mt-2 mb-1">{post.title}</h2>
+            <p
+              className="text-gray-500 mb-4 line-clamp-3"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
 
             <div className="flex gap-4 items-center">
-              <span className="text-xs text-gray-500">5d ago</span>
+              <span className="text-xs text-gray-500">
+                <TimeAgo date={post.createdAt} />
+              </span>
               <div className="flex gap-1 items-center text-gray-500">
                 <ThumbsUp size={14} className="" />
                 <span className="text-xs">72</span>
@@ -39,7 +38,10 @@ const SearchItem = () => {
           </div>
 
           {/* search item image */}
-          <img src="" className="outline w-1/4 object-cover" />
+          <img
+            src={post.image}
+            className="md:w-[300px] md:h-[200px] w-[150px] h-[100px] object-cover"
+          />
         </div>
       </div>
       <Separator className="my-12" />
