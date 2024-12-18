@@ -113,7 +113,7 @@ const PostPage = () => {
         <ImageBanner img={post.image}>
           <div className="flex flex-col justify-center max-w-screen-md mx-auto p-6">
             {/* post title */}
-            <h1 className="text-4xl lg:text-6xl uppercase font-bold text-white">
+            <h1 className="text-2xl sm:text-4xl lg:text-6xl uppercase font-bold text-white">
               {post.title} | {post.category} Review
             </h1>
 

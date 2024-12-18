@@ -45,15 +45,18 @@ const SearchPage = () => {
 
     const fetchPosts = async () => {
       setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/post/getposts?${searchQuery}`);
-      if (!res.ok) {
-        setLoading(false);
-        return;
-      }
-      if (res.ok) {
+      try {
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/post/getposts?${searchQuery}`);
+        if (!res.ok) {
+          return;
+        }
+
         const data: IPostResponse = await res.json();
         setPosts(data.posts);
+      } catch (err) {
+        console.error(err);
+      } finally {
         setLoading(false);
       }
     };

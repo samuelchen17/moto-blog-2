@@ -2,15 +2,42 @@ import { Separator } from "@/components/ui/separator";
 import { IPost } from "@shared/types/post";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
+import { useEffect, useState } from "react";
+import { IGetUser } from "@shared/types/user";
 
 const SearchItem = ({ post }: { post: IPost }) => {
+  const [author, setAuthor] = useState<IGetUser | null>(null);
+  // get comments, likes, also get author
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const authorId = post.createdBy;
+
+        if (authorId) {
+          const authorRes = await fetch(`/api/${authorId}`);
+          const authorData: IGetUser = await authorRes.json();
+
+          if (!authorRes.ok) {
+            throw new Error("Failed to fetch author");
+          }
+
+          setAuthor(authorData);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchAuthor();
+  }, [author]);
+
   return (
     <>
       <div className="flex flex-col w-full mt-12">
         {/* author information */}
         <div className=" flex gap-2 items-center mb-2">
           <div className="bg-gray-400 h-5 w-5 rounded-full" />
-          <span className="text-sm">Guest Author</span>
+          <span className="text-sm">{author?.username}</span>
         </div>
 
         {/* title and content */}
