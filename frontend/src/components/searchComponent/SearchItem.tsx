@@ -48,11 +48,11 @@ const SearchItem = ({ post }: { post: IPost }) => {
         {/* title and content */}
         <div className="flex flex-row justify-between">
           <div className="mb-2 mr-6">
-            <h2 className="text-xl font-bold mt-2 mb-1 line-clamp-1 md:line-clamp-none">
+            <h2 className="md:text-xl font-bold mt-2 mb-1 line-clamp-2 md:line-clamp-none">
               {post.title}
             </h2>
             <p
-              className="text-gray-500 mb-4 line-clamp-1 md:line-clamp-2"
+              className="text-gray-500 mb-4 line-clamp-2 md:line-clamp-2"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
@@ -74,7 +74,7 @@ const SearchItem = ({ post }: { post: IPost }) => {
           {/* search item image */}
           <img
             src={post.image}
-            className="md:w-[300px] md:h-[200px] w-[150px] h-[100px] object-cover"
+            className="md:w-[300px] md:h-[200px] sm:w-[150px] w-[100px] h-[100px] object-cover"
           />
         </div>
       </div>
