@@ -30,7 +30,7 @@ export default function DashNavUser({}) {
               alt={currentUser?.user.username}
             />
             <AvatarFallback className="rounded-lg">
-              {currentUser?.user.username[0]}
+              {currentUser?.user.username}
             </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
