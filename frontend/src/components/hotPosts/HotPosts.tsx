@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import HotPostCard from "./HotPostCard";
 import { IGetUser } from "@shared/types/user";
 import TimeAgo from "../TimeAgo";
+import { Link } from "react-router-dom";
 
 const HotPosts = () => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -49,24 +50,26 @@ const HotPosts = () => {
             alt="Post Thumbnail"
             src={recentPosts[0].image}
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
-            <span className="lg:text-4xl text-xl font-bold pb-4">
-              {recentPosts[0].title}
-            </span>
-            <span>
-              By {author?.username} ·{" "}
-              <TimeAgo date={recentPosts[0].createdAt} />
-            </span>
-            <p
-              className=" mb-4 line-clamp-1"
-              dangerouslySetInnerHTML={{ __html: recentPosts[0].content }}
-            />
+          <Link to={`/blogs/post/${recentPosts[0].slug}`}>
+            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
+              <span className="lg:text-4xl text-xl font-bold pb-4">
+                {recentPosts[0].title}
+              </span>
+              <span className="mb-4">
+                By {author?.username} ·{" "}
+                <TimeAgo date={recentPosts[0].createdAt} />
+              </span>
+              {/* <p
+                className="  line-clamp-1"
+                dangerouslySetInnerHTML={{ __html: recentPosts[0].content }}
+              /> */}
 
-            {/* {recentPosts[0].category} */}
-            <Button className="bg-white text-black hover:bg-white/90">
-              Read more
-            </Button>
-          </div>
+              {/* {recentPosts[0].category} */}
+              <Button className="bg-white text-black hover:bg-white/90">
+                Read more
+              </Button>
+            </div>
+          </Link>
         </div>
 
         {/* side articles */}

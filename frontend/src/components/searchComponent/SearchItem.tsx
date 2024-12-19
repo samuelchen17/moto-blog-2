@@ -4,7 +4,6 @@ import { MessageCircle, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
 import { useEffect, useState } from "react";
 import { IGetUser } from "@shared/types/user";
-import { Avatar } from "../ui/avatar";
 
 const SearchItem = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);
@@ -60,7 +59,6 @@ const SearchItem = ({ post }: { post: IPost }) => {
               <span className="text-xs text-gray-500">
                 <TimeAgo date={post.createdAt} />
               </span>
-              s
               <div className="flex gap-1 items-center text-gray-500">
                 <ThumbsUp size={14} className="" />
                 <span className="text-xs">72</span>

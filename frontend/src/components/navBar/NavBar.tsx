@@ -15,13 +15,13 @@ const NavBar = () => {
     <nav className="flex flex-row justify-between max-w-screen-xl mx-auto h-[80px] items-center px-4 border-b">
       <div className="flex items-center gap-2">
         {/* navbar collapse */}
-        <Menu className="md:hidden" size={30} />
+        {/* <Menu className="md:hidden" size={30} /> */}
 
         {/* navbar icon */}
-        <Link className="flex gap-2" to="/home">
+        <Link className="flex gap-2" to="/">
           <img src={helmetIcon} className="sm:h-[50px] h-[30px] dark:invert" />
-          <span className="self-center whitespace-nowrap text-sm sm:text-4xl font-semibold dark:text-white">
-            SC MOTO
+          <span className="self-center whitespace-nowrap text-xl sm:text-4xl font-semibold dark:text-white">
+            MOTOCE
           </span>
         </Link>
       </div>

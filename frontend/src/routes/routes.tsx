@@ -18,6 +18,7 @@ import SearchPage from "@/pages/SearchPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
+      <Route index element={<HomePage />} />
       <Route path={navLinks[0].path} element={<HomePage />} />
       {/* for logged in  users */}
       <Route element={<AuthRoute />}>
