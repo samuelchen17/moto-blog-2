@@ -77,6 +77,29 @@ const SearchPage = () => {
     navigate(`/search?${searchQuery}`, { replace: true });
   }, [searchParams, navigate]);
 
+  const handleShowMore = async () => {
+    const startIndex = posts.length.toString();
+    try {
+      const urlParams = new URLSearchParams(location.search);
+      urlParams.set("startIndex", startIndex);
+      const searchQuery = urlParams.toString();
+
+      const res = await fetch(`/api/post/getposts?${searchQuery}`);
+      if (!res.ok) return;
+
+      const data: IPostResponse = await res.json();
+
+      if (res.ok) {
+        setPosts((prev) => [...prev, ...data.posts]);
+        if (data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
   //   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   //     e.preventDefault();
   //     const urlParams = new URLSearchParams(location.search);
@@ -143,6 +166,15 @@ const SearchPage = () => {
           </Link>
         ))}
       </div>
+
+      {showMore && (
+        <button
+          onClick={handleShowMore}
+          className="self-center w-full text-red-500 py-6"
+        >
+          Show more
+        </button>
+      )}
     </div>
   );
 };
