@@ -1,9 +1,9 @@
 import { IPost } from "@shared/types/post";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { format } from "date-fns";
 import HotPostCard from "./HotPostCard";
 import { IGetUser } from "@shared/types/user";
+import TimeAgo from "../TimeAgo";
 
 const HotPosts = () => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -53,14 +53,19 @@ const HotPosts = () => {
             <span className="lg:text-4xl text-xl font-bold pb-4">
               {recentPosts[0].title}
             </span>
-            <span>By {author?.username}</span>
+            <span>
+              By {author?.username} ·{" "}
+              <TimeAgo date={recentPosts[0].createdAt} />
+            </span>
             <p
               className=" mb-4 line-clamp-1"
               dangerouslySetInnerHTML={{ __html: recentPosts[0].content }}
             />
 
             {/* {recentPosts[0].category} */}
-            <Button className="bg-white text-black">Read more</Button>
+            <Button className="bg-white text-black hover:bg-white/90">
+              Read more
+            </Button>
           </div>
         </div>
 

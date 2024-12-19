@@ -2,7 +2,6 @@ import { IPost } from "@shared/types/post";
 import { IGetUser } from "@shared/types/user";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import TimeAgo from "../TimeAgo";
