@@ -10,10 +10,11 @@ import {
 import { postCategory } from "@/config/postCategory.config";
 import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 interface ISearchParams {
+  [key: string]: string;
   searchTerm: string;
   sort: string;
   category: string;
@@ -22,46 +23,38 @@ interface ISearchParams {
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams>({
     searchTerm: "",
-    sort: "desc",
-    category: "uncategorized",
+    category: "",
+    sort: "",
   });
   const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState<boolean>(true);
 
+  const navigate = useNavigate();
   const location = useLocation();
 
+  // update search params from URL
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get("searchTerm");
-    const sortFromUrl = urlParams.get("sort");
-    const categoryFromUrl = urlParams.get("category");
+    setSearchParams({
+      searchTerm: urlParams.get("searchTerm") || "",
+      category: urlParams.get("category") || "",
+      sort: urlParams.get("sort") || "desc",
+    });
+  }, [location.search]);
 
-    if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
-      setSearchParams({
-        ...searchParams,
-        searchTerm: searchTermFromUrl ?? searchParams.searchTerm,
-        sort: sortFromUrl ?? searchParams.sort,
-        category: categoryFromUrl ?? searchParams.category,
-      });
-    }
-
+  // fetch posts when search params change
+  useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const searchQuery = urlParams.toString();
+        const searchQuery = new URLSearchParams(searchParams).toString();
         const res = await fetch(`/api/post/getposts?${searchQuery}`);
-        if (!res.ok) {
-          return;
-        }
+        if (!res.ok) return;
 
         const data: IPostResponse = await res.json();
         setPosts(data.posts);
-        if (data.posts.length === 9) {
-          setShowMore(true);
-        } else {
-          setShowMore(false);
-        }
+        setShowMore(data.posts.length === 9);
       } catch (err) {
         console.error(err);
       } finally {
@@ -70,20 +63,32 @@ const SearchPage = () => {
     };
 
     fetchPosts();
-  }, [location.search]);
+  }, [searchParams]);
 
-  const handleChange = (id: string, value: string) => {
-    if (id === "sort") {
-      const order = value || "desc";
-      setSearchParams({ ...searchParams, sort: order });
-    }
-    if (id === "category") {
-      const category = value || "uncategorized";
-      setSearchParams({ ...searchParams, category });
-    }
+  const handleChange = (id: keyof ISearchParams, value: string) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
 
-  console.log(searchParams);
+  useEffect(() => {
+    const searchQuery = new URLSearchParams(searchParams).toString();
+    navigate(`/search?${searchQuery}`, { replace: true });
+  }, [searchParams, navigate]);
+
+  //   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     const urlParams = new URLSearchParams(location.search);
+  //     urlParams.set("sort", searchParams.sort);
+  //     urlParams.set("category", searchParams.category);
+
+  //     const searchQuery = urlParams.toString();
+
+  //     navigate(`/search?${searchQuery}`);
+  //   };
+
+  //   console.log(searchParams);
   //   console.log(posts);
 
   return (
@@ -98,14 +103,20 @@ const SearchPage = () => {
           <div className="text-gray-500">Results for</div> &nbsp;
           {searchParams.searchTerm}
         </h1>
-        <div className="flex justify-between flex-row gap-4">
+        <form className="flex justify-between flex-row gap-4">
           {/* category */}
-          <Select onValueChange={(value) => handleChange("category", value)}>
+          <Select
+            onValueChange={(value) => {
+              handleChange("category", value);
+            }}
+            defaultValue=""
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              {postCategory.map((category) => (
+              {/* <SelectItem value="all">All</SelectItem> */}
+              {postCategory.slice(1).map((category) => (
                 <SelectItem key={category.name} value={category.value}>
                   {category.name}
                 </SelectItem>
@@ -123,7 +134,7 @@ const SearchPage = () => {
               <SelectItem value="asc">Oldest</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </form>
 
         {/* search */}
         {posts.map((post) => (

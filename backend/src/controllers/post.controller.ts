@@ -28,7 +28,7 @@ export const getPosts = async (
   const startIndex = parseInt(req.query.startIndex as string) || 0;
   const limit = parseInt(req.query.limit as string) || 9;
   // 1 = asc, -1 = desc
-  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
   try {
     // construct the query as needed
