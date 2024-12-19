@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import HotPostCard from "./HotPostCard";
+import { IGetUser } from "@shared/types/user";
 
 const HotPosts = () => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
+  const [author, setAuthor] = useState<IGetUser | null>(null);
 
   useEffect(() => {
     try {
@@ -15,6 +17,19 @@ const HotPosts = () => {
 
         if (res.ok) {
           setRecentPosts(data);
+        }
+
+        const authorId = data[0].createdBy;
+
+        if (authorId) {
+          const authorRes = await fetch(`/api/${authorId}`);
+          const authorData: IGetUser = await authorRes.json();
+
+          if (!authorRes.ok) {
+            throw new Error("Failed to fetch author");
+          }
+
+          setAuthor(authorData);
         }
       };
 
@@ -38,8 +53,13 @@ const HotPosts = () => {
             <span className="lg:text-4xl text-xl font-bold pb-4">
               {recentPosts[0].title}
             </span>
-            <span>By {recentPosts[0].createdBy}</span>
-            <div>button for read more</div>
+            <span>By {author?.username}</span>
+            <p
+              className=" mb-4 line-clamp-1"
+              dangerouslySetInnerHTML={{ __html: recentPosts[0].content }}
+            />
+
+            {/* {recentPosts[0].category} */}
             <Button className="bg-white text-black">Read more</Button>
           </div>
         </div>
