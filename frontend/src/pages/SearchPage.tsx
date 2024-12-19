@@ -7,8 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { postCategory } from "@/config/postCategory.config";
 import { IPost, IPostResponse } from "@shared/types/post";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 interface ISearchParams {
@@ -25,6 +27,7 @@ const SearchPage = () => {
   });
   const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showMore, setShowMore] = useState<boolean>(true);
 
   const location = useLocation();
 
@@ -54,6 +57,11 @@ const SearchPage = () => {
 
         const data: IPostResponse = await res.json();
         setPosts(data.posts);
+        if (data.posts.length === 9) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -64,8 +72,19 @@ const SearchPage = () => {
     fetchPosts();
   }, [location.search]);
 
+  const handleChange = (id: string, value: string) => {
+    if (id === "sort") {
+      const order = value || "desc";
+      setSearchParams({ ...searchParams, sort: order });
+    }
+    if (id === "category") {
+      const category = value || "uncategorized";
+      setSearchParams({ ...searchParams, category });
+    }
+  };
+
   console.log(searchParams);
-  console.log(posts);
+  //   console.log(posts);
 
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
@@ -79,33 +98,38 @@ const SearchPage = () => {
           <div className="text-gray-500">Results for</div> &nbsp;
           {searchParams.searchTerm}
         </h1>
-        <div className="flex justify-between flex-col sm:flex-row">
+        <div className="flex justify-between flex-row gap-4">
           {/* category */}
-          <Select>
+          <Select onValueChange={(value) => handleChange("category", value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Motorcycle</SelectItem>
-              <SelectItem value="2">Gear</SelectItem>
+              {postCategory.map((category) => (
+                <SelectItem key={category.name} value={category.value}>
+                  {category.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
           {/* sort by */}
-          <Select>
+          <Select onValueChange={(value) => handleChange("sort", value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Latest</SelectItem>
-              <SelectItem value="2">Oldest</SelectItem>
+              <SelectItem value="desc">Latest</SelectItem>
+              <SelectItem value="asc">Oldest</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* search */}
         {posts.map((post) => (
-          <SearchItem post={post} />
+          <Link key={post._id} to={`/blogs/post/${post.slug}`}>
+            <SearchItem post={post} />
+          </Link>
         ))}
       </div>
     </div>
