@@ -34,9 +34,9 @@ const HomePage = () => {
           <RecentPosts limit={9} />
         </div>
 
-        <div className="rounded-md border overflow-hidden relative my-12">
+        <div className="rounded-md border overflow-hidden relative my-12 h-[300px]">
           <img
-            className="w-full h-[300px] object-cover opacity-20"
+            className="w-full h-full object-cover filter contrast-125 brightness-75"
             alt="group ride image"
             src="https://images.unsplash.com/photo-1690540293122-14d3051a5fe5?q=80&w=2698&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           />
