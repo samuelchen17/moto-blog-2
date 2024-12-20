@@ -20,6 +20,8 @@ interface ISearchParams {
   category: string;
 }
 
+// searching is bugged, when searching by word
+
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams>({
     searchTerm: "",
@@ -42,6 +44,12 @@ const SearchPage = () => {
       sort: urlParams.get("sort") || "desc",
     });
   }, [location.search]);
+
+  // navigate to the new page
+  useEffect(() => {
+    const searchQuery = new URLSearchParams(searchParams).toString();
+    navigate(`/search?${searchQuery}`, { replace: true });
+  }, [searchParams]);
 
   // fetch posts when search params change
   useEffect(() => {
@@ -71,11 +79,6 @@ const SearchPage = () => {
       [id]: value,
     }));
   };
-
-  useEffect(() => {
-    const searchQuery = new URLSearchParams(searchParams).toString();
-    navigate(`/search?${searchQuery}`, { replace: true });
-  }, [searchParams, navigate]);
 
   const handleShowMore = async () => {
     const startIndex = posts.length.toString();
