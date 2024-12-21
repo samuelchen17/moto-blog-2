@@ -35,6 +35,10 @@ const SearchPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // update search params
+  // navigate to url
+  // fetch based on url
+
   // update search params from URL
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -102,20 +106,6 @@ const SearchPage = () => {
       console.error("Error:", err);
     }
   };
-
-  //   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     const urlParams = new URLSearchParams(location.search);
-  //     urlParams.set("sort", searchParams.sort);
-  //     urlParams.set("category", searchParams.category);
-
-  //     const searchQuery = urlParams.toString();
-
-  //     navigate(`/search?${searchQuery}`);
-  //   };
-
-  //   console.log(searchParams);
-  //   console.log(posts);
 
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
