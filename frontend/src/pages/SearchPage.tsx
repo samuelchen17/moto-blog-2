@@ -47,16 +47,7 @@ const SearchPage = () => {
       category: urlParams.get("category") || "",
       sort: urlParams.get("sort") || "desc",
     });
-  }, [location.search]);
 
-  // navigate to the new page
-  useEffect(() => {
-    const searchQuery = new URLSearchParams(searchParams).toString();
-    navigate(`/search?${searchQuery}`, { replace: true });
-  }, [searchParams]);
-
-  // fetch posts when search params change
-  useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
@@ -75,7 +66,17 @@ const SearchPage = () => {
     };
 
     fetchPosts();
-  }, [searchParams]);
+  }, [location.search]);
+
+  // navigate to the new page
+  //   useEffect(() => {
+  //     const searchQuery = new URLSearchParams(searchParams).toString();
+
+  //     // check if new query string is different from current to prevent infinite looping
+  //     if (location.search !== `?${searchQuery}`) {
+  //       navigate(`/search?${searchQuery}`, { replace: true });
+  //     }
+  //   }, [searchParams, navigate, location.search]);
 
   const handleChange = (id: keyof ISearchParams, value: string) => {
     setSearchParams((prev) => ({

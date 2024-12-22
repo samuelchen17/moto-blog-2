@@ -10,7 +10,16 @@ const SearchBar = () => {
 
   console.log(searchTerm);
 
-  // useEffect to get search term from url
+  // submit first
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+
+    navigate(`/search?${urlParams.toString()}`);
+  };
+
+  // then useEffect to get search term from url
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
@@ -19,14 +28,6 @@ const SearchBar = () => {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set("searchTerm", searchTerm);
-
-    navigate(`/search?${urlParams.toString()}`);
-  };
 
   return (
     <form onSubmit={handleSubmit}>
