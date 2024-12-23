@@ -174,7 +174,8 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <Link
-                      to={`/update-post/${post._id}`}
+                      // to={`/update-post/${post._id}`}
+                      to={`/dashboard/?tab=update-post/${post._id}`}
                       className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                     >
                       Edit

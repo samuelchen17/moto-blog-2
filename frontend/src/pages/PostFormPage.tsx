@@ -21,12 +21,16 @@ import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
-const PostFormPage = () => {
+interface IPostFormPageProps {
+  postId?: String;
+}
+
+const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const [imageUploading, setImageUploading] = useState<boolean>(false);
-  const { postId } = useParams<{ postId: string }>();
+  // const { postId } = useParams<{ postId: string }>();
 
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user

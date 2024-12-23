@@ -18,7 +18,7 @@ const RootLayout = () => {
       {/* <NavBarSidebar /> */}
       <div>
         <header>
-          <nav>
+          <nav className="border-b">
             <NavBar />
           </nav>
         </header>

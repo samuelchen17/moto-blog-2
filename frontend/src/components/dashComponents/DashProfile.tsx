@@ -1,6 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +14,7 @@ import { updateStop } from "../../redux/features/user/userSlice";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../../config/firebase.config";
 import { deleteTempImageSuccess } from "../../redux/features/image/imageSlice";
+import { Button } from "../ui/button";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -53,7 +54,7 @@ const DashProfile = () => {
   }, [tempImagePath]);
 
   return (
-    <div className="w-full mx-auto px-4">
+    <div className="w-full mx-auto">
       <h1 className="text-2xl">Profile</h1>
 
       <hr></hr>

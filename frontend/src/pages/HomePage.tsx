@@ -17,10 +17,10 @@ const HomePage = () => {
     <>
       <ImageBanner img="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
         <div className="text-center">
-          <h1 className="uppercase font-bold text-4xl md:text-6xl lg:text-8xl text-white m-4">
-            Welcome to SCMOTO
+          <h1 className="font-bold text-4xl md:text-6xl lg:text-8xl text-white m-4">
+            Welcome to MotOce
           </h1>
-          <h2 className="text-2xl md:text-3xl  lg:text-4xl font-bold">
+          <h2 className="text-2xl md:text-3xl  lg:text-4xl font-bold  text-white">
             Where Aussie Bikers get together
           </h2>
         </div>

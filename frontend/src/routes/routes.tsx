@@ -6,7 +6,7 @@ import {
 import RootLayout from "../layouts/RootLayout";
 import HomePage from "../pages/HomePage";
 import DashboardPage from "../pages/DashboardPage";
-import BlogsPage from "../pages/BlogsPage";
+// import BlogsPage from "../pages/BlogsPage";
 import AboutPage from "../pages/AboutPage";
 import AuthRoute from "../components/AuthRoute";
 import AdminRoute from "../components/AdminRoute";
@@ -33,7 +33,7 @@ const router = createBrowserRouter(
           />
         </Route>
       </Route>
-      <Route path="blogs" element={<BlogsPage />} />
+      {/* <Route path="blogs" element={<BlogsPage />} /> */}
       <Route path="blogs/post/:postSlug" element={<PostPage />} />
       <Route path="search" element={<SearchPage />} />
       <Route path={navLinks[2].path} element={<AboutPage />} />

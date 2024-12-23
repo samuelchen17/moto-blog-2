@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import DashProfile from "../components/dashComponents/DashProfile";
 import DashSidebar from "../components/dashComponents/DashSidebar";
 import DashHeader from "../components/dashComponents/DashHeader";
@@ -10,18 +10,26 @@ import DashPosts from "../components/dashComponents/dashAdminComponents/DashPost
 import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashEvents from "../components/dashComponents/dashAdminComponents/DashEvents";
+import PostFormPage from "./PostFormPage";
 
 const DashboardPage = () => {
-  const location = useLocation();
-  const [tab, setTab] = useState<string>("");
+  // const location = useLocation();
+  // const [tab, setTab] = useState<string>("");
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get("tab");
-    if (tabFromUrl) {
-      setTab(tabFromUrl);
-    }
-  }, [location.search]);
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(location.search);
+  //   const tabFromUrl = urlParams.get("tab");
+  //   if (tabFromUrl) {
+  //     setTab(tabFromUrl);
+  //   }
+  // }, [location.search]);
+
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  // check to see if the tab has a post id
+  const match = tab?.match(/^update-post\/(.+)$/);
+  const postId = match ? match[1] : null;
 
   return (
     <SidebarProvider className="flex flex-col">
@@ -32,7 +40,7 @@ const DashboardPage = () => {
         <DashSidebar />
 
         {/* dashboard */}
-        <div className="w-full max-w-screen-xl mx-auto">
+        <div className="w-full max-w-screen-xl mx-auto mt-4 px-4">
           {tab === "dashboard" && <Dashboard />}
 
           {/* profile */}
@@ -52,6 +60,14 @@ const DashboardPage = () => {
 
           {/* add events */}
           {tab === "events" && <DashEvents />}
+
+          {/* write post */}
+          {tab === "create-post" && <PostFormPage key="create" />}
+
+          {/* edit post */}
+          {postId && <PostFormPage key="update" postId={postId} />}
+
+          {/* {tab === "update-post/:postId" && (<PostFormPage key="update" />)} */}
         </div>
       </div>
     </SidebarProvider>
