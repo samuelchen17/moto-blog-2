@@ -27,6 +27,7 @@ const DashboardPage = () => {
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
 
+  // check to see if the tab has a post id
   const match = tab?.match(/^update-post\/(.+)$/);
   const postId = match ? match[1] : null;
 
