@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import DashProfile from "../components/dashComponents/DashProfile";
 import DashSidebar from "../components/dashComponents/DashSidebar";
 import DashHeader from "../components/dashComponents/DashHeader";
@@ -13,16 +13,22 @@ import DashEvents from "../components/dashComponents/dashAdminComponents/DashEve
 import PostFormPage from "./PostFormPage";
 
 const DashboardPage = () => {
-  const location = useLocation();
-  const [tab, setTab] = useState<string>("");
+  // const location = useLocation();
+  // const [tab, setTab] = useState<string>("");
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get("tab");
-    if (tabFromUrl) {
-      setTab(tabFromUrl);
-    }
-  }, [location.search]);
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(location.search);
+  //   const tabFromUrl = urlParams.get("tab");
+  //   if (tabFromUrl) {
+  //     setTab(tabFromUrl);
+  //   }
+  // }, [location.search]);
+
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  const match = tab?.match(/^update-post\/(.+)$/);
+  const postId = match ? match[1] : null;
 
   return (
     <SidebarProvider className="flex flex-col">
@@ -58,7 +64,9 @@ const DashboardPage = () => {
           {tab === "create-post" && <PostFormPage key="create" />}
 
           {/* edit post */}
-          {tab === "update-post/:postId" && <PostFormPage key="update" />}
+          {postId && <PostFormPage key="update" postId={postId} />}
+
+          {/* {tab === "update-post/:postId" && (<PostFormPage key="update" />)} */}
         </div>
       </div>
     </SidebarProvider>
