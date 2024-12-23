@@ -10,6 +10,7 @@ import DashPosts from "../components/dashComponents/dashAdminComponents/DashPost
 import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashEvents from "../components/dashComponents/dashAdminComponents/DashEvents";
+import PostFormPage from "./PostFormPage";
 
 const DashboardPage = () => {
   const location = useLocation();
@@ -52,6 +53,12 @@ const DashboardPage = () => {
 
           {/* add events */}
           {tab === "events" && <DashEvents />}
+
+          {/* write post */}
+          {tab === "create-post" && <PostFormPage key="create" />}
+
+          {/* edit post */}
+          {tab === "update-post/:postId" && <PostFormPage key="update" />}
         </div>
       </div>
     </SidebarProvider>
