@@ -8,7 +8,7 @@ const DashHeader = () => {
   );
 
   return (
-    <div className="flex flex-row gap-2 mx-4 my-4">
+    <div className="flex flex-row gap-2 px-4 py-4 border-b">
       <Avatar rounded img={currentUser?.user.profilePicture} />
       <div className="flex flex-col gap">
         <span className="text-lg font-semibold">

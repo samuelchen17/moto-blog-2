@@ -1,6 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Label, Spinner, TextInput } from "flowbite-react";
 import { IUpdateUserPayload } from "@shared/types/user";
 import {
   handleDashFormChange,
@@ -10,6 +10,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { useEffect, useState } from "react";
 import { updateStop } from "../../redux/features/user/userSlice";
 import DashSettingsDeleteUser from "./DashSettingsDeleteUser";
+import { Button } from "../ui/button";
 
 const DashSettings = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -24,13 +25,13 @@ const DashSettings = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-full mx-auto px-4">
+    <div className="w-full mx-auto">
       <h1 className="text-2xl">Settings</h1>
 
       <hr></hr>
 
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={handleDashFormSubmit({
           formData,
           setFormData,

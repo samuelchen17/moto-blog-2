@@ -12,7 +12,7 @@ const NavBar = () => {
   const path = useLocation().pathname;
 
   return (
-    <nav className="flex flex-row justify-between max-w-screen-xl mx-auto h-[80px] items-center px-4 border-b">
+    <nav className="flex flex-row justify-between max-w-screen-xl mx-auto h-[80px] items-center px-4 w-full">
       <div className="flex items-center gap-2">
         {/* navbar collapse */}
         {/* <Menu className="md:hidden" size={30} /> */}

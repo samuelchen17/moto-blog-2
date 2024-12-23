@@ -11,7 +11,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
         off: "w-64",
       },
       inner:
-        "h-full overflow-y-auto overflow-x-hidden rounded bg-gray-50 px-3 py-4 dark:bg-red-800",
+        "h-full overflow-y-auto overflow-x-hidden rounded bg-gray-50 px-3 py-4 dark:bg-background border-r",
     },
     collapse: {
       button:

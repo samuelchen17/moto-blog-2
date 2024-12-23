@@ -32,7 +32,7 @@ const DashboardPage = () => {
         <DashSidebar />
 
         {/* dashboard */}
-        <div className="w-full max-w-screen-xl mx-auto">
+        <div className="w-full max-w-screen-xl mx-auto mt-4 px-4">
           {tab === "dashboard" && <Dashboard />}
 
           {/* profile */}
