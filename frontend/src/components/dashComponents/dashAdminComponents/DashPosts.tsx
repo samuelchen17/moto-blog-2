@@ -7,6 +7,14 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const DashPosts = () => {
   const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
@@ -16,6 +24,9 @@ const DashPosts = () => {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+
+  // implement accordion so user doesnt have to scrolls
+  // Dropdown to select hot posts, could change to algorithm based on interactivity with users?
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -94,6 +105,24 @@ const DashPosts = () => {
 
   return (
     <div className="w-full">
+      {/* implement select hotpost section */}
+      <span>Hot Post Selection</span>
+      <form>
+        <span>Post 1</span>
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select Post" />
+          </SelectTrigger>
+          <SelectContent>
+            {userAdminPosts.map((post) => (
+              <SelectItem key={post._id} value={post._id}>
+                {post.slug}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </form>
+
       {currentUser?.user.admin && userAdminPosts.length > 0 ? (
         // implement tailwind-scrollbar? for mobile
         <div className="overflow-x-auto">

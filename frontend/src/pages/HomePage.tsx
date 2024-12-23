@@ -16,9 +16,14 @@ const HomePage = () => {
   return (
     <>
       <ImageBanner img="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-        <h1 className="uppercase font-bold text-8xl text-white">
-          buy that bike
-        </h1>
+        <div className="text-center">
+          <h1 className="uppercase font-bold text-4xl md:text-6xl lg:text-8xl text-white m-4">
+            Welcome to SCMOTO
+          </h1>
+          <h2 className="text-2xl md:text-3xl  lg:text-4xl font-bold">
+            Where Aussie Bikers get together
+          </h2>
+        </div>
       </ImageBanner>
 
       <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
@@ -33,6 +38,9 @@ const HomePage = () => {
           <h2 className="font-bold text-2xl mb-6">Recent posts</h2>
           <RecentPosts limit={9} />
         </div>
+
+        {/* upcoming events */}
+        <span>Add events list here</span>
 
         <div className="rounded-md border overflow-hidden relative my-12 h-[300px]">
           <img

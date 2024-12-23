@@ -8,6 +8,7 @@ import {
   Users,
   FileText,
   NotebookPen,
+  CalendarPlus,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -60,6 +61,12 @@ export const dashNavItems: IDashNavItems[] = [
     name: "posts",
     path: "/dashboard/?tab=posts",
     icon: FileText,
+    admin: true,
+  },
+  {
+    name: "events",
+    path: "/dashboard/?tab=events",
+    icon: CalendarPlus,
     admin: true,
   },
 ];

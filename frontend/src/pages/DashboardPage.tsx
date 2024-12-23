@@ -9,6 +9,7 @@ import DashComments from "../components/dashComponents/dashAdminComponents/DashC
 import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";
 import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import DashEvents from "../components/dashComponents/dashAdminComponents/DashEvents";
 
 const DashboardPage = () => {
   const location = useLocation();
@@ -48,6 +49,9 @@ const DashboardPage = () => {
 
           {/* users */}
           {tab === "users" && <DashUsers />}
+
+          {/* add events */}
+          {tab === "events" && <DashEvents />}
         </div>
       </div>
     </SidebarProvider>

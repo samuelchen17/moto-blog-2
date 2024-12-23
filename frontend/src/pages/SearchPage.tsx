@@ -85,7 +85,9 @@ const SearchPage = () => {
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
       {/* mobile screen search */}
-      <div className="sm:hidden">
+      <div
+      //   className="sm:hidden"
+      >
         <SearchBar />
       </div>
 

@@ -30,7 +30,6 @@ const NavBar = () => {
         <NavBarThemeBtn />
 
         {/* search component */}
-
         <Button className="rounded-full">
           <Link to="/search">
             <Search />
@@ -41,10 +40,10 @@ const NavBar = () => {
         <NavBarAuth />
       </div>
       {/* navigation links */}
-      <div className="hidden md:block">
-        {/* <NavBarLinks currentPath={path} /> */}
+      {/* <div className="hidden md:block">
+        <NavBarLinks currentPath={path} />
         <SearchBar />
-      </div>
+      </div> */}
     </nav>
   );
 };
