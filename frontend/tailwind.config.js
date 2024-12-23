@@ -3,8 +3,8 @@ const typography = require("@tailwindcss/typography");
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
   theme: {
   	extend: {
   		colors: {
@@ -56,10 +56,12 @@ export default {
   				accent: 'hsl(var(--sidebar-accent))',
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
+  				ring: 'hsl(var(--sidebar-ring))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))'
   			}
   		},
-  		typography: '({ theme }) => ({\\\\n        DEFAULT: {\\\\n          css: {\\\\n            "--tw-prose-bullets": theme("colors.pink[400]"),\\\\n            li: {\\\\n              p: {\\\\n                margin: 0,\\\\n              },\\\\n            },\\\\n          },\\\\n        },\\\\n      })',
+  		typography: '({ theme }) => ({\\\\\\\\n        DEFAULT: {\\\\\\\\n          css: {\\\\\\\\n            "--tw-prose-bullets": theme("colors.pink[400]"),\\\\\\\\n            li: {\\\\\\\\n              p: {\\\\\\\\n                margin: 0,\\\\\\\\n              },\\\\\\\\n            },\\\\\\\\n          },\\\\\\\\n        },\\\\\\\\n      })',
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

@@ -1,8 +1,9 @@
-import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
+import { Avatar } from "flowbite-react";
+import { Button } from "../ui/button";
 import AuthModal from "../authModal/AuthModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { PiSignOutBold } from "react-icons/pi";
+// import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
   openRegister,
@@ -10,6 +11,18 @@ import {
 } from "../../redux/features/modal/authModalSlice";
 import { dashNavItems } from "../../config/dashNavItems.config";
 import userSignOut from "../../utils/userSignOut.utils";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, User } from "lucide-react";
+import React from "react";
 
 const NavBarAuth = () => {
   const { currentUser } = useAppSelector(
@@ -22,58 +35,74 @@ const NavBarAuth = () => {
   return (
     <>
       {currentUser ? (
-        <Dropdown
-          arrowIcon={false}
-          inline
-          label={
-            <Avatar alt="user" rounded img={currentUser.user.profilePicture} />
-          }
-        >
-          <Dropdown.Header>
-            <span className="block text-sm">{currentUser.user.username}</span>
-            <span className="block truncate text-sm font-medium">
-              {currentUser.user.email}
-            </span>
-          </Dropdown.Header>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar
+                alt="user"
+                rounded
+                img={currentUser.user.profilePicture}
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-44">
+              <DropdownMenuLabel>
+                <span className="block text-sm">
+                  {currentUser.user.username}
+                </span>
+                <span className="block truncate text-sm font-medium">
+                  {currentUser.user.email}
+                </span>
+              </DropdownMenuLabel>
 
-          {dashNavItems
-            .filter((item) => !item.admin || currentUser?.user.admin)
-            .map((item) => (
-              <Dropdown.Item
-                key={item.name}
-                as={Link}
-                to={item.path}
-                icon={item.icon}
-                className="capitalize"
-              >
-                {item.name}
-              </Dropdown.Item>
-            ))}
+              <DropdownMenuSeparator />
 
-          <Dropdown.Divider />
-          <Dropdown.Item
-            icon={PiSignOutBold}
-            onClick={() => userSignOut({ dispatch })}
-          >
-            Sign Out
-          </Dropdown.Item>
-        </Dropdown>
+              {/* main */}
+              <DropdownMenuGroup>
+                {dashNavItems
+                  .filter((item) => !item.admin || currentUser?.user.admin)
+                  .map((item) => (
+                    <Link to={item.path} key={item.name}>
+                      <DropdownMenuItem className="capitalize">
+                        {item.icon &&
+                          React.createElement(item.icon, {
+                            className: "mr-1 h-4 w-4",
+                          })}
+                        <span> {item.name}</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  ))}
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => userSignOut({ dispatch })}>
+                <LogOut className="mr-1" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       ) : (
         <>
-          <Button color="none" onClick={() => dispatch(openLogin())}>
+          <Button
+            variant="ghost"
+            className="rounded-full sm:block hidden"
+            onClick={() => dispatch(openLogin())}
+          >
             Log In
           </Button>
           <Button
-            className="bg-black dark:bg-white"
-            pill
+            className="rounded-full hidden lg:block"
             onClick={() => dispatch(openRegister())}
           >
             Sign Up
           </Button>
+          <button onClick={() => dispatch(openLogin())}>
+            <User className=" sm:hidden " size={24} />
+          </button>
         </>
       )}
 
-      <Navbar.Toggle />
+      {/* <Navbar.Toggle /> */}
 
       {/* authentication modal */}
       <AuthModal />
@@ -82,3 +111,46 @@ const NavBarAuth = () => {
 };
 
 export default NavBarAuth;
+
+{
+  /* <Dropdown
+arrowIcon={false}
+inline
+label={
+  <Avatar
+    alt="user"
+    rounded
+    img={currentUser.user.profilePicture}
+  />
+}
+>
+<Dropdown.Header>
+  <span className="block text-sm">{currentUser.user.username}</span>
+  <span className="block truncate text-sm font-medium">
+    {currentUser.user.email}
+  </span>
+</Dropdown.Header>
+
+{dashNavItems
+  .filter((item) => !item.admin || currentUser?.user.admin)
+  .map((item) => (
+    <Dropdown.Item
+      key={item.name}
+      as={Link}
+      to={item.path}
+      icon={item.icon}
+      className="capitalize"
+    >
+      {item.name}
+    </Dropdown.Item>
+  ))}
+
+<Dropdown.Divider />
+<Dropdown.Item
+  icon={PiSignOutBold}
+  onClick={() => userSignOut({ dispatch })}
+>
+  Sign Out
+</Dropdown.Item>
+</Dropdown> */
+}

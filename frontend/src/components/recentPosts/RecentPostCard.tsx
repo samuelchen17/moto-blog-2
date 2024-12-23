@@ -2,13 +2,13 @@ import { IPost } from "@shared/types/post";
 import { IGetUser } from "@shared/types/user";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { FaComment, FaSave, FaThumbsUp } from "react-icons/fa";
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -36,12 +36,12 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   }, [post]);
 
   return (
-    <Card>
+    <Card className="min-h-[430px]">
       <Link to={`/blogs/post/${post.slug}`}>
         <img
           src={post.image}
           alt={post.title}
-          className="h-[260px] w-full object-cover rounded-t-md border-b"
+          className="h-[160px] w-full object-cover rounded-t-md border-b"
         />
       </Link>
       <CardHeader>
@@ -56,24 +56,25 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
 
           <div className="flex gap-2 items-center ">
             {/* implement */}
-            <FaThumbsUp />
+            {/* <FaThumbsUp />
             <FaComment />
-            <FaSave />
+            <FaSave /> */}
+            {format(new Date(post.createdAt), "dd MMM yyyy")}
           </div>
         </CardDescription>
-        <CardTitle className="capitalize pt-1">{post.title}</CardTitle>
+        <CardTitle className="capitalize pt-3">{post.title}</CardTitle>
       </CardHeader>
-      <CardContent className="">
-        <Badge variant="outline" className="uppercase mx-auto">
+      {/* <CardContent className=""></CardContent> */}
+      <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
+        <Badge variant="outline" className="uppercase mr-auto">
           {post.category}
         </Badge>
-      </CardContent>
-
-      <CardFooter>
+        {/* <CardFooter className="outline"> */}
         <Button>
           <Link to={`/blogs/post/${post.slug}`}>Read more</Link>
         </Button>
-      </CardFooter>
+        {/* </CardFooter> */}
+      </div>
     </Card>
   );
 };

@@ -4,6 +4,7 @@ import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 import { IPostResponse, IPost } from "@shared/types/post";
+import { Config } from "../models/config.model";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -27,7 +28,7 @@ export const getPosts = async (
   const startIndex = parseInt(req.query.startIndex as string) || 0;
   const limit = parseInt(req.query.limit as string) || 9;
   // 1 = asc, -1 = desc
-  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
   try {
     // construct the query as needed
@@ -251,5 +252,36 @@ export const updatePost = async (
   } catch (err) {
     console.error("Error updating post:", err);
     next(new CustomError(500, "Failed to update post"));
+  }
+};
+
+export const getHotPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // construct the query as needed
+    const config = await Config.findOne({ _id: "config" });
+
+    if (!config) {
+      return next(new CustomError(404, "Configuration not found"));
+    }
+
+    // extract post ids
+    const postIds = config.hot_articles;
+
+    const posts = await Post.find({
+      _id: { $in: postIds },
+    });
+
+    if (posts.length === 0) {
+      return next(new CustomError(404, "No hot articles found"));
+    }
+
+    res.status(200).json(posts);
+  } catch (err) {
+    console.error("Error fetching hot articles:", err);
+    next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };

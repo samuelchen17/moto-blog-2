@@ -1,10 +1,15 @@
 import { FC, SVGProps } from "react";
-import { MdOutlinePostAdd, MdSpaceDashboard } from "react-icons/md";
-import { BiSolidCommentDetail } from "react-icons/bi";
-import { HiDocumentText } from "react-icons/hi2";
-import { IoMdSettings } from "react-icons/io";
-import { HiUser } from "react-icons/hi";
-import { PiUsersFourFill } from "react-icons/pi";
+
+import {
+  LayoutDashboard,
+  User,
+  Settings,
+  MessageSquareText,
+  Users,
+  FileText,
+  NotebookPen,
+  CalendarPlus,
+} from "lucide-react";
 
 interface IDashNavItems {
   name: string;
@@ -19,43 +24,49 @@ export const dashNavItems: IDashNavItems[] = [
   {
     name: "dashboard",
     path: "/dashboard/?tab=dashboard",
-    icon: MdSpaceDashboard,
+    icon: LayoutDashboard,
     admin: true,
   },
   {
     name: "profile",
     path: "/dashboard?tab=profile",
-    icon: HiUser,
+    icon: User,
     label: true,
     labelColor: "dark",
   },
   {
     name: "settings",
     path: "/dashboard?tab=settings",
-    icon: IoMdSettings,
+    icon: Settings,
   },
   {
     name: "comments",
     path: "/dashboard/?tab=comments",
-    icon: BiSolidCommentDetail,
+    icon: MessageSquareText,
     admin: true,
   },
   {
     name: "users",
     path: "/dashboard/?tab=users",
-    icon: PiUsersFourFill,
+    icon: Users,
     admin: true,
   },
   {
     name: "write",
     path: "/create-post",
-    icon: MdOutlinePostAdd,
+    icon: NotebookPen,
     admin: true,
   },
   {
     name: "posts",
     path: "/dashboard/?tab=posts",
-    icon: HiDocumentText,
+    icon: FileText,
+    admin: true,
+  },
+  {
+    name: "events",
+    path: "/dashboard/?tab=events",
+    icon: CalendarPlus,
     admin: true,
   },
 ];

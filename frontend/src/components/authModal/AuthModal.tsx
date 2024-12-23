@@ -21,7 +21,7 @@ const AuthModal = () => {
 
   return (
     <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
-      <Modal.Header />
+      <Modal.Header className="" />
       <Modal.Body>
         <AuthLayout isSignIn={isSignIn} />
       </Modal.Body>
@@ -45,7 +45,7 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({ isSignIn }) => {
         {isSignIn ? "Not registered?" : "Have an account?"}&nbsp;
         <button
           onClick={() => dispatch(toggleAuthMode())}
-          className="text-cyan-700 hover:underline dark:text-cyan-500"
+          className="text-black underline dark:text-white"
         >
           {isSignIn ? "Create account" : "Log in "}
         </button>

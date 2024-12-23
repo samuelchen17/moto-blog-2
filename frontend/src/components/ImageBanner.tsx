@@ -10,7 +10,7 @@ const ImageBanner: React.FC<ImageBannerProps> = ({ img, children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   return (
-    <div className="relative w-full h-[300px] lg:h-[600px]">
+    <div className="relative w-full h-[300px] lg:h-[500px] 2xl:h-[600px]">
       {isLoading && <Skeleton className="w-full h-full" />}
       <img
         alt="image banner"

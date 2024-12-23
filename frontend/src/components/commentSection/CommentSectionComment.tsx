@@ -1,7 +1,7 @@
 import { IComment } from "@shared/types/comment";
 import { IGetUser } from "@shared/types/user";
 import { useEffect, useState } from "react";
-import { formatDistanceToNow } from "date-fns";
+import TimeAgo from "../TimeAgo";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
@@ -12,13 +12,13 @@ import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
-const TimeAgo = ({ date }: { date: string | Date }) => {
-  return (
-    <span className="text-sm text-gray-500">
-      {formatDistanceToNow(new Date(date), { addSuffix: true })}
-    </span>
-  );
-};
+// const TimeAgo = ({ date }: { date: string | Date }) => {
+//   return (
+//     <span className="text-sm text-gray-500">
+//       {formatDistanceToNow(new Date(date), { addSuffix: true })}
+//     </span>
+//   );
+// };
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -169,7 +169,9 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
           <span className="font-bold truncate mr-1 text-sm">
             {commentBy ? `@${commentBy?.username}` : "Deleted User"}
           </span>
-          <TimeAgo date={comment.createdAt} />
+          <span className="text-sm text-gray-500">
+            <TimeAgo date={comment.createdAt} />
+          </span>
         </div>
 
         {/* text area for editing */}

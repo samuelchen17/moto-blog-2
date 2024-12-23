@@ -1,4 +1,4 @@
-import { Button } from "flowbite-react";
+import { Button } from "../ui/button";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from "../../config/firebase.config";
