@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IComment } from "@shared/types/comment";
+import { IComment } from "src/types";
 
 // interface IComment {
 //   content: string;

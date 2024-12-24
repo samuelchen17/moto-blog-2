@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:types": "bash ./scripts/generateTypes.sh",
+    "postinstall": "npm run generate:types"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.1",
