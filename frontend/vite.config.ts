@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000", // process.env.VITE_API_BASE_URL || "http://localhost:3000", implement prod
-        secure: false, // remove for prod implement
+        target: process.env.VITE_API_URL || "http://localhost:3000", //implement prod, change localhost to dev
+        secure: process.env.NODE_ENV === "production",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // remove "/api" before forward
       },
