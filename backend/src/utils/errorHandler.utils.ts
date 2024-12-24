@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IErrorRes } from "@shared/types/res";
+import { IErrorRes } from "src/types";
 
 // Custom error class to store HTTP status code
 export class CustomError extends Error {

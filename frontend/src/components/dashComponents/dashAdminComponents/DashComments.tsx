@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
-import { IComment, IAllCommentResponse } from "@shared/types/comment";
+import { IComment, IAllCommentResponse } from "src/types";
 
 // implement accordion for post and comments
 

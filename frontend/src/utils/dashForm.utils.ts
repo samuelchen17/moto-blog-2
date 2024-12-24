@@ -1,6 +1,6 @@
 import React from "react";
-import { IUpdateUserPayload } from "@shared/types/user";
-import { ISuccessRes } from "@shared/types/res";
+import { IUpdateUserPayload } from "src/types";
+import { ISuccessRes } from "src/types";
 import {
   updateFailure,
   updateStart,

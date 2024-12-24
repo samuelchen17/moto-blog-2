@@ -7,8 +7,8 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IGetUserResponse, IUpdateUserPayload } from "@shared/types/user";
-import { ISuccessRes } from "@shared/types/res";
+import { IGetUserResponse, IUpdateUserPayload } from "src/types";
+import { ISuccessRes } from "src/types";
 import { authentication, random } from "../helpers/user.helpers";
 import {
   getEmailValidationErrMsg,

@@ -3,7 +3,7 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { IPostResponse, IPost } from "@shared/types/post";
+import { IPostResponse, IPost } from "src/types";
 import { Config } from "../models/config.model";
 
 const window = new JSDOM("").window;

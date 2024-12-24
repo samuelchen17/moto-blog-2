@@ -10,10 +10,9 @@ import router from "./router/index.router";
 import config from "./config/config";
 
 const app = express();
-// const PORT = process.env.PORT || 6060; // if env PORT undefined, default to 6060
-
 app.use(
   cors({
+    origin: config.frontendUrl,
     credentials: true,
   })
 );

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { IGetUser, IGetUserResponse } from "@shared/types/user";
-import { IComment, IAllCommentResponse } from "@shared/types/comment";
-import { IPost, IPostResponse } from "@shared/types/post";
+import { IGetUser, IGetUserResponse } from "src/types";
+import { IComment, IAllCommentResponse } from "src/types";
+import { IPost, IPostResponse } from "src/types";
 import { Button, Table } from "flowbite-react";
 
 // implement styles, fix dashboard

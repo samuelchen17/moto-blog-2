@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IErrorRes, ISuccessRes } from "@shared/types/res";
+import { IErrorRes, ISuccessRes } from "src/types";
 
 interface IUserState {
   currentUser: ISuccessRes | null;

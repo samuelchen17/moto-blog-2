@@ -15,9 +15,10 @@ const config = {
     url: process.env.MONGODB_URL,
   },
   server: {
-    host: "localhost",
-    port: 3000,
+    host: "render",
+    port: process.env.PORT || 3000,
   },
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
   displayPicture: {
     default:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png",

@@ -23,7 +23,6 @@
     /* Path alias for shared folder */
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/*"],
       "@/*": ["./src/*"]
     }
   },

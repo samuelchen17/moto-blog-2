@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IPost } from "@shared/types/post";
+import { IPost } from "src/types";
 import config from "../config/config";
 
 // interface IPost extends Document {

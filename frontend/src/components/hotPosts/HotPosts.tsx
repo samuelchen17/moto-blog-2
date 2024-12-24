@@ -1,8 +1,8 @@
-import { IPost } from "@shared/types/post";
+import { IPost } from "src/types";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import HotPostCard from "./HotPostCard";
-import { IGetUser } from "@shared/types/user";
+import { IGetUser } from "src/types";
 import TimeAgo from "../TimeAgo";
 import { Link } from "react-router-dom";
 

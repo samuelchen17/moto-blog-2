@@ -4,7 +4,7 @@ import { Alert, Label, Spinner, TextInput } from "flowbite-react";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
-import { IUpdateUserPayload } from "@shared/types/user";
+import { IUpdateUserPayload } from "src/types";
 import {
   handleDashFormChange,
   handleDashFormSubmit,

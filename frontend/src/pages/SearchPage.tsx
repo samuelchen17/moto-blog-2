@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { postCategory } from "@/config/postCategory.config";
-import { IPost, IPostResponse } from "@shared/types/post";
+import { IPost, IPostResponse } from "src/types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -161,7 +161,6 @@ export default SearchPage;
 //   SelectValue,
 // } from "@/components/ui/select";
 // import { postCategory } from "@/config/postCategory.config";
-// import { IPost, IPostResponse } from "@shared/types/post";
 // import { useEffect, useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
 // import { useLocation } from "react-router-dom";

@@ -1,4 +1,4 @@
-import { IPost, IPostResponse } from "@shared/types/post";
+import { IPost, IPostResponse } from "src/types";
 import { useEffect, useState } from "react";
 import RecentPostCard from "./RecentPostCard";
 import {
