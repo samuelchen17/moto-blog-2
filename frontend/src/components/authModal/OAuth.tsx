@@ -6,8 +6,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { signInSuccess } from "../../redux/features/user/userSlice";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
 import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
-import { IGoogleAuthPayload } from "@shared/types/auth";
-
+import { IGoogleAuthPayload } from "src/types";
 const OAuth = () => {
   const dispatch = useAppDispatch();
   const auth = getAuth(firebaseApp);

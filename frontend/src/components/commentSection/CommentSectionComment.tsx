@@ -1,5 +1,5 @@
-import { IComment } from "@shared/types/comment";
-import { IGetUser } from "@shared/types/user";
+import { IComment } from "src/types";
+import { IGetUser } from "src/types";
 import { useEffect, useState } from "react";
 import TimeAgo from "../TimeAgo";
 import { FaThumbsUp } from "react-icons/fa";

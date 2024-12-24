@@ -1,9 +1,9 @@
 import { Separator } from "@/components/ui/separator";
-import { IPost } from "@shared/types/post";
+import { IPost } from "src/types";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
 import { useEffect, useState } from "react";
-import { IGetUser } from "@shared/types/user";
+import { IGetUser } from "src/types";
 
 const SearchItem = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);

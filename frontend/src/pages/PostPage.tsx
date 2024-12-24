@@ -1,11 +1,11 @@
 import { Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IPost, IPostResponse } from "@shared/types/post";
+import { IPost, IPostResponse } from "src/types";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
-import { IGetUser } from "@shared/types/user";
+import { IGetUser } from "src/types";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
 

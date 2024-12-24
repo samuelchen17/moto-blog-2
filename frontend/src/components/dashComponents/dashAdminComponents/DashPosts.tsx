@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import { IPostResponse, IPost } from "@shared/types/post";
+import { IPostResponse, IPost } from "src/types";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";

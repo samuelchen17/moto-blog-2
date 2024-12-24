@@ -12,9 +12,9 @@ import {
   toggleAuthModal,
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
-import { IErrorRes, ISuccessRes } from "@shared/types/res";
+import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
-import { ISignInAuthPayload, ISignUpAuthPayload } from "@shared/types/auth";
+import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 

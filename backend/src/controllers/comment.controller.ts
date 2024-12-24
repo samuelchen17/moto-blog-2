@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
-import { ICommentResponse, IAllCommentResponse } from "@shared/types/comment";
+import { ICommentResponse, IAllCommentResponse } from "src/types";
 
 export const createComment = async (
   req: Request,

@@ -9,7 +9,7 @@ import {
 } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
-import { IPostResponse, IPublishPostPayload } from "@shared/types/post";
+import { IPostResponse, IPublishPostPayload } from "src/types";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";

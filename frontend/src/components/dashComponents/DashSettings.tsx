@@ -1,7 +1,7 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { Alert, Label, Spinner, TextInput } from "flowbite-react";
-import { IUpdateUserPayload } from "@shared/types/user";
+import { IUpdateUserPayload } from "src/types";
 import {
   handleDashFormChange,
   handleDashFormSubmit,

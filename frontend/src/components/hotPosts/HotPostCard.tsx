@@ -1,5 +1,5 @@
-import { IPost } from "@shared/types/post";
-import { IGetUser } from "@shared/types/user";
+import { IPost } from "src/types";
+import { IGetUser } from "src/types";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";

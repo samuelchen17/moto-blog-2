@@ -11,8 +11,8 @@ import {
   IGoogleAuthPayload,
   ISignInAuthPayload,
   ISignUpAuthPayload,
-} from "@shared/types/auth";
-import { ISuccessRes } from "@shared/types/res";
+} from "src/types";
+import { ISuccessRes } from "src/types";
 import { UserDocument } from "../models/user.model";
 import {
   getEmailValidationErrMsg,
