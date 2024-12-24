@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const prodOrigin = [process.env.FRONTEND_URL].filter(Boolean) as string[];
+const devOrigin = [process.env.DEV_ORIGIN].filter(Boolean) as string[];
+
 const config = {
   mongo: {
     options: {
@@ -18,7 +21,7 @@ const config = {
     host: "render",
     port: process.env.PORT || 3000,
   },
-  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
+  frontendUrl: process.env.NODE_ENV === "production" ? prodOrigin : devOrigin,
   displayPicture: {
     default:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png",
@@ -28,4 +31,5 @@ const config = {
       "https://www.shutterstock.com/image-photo/motorcycle-parked-alone-on-asphalt-260nw-2153911847.jpg",
   },
 };
+
 export default config;
