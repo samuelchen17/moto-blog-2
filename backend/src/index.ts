@@ -20,7 +20,7 @@ app.use(
     // origin: config.frontendUrl,
     origin: (origin, callback) => {
       const allowedOrigins = [process.env.FRONTEND_URL];
-      if (allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error(`Not allowed by CORS: ${origin}`));
