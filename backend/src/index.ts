@@ -16,6 +16,9 @@ app.use(
     credentials: true,
   })
 );
+
+console.log(config.frontendUrl);
+
 app.use(compression()); // compresses all responses
 app.use(cookieParser());
 app.use(bodyParser.json()); // to parse JSON-formatted request bodies
