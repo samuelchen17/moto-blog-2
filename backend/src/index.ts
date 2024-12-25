@@ -20,7 +20,7 @@ app.use(
     // origin: config.frontendUrl,
     origin: (origin, callback) => {
       const allowedOrigins = [process.env.FRONTEND_URL];
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error(`Not allowed by CORS: ${origin}`));
@@ -30,7 +30,8 @@ app.use(
   })
 );
 
-// app.options("*", cors());
+// enable pre-flight across-the-board
+app.options("*", cors());
 
 app.use((req, res, next) => {
   console.log("Request Origin:", req.headers.origin);
