@@ -9,15 +9,34 @@ import { errorHandler } from "./utils/errorHandler.utils";
 import router from "./router/index.router";
 import config from "./config/config";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const app = express();
+// implement stricter cors policy, currently localhost can connect to deployed backend on render
 app.use(
   cors({
-    origin: config.frontendUrl,
+    // origin: config.frontendUrl,
+    origin: (origin, callback) => {
+      const allowedOrigins = [process.env.FRONTEND_URL];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by CORS: ${origin}`));
+      }
+    },
     credentials: true,
   })
 );
 
-console.log(config.frontendUrl);
+// app.options("*", cors());
+
+app.use((req, res, next) => {
+  console.log("Request Origin:", req.headers.origin);
+  console.log("Request Headers:", req.headers);
+  next();
+});
 
 app.use(compression()); // compresses all responses
 app.use(cookieParser());
