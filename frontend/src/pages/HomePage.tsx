@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import HotPosts from "@/components/hotPosts/HotPosts";
 import ImageBanner from "@/components/ImageBanner";
+import UpcomingEvents from "@/components/events/UpcomingEvents";
 
 const HomePage = () => {
   return (
@@ -40,7 +41,7 @@ const HomePage = () => {
         </div>
 
         {/* upcoming events */}
-        <span>Add events list here</span>
+        <UpcomingEvents />
 
         <div className="rounded-md border overflow-hidden relative my-12 h-[300px]">
           <img
