@@ -2,28 +2,30 @@ import { Button } from "../ui/button";
 
 const UpcomingEvent = () => {
   return (
-    <div className="flex gap-4 my-4 rounded-md bg-slate-100 lg:bg-transparent">
-      <div className="p-4 rounded-md bg-slate-100 mb-auto hidden lg:block">
-        <div>DEC</div>
-        <div>22</div>
-      </div>
-
-      <div className="gap-2 flex flex-col">
-        <div>
-          <span className="text-blue-500">22 December 2024</span>
-          <span> Bike Meets</span>
+    <div className="mx-auto">
+      <div className="flex gap-4 my-4 rounded-md bg-slate-100 lg:bg-transparent p-4 max-w-[350px] lg:max-w-none mx-auto">
+        <div className="p-4 rounded-md bg-slate-100 mb-auto hidden lg:block">
+          <div>DEC</div>
+          <div>22</div>
         </div>
 
-        <h2 className="font-bold text-xl">Track day</h2>
+        <div className="gap-2 flex flex-col">
+          <div>
+            <span className="text-blue-500">22 December 2024</span>
+            <span> Bike Meets</span>
+          </div>
 
-        <p>
-          description of the event goes here lorem ipsum fjasdkhf as hkjasdhf
-          khsdkjf hjafklds hfks hdjkfdsa h
-        </p>
+          <h2 className="font-bold text-xl">Track day</h2>
 
-        <div className="flex">
-          <div>Location melb cbd</div>
-          <Button>Join</Button>
+          <p>
+            description of the event goes here lorem ipsum fjasdkhf as hkjasdhf
+            khsdkjf hjafklds hfks hdjkfdsa h
+          </p>
+
+          <div className="flex">
+            <div>Location melb cbd</div>
+            <Button>Join</Button>
+          </div>
         </div>
       </div>
     </div>
