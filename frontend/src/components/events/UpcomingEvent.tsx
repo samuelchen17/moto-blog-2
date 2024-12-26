@@ -3,8 +3,8 @@ import { Button } from "../ui/button";
 const UpcomingEvent = () => {
   return (
     <div className="mx-auto">
-      <div className="flex gap-4 my-4 rounded-md bg-slate-100 lg:bg-transparent p-4 max-w-[350px] lg:max-w-none mx-auto">
-        <div className="p-4 rounded-md bg-slate-100 mb-auto hidden lg:block">
+      <div className="flex gap-4 my-4 rounded-md bg-slate-100 sm:bg-transparent p-4 mx-auto">
+        <div className="p-4 rounded-md bg-slate-100 mb-auto hidden sm:block">
           <div>DEC</div>
           <div>22</div>
         </div>
