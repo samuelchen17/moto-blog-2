@@ -50,9 +50,9 @@ const handleLoginResponse = async (
   res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
     domain: cookieDomain,
     path: "/", // cookie valid for all paths
-    httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
+    httpOnly: process.env.NODE_ENV === "production", // prevent JS access to cookie to reduce XSS attacks
     secure: process.env.NODE_ENV === "production", // set to true if using https
-    sameSite: "none", // set to strict or lax to help prevent csrf, but since backend and frontend on different services, set none
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // set to strict or lax to help prevent csrf, but since backend and frontend on different services, set none
     maxAge: 3600000, // 1 hour
   });
 

@@ -11,14 +11,7 @@ import { setComments } from "../../redux/features/comment/commentSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-
-// const TimeAgo = ({ date }: { date: string | Date }) => {
-//   return (
-//     <span className="text-sm text-gray-500">
-//       {formatDistanceToNow(new Date(date), { addSuffix: true })}
-//     </span>
-//   );
-// };
+import axios from "axios";
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -43,18 +36,12 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   // edit comment logic
   const handleSave = async (commentId: string) => {
     try {
-      const res = await fetch(
+      const res = await axios.patch(
         `/api/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ content: editedContent }),
-        }
+        { content: editedContent }
       );
 
-      if (res.ok) {
+      if (res.status === 200) {
         setIsEditing(false);
         dispatch(
           setComments(
@@ -70,7 +57,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         );
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error editing comment:", err);
     }
   };
 
@@ -278,3 +265,36 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 };
 
 export default CommentSectionComment;
+
+// const handleSave = async (commentId: string) => {
+//   try {
+//     const res = await fetch(
+//       `/api/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+//       {
+//         method: "PATCH",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ content: editedContent }),
+//       }
+//     );
+
+//     if (res.ok) {
+//       setIsEditing(false);
+//       dispatch(
+//         setComments(
+//           comments.map((comment) =>
+//             comment._id === commentId
+//               ? {
+//                   ...comment,
+//                   content: editedContent,
+//                 }
+//               : comment
+//           )
+//         )
+//       );
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
