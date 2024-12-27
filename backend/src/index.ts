@@ -10,11 +10,9 @@ import router from "./router/index.router";
 import config from "./config/config";
 
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const app = express();
-// implement stricter cors policy, currently localhost can connect to deployed backend on render
 app.use(
   cors({
     // origin: config.frontendUrl,

@@ -23,6 +23,9 @@ import {
   validateUsername,
 } from "../helpers/validator.helpers";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const handleLoginResponse = async (
   user: UserDocument,
   res: Response<ISuccessRes>
@@ -34,18 +37,22 @@ const handleLoginResponse = async (
   // save session token
   await user.save();
 
-  // implement prod
-  // const cookieDomain = process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost';
+  // check for frontend url env in deployment
+  if (process.env.NODE_ENV === "production" && !process.env.FRONTEND_URL) {
+    throw new Error("FRONTEND_URL must be defined in production.");
+  }
+
+  const cookieDomain =
+    process.env.NODE_ENV === "production"
+      ? new URL(process.env.FRONTEND_URL!).hostname
+      : "localhost";
 
   res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
-    domain:
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : "localhost",
+    domain: cookieDomain,
     path: "/", // cookie valid for all paths
     httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
     secure: process.env.NODE_ENV === "production", // set to true if using https
-    // sameSite: "Strict", // helps prevent csrf attacks
+    sameSite: "none", // set to strict or lax to help prevent csrf, but since backend and frontend on different services, set none
     maxAge: 3600000, // 1 hour
   });
 
