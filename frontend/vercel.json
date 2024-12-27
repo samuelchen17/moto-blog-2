@@ -3,7 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://moto-blog-2.onrender.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
+  ]
 }
