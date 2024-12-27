@@ -38,7 +38,10 @@ const handleLoginResponse = async (
   // const cookieDomain = process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost';
 
   res.cookie("motoBlogAuthToken", user.authentication.sessionToken, {
-    domain: "localhost",
+    domain:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "localhost",
     path: "/", // cookie valid for all paths
     httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
     secure: process.env.NODE_ENV === "production", // set to true if using https
