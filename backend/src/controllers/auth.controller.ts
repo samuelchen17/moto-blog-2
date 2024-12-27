@@ -165,7 +165,7 @@ export const login = async (
     );
 
     if (!user) {
-      return next(new CustomError(401, "Incorrect email or password"));
+      return next(new CustomError(401, "Invalid credentials"));
     }
 
     // check if these properties exist so that it cannot be undefined
@@ -177,7 +177,7 @@ export const login = async (
     const expectedHash = authentication(user.authentication.salt, password);
 
     if (user.authentication.password !== expectedHash) {
-      return next(new CustomError(401, "Incorrect email or password"));
+      return next(new CustomError(401, "Invalid credentials"));
     }
 
     // sign user in
@@ -205,7 +205,7 @@ export const googleAuth = async (
       );
 
       if (!user) {
-        return next(new CustomError(401, "User does not exist"));
+        return next(new CustomError(404, "User does not exist"));
       }
 
       // sign user in

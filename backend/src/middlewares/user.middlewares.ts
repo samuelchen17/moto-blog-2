@@ -16,13 +16,13 @@ export const isAuthenticated = async (
     // retrieve session token from cookies of incoming request, set when user logs in
     const sessionToken = req.cookies["motoBlogAuthToken"];
     if (!sessionToken) {
-      next(new CustomError(403, "Authentication token is missing"));
+      next(new CustomError(401, "Authentication token is missing"));
     }
 
     // check if there is existing user by this sessionToken, valid if true
     const existingUser = await getUserBySessionToken(sessionToken);
     if (!existingUser) {
-      next(new CustomError(403, "User session is invalid or has expired"));
+      next(new CustomError(401, "User session is invalid or has expired"));
     }
 
     // data is merged into req object, accessed by req.identity
@@ -30,7 +30,7 @@ export const isAuthenticated = async (
 
     return next();
   } catch (error) {
-    next(new CustomError(400, "User is not authenticated"));
+    next(new CustomError(401, "User is not authenticated"));
   }
 };
 
@@ -54,7 +54,7 @@ export const isOwner = async (
 
     next();
   } catch (error) {
-    next(new CustomError(400, "User is not authenticated"));
+    next(new CustomError(401, "User is not authenticated"));
   }
 };
 
