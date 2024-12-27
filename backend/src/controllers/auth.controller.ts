@@ -41,8 +41,7 @@ const handleLoginResponse = async (
     domain: "localhost",
     path: "/", // cookie valid for all paths
     httpOnly: true, // prevent JS access to cookie to reduce XSS attacks
-    secure: false, // set to true if using https
-    // secure: process.env.NODE_ENV === 'production', // Use secure cookies only in production
+    secure: process.env.NODE_ENV === "production", // set to true if using https
     // sameSite: "Strict", // helps prevent csrf attacks
     maxAge: 3600000, // 1 hour
   });
