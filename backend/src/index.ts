@@ -33,11 +33,11 @@ app.use(
 // enable pre-flight across-the-board
 app.options("*", cors());
 
-app.use((req, res, next) => {
-  console.log("Request Origin:", req.headers.origin);
-  console.log("Request Headers:", req.headers);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("Request Origin:", req.headers.origin);
+//   console.log("Request Headers:", req.headers);
+//   next();
+// });
 
 app.use(compression()); // compresses all responses
 app.use(cookieParser());
