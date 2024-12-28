@@ -11,6 +11,8 @@ import {
   setTotalComments,
 } from "../../redux/features/comment/commentSlice";
 
+import axios from "axios";
+
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   //   const [comment, setComment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -35,18 +37,15 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
     }
 
     try {
-      const res = await fetch("/api/comment/postcomment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          postId,
-          content: comment,
-          commentBy: currentUser?.user.id,
-        }),
+      const res = await axios.post("/api/comment/postcomment", {
+        postId,
+        content: comment,
+        commentBy: currentUser?.user.id,
       });
-      const data = await res.json();
-      if (res.ok) {
-        // update using state instead of fetching data again
+
+      if (res.status === 200) {
+        // update using state instead of getting data again
+        const data = await res.data;
         dispatch(addComment(data));
         dispatch(setComment(""));
         dispatch(setTotalComments(totalComments + 1));

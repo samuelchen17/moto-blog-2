@@ -7,6 +7,8 @@ import { signInSuccess } from "../../redux/features/user/userSlice";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
 import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
 import { IGoogleAuthPayload } from "src/types";
+import axios from "axios";
+
 const OAuth = () => {
   const dispatch = useAppDispatch();
   const auth = getAuth(firebaseApp);
@@ -26,17 +28,27 @@ const OAuth = () => {
         dpUrl: googleResults.user.photoURL || "",
       };
 
-      const res: Response = await fetch("/api/auth/google", {
-        method: "POST",
-        body: JSON.stringify(payload),
+      const res = await axios.post<AuthResponse>("/api/auth/google", payload, {
         headers: { "Content-Type": "application/json" },
       });
 
-      const data: AuthResponse = await res.json();
+      const data = res.data;
 
-      if (!res.ok) {
+      if (res.status !== 200) {
         throw new Error(data.message || "An unexpected error occurred");
       }
+
+      // const res: Response = await fetch("/api/auth/google", {
+      //   method: "POST",
+      //   body: JSON.stringify(payload),
+      //   headers: { "Content-Type": "application/json" },
+      // });
+
+      // const data: AuthResponse = await res.json();
+
+      // if (!res.ok) {
+      //   throw new Error(data.message || "An unexpected error occurred");
+      // }
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
