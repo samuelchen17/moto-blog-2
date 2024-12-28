@@ -8,6 +8,7 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 import { IGetUser } from "src/types";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
+import { _get } from "@/api/axiosClient";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -23,13 +24,19 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
-        const postData: IPostResponse = await postRes.json();
+        // const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
+        const postRes = await _get<IPostResponse>(
+          `/post/getposts?slug=${postSlug}`
+        );
 
-        if (!postRes.ok) {
-          setError(true);
-          throw new Error("Failed response");
-        }
+        const postData = postRes.data;
+
+        // const postData: IPostResponse = await postRes.json();
+
+        // if (!postRes.ok) {
+        //   setError(true);
+        //   throw new Error("Failed response");
+        // }
 
         const { updatedContent, toc } = processContentAndExtractHeaders(
           postData.posts[0].content
