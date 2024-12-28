@@ -49,13 +49,14 @@ const PostPage = () => {
 
         // get author information
         if (authorId) {
-          const authorRes = await fetch(`/api/${authorId}`);
-          const authorData: IGetUser = await authorRes.json();
+          const authorRes = await _get<IGetUser>(`/${authorId}`);
+          const authorData = authorRes.data;
 
-          if (!authorRes.ok) {
-            setError(true);
-            throw new Error("Failed to fetch author");
-          }
+          // redundant
+          // if (authorRes.status !== 200) {
+          //   setError(true);
+          //   throw new Error("Failed to fetch author");
+          // }
 
           setAuthor(authorData);
         }
@@ -99,7 +100,7 @@ const PostPage = () => {
     };
   };
 
-  console.log(tableOfContents);
+  // console.log(tableOfContents);
 
   if (loading)
     return (
@@ -112,7 +113,8 @@ const PostPage = () => {
     return <div>Post could not be retrieved</div>;
   }
 
-  console.log(post);
+  // console.log(post);
+
   if (post && !loading && !error) {
     return (
       <div>
