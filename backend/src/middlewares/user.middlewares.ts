@@ -14,6 +14,7 @@ export const isAuthenticated = async (
 ) => {
   try {
     // retrieve session token from cookies of incoming request, set when user logs in
+    // cookie is auto sent to backend from frontend, same domain or cors
     const sessionToken = req.cookies["motoBlogAuthToken"];
     if (!sessionToken) {
       next(new CustomError(401, "Authentication token is missing"));

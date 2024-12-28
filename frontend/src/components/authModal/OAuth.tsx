@@ -34,22 +34,6 @@ const OAuth = () => {
 
       const data = res.data;
 
-      if (res.status !== 200) {
-        throw new Error(data.message || "An unexpected error occurred");
-      }
-
-      // const res: Response = await fetch("/api/auth/google", {
-      //   method: "POST",
-      //   body: JSON.stringify(payload),
-      //   headers: { "Content-Type": "application/json" },
-      // });
-
-      // const data: AuthResponse = await res.json();
-
-      // if (!res.ok) {
-      //   throw new Error(data.message || "An unexpected error occurred");
-      // }
-
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
         dispatch(toggleAuthModal());
