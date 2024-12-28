@@ -9,20 +9,20 @@ const _get = <T>(url: string, config = {}) => {
   return apiClient.get<T>(url, config);
 };
 
-const _delete = (url: string, config = {}) => {
-  return apiClient.delete(url, config);
+const _delete = <T>(url: string, config = {}) => {
+  return apiClient.delete<T>(url, config);
 };
 
-const _put = (url: string, data = {}, config = {}) => {
-  return apiClient.put(url, data, config);
+const _put = <T>(url: string, data = {}, config = {}) => {
+  return apiClient.put<T>(url, data, config);
 };
 
-const _post = (url: string, data = {}, config = {}) => {
-  return apiClient.post(url, data, config);
+const _post = <T>(url: string, data = {}, config = {}) => {
+  return apiClient.post<T>(url, data, config);
 };
 
-const _patch = (url: string, data = {}, config = {}) => {
-  return apiClient.patch(url, data, config);
+const _patch = <T>(url: string, data = {}, config = {}) => {
+  return apiClient.patch<T>(url, data, config);
 };
 
 apiClient.interceptors.response.use(

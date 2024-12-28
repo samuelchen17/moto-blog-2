@@ -15,7 +15,6 @@ import {
 import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
-import axios from "axios";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 

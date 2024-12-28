@@ -10,8 +10,8 @@ import {
   setComment,
   setTotalComments,
 } from "../../redux/features/comment/commentSlice";
-
-import axios from "axios";
+import { _post } from "@/api/axiosClient";
+import { IComment } from "@/types";
 
 const CommentSectionAddComment = ({ postId }: ICommentSection) => {
   //   const [comment, setComment] = useState<string>("");
@@ -37,26 +37,24 @@ const CommentSectionAddComment = ({ postId }: ICommentSection) => {
     }
 
     try {
-      const res = await axios.post("/api/comment/postcomment", {
+      const res = await _post<IComment>("/comment/postcomment", {
         postId,
         content: comment,
         commentBy: currentUser?.user.id,
       });
 
-      if (res.status === 200) {
-        // update using state instead of getting data again
-        const data = await res.data;
-        dispatch(addComment(data));
-        dispatch(setComment(""));
-        dispatch(setTotalComments(totalComments + 1));
-      }
+      const data = res.data;
+
+      dispatch(addComment(data));
+      dispatch(setComment(""));
+      dispatch(setTotalComments(totalComments + 1));
     } catch (err) {
       if (err instanceof Error) {
         setErrorMessage(err.message);
       } else {
         setErrorMessage("An unknown error occurred");
       }
-      console.log(err);
+      console.error(err);
     }
   };
 

@@ -24,19 +24,11 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        // const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
         const postRes = await _get<IPostResponse>(
           `/post/getposts?slug=${postSlug}`
         );
 
         const postData = postRes.data;
-
-        // const postData: IPostResponse = await postRes.json();
-
-        // if (!postRes.ok) {
-        //   setError(true);
-        //   throw new Error("Failed response");
-        // }
 
         const { updatedContent, toc } = processContentAndExtractHeaders(
           postData.posts[0].content
@@ -51,12 +43,6 @@ const PostPage = () => {
         if (authorId) {
           const authorRes = await _get<IGetUser>(`/${authorId}`);
           const authorData = authorRes.data;
-
-          // redundant
-          // if (authorRes.status !== 200) {
-          //   setError(true);
-          //   throw new Error("Failed to fetch author");
-          // }
 
           setAuthor(authorData);
         }
