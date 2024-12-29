@@ -7,7 +7,7 @@ import { signInSuccess } from "../../redux/features/user/userSlice";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
 import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
 import { IGoogleAuthPayload } from "src/types";
-import axios from "axios";
+import { _post } from "@/api/axiosClient";
 
 const OAuth = () => {
   const dispatch = useAppDispatch();
@@ -28,9 +28,7 @@ const OAuth = () => {
         dpUrl: googleResults.user.photoURL || "",
       };
 
-      const res = await axios.post<AuthResponse>("/api/auth/google", payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await _post<AuthResponse>("/auth/google", payload);
 
       const data = res.data;
 
