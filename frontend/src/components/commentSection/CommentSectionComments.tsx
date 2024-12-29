@@ -39,7 +39,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
     };
 
     getComments();
-  }, [postId]); // add comment here so it updates user comment, changed to show in state to prevent unnecessary fetch requests
+  }, [postId]);
 
   const handleShowMore = async () => {
     const startIndex = comments.length;

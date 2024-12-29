@@ -7,7 +7,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { Modal } from "flowbite-react";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
-import { setComments } from "../../redux/features/comment/commentSlice";
+import {
+  decrementTotalComments,
+  setComments,
+} from "../../redux/features/comment/commentSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
@@ -112,6 +115,8 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
       dispatch(
         setComments(comments.filter((comment) => comment._id !== commentId))
       );
+
+      dispatch(decrementTotalComments());
     } catch (err) {
       console.error(err);
     }

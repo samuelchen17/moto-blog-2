@@ -82,7 +82,7 @@ export const getPosts = async (
       lastMonthPosts,
     });
   } catch (err) {
-    console.error("Error fetching posts:", err);
+    console.error("Error retrieving posts:", err);
     next(new CustomError(500, "Failed to retrieve posts"));
   }
 };
@@ -281,7 +281,7 @@ export const getHotPosts = async (
 
     res.status(200).json(posts);
   } catch (err) {
-    console.error("Error fetching hot articles:", err);
+    console.error("Error retrieving  hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };
