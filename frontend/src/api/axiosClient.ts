@@ -33,6 +33,9 @@ apiClient.interceptors.response.use(
         "Axios Error:",
         error.response?.data?.message || error.message
       );
+
+      // for the catch block to display the error message sent from backend
+      throw new Error(error.response?.data?.message);
     } else {
       console.error("Unexpected Error:", error);
     }

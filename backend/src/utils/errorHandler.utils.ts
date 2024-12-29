@@ -33,7 +33,7 @@ export const errorHandler = (
   res: Response<IErrorRes>,
   next: NextFunction
 ) => {
-  console.error(err.message); // Log for backend purposes
+  // console.error(err.message); // Log for backend purposes
 
   // If the error has a specific status code (like a 404 or 400), send it; otherwise, default to 500
   //   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
