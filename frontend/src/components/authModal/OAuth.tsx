@@ -44,7 +44,7 @@ const OAuth = () => {
   };
 
   return (
-    <Button className="w-full" onClick={handleOAuthClick}>
+    <Button className="w-full" onClick={handleOAuthClick} type="button">
       <div className="flex-row flex items-center gap-2">
         <AiFillGoogleCircle className="w-6 h-6" />
         Sign in with Google
