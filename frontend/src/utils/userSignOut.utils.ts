@@ -1,5 +1,6 @@
 import { AppDispatch } from "../redux/store";
 import { signOutSuccess } from "../redux/features/user/userSlice";
+import { _post } from "@/api/axiosClient";
 
 interface IUserSignOutProps {
   dispatch: AppDispatch;
@@ -7,16 +8,8 @@ interface IUserSignOutProps {
 
 const userSignOut = async ({ dispatch }: IUserSignOutProps) => {
   try {
-    const res = await fetch("/api/user", {
-      method: "POST",
-    });
+    await _post("/user");
 
-    const data = res.json();
-
-    if (!res.ok) {
-      console.log(data);
-      throw new Error("sign out failed");
-    }
     dispatch(signOutSuccess());
   } catch (err) {
     console.error("Error:", err);
