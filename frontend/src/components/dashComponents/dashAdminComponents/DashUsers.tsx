@@ -6,6 +6,7 @@ import { IGetUser, IGetUserResponse } from "src/types";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { _delete, _get } from "@/api/axiosClient";
 
 const DashUsers = () => {
   const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
@@ -18,16 +19,17 @@ const DashUsers = () => {
   );
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const getUsers = async () => {
       try {
         setErrorMessage(null);
-        const res = await fetch(`/api/user/${currentUser?.user.id}`);
-        const data: IGetUserResponse = await res.json();
-        if (res.ok) {
-          setAllUsers(data.users);
-          if (data.users.length < 9) {
-            setShowMore(false);
-          }
+        const res = await _get<IGetUserResponse>(
+          `/user/${currentUser?.user.id}`
+        );
+        const data = res.data;
+
+        setAllUsers(data.users);
+        if (data.users.length < 9) {
+          setShowMore(false);
         }
       } catch (err) {
         console.error("Error:", err);
@@ -36,7 +38,7 @@ const DashUsers = () => {
     };
 
     if (currentUser?.user.admin) {
-      fetchUsers();
+      getUsers();
     }
   }, [currentUser?.user.id]);
 
@@ -44,16 +46,14 @@ const DashUsers = () => {
     const startIndex = allUsers.length;
     try {
       setErrorMessage(null);
-      const res = await fetch(
-        `/api/user/${currentUser?.user.id}?startIndex=${startIndex}`
+      const res = await _get<IGetUserResponse>(
+        `/user/${currentUser?.user.id}?startIndex=${startIndex}`
       );
-      const data: IGetUserResponse = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        setAllUsers((prev) => [...prev, ...data.users]);
-        if (data.users.length < 9) {
-          setShowMore(false);
-        }
+      setAllUsers((prev) => [...prev, ...data.users]);
+      if (data.users.length < 9) {
+        setShowMore(false);
       }
     } catch (err) {
       console.error("Error:", err);
@@ -61,23 +61,15 @@ const DashUsers = () => {
     }
   };
 
-  console.log(allUsers);
   // change to handle delete user
   const handleDeleteUser = async () => {
     setOpenModal(false);
     try {
-      const res = await fetch(
-        `/api/user/admin/${currentUser?.user.id}/${userIdToDelete}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await _delete(`/user/admin/${currentUser?.user.id}/${userIdToDelete}`);
 
-      const data = await res.json();
+      setAllUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
 
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
+      // implement delete alert
 
       setUserIdToDelete(null);
     } catch (err) {
