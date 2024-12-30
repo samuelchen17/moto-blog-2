@@ -33,6 +33,7 @@ const DashSettingsDeleteUser = () => {
 
       dispatch(deleteUserSuccess());
 
+      // react toast? implement sign out success message
       // alert(data.message);
     } catch (err) {
       console.error("Error:", err);
@@ -82,14 +83,3 @@ const DashSettingsDeleteUser = () => {
 };
 
 export default DashSettingsDeleteUser;
-
-// const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
-//   method: "DELETE",
-// });
-
-// const data = await res.json();
-
-// if (!res.ok) {
-//   dispatch(deleteUserFailure(data.message));
-//   return;
-// }
