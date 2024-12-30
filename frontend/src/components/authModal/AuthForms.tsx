@@ -15,6 +15,7 @@ import {
 import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
+import { _post } from "@/api/axiosClient";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 
@@ -49,21 +50,8 @@ export const AuthFormsSignIn = () => {
 
       const payload: ISignInAuthPayload = { ...formData };
 
-      const res: Response = await fetch("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      // const res: Response = await axios.post("/api/auth/login", payload);
-
-      const data: AuthResponse = await res.json();
-
-      if (!res.ok) {
-        // Display the error message from the backend
-        dispatch(signInFailure(data.message));
-        return; // dispatch does not return
-      }
+      const res = await _post<AuthResponse>("/auth/login", payload);
+      const data = res.data;
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
@@ -169,18 +157,11 @@ export const AuthFormsSignUp = () => {
 
       const payload: ISignUpAuthPayload = { ...formData };
 
-      const res: Response = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
+      await _post<AuthResponse>("/auth/register", payload);
 
-      const data: AuthResponse = await res.json();
-
-      if (!res.ok) {
-        // Display the error message from the backend
-        throw new Error(data.message || "An unexpected error occurred");
-      }
+      // const res = await _post<AuthResponse>("/auth/register", payload);
+      // const data = res.data;
+      // implement signup success message
 
       dispatch(signUpSuccess());
       // redirect to log in

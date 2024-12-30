@@ -20,7 +20,7 @@ const DashComments = () => {
   );
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const getComments = async () => {
       try {
         setErrorMessage(null);
         const res = await _get<IAllCommentResponse>(
@@ -34,12 +34,12 @@ const DashComments = () => {
         }
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to fetch comments, internal error");
+        setErrorMessage("Failed to retrieve comments, internal error");
       }
     };
 
     if (currentUser?.user.admin) {
-      fetchComments();
+      getComments();
     }
   }, [currentUser?.user.id]);
 
