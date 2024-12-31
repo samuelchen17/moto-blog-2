@@ -1,31 +1,11 @@
-import { IPost } from "src/types";
-import { IGetUser } from "src/types";
+import { IPostWithAuthor } from "src/types";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import TimeAgo from "../TimeAgo";
 import { _get } from "@/api/axiosClient";
 
-const HotPostCard = ({ post }: { post: IPost }) => {
-  const [author, setAuthor] = useState<IGetUser | null>(null);
-
-  useEffect(() => {
-    try {
-      const getAuthor = async () => {
-        const res = await _get<IGetUser>(`/${post.createdBy}`);
-
-        const data = res.data;
-
-        setAuthor(data);
-      };
-
-      getAuthor();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [post]);
-
+const HotPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <>
       <Link
@@ -46,7 +26,7 @@ const HotPostCard = ({ post }: { post: IPost }) => {
             {post.title}
           </span>
           <div className="text-gray-500 text-sm">
-            By {author?.username} · <TimeAgo date={post.createdAt} />
+            By {post?.createdBy.username} · <TimeAgo date={post.createdAt} />
           </div>
         </div>
         <div className="flex flex-col items-start gap-2">

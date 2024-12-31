@@ -2,17 +2,6 @@ import mongoose from "mongoose";
 import { IPost } from "src/types";
 import config from "../config/config";
 
-// interface IPost extends Document {
-//   createdBy: string;
-//   title: string;
-//   content: string;
-//   image: string;
-//   category: string;
-//   slug: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
 const postSchema = new mongoose.Schema<IPost>(
   {
     createdBy: {

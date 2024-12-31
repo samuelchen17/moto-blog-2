@@ -1,7 +1,5 @@
-import { IPost } from "src/types";
-import { IGetUser } from "src/types";
+import { IPostWithAuthor } from "src/types";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import {
@@ -15,25 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { _get } from "@/api/axiosClient";
 
-const RecentPostCard = ({ post }: { post: IPost }) => {
-  const [author, setAuthor] = useState<IGetUser | null>(null);
-
-  useEffect(() => {
-    try {
-      const fetchAuthor = async () => {
-        const res = await _get<IGetUser>(`/${post.createdBy}`);
-
-        const data = res.data;
-
-        setAuthor(data);
-      };
-
-      fetchAuthor();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [post]);
-
+const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <Card className="min-h-[430px]">
       <Link to={`/blogs/post/${post.slug}`}>
@@ -47,10 +27,10 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
         <CardDescription className="flex justify-between">
           <div className="flex gap-2 items-center">
             <img
-              src={author?.profilePicture}
+              src={post?.createdBy.profilePicture}
               className="h-6 w-6 object-cover rounded-full bg-gray-500"
             />
-            <span className="font-semibold">{author?.username}</span>
+            <span className="font-semibold">{post?.createdBy.username}</span>
           </div>
 
           <div className="flex gap-2 items-center ">

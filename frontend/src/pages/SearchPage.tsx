@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { postCategory } from "@/config/postCategory.config";
-import { IPost, IPostResponse } from "src/types";
+import { IPostResponse, IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import { Spinner } from "flowbite-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState<boolean>(true);
 

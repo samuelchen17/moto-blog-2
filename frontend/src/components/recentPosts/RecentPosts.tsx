@@ -1,4 +1,4 @@
-import { IPost, IPostResponse } from "src/types";
+import { IPostResponse, IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
 import RecentPostCard from "./RecentPostCard";
 import {
@@ -11,7 +11,9 @@ import {
 import { _get } from "@/api/axiosClient";
 
 const RecentPosts = ({ limit }: { limit: number }) => {
-  const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
+  const [recentPosts, setRecentPosts] = useState<IPostWithAuthor[] | null>(
+    null
+  );
 
   useEffect(() => {
     try {
