@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { IGetUser, IGetUserResponse } from "src/types";
+import {
+  IGetUser,
+  IGetUserResponse,
+  IPostWithAuthor,
+  IPostResponse,
+} from "src/types";
 import { IComment, IAllCommentResponse } from "src/types";
-import { IPost, IPostResponse } from "src/types";
 import { Button, Table } from "flowbite-react";
 import { _get } from "@/api/axiosClient";
 
@@ -12,7 +16,7 @@ import { _get } from "@/api/axiosClient";
 const Dashboard = () => {
   const [users, setUsers] = useState<IGetUser[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
-  const [post, setPosts] = useState<IPost[]>([]);
+  const [post, setPosts] = useState<IPostWithAuthor[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [totalComments, setTotalComments] = useState<number>(0);
   const [totalPosts, setTotalPosts] = useState<number>(0);

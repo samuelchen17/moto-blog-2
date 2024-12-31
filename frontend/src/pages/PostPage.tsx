@@ -1,11 +1,10 @@
 import { Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IPost, IPostResponse } from "src/types";
+import { IPostResponse, IPostWithAuthor } from "src/types";
 import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
-import { IGetUser } from "src/types";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";
@@ -14,8 +13,7 @@ const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [post, setPost] = useState<IPost | null>(null);
-  const [author, setAuthor] = useState<IGetUser | null>(null);
+  const [post, setPost] = useState<IPostWithAuthor | null>(null);
   const [tableOfContents, setTableOfContents] = useState<
     { id: string; text: string }[]
   >([]);
@@ -36,16 +34,6 @@ const PostPage = () => {
 
         setPost({ ...postData.posts[0], content: updatedContent });
         setTableOfContents(toc);
-
-        const authorId = postData.posts[0].createdBy;
-
-        // get author information
-        if (authorId) {
-          const authorRes = await _get<IGetUser>(`/${authorId}`);
-          const authorData = authorRes.data;
-
-          setAuthor(authorData);
-        }
 
         setError(false);
       } catch (err) {
@@ -116,11 +104,11 @@ const PostPage = () => {
             <div className="flex items-center text-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
               <img
                 className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
-                src={author?.profilePicture}
-                alt={author?.username}
+                src={post?.createdBy.profilePicture}
+                alt={post?.createdBy.username}
               />
               {"by "}
-              {author?.username}
+              {post?.createdBy.username}
             </div>
 
             <div className="text-slate-300 font-semibold uppercase">

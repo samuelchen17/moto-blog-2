@@ -3,8 +3,9 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { IPostResponse, IPost } from "src/types";
+import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
 import { Config } from "../models/config.model";
+import { User } from "../models/user.model";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -20,6 +21,37 @@ interface IPostQuery {
   >;
 }
 
+// Helper function to fetch authors and attach them to posts
+export const attachAuthorsToPosts = async (
+  posts: IPost[]
+): Promise<IPostWithAuthor[]> => {
+  // Step 1: Extract unique author IDs
+  const authorIds = [...new Set(posts.map((post) => post.createdBy))];
+
+  // fetch authors
+  const authors = await User.find(
+    { _id: { $in: authorIds } },
+    "username profilePicture"
+  ).lean();
+
+  // author map for constant time lookup
+  const authorMap: Record<string, IUserRes> = {};
+  authors.forEach((author) => {
+    authorMap[author._id.toString()] = {
+      ...author,
+      _id: author._id.toString(),
+    };
+  });
+
+  // attach author data to each post
+  const postsWithAuthors: IPostWithAuthor[] = posts.map((post) => ({
+    ...post,
+    createdBy: authorMap[post.createdBy], // Add author details or null if not found
+  }));
+
+  return postsWithAuthors;
+};
+
 export const getPosts = async (
   req: Request,
   res: Response<IPostResponse>,
@@ -31,14 +63,14 @@ export const getPosts = async (
   const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
   try {
-    // construct the query as needed
+    // construct the query based on search params
     const query: IPostQuery = {};
 
     if (req.query.createdBy) {
       query.createdBy = req.query.createdBy as string;
     }
 
-    if (req.query.category) {
+    if (req.query.category && req.query.category !== "all") {
       query.category = req.query.category as string;
     }
 
@@ -57,15 +89,19 @@ export const getPosts = async (
       ];
     }
 
+    // fetch posts
     const posts = await Post.find<IPost>(query)
       .skip(startIndex)
       .limit(limit)
-      .sort({ updatedAt: sortDirection });
+      .sort({ updatedAt: sortDirection })
+      .lean();
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
 
     const totalPosts = await Post.countDocuments();
-
     const now = new Date();
-
     const oneMonthAgo = new Date(
       now.getFullYear(),
       now.getMonth() - 1,
@@ -77,7 +113,7 @@ export const getPosts = async (
     });
 
     res.status(200).json({
-      posts,
+      posts: postsWithAuthors,
       totalPosts,
       lastMonthPosts,
     });
@@ -273,11 +309,15 @@ export const getHotPosts = async (
 
     const posts = await Post.find({
       _id: { $in: postIds },
-    });
+    }).lean();
 
     if (posts.length === 0) {
       return next(new CustomError(404, "No hot articles found"));
     }
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
 
     // Fetch authors for each post
     // const postsWithAuthors = await Promise.all(
@@ -293,7 +333,7 @@ export const getHotPosts = async (
     // );
 
     // res.status(200).json(postsWithAuthors);
-    res.status(200).json(posts);
+    res.status(200).json(postsWithAuthors);
   } catch (err) {
     console.error("Error retrieving  hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));

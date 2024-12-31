@@ -1,33 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-import { IPost } from "src/types";
+import { IPostWithAuthor } from "src/types";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
-import { useEffect, useState } from "react";
-import { IGetUser } from "src/types";
 import { _get } from "@/api/axiosClient";
 
-const SearchItem = ({ post }: { post: IPost }) => {
-  const [author, setAuthor] = useState<IGetUser | null>(null);
-  // get comments, likes implement
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const authorId = post.createdBy;
-
-        if (authorId) {
-          const authorRes = await _get<IGetUser>(`/${authorId}`);
-          const authorData = authorRes.data;
-
-          setAuthor(authorData);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchAuthor();
-  }, [author]);
-
+const SearchItem = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <>
       <div className="flex flex-col w-full mt-12">
@@ -35,10 +12,10 @@ const SearchItem = ({ post }: { post: IPost }) => {
         <div className=" flex gap-2 items-center mb-2">
           <img
             className="h-5 w-5 rounded-full bg-gray-400 "
-            src={author?.profilePicture}
+            src={post?.createdBy.profilePicture}
           />
 
-          <span className="text-sm">{author?.username}</span>
+          <span className="text-sm">{post?.createdBy.username}</span>
         </div>
 
         {/* title and content */}

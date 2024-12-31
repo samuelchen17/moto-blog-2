@@ -1,33 +1,22 @@
-import { IPost } from "src/types";
+import { IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import HotPostCard from "./HotPostCard";
-import { IGetUser } from "src/types";
 import TimeAgo from "../TimeAgo";
 import { Link } from "react-router-dom";
 import { Spinner } from "flowbite-react";
 import { _get } from "@/api/axiosClient";
 
 const HotPosts = () => {
-  const [hotPosts, setHotPosts] = useState<IPost[] | null>(null);
-  const [author, setAuthor] = useState<IGetUser | null>(null);
+  const [hotPosts, setHotPosts] = useState<IPostWithAuthor[] | null>(null);
 
   useEffect(() => {
     try {
       const fetchHotPosts = async () => {
-        const res = await _get<IPost[]>(`/post/gethotposts`);
+        const res = await _get<IPostWithAuthor[]>(`/post/gethotposts`);
         const data = res.data;
 
         setHotPosts(data);
-
-        const authorId = data[0].createdBy;
-
-        if (authorId) {
-          const authorRes = await _get<IGetUser>(`/${authorId}`);
-          const authorData = authorRes.data;
-
-          setAuthor(authorData);
-        }
       };
 
       fetchHotPosts();
@@ -52,7 +41,8 @@ const HotPosts = () => {
                 {hotPosts[0].title}
               </span>
               <span className="mb-4">
-                By {author?.username} · <TimeAgo date={hotPosts[0].createdAt} />
+                By {hotPosts[0]?.createdBy.username} ·{" "}
+                <TimeAgo date={hotPosts[0].createdAt} />
                 {/* By {hotPosts[0].author.username} ·{" "}
                 <TimeAgo date={hotPosts[0].createdAt} /> */}
               </span>
@@ -89,34 +79,3 @@ const HotPosts = () => {
 };
 
 export default HotPosts;
-
-// combined post and author fetch, removed as speed is more important for this project
-// useEffect(() => {
-//   try {
-//     const fetchHotPosts = async () => {
-//       const res = await _get<IPostWithAuthor[]>(`/post/gethotposts`);
-//       const data = await res.data;
-
-//       if (res.ok) {
-//         setHotPosts(data);
-//       }
-
-//       const authorId = data[0].createdBy;
-
-//       if (authorId) {
-//         const authorRes = await _get<IGetUser>(`/${authorId}`);
-//         const authorData = authorRes.data;
-
-//         if (!authorRes.ok) {
-//           throw new Error("Failed to fetch author");
-//         }
-
-//         setAuthor(authorData);
-//       }
-//     };
-
-//     fetchHotPosts();
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });

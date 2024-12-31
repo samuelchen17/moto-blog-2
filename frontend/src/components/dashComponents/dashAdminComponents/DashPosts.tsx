@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import { IPostResponse, IPost } from "src/types";
+import { IPostResponse, IPostWithAuthor } from "src/types";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
@@ -17,7 +17,7 @@ import {
 import { _delete, _get } from "@/api/axiosClient";
 
 const DashPosts = () => {
-  const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
+  const [userAdminPosts, setUserAdminPosts] = useState<IPostWithAuthor[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);

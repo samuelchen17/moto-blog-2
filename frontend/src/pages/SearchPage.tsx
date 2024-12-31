@@ -8,16 +8,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { postCategory } from "@/config/postCategory.config";
-import { IPost, IPostResponse } from "src/types";
+import { IPostResponse, IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
 import { _get } from "@/api/axiosClient";
+import { Spinner } from "flowbite-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState<boolean>(true);
 
@@ -78,7 +79,8 @@ const SearchPage = () => {
     }
   };
 
-  console.log(searchParams);
+  // console.log(searchParams);
+
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
       {/* mobile screen search */}
@@ -105,7 +107,7 @@ const SearchPage = () => {
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              {/* <SelectItem value="all">All</SelectItem> */}
+              <SelectItem value="all">All</SelectItem>
               {postCategory.slice(1).map((category) => (
                 <SelectItem key={category.name} value={category.value}>
                   {category.name}
@@ -127,21 +129,25 @@ const SearchPage = () => {
         </form>
 
         {/* search */}
-        {posts.map((post) => (
-          <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-            <SearchItem post={post} />
-          </Link>
-        ))}
-      </div>
+        {loading ? (
+          <Spinner />
+        ) : (
+          posts.map((post) => (
+            <Link key={post._id} to={`/blogs/post/${post.slug}`}>
+              <SearchItem post={post} />
+            </Link>
+          ))
+        )}
 
-      {showMore && (
-        <button
-          onClick={handleShowMore}
-          className="self-center w-full text-red-500 py-6"
-        >
-          Show more
-        </button>
-      )}
+        {showMore && (
+          <button
+            onClick={handleShowMore}
+            className="self-center w-full text-red-500 py-6"
+          >
+            Show more
+          </button>
+        )}
+      </div>
     </div>
   );
 };
