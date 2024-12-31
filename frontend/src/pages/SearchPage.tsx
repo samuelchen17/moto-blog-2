@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
 import { _get } from "@/api/axiosClient";
+import { Spinner } from "flowbite-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,6 +80,7 @@ const SearchPage = () => {
   };
 
   console.log(searchParams);
+
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
       {/* mobile screen search */}
@@ -127,21 +129,25 @@ const SearchPage = () => {
         </form>
 
         {/* search */}
-        {posts.map((post) => (
-          <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-            <SearchItem post={post} />
-          </Link>
-        ))}
-      </div>
+        {loading ? (
+          <Spinner />
+        ) : (
+          posts.map((post) => (
+            <Link key={post._id} to={`/blogs/post/${post.slug}`}>
+              <SearchItem post={post} />
+            </Link>
+          ))
+        )}
 
-      {showMore && (
-        <button
-          onClick={handleShowMore}
-          className="self-center w-full text-red-500 py-6"
-        >
-          Show more
-        </button>
-      )}
+        {showMore && (
+          <button
+            onClick={handleShowMore}
+            className="self-center w-full text-red-500 py-6"
+          >
+            Show more
+          </button>
+        )}
+      </div>
     </div>
   );
 };

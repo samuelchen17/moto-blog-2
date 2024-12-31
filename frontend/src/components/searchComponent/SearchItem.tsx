@@ -9,24 +9,24 @@ import { _get } from "@/api/axiosClient";
 const SearchItem = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);
   // get comments, likes implement
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const authorId = post.createdBy;
+  // useEffect(() => {
+  //   const fetchAuthor = async () => {
+  //     try {
+  //       const authorId = post.createdBy;
 
-        if (authorId) {
-          const authorRes = await _get<IGetUser>(`/${authorId}`);
-          const authorData = authorRes.data;
+  //       if (authorId) {
+  //         const authorRes = await _get<IGetUser>(`/${authorId}`);
+  //         const authorData = authorRes.data;
 
-          setAuthor(authorData);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  //         setAuthor(authorData);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
 
-    fetchAuthor();
-  }, [author]);
+  //   fetchAuthor();
+  // });
 
   return (
     <>

@@ -26,6 +26,8 @@ interface IPostFormPageProps {
   postId?: String;
 }
 
+// implement persist form upon failure to submit
+
 const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
   const editorRef = useRef<Editor | null>(null);
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
