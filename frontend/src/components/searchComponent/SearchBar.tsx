@@ -8,7 +8,7 @@ const SearchBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log(searchTerm);
+  // console.log(searchTerm);
 
   // submit first
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

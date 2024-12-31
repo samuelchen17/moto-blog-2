@@ -79,7 +79,7 @@ const SearchPage = () => {
     }
   };
 
-  console.log(searchParams);
+  // console.log(searchParams);
 
   return (
     <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
@@ -107,7 +107,7 @@ const SearchPage = () => {
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              {/* <SelectItem value="all">All</SelectItem> */}
+              <SelectItem value="all">All</SelectItem>
               {postCategory.slice(1).map((category) => (
                 <SelectItem key={category.name} value={category.value}>
                   {category.name}

@@ -38,7 +38,7 @@ export const getPosts = async (
       query.createdBy = req.query.createdBy as string;
     }
 
-    if (req.query.category) {
+    if (req.query.category && req.query.category !== "all") {
       query.category = req.query.category as string;
     }
 
