@@ -3,7 +3,7 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { IPostResponse, IPost, IPostWithAuthor } from "src/types";
+import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
 
@@ -20,6 +20,34 @@ interface IPostQuery {
     | { content?: { $regex: string; $options: string } }
   >;
 }
+
+// Helper function to fetch authors and attach them to posts
+export const attachAuthorsToPosts = async (
+  posts: IPost[]
+): Promise<IPostWithAuthor[]> => {
+  // Step 1: Extract unique author IDs
+  const authorIds = [...new Set(posts.map((post) => post.createdBy))];
+
+  // fetch authors
+  const authors = await User.find(
+    { _id: { $in: authorIds } },
+    "username profilePicture"
+  ).lean();
+
+  // author map for constant time lookup
+  const authorMap: Record<string, any> = {};
+  authors.forEach((author) => {
+    authorMap[author._id.toString()] = author;
+  });
+
+  // attach author data to each post
+  const postsWithAuthors: IPostWithAuthor[] = posts.map((post) => ({
+    ...post,
+    createdBy: authorMap[post.createdBy], // Add author details or null if not found
+  }));
+
+  return postsWithAuthors;
+};
 
 export const getPosts = async (
   req: Request,
@@ -65,26 +93,9 @@ export const getPosts = async (
       .sort({ updatedAt: sortDirection })
       .lean();
 
-    // extract unique user ids
-    const authorIds = [...new Set(posts.map((post) => post.createdBy))];
-
-    // fetch authors
-    const authors = await User.find(
-      { _id: { $in: authorIds } },
-      "username profilePicture"
-    ).lean();
-
-    // author map for constant time lookup
-    const authorMap: Record<string, any> = {};
-    authors.forEach((author) => {
-      authorMap[author._id.toString()] = author;
-    });
-
-    // attach author data to each post
-    const postsWithAuthors: IPostWithAuthor[] = posts.map((post) => ({
-      ...post,
-      createdBy: authorMap[post.createdBy], // Add author details or null if not found
-    }));
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
 
     const totalPosts = await Post.countDocuments();
     const now = new Date();
@@ -108,74 +119,6 @@ export const getPosts = async (
     next(new CustomError(500, "Failed to retrieve posts"));
   }
 };
-
-// original getPost function
-// export const getPosts = async (
-//   req: Request,
-//   res: Response<IPostResponse>,
-//   next: NextFunction
-// ) => {
-//   const startIndex = parseInt(req.query.startIndex as string) || 0;
-//   const limit = parseInt(req.query.limit as string) || 9;
-//   // 1 = asc, -1 = desc
-//   const sortDirection = req.query.sort === "asc" ? 1 : -1;
-
-//   try {
-//     // construct the query as needed
-//     const query: IPostQuery = {};
-
-//     if (req.query.createdBy) {
-//       query.createdBy = req.query.createdBy as string;
-//     }
-
-//     if (req.query.category && req.query.category !== "all") {
-//       query.category = req.query.category as string;
-//     }
-
-//     if (req.query.slug) {
-//       query.slug = req.query.slug as string;
-//     }
-
-//     if (req.query.postId) {
-//       query._id = req.query.postId as string;
-//     }
-
-//     if (req.query.searchTerm) {
-//       query.$or = [
-//         { title: { $regex: req.query.searchTerm as string, $options: "i" } },
-//         { content: { $regex: req.query.searchTerm as string, $options: "i" } },
-//       ];
-//     }
-
-//     const posts = await Post.find<IPost>(query)
-//       .skip(startIndex)
-//       .limit(limit)
-//       .sort({ updatedAt: sortDirection });
-
-//     const totalPosts = await Post.countDocuments();
-
-//     const now = new Date();
-
-//     const oneMonthAgo = new Date(
-//       now.getFullYear(),
-//       now.getMonth() - 1,
-//       now.getDate()
-//     );
-
-//     const lastMonthPosts = await Post.countDocuments({
-//       createdAt: { $gte: oneMonthAgo },
-//     });
-
-//     res.status(200).json({
-//       posts,
-//       totalPosts,
-//       lastMonthPosts,
-//     });
-//   } catch (err) {
-//     console.error("Error retrieving posts:", err);
-//     next(new CustomError(500, "Failed to retrieve posts"));
-//   }
-// };
 
 export const createPost = async (
   req: Request,
@@ -363,11 +306,15 @@ export const getHotPosts = async (
 
     const posts = await Post.find({
       _id: { $in: postIds },
-    });
+    }).lean();
 
     if (posts.length === 0) {
       return next(new CustomError(404, "No hot articles found"));
     }
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
 
     // Fetch authors for each post
     // const postsWithAuthors = await Promise.all(
@@ -383,7 +330,7 @@ export const getHotPosts = async (
     // );
 
     // res.status(200).json(postsWithAuthors);
-    res.status(200).json(posts);
+    res.status(200).json(postsWithAuthors);
   } catch (err) {
     console.error("Error retrieving  hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));
