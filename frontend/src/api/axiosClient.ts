@@ -1,3 +1,8 @@
+import { openLogin } from "@/redux/features/modal/authModalSlice";
+import { signOutSuccess } from "@/redux/features/user/userSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { store } from "@/redux/store";
+import userSignOut from "@/utils/userSignOut.utils";
 import axios from "axios";
 
 const apiClient = axios.create({
@@ -27,12 +32,25 @@ const _patch = <T>(url: string, data = {}, config = {}) => {
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (axios.isAxiosError(error)) {
       console.error(
         "Axios Error:",
         error.response?.data?.message || error.message
       );
+
+      // If the error is a 401 sign user out
+      if (error.response?.status === 401) {
+        try {
+          await _post("/user");
+          store.dispatch(signOutSuccess());
+          store.dispatch(openLogin());
+
+          // implement please sign in message?
+        } catch (err) {
+          console.error("Error logging out user:", err);
+        }
+      }
 
       // for the catch block to display the error message sent from backend
       throw new Error(error.response?.data?.message);
