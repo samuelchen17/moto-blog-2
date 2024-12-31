@@ -5,6 +5,7 @@ import { IGetUser, IGetUserResponse } from "src/types";
 import { IComment, IAllCommentResponse } from "src/types";
 import { IPost, IPostResponse } from "src/types";
 import { Button, Table } from "flowbite-react";
+import { _get } from "@/api/axiosClient";
 
 // implement styles, fix dashboard
 
@@ -26,44 +27,40 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`/api/user/${currentUser?.user.id}?limit=5`);
-        const data: IGetUserResponse = await res.json();
+        const res = await _get<IGetUserResponse>(
+          `/user/${currentUser?.user.id}?limit=5`
+        );
+        const data = res.data;
 
-        if (res.ok) {
-          setUsers(data.users);
-          setTotalUsers(data.totalUsers);
-          setLastMonthUsers(data.lastMonthUsers);
-        }
+        setUsers(data.users);
+        setTotalUsers(data.totalUsers);
+        setLastMonthUsers(data.lastMonthUsers);
       } catch (err) {
         console.error(err);
       }
     };
     const fetchComments = async () => {
       try {
-        const res = await fetch(
-          `/api/comment/getallcomments/${currentUser?.user.id}?limit=5`
+        const res = await _get<IAllCommentResponse>(
+          `/comment/getallcomments/${currentUser?.user.id}?limit=5`
         );
-        const data: IAllCommentResponse = await res.json();
+        const data = res.data;
 
-        if (res.ok) {
-          setComments(data.comments);
-          setTotalComments(data.totalComments);
-          setLastMonthComments(data.lastMonthComments);
-        }
+        setComments(data.comments);
+        setTotalComments(data.totalComments);
+        setLastMonthComments(data.lastMonthComments);
       } catch (err) {
         console.error(err);
       }
     };
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/post/getposts?limit=5`);
-        const data: IPostResponse = await res.json();
+        const res = await _get<IPostResponse>(`/post/getposts?limit=5`);
+        const data = res.data;
 
-        if (res.ok) {
-          setPosts(data.posts);
-          setTotalPosts(data.totalPosts);
-          setLastMonthPosts(data.lastMonthPosts);
-        }
+        setPosts(data.posts);
+        setTotalPosts(data.totalPosts);
+        setLastMonthPosts(data.lastMonthPosts);
       } catch (err) {
         console.error(err);
       }
