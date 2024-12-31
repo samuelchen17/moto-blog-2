@@ -213,7 +213,9 @@ export const getUser = async (
     const user = await User.findById(req.params.commentBy);
 
     if (!user) {
-      res.status(200).json({ username: "Deleted User" });
+      res.status(200).json({
+        username: "Deleted User",
+      });
       return;
     }
 
