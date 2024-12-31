@@ -7,6 +7,8 @@ import { signInSuccess } from "../../redux/features/user/userSlice";
 import { AuthResponse, isAuthSuccessResponse } from "./AuthForms";
 import { toggleAuthModal } from "../../redux/features/modal/authModalSlice";
 import { IGoogleAuthPayload } from "src/types";
+import { _post } from "@/api/axiosClient";
+
 const OAuth = () => {
   const dispatch = useAppDispatch();
   const auth = getAuth(firebaseApp);
@@ -26,17 +28,9 @@ const OAuth = () => {
         dpUrl: googleResults.user.photoURL || "",
       };
 
-      const res: Response = await fetch("/api/auth/google", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await _post<AuthResponse>("/auth/google", payload);
 
-      const data: AuthResponse = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "An unexpected error occurred");
-      }
+      const data = res.data;
 
       if (isAuthSuccessResponse(data)) {
         dispatch(signInSuccess(data));
@@ -50,7 +44,7 @@ const OAuth = () => {
   };
 
   return (
-    <Button className="w-full" onClick={handleOAuthClick}>
+    <Button className="w-full" onClick={handleOAuthClick} type="button">
       <div className="flex-row flex items-center gap-2">
         <AiFillGoogleCircle className="w-6 h-6" />
         Sign in with Google

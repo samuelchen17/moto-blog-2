@@ -30,10 +30,18 @@ const commentSlice = createSlice({
     setTotalComments: (state, action: PayloadAction<number>) => {
       state.totalComments = action.payload;
     },
+    decrementTotalComments: (state) => {
+      state.totalComments -= 1;
+    },
   },
 });
 
-export const { setComment, setComments, addComment, setTotalComments } =
-  commentSlice.actions;
+export const {
+  setComment,
+  setComments,
+  addComment,
+  setTotalComments,
+  decrementTotalComments,
+} = commentSlice.actions;
 
 export default commentSlice.reducer;

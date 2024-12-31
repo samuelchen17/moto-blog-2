@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { _get } from "@/api/axiosClient";
 
 const RecentPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPost[] | null>(null);
@@ -15,12 +16,10 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch(`/api/post/getposts?limit=${limit}`);
-        const data: IPostResponse = await res.json();
+        const res = await _get<IPostResponse>(`/post/getposts?limit=${limit}`);
+        const data = res.data;
 
-        if (res.ok) {
-          setRecentPosts(data.posts);
-        }
+        setRecentPosts(data.posts);
       };
 
       fetchRecentPosts();

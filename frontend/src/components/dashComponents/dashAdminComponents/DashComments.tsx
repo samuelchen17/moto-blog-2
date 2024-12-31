@@ -5,6 +5,7 @@ import { Alert, Button, Modal, Table } from "flowbite-react";
 import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { IComment, IAllCommentResponse } from "src/types";
+import { _delete, _get } from "@/api/axiosClient";
 
 // implement accordion for post and comments
 
@@ -19,27 +20,26 @@ const DashComments = () => {
   );
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const getComments = async () => {
       try {
         setErrorMessage(null);
-        const res = await fetch(
-          `/api/comment/getallcomments/${currentUser?.user.id}`
+        const res = await _get<IAllCommentResponse>(
+          `/comment/getallcomments/${currentUser?.user.id}`
         );
-        const data: IAllCommentResponse = await res.json();
-        if (res.ok) {
-          setAllComments(data.comments);
-          if (data.comments.length < 9) {
-            setShowMore(false);
-          }
+        const data = res.data;
+
+        setAllComments(data.comments);
+        if (data.comments.length < 9) {
+          setShowMore(false);
         }
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to fetch comments, internal error");
+        setErrorMessage("Failed to retrieve comments, internal error");
       }
     };
 
     if (currentUser?.user.admin) {
-      fetchComments();
+      getComments();
     }
   }, [currentUser?.user.id]);
 
@@ -47,16 +47,14 @@ const DashComments = () => {
     const startIndex = allComments.length;
     try {
       setErrorMessage(null);
-      const res = await fetch(
-        `/api/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
+      const res = await _get<IAllCommentResponse>(
+        `/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
       );
-      const data: IAllCommentResponse = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        setAllComments((prev) => [...prev, ...data.comments]);
-        if (data.comments.length < 9) {
-          setShowMore(false);
-        }
+      setAllComments((prev) => [...prev, ...data.comments]);
+      if (data.comments.length < 9) {
+        setShowMore(false);
       }
     } catch (err) {
       console.error("Error:", err);
@@ -68,18 +66,13 @@ const DashComments = () => {
   const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
-      const res = await fetch(
-        `/api/comment/delete/${idToDelete}/${currentUser?.user.id}`,
-        {
-          method: "DELETE",
-        }
+      const res = await _delete(
+        `/comment/delete/${idToDelete}/${currentUser?.user.id}`
       );
 
-      const data = await res.json();
+      const data = res.data;
 
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
+      // implement delete alert
 
       setAllComments((prev) =>
         prev.filter((comment) => comment._id !== idToDelete)

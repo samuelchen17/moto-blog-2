@@ -4,6 +4,7 @@ import { MessageCircle, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
 import { useEffect, useState } from "react";
 import { IGetUser } from "src/types";
+import { _get } from "@/api/axiosClient";
 
 const SearchItem = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);
@@ -14,12 +15,8 @@ const SearchItem = ({ post }: { post: IPost }) => {
         const authorId = post.createdBy;
 
         if (authorId) {
-          const authorRes = await fetch(`/api/${authorId}`);
-          const authorData: IGetUser = await authorRes.json();
-
-          if (!authorRes.ok) {
-            throw new Error("Failed to fetch author");
-          }
+          const authorRes = await _get<IGetUser>(`/${authorId}`);
+          const authorData = authorRes.data;
 
           setAuthor(authorData);
         }

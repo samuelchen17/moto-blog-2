@@ -82,7 +82,7 @@ export const getPosts = async (
       lastMonthPosts,
     });
   } catch (err) {
-    console.error("Error fetching posts:", err);
+    console.error("Error retrieving posts:", err);
     next(new CustomError(500, "Failed to retrieve posts"));
   }
 };
@@ -265,7 +265,7 @@ export const getHotPosts = async (
     const config = await Config.findOne({ _id: "config" });
 
     if (!config) {
-      return next(new CustomError(404, "Configuration not found"));
+      return next(new CustomError(404, "Hot post configuration not found"));
     }
 
     // extract post ids
@@ -279,9 +279,23 @@ export const getHotPosts = async (
       return next(new CustomError(404, "No hot articles found"));
     }
 
+    // Fetch authors for each post
+    // const postsWithAuthors = await Promise.all(
+    //   posts.map(async (post) => {
+    //     const author = await User.findById(post.createdBy).select(
+    //       "username profilePicture"
+    //     );
+    //     const authorData = author || {
+    //       username: "Deleted User",
+    //     };
+    //     return { ...post.toObject(), author: authorData };
+    //   })
+    // );
+
+    // res.status(200).json(postsWithAuthors);
     res.status(200).json(posts);
   } catch (err) {
-    console.error("Error fetching hot articles:", err);
+    console.error("Error retrieving  hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };

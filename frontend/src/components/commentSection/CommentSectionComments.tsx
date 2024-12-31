@@ -8,6 +8,7 @@ import {
   setComments,
   setTotalComments,
 } from "../../redux/features/comment/commentSlice";
+import { _get } from "@/api/axiosClient";
 
 // implement collapse comment section!!
 
@@ -21,17 +22,16 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await fetch(`/api/comment/getcomments/${postId}`);
+        const res = await _get<ICommentResponse>(
+          `/comment/getcomments/${postId}`
+        );
 
-        if (res.ok) {
-          // move all data inside res.ok implement
-          const data: ICommentResponse = await res.json();
-          dispatch(setComments(data.comments));
-          dispatch(setTotalComments(data.totalComments));
+        const data = res.data;
+        dispatch(setComments(data.comments));
+        dispatch(setTotalComments(data.totalComments));
 
-          if (data.comments.length < 3) {
-            setShowMore(false);
-          }
+        if (data.comments.length < 3) {
+          setShowMore(false);
         }
       } catch (err) {
         console.error(err);
@@ -39,21 +39,19 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
     };
 
     getComments();
-  }, [postId]); // add comment here so it updates user comment, changed to show in state to prevent unnecessary fetch requests
+  }, [postId]);
 
   const handleShowMore = async () => {
     const startIndex = comments.length;
     try {
-      const res = await fetch(
-        `/api/comment/getcomments/${postId}?startIndex=${startIndex}`
+      const res = await _get<ICommentResponse>(
+        `/comment/getcomments/${postId}?startIndex=${startIndex}`
       );
-      const data: ICommentResponse = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        dispatch(setComments([...comments, ...data.comments]));
-        if (data.comments.length < 3) {
-          setShowMore(false);
-        }
+      dispatch(setComments([...comments, ...data.comments]));
+      if (data.comments.length < 3) {
+        setShowMore(false);
       }
     } catch (err) {
       console.error("Error:", err);

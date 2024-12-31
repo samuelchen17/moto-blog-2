@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { _delete, _get } from "@/api/axiosClient";
 
 const DashPosts = () => {
   const [userAdminPosts, setUserAdminPosts] = useState<IPost[]>([]);
@@ -29,27 +30,26 @@ const DashPosts = () => {
   // Dropdown to select hot posts, could change to algorithm based on interactivity with users?
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const getPosts = async () => {
       try {
         setErrorMessage(null);
-        const res = await fetch(
-          `/api/post/getposts?createdBy=${currentUser?.user.id}`
+        const res = await _get<IPostResponse>(
+          `/post/getposts?createdBy=${currentUser?.user.id}`
         );
-        const data: IPostResponse = await res.json();
-        if (res.ok) {
-          setUserAdminPosts(data.posts);
-          if (data.posts.length < 9) {
-            setShowMore(false);
-          }
+        const data = res.data;
+
+        setUserAdminPosts(data.posts);
+        if (data.posts.length < 9) {
+          setShowMore(false);
         }
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to fetch posts, internal error");
+        setErrorMessage("Failed to retrieve posts, internal error");
       }
     };
 
     if (currentUser?.user.admin) {
-      fetchPosts();
+      getPosts();
     }
   }, [currentUser?.user.id]);
 
@@ -57,16 +57,14 @@ const DashPosts = () => {
     const startIndex = userAdminPosts.length;
     try {
       setErrorMessage(null);
-      const res = await fetch(
-        `/api/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
+      const res = await _get<IPostResponse>(
+        `/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
       );
-      const data: IPostResponse = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        setUserAdminPosts((prev) => [...prev, ...data.posts]);
-        if (data.posts.length < 9) {
-          setShowMore(false);
-        }
+      setUserAdminPosts((prev) => [...prev, ...data.posts]);
+      if (data.posts.length < 9) {
+        setShowMore(false);
       }
     } catch (err) {
       console.error("Error:", err);
@@ -77,18 +75,13 @@ const DashPosts = () => {
   const handleDeletePost = async () => {
     setOpenModal(false);
     try {
-      const res = await fetch(
-        `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`,
-        {
-          method: "DELETE",
-        }
+      const res = await _delete(
+        `/post/delete/${postIdToDelete}/${currentUser?.user.id}`
       );
 
-      const data = await res.json();
+      const data = res.data;
 
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
+      // implement delete post success message
 
       setUserAdminPosts((prev) =>
         prev.filter((post) => post._id !== postIdToDelete)

@@ -8,6 +8,7 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 import { IGetUser } from "src/types";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
+import { _get } from "@/api/axiosClient";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -23,13 +24,11 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const postRes = await fetch(`/api/post/getposts?slug=${postSlug}`);
-        const postData: IPostResponse = await postRes.json();
+        const postRes = await _get<IPostResponse>(
+          `/post/getposts?slug=${postSlug}`
+        );
 
-        if (!postRes.ok) {
-          setError(true);
-          throw new Error("Failed response");
-        }
+        const postData = postRes.data;
 
         const { updatedContent, toc } = processContentAndExtractHeaders(
           postData.posts[0].content
@@ -42,13 +41,8 @@ const PostPage = () => {
 
         // get author information
         if (authorId) {
-          const authorRes = await fetch(`/api/${authorId}`);
-          const authorData: IGetUser = await authorRes.json();
-
-          if (!authorRes.ok) {
-            setError(true);
-            throw new Error("Failed to fetch author");
-          }
+          const authorRes = await _get<IGetUser>(`/${authorId}`);
+          const authorData = authorRes.data;
 
           setAuthor(authorData);
         }
@@ -92,7 +86,7 @@ const PostPage = () => {
     };
   };
 
-  console.log(tableOfContents);
+  // console.log(tableOfContents);
 
   if (loading)
     return (
@@ -105,7 +99,8 @@ const PostPage = () => {
     return <div>Post could not be retrieved</div>;
   }
 
-  console.log(post);
+  // console.log(post);
+
   if (post && !loading && !error) {
     return (
       <div>

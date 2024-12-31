@@ -78,7 +78,7 @@ export const deleteUser = async (
 
     res.status(200).json({ message: "User deleted", deletedUser: deletedUser });
   } catch (error) {
-    next(new CustomError(400, "Unable to delete user"));
+    next(new CustomError(400, "Failed to delete account"));
   }
 };
 
@@ -213,7 +213,9 @@ export const getUser = async (
     const user = await User.findById(req.params.commentBy);
 
     if (!user) {
-      res.status(200).json({ username: "Deleted User" });
+      res.status(200).json({
+        username: "Deleted User",
+      });
       return;
     }
 

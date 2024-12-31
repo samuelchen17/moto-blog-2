@@ -8,6 +8,7 @@ import {
 } from "../../redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
+import { _delete } from "@/api/axiosClient";
 
 const DashSettingsDeleteUser = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -23,26 +24,20 @@ const DashSettingsDeleteUser = () => {
       dispatch(deleteUserStart());
 
       if (!currentUser) {
-        dispatch(deleteUserFailure("Error deleting user"));
+        dispatch(deleteUserFailure("User is not authorized"));
         return;
       }
 
-      const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
-        method: "DELETE",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        dispatch(deleteUserFailure(data.message));
-        return;
-      }
+      const res = await _delete(`/user/${currentUser.user.id}`);
+      // const data: any = res.data;
 
       dispatch(deleteUserSuccess());
+
+      // react toast? implement sign out success message
+      // alert(data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
-        // setErrorMessage(err.message);
         dispatch(deleteUserFailure(err.message));
       } else {
         dispatch(deleteUserFailure("An unknown error occurred"));

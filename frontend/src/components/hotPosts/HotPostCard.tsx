@@ -5,23 +5,22 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import TimeAgo from "../TimeAgo";
+import { _get } from "@/api/axiosClient";
 
 const HotPostCard = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);
 
   useEffect(() => {
     try {
-      const fetchAuthor = async () => {
-        const res = await fetch(`/api/${post.createdBy}`);
+      const getAuthor = async () => {
+        const res = await _get<IGetUser>(`/${post.createdBy}`);
 
-        const data: IGetUser = await res.json();
+        const data = res.data;
 
-        if (res.ok) {
-          setAuthor(data);
-        }
+        setAuthor(data);
       };
 
-      fetchAuthor();
+      getAuthor();
     } catch (err) {
       console.error(err);
     }

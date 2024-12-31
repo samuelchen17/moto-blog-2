@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { _get } from "@/api/axiosClient";
 
 const RecentPostCard = ({ post }: { post: IPost }) => {
   const [author, setAuthor] = useState<IGetUser | null>(null);
@@ -20,13 +21,11 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   useEffect(() => {
     try {
       const fetchAuthor = async () => {
-        const res = await fetch(`/api/${post.createdBy}`);
+        const res = await _get<IGetUser>(`/${post.createdBy}`);
 
-        const data: IGetUser = await res.json();
+        const data = res.data;
 
-        if (res.ok) {
-          setAuthor(data);
-        }
+        setAuthor(data);
       };
 
       fetchAuthor();

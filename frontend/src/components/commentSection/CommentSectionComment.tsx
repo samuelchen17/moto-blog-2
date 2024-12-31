@@ -7,11 +7,16 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { Modal } from "flowbite-react";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
-import { setComments } from "../../redux/features/comment/commentSlice";
+import {
+  decrementTotalComments,
+  setComments,
+} from "../../redux/features/comment/commentSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import axios from "axios";
+import { _delete, _get, _patch } from "@/api/axiosClient";
+
+// implement show message been deleted
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -36,26 +41,24 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   // edit comment logic
   const handleSave = async (commentId: string) => {
     try {
-      const res = await axios.patch(
-        `/api/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+      await _patch(
+        `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
         { content: editedContent }
       );
 
-      if (res.status === 200) {
-        setIsEditing(false);
-        dispatch(
-          setComments(
-            comments.map((comment) =>
-              comment._id === commentId
-                ? {
-                    ...comment,
-                    content: editedContent,
-                  }
-                : comment
-            )
+      setIsEditing(false);
+      dispatch(
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  content: editedContent,
+                }
+              : comment
           )
-        );
-      }
+        )
+      );
     } catch (err) {
       console.error("Error editing comment:", err);
     }
@@ -69,30 +72,27 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         return;
       }
 
-      const res = await fetch(
-        `/api/comment/like/${commentId}/${currentUser.user.id}`,
-        { method: "PATCH" }
+      const res = await _patch<IComment>(
+        `/comment/like/${commentId}/${currentUser.user.id}`
       );
 
-      if (res.ok) {
-        const data = await res.json();
+      const data = res.data;
 
-        // loop through comments to find a match
-        dispatch(
-          setComments(
-            comments.map((comment) =>
-              comment._id === commentId
-                ? {
-                    // add likes and numberOfLikes to comment
-                    ...comment,
-                    likes: data.likes,
-                    numberOfLikes: data.likes.length,
-                  }
-                : comment
-            )
+      // loop through comments to find a match
+      dispatch(
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  // add likes and numberOfLikes to comment
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
           )
-        );
-      }
+        )
+      );
     } catch (err) {
       console.error(err);
     }
@@ -106,20 +106,17 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         return;
       }
 
-      const res = await fetch(
-        `/api/comment/delete/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-        {
-          method: "DELETE",
-        }
+      const res = await _delete(
+        `/comment/delete/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`
       );
 
-      if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-        dispatch(
-          setComments(comments.filter((comment) => comment._id !== commentId))
-        );
-      }
+      const data = res.data;
+      console.log(data);
+      dispatch(
+        setComments(comments.filter((comment) => comment._id !== commentId))
+      );
+
+      dispatch(decrementTotalComments());
     } catch (err) {
       console.error(err);
     }
@@ -128,11 +125,10 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await fetch(`/api/${comment.commentBy}`);
-        if (res.ok) {
-          const data: IGetUser = await res.json();
-          setCommentBy(data);
-        }
+        const res = await _get<IGetUser>(`/${comment.commentBy}`);
+
+        const data = res.data;
+        setCommentBy(data);
       } catch (err) {
         console.error(err);
       }
@@ -265,36 +261,3 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 };
 
 export default CommentSectionComment;
-
-// const handleSave = async (commentId: string) => {
-//   try {
-//     const res = await fetch(
-//       `/api/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-//       {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ content: editedContent }),
-//       }
-//     );
-
-//     if (res.ok) {
-//       setIsEditing(false);
-//       dispatch(
-//         setComments(
-//           comments.map((comment) =>
-//             comment._id === commentId
-//               ? {
-//                   ...comment,
-//                   content: editedContent,
-//                 }
-//               : comment
-//           )
-//         )
-//       );
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };

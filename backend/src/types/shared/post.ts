@@ -18,6 +18,12 @@ export interface IPost {
   image: string;
 }
 
+export interface IPostWithAuthor extends IPost {
+  author:
+    | { username: string; profilePicture: string }
+    | { username: "Deleted User" };
+}
+
 export interface IPostResponse {
   posts: IPost[];
   totalPosts: number;
