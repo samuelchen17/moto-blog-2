@@ -33,7 +33,7 @@ const DashSettingsDeleteUser = () => {
 
       dispatch(deleteUserSuccess());
 
-      // react toast? implement sign out success message
+      // react toast? implement delete success message
       // alert(data.message);
     } catch (err) {
       console.error("Error:", err);
