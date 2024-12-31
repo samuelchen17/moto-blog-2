@@ -1,4 +1,4 @@
-import { IPost, IPostWithAuthor } from "src/types";
+import { IPost } from "src/types";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import HotPostCard from "./HotPostCard";
@@ -6,60 +6,25 @@ import { IGetUser } from "src/types";
 import TimeAgo from "../TimeAgo";
 import { Link } from "react-router-dom";
 import { Spinner } from "flowbite-react";
+import { _get } from "@/api/axiosClient";
 
 const HotPosts = () => {
   const [hotPosts, setHotPosts] = useState<IPost[] | null>(null);
   const [author, setAuthor] = useState<IGetUser | null>(null);
 
-  // useEffect(() => {
-  //   try {
-  //     const fetchHotPosts = async () => {
-  //       const res = await fetch(`/api/post/gethotposts`);
-  //       const data: IPostWithAuthor[] = await res.json();
-
-  //       if (res.ok) {
-  //         setHotPosts(data);
-  //       }
-
-  //       const authorId = data[0].createdBy;
-
-  //       if (authorId) {
-  //         const authorRes = await fetch(`/api/${authorId}`);
-  //         const authorData: IGetUser = await authorRes.json();
-
-  //         if (!authorRes.ok) {
-  //           throw new Error("Failed to fetch author");
-  //         }
-
-  //         setAuthor(authorData);
-  //       }
-  //     };
-
-  //     fetchHotPosts();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // });
-
   useEffect(() => {
     try {
       const fetchHotPosts = async () => {
-        const res = await fetch(`/api/post/gethotposts`);
-        const data: IPost[] = await res.json();
+        const res = await _get<IPost[]>(`/post/gethotposts`);
+        const data = res.data;
 
-        if (res.ok) {
-          setHotPosts(data);
-        }
+        setHotPosts(data);
 
         const authorId = data[0].createdBy;
 
         if (authorId) {
-          const authorRes = await fetch(`/api/${authorId}`);
-          const authorData: IGetUser = await authorRes.json();
-
-          if (!authorRes.ok) {
-            throw new Error("Failed to fetch author");
-          }
+          const authorRes = await _get<IGetUser>(`/${authorId}`);
+          const authorData = authorRes.data;
 
           setAuthor(authorData);
         }
@@ -124,3 +89,34 @@ const HotPosts = () => {
 };
 
 export default HotPosts;
+
+// combined post and author fetch, removed as speed is more important for this project
+// useEffect(() => {
+//   try {
+//     const fetchHotPosts = async () => {
+//       const res = await fetch(`/api/post/gethotposts`);
+//       const data: IPostWithAuthor[] = await res.json();
+
+//       if (res.ok) {
+//         setHotPosts(data);
+//       }
+
+//       const authorId = data[0].createdBy;
+
+//       if (authorId) {
+//         const authorRes = await fetch(`/api/${authorId}`);
+//         const authorData: IGetUser = await authorRes.json();
+
+//         if (!authorRes.ok) {
+//           throw new Error("Failed to fetch author");
+//         }
+
+//         setAuthor(authorData);
+//       }
+//     };
+
+//     fetchHotPosts();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });

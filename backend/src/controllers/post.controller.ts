@@ -5,8 +5,6 @@ import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 import { IPostResponse, IPost } from "src/types";
 import { Config } from "../models/config.model";
-import { User } from "../models/user.model";
-import config from "../config/config";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
