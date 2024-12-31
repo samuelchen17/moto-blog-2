@@ -21,7 +21,7 @@ const RecentPostCard = ({ post }: { post: IPost }) => {
   useEffect(() => {
     try {
       const fetchAuthor = async () => {
-        const res = await _get<IGetUser>(`/api/${post.createdBy}`);
+        const res = await _get<IGetUser>(`/${post.createdBy}`);
 
         const data = res.data;
 
