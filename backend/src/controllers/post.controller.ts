@@ -35,9 +35,12 @@ export const attachAuthorsToPosts = async (
   ).lean();
 
   // author map for constant time lookup
-  const authorMap: Record<string, any> = {};
+  const authorMap: Record<string, IUserRes> = {};
   authors.forEach((author) => {
-    authorMap[author._id.toString()] = author;
+    authorMap[author._id.toString()] = {
+      ...author,
+      _id: author._id.toString(),
+    };
   });
 
   // attach author data to each post
