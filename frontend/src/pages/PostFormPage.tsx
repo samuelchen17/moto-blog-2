@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "../config/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
+import { _get } from "@/api/axiosClient";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
@@ -47,11 +48,12 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
       if (postId) {
         try {
           setPublishErrMsg(null);
-          const res = await fetch(`/api/post/getposts?postId=${postId}`);
-          const data: IPostResponse = await res.json();
-          if (res.ok) {
-            setFormData(data.posts[0]);
-          }
+          const res = await _get<IPostResponse>(
+            `/post/getposts?postId=${postId}`
+          );
+          const data = res.data;
+
+          setFormData(data.posts[0]);
         } catch (err) {
           console.error("Error:", err);
           setPublishErrMsg("Failed to load post data, internal error");

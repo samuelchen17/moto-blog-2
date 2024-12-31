@@ -10,6 +10,7 @@ import { deleteTempImageSuccess } from "../redux/features/image/imageSlice";
 import { AppDispatch } from "../redux/store";
 import { storage } from "../config/firebase.config";
 import { deleteObject, ref } from "firebase/storage";
+import { _patch } from "@/api/axiosClient";
 
 export interface IDashFormProps {
   formData: IUpdateUserPayload;
@@ -78,19 +79,11 @@ export const handleDashFormSubmit =
 
       const payload: IUpdateUserPayload = { ...formData };
 
-      const res: Response = await fetch(`/api/user/${currentUser.user.id}`, {
-        method: "PATCH",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data: ISuccessRes = await res.json();
-
-      if (!res.ok) {
-        // Display the error message from the backend
-        dispatch(updateFailure(data.message));
-        return;
-      }
+      const res = await _patch<ISuccessRes>(
+        `/user/${currentUser.user.id}`,
+        payload
+      );
+      const data = res.data;
 
       dispatch(deleteTempImageSuccess());
       dispatch(updateSuccess(data));

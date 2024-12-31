@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
+import { _get } from "@/api/axiosClient";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,10 +34,9 @@ const SearchPage = () => {
       setLoading(true);
       try {
         const searchQuery = new URLSearchParams(searchParams).toString();
-        const res = await fetch(`/api/post/getposts?${searchQuery}`);
-        if (!res.ok) return;
+        const res = await _get<IPostResponse>(`/post/getposts?${searchQuery}`);
 
-        const data: IPostResponse = await res.json();
+        const data = res.data;
         setPosts(data.posts);
         setShowMore(data.posts.length === 9);
       } catch (err) {
@@ -65,16 +65,13 @@ const SearchPage = () => {
       urlParams.set("startIndex", startIndex);
       const searchQuery = urlParams.toString();
 
-      const res = await fetch(`/api/post/getposts?${searchQuery}`);
-      if (!res.ok) return;
+      const res = await _get<IPostResponse>(`/post/getposts?${searchQuery}`);
 
-      const data: IPostResponse = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        setPosts((prev) => [...prev, ...data.posts]);
-        if (data.posts.length < 9) {
-          setShowMore(false);
-        }
+      setPosts((prev) => [...prev, ...data.posts]);
+      if (data.posts.length < 9) {
+        setShowMore(false);
       }
     } catch (err) {
       console.error("Error:", err);
