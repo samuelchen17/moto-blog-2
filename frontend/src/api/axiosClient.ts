@@ -1,8 +1,6 @@
 import { openLogin } from "@/redux/features/modal/authModalSlice";
 import { signOutSuccess } from "@/redux/features/user/userSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { store } from "@/redux/store";
-import userSignOut from "@/utils/userSignOut.utils";
 import axios from "axios";
 
 const apiClient = axios.create({
