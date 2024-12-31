@@ -9,16 +9,16 @@ import {
 } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
-import { IPostResponse, IPublishPostPayload } from "src/types";
+import { IPost, IPostResponse, IPublishPostPayload } from "src/types";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import DOMPurify from "dompurify";
 import { postCategory } from "../config/postCategory.config";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { storage } from "../config/firebase.config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
-import { _get } from "@/api/axiosClient";
+import { _get, _patch, _post } from "@/api/axiosClient";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
@@ -31,7 +31,6 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
   const [formData, setFormData] = useState<IPublishPostPayload>(clearForm);
   const [publishErrMsg, setPublishErrMsg] = useState<string | null>(null);
   const [imageUploading, setImageUploading] = useState<boolean>(false);
-  // const { postId } = useParams<{ postId: string }>();
 
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -64,7 +63,7 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
     if (postId && currentUser?.user.admin) {
       fetchPostById();
     }
-  }, [postId]);
+  }, [postId, currentUser?.user.admin]);
 
   // handle title and category changes
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,27 +120,20 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
       setFormData(updatedFormData);
 
       const payload: IPublishPostPayload = { ...formData };
+
+      // post new or update existing depending on post id
       const url = postId
-        ? `/api/post/update/${postId}/${currentUser.user.id}`
-        : `/api/post/create/${currentUser.user.id}`;
-      const method = postId ? "PATCH" : "POST";
+        ? `/post/update/${postId}/${currentUser.user.id}`
+        : `/post/create/${currentUser.user.id}`;
 
-      const res: Response = await fetch(url, {
-        method,
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = postId
+        ? await _patch<IPost>(url, payload)
+        : await _post<IPost>(url, payload);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setPublishErrMsg(data.message);
-        throw new Error(data.message);
-      }
+      const data = res.data;
 
       setPublishErrMsg(null);
 
-      // navigate(`/blogs/${data.slug}`);
       navigate(`/blogs/post/${data.slug}`);
     } catch (err) {
       console.error("Error:", err);
@@ -154,7 +146,7 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
     }
   };
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <div className="max-w-screen-lg mx-auto">

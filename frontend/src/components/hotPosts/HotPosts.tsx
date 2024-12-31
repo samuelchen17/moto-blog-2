@@ -94,8 +94,8 @@ export default HotPosts;
 // useEffect(() => {
 //   try {
 //     const fetchHotPosts = async () => {
-//       const res = await fetch(`/api/post/gethotposts`);
-//       const data: IPostWithAuthor[] = await res.json();
+//       const res = await _get<IPostWithAuthor[]>(`/post/gethotposts`);
+//       const data = await res.data;
 
 //       if (res.ok) {
 //         setHotPosts(data);
@@ -104,8 +104,8 @@ export default HotPosts;
 //       const authorId = data[0].createdBy;
 
 //       if (authorId) {
-//         const authorRes = await fetch(`/api/${authorId}`);
-//         const authorData: IGetUser = await authorRes.json();
+//         const authorRes = await _get<IGetUser>(`/${authorId}`);
+//         const authorData = authorRes.data;
 
 //         if (!authorRes.ok) {
 //           throw new Error("Failed to fetch author");

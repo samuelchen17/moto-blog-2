@@ -58,7 +58,7 @@ const DashPosts = () => {
     try {
       setErrorMessage(null);
       const res = await _get<IPostResponse>(
-        `/api/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
+        `/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
       );
       const data = res.data;
 
@@ -76,7 +76,7 @@ const DashPosts = () => {
     setOpenModal(false);
     try {
       const res = await _delete(
-        `/api/post/delete/${postIdToDelete}/${currentUser?.user.id}`
+        `/post/delete/${postIdToDelete}/${currentUser?.user.id}`
       );
 
       const data = res.data;
