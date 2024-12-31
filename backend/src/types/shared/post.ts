@@ -18,14 +18,19 @@ export interface IPost {
   image: string;
 }
 
-export interface IPostWithAuthor extends IPost {
-  author:
-    | { username: string; profilePicture: string }
-    | { username: "Deleted User" };
+// refactor to user after testing implement
+export interface IUserRes {
+  _id: string;
+  username: string;
+  profilePicture: string;
+}
+
+export interface IPostWithAuthor extends Omit<IPost, "createdBy"> {
+  createdBy: IUserRes;
 }
 
 export interface IPostResponse {
-  posts: IPost[];
+  posts: IPostWithAuthor[];
   totalPosts: number;
   lastMonthPosts: number;
 }
