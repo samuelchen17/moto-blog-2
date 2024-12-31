@@ -12,7 +12,7 @@ const HotPostCard = ({ post }: { post: IPost }) => {
 
   useEffect(() => {
     try {
-      const fetchAuthor = async () => {
+      const getAuthor = async () => {
         const res = await _get<IGetUser>(`/${post.createdBy}`);
 
         const data = res.data;
@@ -20,7 +20,7 @@ const HotPostCard = ({ post }: { post: IPost }) => {
         setAuthor(data);
       };
 
-      fetchAuthor();
+      getAuthor();
     } catch (err) {
       console.error(err);
     }
