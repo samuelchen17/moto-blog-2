@@ -51,12 +51,6 @@ export const dashNavItems: IDashNavItems[] = [
     icon: Users,
     admin: true,
   },
-  // {
-  //   name: "write",
-  //   path: "/create-post",
-  //   icon: NotebookPen,
-  //   admin: true,
-  // },
   {
     name: "write",
     path: "/dashboard/?tab=create-post",

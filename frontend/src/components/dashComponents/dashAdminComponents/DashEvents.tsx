@@ -3,8 +3,8 @@
 const DashEvents = () => {
   return (
     <div>
-      DashEvents should display here
-      <span>show up</span>
+      <div>Add event option here</div>
+      <span>events list and edit and delete option</span>
     </div>
   );
 };

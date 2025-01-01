@@ -66,8 +66,6 @@ const DashboardPage = () => {
 
           {/* edit post */}
           {postId && <PostFormPage key="update" postId={postId} />}
-
-          {/* {tab === "update-post/:postId" && (<PostFormPage key="update" />)} */}
         </div>
       </div>
     </SidebarProvider>

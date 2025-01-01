@@ -11,7 +11,7 @@ import { IComment, IAllCommentResponse } from "src/types";
 import { Button, Table } from "flowbite-react";
 import { _get } from "@/api/axiosClient";
 
-// implement styles, fix dashboard
+// implement styles, fix dashboard, add events summary
 
 const Dashboard = () => {
   const [users, setUsers] = useState<IGetUser[]>([]);
