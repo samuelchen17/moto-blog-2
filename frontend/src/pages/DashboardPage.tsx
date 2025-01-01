@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import DashProfile from "../components/dashComponents/DashProfile";
 import DashSidebar from "../components/dashComponents/DashSidebar";
 import DashHeader from "../components/dashComponents/DashHeader";
@@ -13,17 +12,6 @@ import DashEvents from "../components/dashComponents/dashAdminComponents/DashEve
 import PostFormPage from "./PostFormPage";
 
 const DashboardPage = () => {
-  // const location = useLocation();
-  // const [tab, setTab] = useState<string>("");
-
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(location.search);
-  //   const tabFromUrl = urlParams.get("tab");
-  //   if (tabFromUrl) {
-  //     setTab(tabFromUrl);
-  //   }
-  // }, [location.search]);
-
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
 
@@ -41,6 +29,9 @@ const DashboardPage = () => {
 
         {/* dashboard */}
         <div className="w-full max-w-screen-xl mx-auto mt-4 px-4">
+          {/* dynamically  display page title*/}
+          <h2 className="font-bold text-2xl mb-6">dynamically display</h2>
+
           {tab === "dashboard" && <Dashboard />}
 
           {/* profile */}

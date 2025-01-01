@@ -8,7 +8,7 @@ import {
   Users,
   FileText,
   NotebookPen,
-  CalendarPlus,
+  Calendar,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -52,9 +52,9 @@ export const dashNavItems: IDashNavItems[] = [
     admin: true,
   },
   {
-    name: "write",
-    path: "/dashboard/?tab=create-post",
-    icon: NotebookPen,
+    name: "events",
+    path: "/dashboard/?tab=events",
+    icon: Calendar,
     admin: true,
   },
   {
@@ -64,9 +64,9 @@ export const dashNavItems: IDashNavItems[] = [
     admin: true,
   },
   {
-    name: "events",
-    path: "/dashboard/?tab=events",
-    icon: CalendarPlus,
+    name: "write",
+    path: "/dashboard/?tab=create-post",
+    icon: NotebookPen,
     admin: true,
   },
 ];
