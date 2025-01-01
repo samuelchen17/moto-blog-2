@@ -29,16 +29,16 @@ const HomePage = () => {
 
       <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
         {/* hot posts */}
-        <div>
+        {/* <div>
           <h2 className="font-bold text-2xl mb-6">Hot posts</h2>
           <HotPosts />
-        </div>
+        </div> */}
 
         {/* recent posts */}
-        <div className="flex flex-col justify-center py-12 mb-12">
+        {/* <div className="flex flex-col justify-center py-12 mb-12">
           <h2 className="font-bold text-2xl mb-6">Recent posts</h2>
           <RecentPosts limit={9} />
-        </div>
+        </div> */}
 
         {/* upcoming events */}
         <UpcomingEvents />
