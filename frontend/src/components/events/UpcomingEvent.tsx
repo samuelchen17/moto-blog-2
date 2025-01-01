@@ -1,4 +1,4 @@
-import { MapPinned } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 
 const UpcomingEvent = () => {
@@ -7,8 +7,8 @@ const UpcomingEvent = () => {
     // finish hot posts selection? or perhaps integrate algo to auto select hot posts - might be too resource intensive for free service
 
     <div className="mx-auto">
-      <div className="flex gap-4 my-4 rounded-md bg-gray-100 dark:bg-gray-700 sm:dark:bg-transparent sm:bg-transparent p-4 mx-auto">
-        <div className="p-4 rounded-md bg-gray-100 dark:bg-gray-700 mb-auto hidden sm:block text-center w-20">
+      <div className="flex gap-4 mb-4 sm:mb-10 rounded-md bg-gray-100 dark:bg-gray-700 sm:dark:bg-transparent sm:bg-transparent mx-auto sm:p-0 p-4">
+        <div className="py-4 px-6 rounded-md bg-gray-100 dark:bg-gray-700 mb-auto hidden sm:block text-center mr-2">
           <div className="font-bold text-blue-500">DEC</div>
           <div className="text-2xl font-bold">22</div>
         </div>
@@ -24,17 +24,23 @@ const UpcomingEvent = () => {
 
           <h2 className="font-bold text-xl">Track day</h2>
 
-          <p className="mb-6">
+          <p className="mb-6 sm:mb-0 line-clamp-3">
+            description of the event goes here lorem ipsum fjasdkhf as hkjasdhf
+            khsdkjf hjafklds hfks hdjkfdsa h description of the event goes here
+            lorem ipsum fjasdkhf as hkjasdhf khsdkjf hjafklds hfks hdjkfdsa h
+            description of the event goes here lorem ipsum fjasdkhf as hkjasdhf
+            khsdkjf hjafklds hfks hdjkfdsa h description of the event goes here
+            lorem ipsum fjasdkhf as hkjasdhf khsdkjf hjafklds hfks hdjkfdsa h
             description of the event goes here lorem ipsum fjasdkhf as hkjasdhf
             khsdkjf hjafklds hfks hdjkfdsa h
           </p>
 
-          <div className="flex sm:flex-row flex-col gap-4">
+          <div className="flex sm:flex-row flex-col gap-4 sm:items-center">
             <div className="flex gap-1">
-              <MapPinned />
-              <span>Location melb cbd</span>
+              <MapPin />
+              <span className="">Location melb cbd</span>
             </div>
-            <Button>Join</Button>
+            <Button className="">Join</Button>
           </div>
         </div>
       </div>
