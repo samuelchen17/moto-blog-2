@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import { IEvent } from "src/types";
-import config from "../config/config";
 
-const postSchema = new mongoose.Schema<IEvent>(
+const eventSchema = new mongoose.Schema<IEvent>(
   {
     createdBy: {
       type: String,
@@ -39,4 +38,4 @@ const postSchema = new mongoose.Schema<IEvent>(
   { timestamps: true }
 );
 
-export const Event = mongoose.model("Event", postSchema);
+export const Event = mongoose.model("Event", eventSchema);

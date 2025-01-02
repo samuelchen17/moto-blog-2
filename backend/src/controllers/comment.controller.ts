@@ -150,6 +150,7 @@ export const getAllComments = async (
   }
 };
 
+// get comments for one post
 export const getComments = async (
   req: Request,
   res: Response<ICommentResponse>,
