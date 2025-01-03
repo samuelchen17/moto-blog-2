@@ -14,3 +14,10 @@ export interface IEvent extends IEventRequest {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IEventResponse {
+  events: IEvent[];
+  totalEvents: number;
+  lastMonthEvents: number;
+  activeEvents: number;
+}

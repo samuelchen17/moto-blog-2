@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IEvent, IEventRequest } from "src/types";
+import { IEvent, IEventRequest, IEventResponse } from "src/types";
 import { Event } from "../models/event.model";
 
 // implement get participants along with getAllEvents, for accordion
@@ -102,10 +102,42 @@ export const getEvent = async (
 
 export const getEvents = async (
   req: Request,
-  res: Response<IEvent[]>,
+  res: Response<IEventResponse>,
   next: NextFunction
 ) => {
   try {
+    const startIndex = parseInt(req.query.startIndex as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 9;
+    const sortDirection = req.query.order === "asc" ? -1 : 1;
+
+    const events = await Event.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalEvents = await Event.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthEvents = await Event.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    // implement, based on date and maybe time?
+    const activeEvents = 2;
+
+    res.status(200).json({
+      events,
+      totalEvents,
+      lastMonthEvents,
+      activeEvents,
+    });
   } catch (err) {
     console.error("Error retrieving events:", err);
     next(new CustomError(500, "Failed to retrieve events"));
