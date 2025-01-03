@@ -1,5 +1,4 @@
-export interface IEvent {
-  _id: string;
+export interface IEventRequest {
   createdBy: string;
   date: Date;
   title: string;
@@ -8,6 +7,10 @@ export interface IEvent {
   description: string;
   participants: string[];
   capacity: number;
+}
+
+export interface IEvent extends IEventRequest {
+  _id: string;
   createdAt: Date;
   updatedAt: Date;
 }

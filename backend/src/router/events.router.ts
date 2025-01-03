@@ -11,20 +11,15 @@ import { isAdmin, isAuthenticated } from "../middlewares/user.middlewares";
 const eventRouter = (router: Router) => {
   router.get("/event/get-events", getEvents);
   router.get("/event/get-event/:eventId", getEvent);
-  router.post(
-    "/event/create-event/:userId",
-    isAuthenticated,
-    isAdmin,
-    createEvent
-  );
+  router.post("/event/create-event/:id", isAuthenticated, isAdmin, createEvent);
   router.patch(
-    "/event/edit-event/:eventId/:userId",
+    "/event/edit-event/:eventId/:id",
     isAuthenticated,
     isAdmin,
     editEvent
   );
   router.delete(
-    "/event/delete-event/:eventId/:userId",
+    "/event/delete-event/:eventId/:id",
     isAuthenticated,
     isAdmin,
     deleteEvent

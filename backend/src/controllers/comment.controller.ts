@@ -3,6 +3,8 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
 import { ICommentResponse, IAllCommentResponse } from "src/types";
 
+// no need to sanitize or check if fields are missing
+
 export const createComment = async (
   req: Request,
   res: Response,

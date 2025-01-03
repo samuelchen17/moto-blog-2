@@ -45,6 +45,7 @@ apiClient.interceptors.response.use(
           store.dispatch(openLogin());
 
           // implement please sign in message?
+          console.log("please sign in implement");
         } catch (err) {
           console.error("Error logging out user:", err);
         }
