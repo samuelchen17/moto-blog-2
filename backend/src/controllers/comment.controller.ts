@@ -98,15 +98,13 @@ export const deleteComment = async (
   next: NextFunction
 ) => {
   try {
-    const { commentId } = req.params;
+    const deletedComment = await Comment.findByIdAndDelete(
+      req.params.commentId
+    );
 
-    const comment = await Comment.findById(commentId);
-
-    if (!comment) {
+    if (!deletedComment) {
       return next(new CustomError(404, "Comment not found"));
     }
-
-    await Comment.findByIdAndDelete(commentId);
     res.status(200).json("Comment has been deleted");
   } catch (err) {
     console.error("Error deleting comment:", err);
