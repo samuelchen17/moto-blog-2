@@ -118,22 +118,34 @@ export const getEvents = async (
     const totalEvents = await Event.countDocuments();
 
     const now = new Date();
-
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const oneMonthAgo = new Date(
       now.getFullYear(),
       now.getMonth() - 1,
       now.getDate()
     );
 
+    const currentEvents = await Event.find({
+      date: { $gte: today },
+    }).sort({ date: 1 });
+
+    // Past events: before today
+    const pastEvents = await Event.find({
+      date: { $lt: today },
+    }).sort({ date: -1 });
+
     const lastMonthEvents = await Event.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
 
-    // implement, based on date and maybe time?
-    const activeEvents = 2;
+    const activeEvents = await Event.countDocuments({
+      date: { $gte: now },
+    });
 
     res.status(200).json({
       events,
+      currentEvents,
+      pastEvents,
       totalEvents,
       lastMonthEvents,
       activeEvents,

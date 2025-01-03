@@ -17,6 +17,8 @@ export interface IEvent extends IEventRequest {
 
 export interface IEventResponse {
   events: IEvent[];
+  currentEvents: IEvent[];
+  pastEvents: IEvent[];
   totalEvents: number;
   lastMonthEvents: number;
   activeEvents: number;
