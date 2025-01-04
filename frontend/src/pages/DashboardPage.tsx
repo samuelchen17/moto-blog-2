@@ -30,7 +30,9 @@ const DashboardPage = () => {
         {/* dashboard */}
         <div className="w-full max-w-screen-xl mx-auto mt-4 px-4">
           {/* dynamically  display page title*/}
-          <h2 className="font-bold text-2xl mb-6">{tab}</h2>
+          <h2 className="text-2xl mb-6 capitalize">
+            {tab} <hr />
+          </h2>
 
           {tab === "dashboard" && <Dashboard />}
 

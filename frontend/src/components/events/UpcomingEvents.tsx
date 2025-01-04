@@ -21,20 +21,30 @@ const UpcomingEvents = () => {
     getEvents();
   });
 
-  return (
-    <div>
-      {events?.currentEvents.map((event) => (
-        <UpcomingEvent key={event._id} event={event} />
-      ))}
+  if (events) {
+    return (
+      <div>
+        {events.currentEvents?.length > 0 ? (
+          <>
+            {events.currentEvents.map((event) => (
+              <UpcomingEvent key={event._id} event={event} />
+            ))}
+          </>
+        ) : (
+          <div>More events coming soon!</div>
+        )}
 
-      <div>Past events</div>
-      {events?.pastEvents.map((event) => (
-        <UpcomingEvent key={event._id} event={event} />
-      ))}
-
-      <div className="text-red-500">More Events implement or past events</div>
-    </div>
-  );
+        <h2 className="font-bold text-2xl my-6">Past events</h2>
+        {events.pastEvents?.length > 0 ? (
+          events.pastEvents.map((event) => (
+            <UpcomingEvent key={event._id} event={event} />
+          ))
+        ) : (
+          <div>More events coming soon!</div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default UpcomingEvents;
