@@ -2,17 +2,12 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { Alert, Button, Modal, Table } from "flowbite-react";
-import {
-  IEvent,
-  IEventResponse,
-  IPostResponse,
-  IPostWithAuthor,
-} from "src/types";
+import { IEvent, IEventResponse } from "src/types";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 
 import { _delete, _get } from "@/api/axiosClient";
+import AddEventModal from "@/components/AddEventModal";
 
 const DashEvents = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
@@ -89,7 +84,7 @@ const DashEvents = () => {
 
   return (
     <div className="w-full">
-      <Button>Add new</Button>
+      <AddEventModal />
 
       {currentUser?.user.admin && events.length > 0 ? (
         // implement tailwind-scrollbar? for mobile
