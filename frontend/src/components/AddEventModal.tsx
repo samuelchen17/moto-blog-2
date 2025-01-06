@@ -18,7 +18,7 @@ const AddEventModal = () => {
         <Modal.Header />
         <Modal.Body>
           <form>
-            information for new event
+            <DatePicker />
             <div>
               <label>Title</label>
               <Input />
@@ -27,7 +27,14 @@ const AddEventModal = () => {
               <label>Description</label>
               <Input />
             </div>
-            <DatePicker />
+            <div>
+              <label>Category</label>
+              <Input />
+            </div>
+            <div>
+              <label>Location</label>
+              <Input />
+            </div>
           </form>
         </Modal.Body>
       </Modal>
