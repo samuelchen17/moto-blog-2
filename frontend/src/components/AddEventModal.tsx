@@ -19,7 +19,15 @@ const AddEventModal = () => {
         <Modal.Body>
           <form>
             information for new event
-            <DatePickerDemo />
+            <div>
+              <label>Title</label>
+              <Input />
+            </div>
+            <div>
+              <label>Description</label>
+              <Input />
+            </div>
+            <DatePicker />
           </form>
         </Modal.Body>
       </Modal>
@@ -40,8 +48,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "./ui/input";
 
-export function DatePickerDemo() {
+export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
 
   return (
