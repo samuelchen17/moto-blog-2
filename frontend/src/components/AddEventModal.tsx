@@ -1,44 +1,61 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Modal } from "flowbite-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const AddEventModal = () => {
   const [addEvent, setAddEvent] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   return (
-    <>
-      <Button onClick={() => setOpenModal(true)}>Add event</Button>{" "}
-      <Modal
-        show={openModal}
-        size="md"
-        onClose={() => setOpenModal(false)}
-        popup
-        dismissible
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <form>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Create event</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create Event</DialogTitle>
+          <DialogDescription>
+            Please fill out event details here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="flex flex-col gap-2">
+            <Label>Event name</Label>
+            <Input id="name"></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Date</Label>
             <DatePicker />
-            <div>
-              <label>Title</label>
-              <Input />
-            </div>
-            <div>
-              <label>Description</label>
-              <Input />
-            </div>
-            <div>
-              <label>Category</label>
-              <Input />
-            </div>
-            <div>
-              <label>Location</label>
-              <Input />
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
-    </>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Description</Label>
+            <Input id="name"></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Category</Label>
+            <Input id="name"></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Location</Label>
+            <Input id="name"></Input>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type="submit">Add Event</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -56,6 +73,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
