@@ -12,50 +12,53 @@ import {
 
 const AddEventModal = () => {
   const [addEvent, setAddEvent] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Create event</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Create Event</DialogTitle>
-          <DialogDescription>
-            Please fill out event details here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="flex flex-col gap-2">
-            <Label>Event name</Label>
-            <Input id="name"></Input>
-          </div>
+    <>
+      <DatePicker />
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Create event</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create Event</DialogTitle>
+            <DialogDescription>
+              Please fill out event details here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label>Event name</Label>
+              <Input id="name"></Input>
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>Date</Label>
-            <DatePicker />
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label>Date</Label>
+              <DatePicker />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>Description</Label>
-            <Input id="name"></Input>
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label>Description</Label>
+              <Input id="name"></Input>
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>Category</Label>
-            <Input id="name"></Input>
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label>Category</Label>
+              <Input id="name"></Input>
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>Location</Label>
-            <Input id="name"></Input>
+            <div className="flex flex-col gap-2">
+              <Label>Location</Label>
+              <Input id="name"></Input>
+            </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Add Event</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <Button type="submit">Add Event</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
@@ -64,7 +67,6 @@ export default AddEventModal;
 import * as React from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
