@@ -11,54 +11,100 @@ import {
 } from "@/components/ui/dialog";
 
 const AddEventModal = () => {
-  const [addEvent, setAddEvent] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
+  );
+  const [eventDetails, setEventDetails] = useState<IEventRequest>({
+    createdBy: currentUser!.user.id,
+    date: new Date(),
+    title: "",
+    location: "",
+    category: "",
+    description: "",
+    participants: [],
+    capacity: 0,
+  });
+
+  const handleChange = (field: keyof IEventRequest, value: any) => {
+    setEventDetails((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const res = await _post(
+        `/event/create-event/${currentUser?.user.id}`,
+        eventDetails
+      );
+      const data = res.data;
+
+      // update live feedback after adding event implement
+    } catch (err) {
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    }
+  };
+
+  console.log(eventDetails);
 
   return (
-    <>
-      <DatePicker />
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>Create event</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Create Event</DialogTitle>
-            <DialogDescription>
-              Please fill out event details here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex flex-col gap-2">
-              <Label>Event name</Label>
-              <Input id="name"></Input>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Date</Label>
-              <DatePicker />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Description</Label>
-              <Input id="name"></Input>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Category</Label>
-              <Input id="name"></Input>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Location</Label>
-              <Input id="name"></Input>
-            </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="mr-auto">Create event</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Create Event</DialogTitle>
+          <DialogDescription>
+            Please fill out event details here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="flex flex-col gap-2">
+            <Label>Event title</Label>
+            <Input
+              id="title"
+              value={eventDetails?.title}
+              onChange={(e) => handleChange("title", e.target.value)}
+            ></Input>
           </div>
-          <DialogFooter>
-            <Button type="submit">Add Event</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+
+          <div className="flex flex-col gap-2">
+            <Label>Date</Label>
+            <DatePicker />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Description</Label>
+            <Input id="name"></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Category</Label>
+            <Input id="name"></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Location</Label>
+            <Input id="name"></Input>
+          </div>
+        </div>
+
+        {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
+        <DialogFooter>
+          <Button type="submit" onClick={handleSubmit}>
+            Add Event
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -76,6 +122,11 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { IEventRequest } from "@/types";
+import { _post } from "@/api/axiosClient";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+import { Alert } from "flowbite-react";
 
 export function DatePicker() {
   const [date, setDate] = React.useState<Date>();

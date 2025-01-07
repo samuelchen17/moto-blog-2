@@ -83,7 +83,7 @@ const DashEvents = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full flex gap-2 flex-col">
       <AddEventModal />
 
       {currentUser?.user.admin && events.length > 0 ? (
