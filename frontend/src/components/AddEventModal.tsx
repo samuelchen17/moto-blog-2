@@ -10,7 +10,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// also display new comment once post successful
+const defaultEventDetails = {
+  createdBy: "",
+  date: new Date(),
+  title: "",
+  location: "",
+  category: "",
+  description: "",
+  participants: [],
+  capacity: 0,
+};
 
 const AddEventModal = ({
   setEvents,
@@ -23,16 +32,8 @@ const AddEventModal = ({
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const [eventDetails, setEventDetails] = useState<IEventRequest>({
-    createdBy: currentUser!.user.id,
-    date: new Date(),
-    title: "",
-    location: "",
-    category: "",
-    description: "",
-    participants: [],
-    capacity: 0,
-  });
+  const [eventDetails, setEventDetails] =
+    useState<IEventRequest>(defaultEventDetails);
 
   const handleChange = (field: string, value: any) => {
     setEventDetails((prev) => ({
@@ -46,11 +47,11 @@ const AddEventModal = ({
 
     const updatedEventDetails = {
       ...eventDetails,
+      createdBy: currentUser?.user.id,
       date: date?.toISOString(),
     };
 
     try {
-      console.log(updatedEventDetails);
       const res = await _post<IEvent>(
         `/event/create-event/${currentUser?.user.id}`,
         updatedEventDetails
@@ -59,6 +60,7 @@ const AddEventModal = ({
 
       setEvents((prev) => [...prev, data]);
 
+      setEventDetails(defaultEventDetails);
       setOpen(false);
     } catch (err) {
       console.error("Error:", err);
@@ -118,7 +120,6 @@ const AddEventModal = ({
           <div className="flex flex-col gap-2">
             <Label>Location</Label>
             <Input
-              type="number"
               id="location"
               value={eventDetails?.location}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
@@ -128,6 +129,7 @@ const AddEventModal = ({
           <div className="flex flex-col gap-2">
             <Label>Capacity</Label>
             <Input
+              type="number"
               id="capacity"
               value={eventDetails?.capacity}
               onChange={(e) => handleChange(e.target.id, e.target.value)}

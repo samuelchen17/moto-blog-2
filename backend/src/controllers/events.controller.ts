@@ -30,8 +30,7 @@ export const createEvent = async (
       !location ||
       !category ||
       !description ||
-      !participants ||
-      !capacity
+      !participants
     ) {
       return next(new CustomError(400, "All fields are required"));
     }
