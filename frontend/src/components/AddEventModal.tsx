@@ -12,6 +12,7 @@ import {
 
 const AddEventModal = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [date, setDate] = React.useState<Date>();
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -22,11 +23,11 @@ const AddEventModal = () => {
     location: "",
     category: "",
     description: "",
-    participants: [],
-    capacity: 0,
+    participants: ["person 1"],
+    capacity: 5,
   });
 
-  const handleChange = (field: keyof IEventRequest, value: any) => {
+  const handleChange = (field: string, value: any) => {
     setEventDetails((prev) => ({
       ...prev,
       [field]: value,
@@ -34,10 +35,16 @@ const AddEventModal = () => {
   };
 
   const handleSubmit = async () => {
+    const updatedEventDetails = {
+      ...eventDetails,
+      date: date?.toISOString(),
+    };
+
     try {
+      console.log(updatedEventDetails);
       const res = await _post(
         `/event/create-event/${currentUser?.user.id}`,
-        eventDetails
+        updatedEventDetails
       );
       const data = res.data;
 
@@ -51,8 +58,6 @@ const AddEventModal = () => {
       }
     }
   };
-
-  console.log(eventDetails);
 
   return (
     <Dialog>
@@ -72,27 +77,44 @@ const AddEventModal = () => {
             <Input
               id="title"
               value={eventDetails?.title}
-              onChange={(e) => handleChange("title", e.target.value)}
+              onChange={(e) => handleChange(e.target.id, e.target.value)}
             ></Input>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label>Date</Label>
-            <DatePicker />
+            <DatePicker date={date} setDate={setDate} />
           </div>
 
           <div className="flex flex-col gap-2">
             <Label>Description</Label>
-            <Input id="name"></Input>
+            <Input
+              id="description"
+              value={eventDetails?.description}
+              onChange={(e) => handleChange(e.target.id, e.target.value)}
+            ></Input>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label>Category</Label>
-            <Input id="name"></Input>
+            <Input
+              id="category"
+              value={eventDetails?.category}
+              onChange={(e) => handleChange(e.target.id, e.target.value)}
+            ></Input>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label>Location</Label>
+            <Input
+              id="location"
+              value={eventDetails?.location}
+              onChange={(e) => handleChange(e.target.id, e.target.value)}
+            ></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Capacity</Label>
             <Input id="name"></Input>
           </div>
         </div>
@@ -128,9 +150,12 @@ import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { Alert } from "flowbite-react";
 
-export function DatePicker() {
-  const [date, setDate] = React.useState<Date>();
+interface IDatePicker {
+  date: Date | undefined;
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}
 
+export function DatePicker({ date, setDate }: IDatePicker) {
   return (
     <Popover>
       <PopoverTrigger asChild>

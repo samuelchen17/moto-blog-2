@@ -83,7 +83,7 @@ const DashEvents = () => {
   };
 
   return (
-    <div className="w-full flex gap-2 flex-col">
+    <div className="w-full flex gap-6 flex-col">
       <AddEventModal />
 
       {currentUser?.user.admin && events.length > 0 ? (
@@ -91,8 +91,8 @@ const DashEvents = () => {
         <div className="overflow-x-auto">
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Title</Table.HeadCell>
               <Table.HeadCell>Date</Table.HeadCell>
+              <Table.HeadCell>Title</Table.HeadCell>
               <Table.HeadCell>Location</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
               <Table.HeadCell>
