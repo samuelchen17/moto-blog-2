@@ -10,9 +10,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+// also display new comment once post successful
+
 const AddEventModal = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
+  const [open, setOpen] = useState<boolean>(false);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -23,7 +26,7 @@ const AddEventModal = () => {
     location: "",
     category: "",
     description: "",
-    participants: ["person 1"],
+    participants: [],
     capacity: 5,
   });
 
@@ -48,6 +51,8 @@ const AddEventModal = () => {
       );
       const data = res.data;
 
+      setOpen(false);
+
       // update live feedback after adding event implement
     } catch (err) {
       console.error("Error:", err);
@@ -60,7 +65,7 @@ const AddEventModal = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="mr-auto">Create event</Button>
       </DialogTrigger>
