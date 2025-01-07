@@ -91,7 +91,7 @@ const AddEventModal = ({
               id="title"
               value={eventDetails?.title}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
-            ></Input>
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -101,11 +101,11 @@ const AddEventModal = ({
 
           <div className="flex flex-col gap-2">
             <Label>Description</Label>
-            <Input
+            <Textarea
               id="description"
               value={eventDetails?.description}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
-            ></Input>
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -114,7 +114,7 @@ const AddEventModal = ({
               id="category"
               value={eventDetails?.category}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
-            ></Input>
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -123,7 +123,7 @@ const AddEventModal = ({
               id="location"
               value={eventDetails?.location}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
-            ></Input>
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -133,7 +133,7 @@ const AddEventModal = ({
               id="capacity"
               value={eventDetails?.capacity}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
-            ></Input>
+            />
           </div>
         </div>
 
@@ -167,6 +167,7 @@ import { _post } from "@/api/axiosClient";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { Alert } from "flowbite-react";
+import { Textarea } from "./ui/textarea";
 
 interface IDatePicker {
   date: Date | undefined;

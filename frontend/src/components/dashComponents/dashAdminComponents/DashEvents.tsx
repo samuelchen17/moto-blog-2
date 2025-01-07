@@ -9,6 +9,8 @@ import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { _delete, _get } from "@/api/axiosClient";
 import AddEventModal from "@/components/AddEventModal";
 
+// implement, sort by date of event rather than creation
+
 const DashEvents = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
@@ -46,7 +48,7 @@ const DashEvents = () => {
     try {
       setErrorMessage(null);
       const res = await _get<IEventResponse>(
-        `/event/get-events&startIndex=${startIndex}`
+        `/event/get-events?startIndex=${startIndex}`
       );
       const data = res.data;
 
