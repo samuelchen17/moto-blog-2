@@ -23,8 +23,10 @@ const defaultEventDetails = {
 
 const AddEventModal = ({
   setEvents,
+  children,
 }: {
   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
+  children: any;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
@@ -74,9 +76,7 @@ const AddEventModal = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="mr-auto">Create event</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create Event</DialogTitle>
