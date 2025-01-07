@@ -84,7 +84,7 @@ const DashEvents = () => {
 
   return (
     <div className="w-full flex gap-6 flex-col">
-      <AddEventModal />
+      <AddEventModal setEvents={setEvents} />
 
       {currentUser?.user.admin && events.length > 0 ? (
         // implement tailwind-scrollbar? for mobile

@@ -12,7 +12,11 @@ import {
 
 // also display new comment once post successful
 
-const AddEventModal = () => {
+const AddEventModal = ({
+  setEvents,
+}: {
+  setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
+}) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
   const [open, setOpen] = useState<boolean>(false);
@@ -27,7 +31,7 @@ const AddEventModal = () => {
     category: "",
     description: "",
     participants: [],
-    capacity: 5,
+    capacity: 0,
   });
 
   const handleChange = (field: string, value: any) => {
@@ -38,6 +42,8 @@ const AddEventModal = () => {
   };
 
   const handleSubmit = async () => {
+    setErrorMessage("");
+
     const updatedEventDetails = {
       ...eventDetails,
       date: date?.toISOString(),
@@ -45,15 +51,15 @@ const AddEventModal = () => {
 
     try {
       console.log(updatedEventDetails);
-      const res = await _post(
+      const res = await _post<IEvent>(
         `/event/create-event/${currentUser?.user.id}`,
         updatedEventDetails
       );
       const data = res.data;
 
-      setOpen(false);
+      setEvents((prev) => [...prev, data]);
 
-      // update live feedback after adding event implement
+      setOpen(false);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
@@ -112,6 +118,7 @@ const AddEventModal = () => {
           <div className="flex flex-col gap-2">
             <Label>Location</Label>
             <Input
+              type="number"
               id="location"
               value={eventDetails?.location}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
@@ -120,7 +127,11 @@ const AddEventModal = () => {
 
           <div className="flex flex-col gap-2">
             <Label>Capacity</Label>
-            <Input id="name"></Input>
+            <Input
+              id="capacity"
+              value={eventDetails?.capacity}
+              onChange={(e) => handleChange(e.target.id, e.target.value)}
+            ></Input>
           </div>
         </div>
 
@@ -149,7 +160,7 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { IEventRequest } from "@/types";
+import { IEvent, IEventRequest } from "@/types";
 import { _post } from "@/api/axiosClient";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
