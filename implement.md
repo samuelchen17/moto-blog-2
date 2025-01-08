@@ -45,6 +45,4 @@ a tab for user dash events, where they can see what events they have signed up t
 
 sort event by event date rather than creation date?
 
-edit event wrapper, shared with create event
-
 join events - also show capacity, display if event full
