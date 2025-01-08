@@ -88,14 +88,16 @@ export const editEvent = async (
 ) => {
   try {
     const { eventId } = req.params;
+    const updateFields = req.body;
 
-    const editedEvent = await Event.findByIdAndUpdate(
-      eventId,
-      {
-        content: req.body.content,
-      },
-      { new: true }
-    );
+    if (!updateFields || Object.keys(updateFields).length === 0) {
+      return next(new CustomError(400, "No fields provided for update"));
+    }
+
+    const editedEvent = await Event.findByIdAndUpdate(eventId, updateFields, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!editedEvent) {
       return next(new CustomError(404, "Event not found"));
