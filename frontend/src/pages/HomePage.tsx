@@ -28,9 +28,9 @@ const HomePage = () => {
         </div>
       </ImageBanner>
       {/* gap-6 my-12 */}
-      <div className="flex flex-col px-4 max-w-screen-xl mx-auto gap-10">
+      <div className="flex flex-col px-4 max-w-screen-xl mx-auto">
         {/* hot posts */}
-        <div className="mt-10">
+        <div>
           <HeadingTwoWrapper>Hot posts</HeadingTwoWrapper>
           <HotPosts />
         </div>
