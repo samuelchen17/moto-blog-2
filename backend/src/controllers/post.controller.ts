@@ -191,7 +191,11 @@ export const deletePost = async (
   next: NextFunction
 ) => {
   try {
-    await Post.findByIdAndDelete(req.params.postId);
+    const deletedPost = await Post.findByIdAndDelete(req.params.postId);
+
+    if (!deletePost) {
+      return next(new CustomError(404, "Post not found"));
+    }
 
     // implement delete all comments related to post
 

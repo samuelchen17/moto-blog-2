@@ -55,10 +55,6 @@ const DashProfile = () => {
 
   return (
     <div className="w-full mx-auto">
-      <h1 className="text-2xl">Profile</h1>
-
-      <hr></hr>
-
       <div className="flex flex-col-reverse">
         <form
           className="flex flex-col gap-2"

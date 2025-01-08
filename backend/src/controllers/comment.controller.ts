@@ -3,6 +3,8 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
 import { ICommentResponse, IAllCommentResponse } from "src/types";
 
+// no need to sanitize or check if fields are missing
+
 export const createComment = async (
   req: Request,
   res: Response,
@@ -69,12 +71,6 @@ export const editComment = async (
   try {
     const { commentId } = req.params;
 
-    const comment = await Comment.findById(commentId);
-
-    if (!comment) {
-      return next(new CustomError(404, "Comment not found"));
-    }
-
     const editedComment = await Comment.findByIdAndUpdate(
       commentId,
       {
@@ -82,6 +78,10 @@ export const editComment = async (
       },
       { new: true }
     );
+
+    if (!editedComment) {
+      return next(new CustomError(404, "Comment not found"));
+    }
 
     res.status(200).json(editedComment);
   } catch (err) {
@@ -96,15 +96,13 @@ export const deleteComment = async (
   next: NextFunction
 ) => {
   try {
-    const { commentId } = req.params;
+    const deletedComment = await Comment.findByIdAndDelete(
+      req.params.commentId
+    );
 
-    const comment = await Comment.findById(commentId);
-
-    if (!comment) {
+    if (!deletedComment) {
       return next(new CustomError(404, "Comment not found"));
     }
-
-    await Comment.findByIdAndDelete(commentId);
     res.status(200).json("Comment has been deleted");
   } catch (err) {
     console.error("Error deleting comment:", err);
@@ -150,6 +148,7 @@ export const getAllComments = async (
   }
 };
 
+// get comments for one post
 export const getComments = async (
   req: Request,
   res: Response<ICommentResponse>,

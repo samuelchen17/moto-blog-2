@@ -12,6 +12,7 @@ import {
 import HotPosts from "@/components/hotPosts/HotPosts";
 import ImageBanner from "@/components/ImageBanner";
 import UpcomingEvents from "@/components/events/UpcomingEvents";
+import HeadingTwoWrapper from "@/components/HeadingTwoWrapper";
 
 const HomePage = () => {
   return (
@@ -26,22 +27,25 @@ const HomePage = () => {
           </h2>
         </div>
       </ImageBanner>
-
-      <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
+      {/* gap-6 my-12 */}
+      <div className="flex flex-col px-4 max-w-screen-xl mx-auto">
         {/* hot posts */}
         <div>
-          <h2 className="font-bold text-2xl mb-6">Hot posts</h2>
+          <HeadingTwoWrapper>Hot posts</HeadingTwoWrapper>
           <HotPosts />
         </div>
 
         {/* recent posts */}
-        <div className="flex flex-col justify-center py-12 mb-12">
-          <h2 className="font-bold text-2xl mb-6">Recent posts</h2>
+        <div className="flex flex-col justify-center pb-14">
+          <HeadingTwoWrapper>Recent posts</HeadingTwoWrapper>
           <RecentPosts limit={9} />
         </div>
 
         {/* upcoming events */}
-        <UpcomingEvents />
+        <div className="max-w-screen-lg mx-auto">
+          <HeadingTwoWrapper>Upcoming events</HeadingTwoWrapper>
+          <UpcomingEvents />
+        </div>
 
         <div className="rounded-md border overflow-hidden relative my-12 h-[300px]">
           <img

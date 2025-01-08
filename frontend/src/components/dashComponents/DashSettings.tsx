@@ -26,10 +26,6 @@ const DashSettings = () => {
 
   return (
     <div className="w-full mx-auto">
-      <h1 className="text-2xl">Settings</h1>
-
-      <hr></hr>
-
       <form
         className="flex flex-col gap-6"
         onSubmit={handleDashFormSubmit({
