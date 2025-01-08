@@ -24,9 +24,11 @@ const defaultEventDetails = {
 const AddEventModal = ({
   setEvents,
   children,
+  eventToBeEdited,
 }: {
   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
   children: any;
+  eventToBeEdited?: IEvent;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
@@ -34,8 +36,15 @@ const AddEventModal = ({
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const [eventDetails, setEventDetails] =
-    useState<IEventRequest>(defaultEventDetails);
+  const eventInfo = eventToBeEdited ? eventToBeEdited : defaultEventDetails;
+  const [eventDetails, setEventDetails] = useState<IEventRequest>(eventInfo);
+
+  // need useEffect as calling a state setter function directly during component render is not allowed
+  React.useEffect(() => {
+    if (eventToBeEdited?.date) {
+      setDate(new Date(eventToBeEdited.date));
+    }
+  }, [eventToBeEdited]);
 
   const handleChange = (field: string, value: any) => {
     setEventDetails((prev) => ({

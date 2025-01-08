@@ -130,9 +130,14 @@ const DashEvents = () => {
                     </button>
                   </Table.Cell>
                   <Table.Cell>
-                    <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                      Edit
-                    </div>
+                    <AddEventModal
+                      setEvents={setEvents}
+                      eventToBeEdited={event}
+                    >
+                      <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                        Edit
+                      </div>
+                    </AddEventModal>
                   </Table.Cell>
                 </Table.Row>
               ))}
