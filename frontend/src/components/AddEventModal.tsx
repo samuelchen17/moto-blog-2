@@ -63,13 +63,27 @@ const AddEventModal = ({
     };
 
     try {
-      const res = await _post<IEvent>(
-        `/event/create-event/${currentUser?.user.id}`,
-        updatedEventDetails
-      );
+      const url = eventToBeEdited
+        ? `/event/edit-event/${eventToBeEdited._id}/${currentUser?.user.id}`
+        : `/event/create-event/${currentUser?.user.id}`;
+
+      const res = eventToBeEdited
+        ? await _patch<IEvent>(url, updatedEventDetails)
+        : await _post<IEvent>(url, updatedEventDetails);
+
       const data = res.data;
 
-      setEvents((prev) => [...prev, data]);
+      setEvents((prev) => {
+        if (eventToBeEdited) {
+          // find event in array by id
+          return prev.map((event) =>
+            event._id === eventToBeEdited._id ? { ...event, ...data } : event
+          );
+        } else {
+          // add the new event
+          return [...prev, data];
+        }
+      });
 
       setEventDetails(defaultEventDetails);
       setOpen(false);
@@ -88,7 +102,9 @@ const AddEventModal = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Create Event</DialogTitle>
+          <DialogTitle>
+            {eventToBeEdited ? "Edit Event" : "Create Event"}
+          </DialogTitle>
           <DialogDescription>
             Please fill out event details here. Click save when you're done.
           </DialogDescription>
@@ -149,7 +165,7 @@ const AddEventModal = ({
         {errorMessage && <Alert color="failure">{errorMessage}</Alert>}
         <DialogFooter>
           <Button type="submit" onClick={handleSubmit}>
-            Add Event
+            {eventToBeEdited ? "Save Changes" : "Add Event"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -172,7 +188,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { IEvent, IEventRequest } from "@/types";
-import { _post } from "@/api/axiosClient";
+import { _patch, _post } from "@/api/axiosClient";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { Alert } from "flowbite-react";
