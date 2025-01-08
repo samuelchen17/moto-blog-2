@@ -81,11 +81,27 @@ export const deleteEvent = async (
 };
 
 export const editEvent = async (
-  req: Request<{}, {}, IEventRequest>,
+  req: Request,
+  //   req: Request<{}, {}, IEventRequest>,
   res: Response<IEvent>,
   next: NextFunction
 ) => {
   try {
+    const { eventId } = req.params;
+
+    const editedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      {
+        content: req.body.content,
+      },
+      { new: true }
+    );
+
+    if (!editedEvent) {
+      return next(new CustomError(404, "Event not found"));
+    }
+
+    res.status(200).json(editedEvent);
   } catch (err) {
     console.error("Error updating event:", err);
     next(new CustomError(500, "Failed to update event"));

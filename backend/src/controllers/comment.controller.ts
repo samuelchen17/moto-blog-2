@@ -71,12 +71,6 @@ export const editComment = async (
   try {
     const { commentId } = req.params;
 
-    const comment = await Comment.findById(commentId);
-
-    if (!comment) {
-      return next(new CustomError(404, "Comment not found"));
-    }
-
     const editedComment = await Comment.findByIdAndUpdate(
       commentId,
       {
@@ -84,6 +78,10 @@ export const editComment = async (
       },
       { new: true }
     );
+
+    if (!editedComment) {
+      return next(new CustomError(404, "Comment not found"));
+    }
 
     res.status(200).json(editedComment);
   } catch (err) {
