@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import UpcomingEvent from "./UpcomingEvent";
 import { _get } from "@/api/axiosClient";
 import { IEventResponse } from "@/types";
+import HeadingTwoWrapper from "../HeadingTwoWrapper";
 
 const UpcomingEvents = () => {
   const [events, setEvents] = useState<IEventResponse>();
@@ -33,8 +34,8 @@ const UpcomingEvents = () => {
         ) : (
           <div>More events coming soon!</div>
         )}
+        <HeadingTwoWrapper>Past events</HeadingTwoWrapper>
 
-        <h2 className="font-bold text-2xl my-6">Past events</h2>
         {events.pastEvents?.length > 0 ? (
           events.pastEvents.map((event) => (
             <UpcomingEvent key={event._id} event={event} />
