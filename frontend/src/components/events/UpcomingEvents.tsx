@@ -25,24 +25,29 @@ const UpcomingEvents = () => {
   if (events) {
     return (
       <div>
-        {events.currentEvents?.length > 0 ? (
-          <>
-            {events.currentEvents.map((event) => (
-              <UpcomingEvent key={event._id} event={event} />
-            ))}
-          </>
-        ) : (
-          <div>More events coming soon!</div>
-        )}
+        <div className="grid sm:gap-12 gap-4">
+          {events.currentEvents?.length > 0 ? (
+            <>
+              {events.currentEvents.map((event) => (
+                <UpcomingEvent key={event._id} event={event} />
+              ))}
+            </>
+          ) : (
+            <div>More events coming soon!</div>
+          )}
+        </div>
+
         <HeadingTwoWrapper>Past events</HeadingTwoWrapper>
 
-        {events.pastEvents?.length > 0 ? (
-          events.pastEvents.map((event) => (
-            <UpcomingEvent key={event._id} event={event} />
-          ))
-        ) : (
-          <div>More events coming soon!</div>
-        )}
+        <div className="grid sm:gap-12 gap-4">
+          {events.pastEvents?.length > 0 ? (
+            events.pastEvents.map((event) => (
+              <UpcomingEvent key={event._id} event={event} />
+            ))
+          ) : (
+            <div>More events coming soon!</div>
+          )}
+        </div>
       </div>
     );
   }

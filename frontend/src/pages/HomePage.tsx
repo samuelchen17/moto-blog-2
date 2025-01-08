@@ -27,16 +27,16 @@ const HomePage = () => {
           </h2>
         </div>
       </ImageBanner>
-
-      <div className="flex flex-col gap-6 my-12 px-4 max-w-screen-xl mx-auto ">
+      {/* gap-6 my-12 */}
+      <div className="flex flex-col px-4 max-w-screen-xl mx-auto gap-10">
         {/* hot posts */}
-        <div>
+        <div className="mt-10">
           <HeadingTwoWrapper>Hot posts</HeadingTwoWrapper>
           <HotPosts />
         </div>
 
         {/* recent posts */}
-        <div className="flex flex-col justify-center py-12 mb-12 ">
+        <div className="flex flex-col justify-center pb-14">
           <HeadingTwoWrapper>Recent posts</HeadingTwoWrapper>
           <RecentPosts limit={9} />
         </div>
