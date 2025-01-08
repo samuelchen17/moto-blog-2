@@ -30,11 +30,11 @@ const UpcomingEvent = ({ event }: { event: IEvent }) => {
         <p className="mb-6 sm:mb-0 line-clamp-3">{event.description}</p>
 
         <div className="flex sm:flex-row flex-col gap-4 sm:items-center">
+          <Button className="order-1 sm:order-none">Join</Button>
           <div className="flex gap-1">
             <MapPin />
             <span className="">{event.location}</span>
           </div>
-          <Button className="">Join</Button>
         </div>
       </div>
     </div>
