@@ -33,7 +33,7 @@ const UpcomingEvent = ({ event }: { event: IEvent }) => {
           <Button className="order-1 sm:order-none">Join</Button>
           <div className="flex gap-1">
             <MapPin />
-            <span className="">{event.location}</span>
+            <span>{event.location}</span>
           </div>
         </div>
       </div>
