@@ -84,3 +84,7 @@ export const SkeletonRecentPostsCard = () => {
   }
   return <>{skeletons}</>;
 };
+
+export const SkeletonEventCard = () => {
+  return <div>hello</div>;
+};

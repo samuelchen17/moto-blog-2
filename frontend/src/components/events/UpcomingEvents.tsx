@@ -3,6 +3,7 @@ import UpcomingEvent from "./UpcomingEvent";
 import { _get } from "@/api/axiosClient";
 import { IEventResponse } from "@/types";
 import HeadingTwoWrapper from "../HeadingTwoWrapper";
+import { SkeletonEventCard } from "../SkeletonComponents";
 
 const UpcomingEvents = () => {
   const [events, setEvents] = useState<IEventResponse>();
@@ -11,7 +12,7 @@ const UpcomingEvents = () => {
     const getEvents = async () => {
       try {
         // remove production
-        await new Promise((resolve) => setTimeout(resolve, 100000));
+        // await new Promise((resolve) => setTimeout(resolve, 100000));
 
         const res = await _get<IEventResponse>("/event/get-events");
         const data = res.data;
@@ -29,6 +30,8 @@ const UpcomingEvents = () => {
     return (
       <div>
         <div className="grid sm:gap-12 gap-4">
+          <SkeletonEventCard />
+
           {events.currentEvents?.length > 0 ? (
             <>
               {events.currentEvents.map((event) => (

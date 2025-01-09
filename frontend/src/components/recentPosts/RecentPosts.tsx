@@ -20,7 +20,7 @@ const RecentPosts = ({ limit }: { limit: number }) => {
     try {
       const fetchRecentPosts = async () => {
         // remove production
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const res = await _get<IPostResponse>(`/post/getposts?limit=${limit}`);
         const data = res.data;
@@ -35,13 +35,6 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   }, []);
 
   return (
-    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
-    //   {recentPosts &&
-    //     recentPosts.map((post) => (
-    //       <RecentPostCard key={post._id} post={post} />
-    //     ))}
-    // </div>
-
     <Carousel
       opts={{
         // align: "start",
