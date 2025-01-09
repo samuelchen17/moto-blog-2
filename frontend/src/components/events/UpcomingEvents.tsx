@@ -20,7 +20,7 @@ const UpcomingEvents = () => {
     };
 
     getEvents();
-  });
+  }, []);
 
   if (events) {
     return (
