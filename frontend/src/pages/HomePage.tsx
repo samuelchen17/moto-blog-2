@@ -17,7 +17,7 @@ import HeadingTwoWrapper from "@/components/HeadingTwoWrapper";
 const HomePage = () => {
   return (
     <>
-      <ImageBanner img="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+      {/* <ImageBanner img="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
         <div className="text-center">
           <h1 className="font-bold text-4xl md:text-6xl lg:text-8xl text-white m-4">
             Welcome to MOTOCE
@@ -26,14 +26,14 @@ const HomePage = () => {
             Where Aussie Bikers get together
           </h2>
         </div>
-      </ImageBanner>
+      </ImageBanner> */}
       {/* gap-6 my-12 */}
       <div className="flex flex-col px-4 max-w-screen-xl mx-auto">
         {/* hot posts */}
-        <div>
+        {/* <div>
           <HeadingTwoWrapper>Hot posts</HeadingTwoWrapper>
           <HotPosts />
-        </div>
+        </div> */}
 
         {/* recent posts */}
         <div className="flex flex-col justify-center pb-14">

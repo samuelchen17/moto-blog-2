@@ -50,25 +50,28 @@ export const SkeletonRecentPostsCard = () => {
 
         <CardHeader>
           <CardDescription className="flex justify-between">
+            {/* author */}
             <div className="flex gap-2 items-center">
               <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-4 w-20" />
             </div>
 
+            {/* date */}
             <div className="flex gap-2 items-center ">
-              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-4 w-24" />
             </div>
           </CardDescription>
-          <div className="flex-col space-y-2 flex">
+          {/* title */}
+          <CardTitle className="flex-col space-y-2 flex pt-3">
             <Skeleton className="flex-grow h-5" />
             <Skeleton className="flex-grow h-5" />
-          </div>
+          </CardTitle>
         </CardHeader>
 
         <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
-          <Skeleton className="h-4 w-1/3 rounded-full" />
+          <Skeleton className="h-4 w-20 rounded-full" />
 
-          <Skeleton className="h-10 px-4 py-2 w-1/2" />
+          <Skeleton className="h-10 px-4 py-2 w-24" />
         </div>
       </Card>
     </CarouselItem>
