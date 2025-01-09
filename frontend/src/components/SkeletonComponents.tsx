@@ -86,5 +86,25 @@ export const SkeletonRecentPostsCard = () => {
 };
 
 export const SkeletonEventCard = () => {
-  return <div>hello</div>;
+  return (
+    <div className="flex gap-4 rounded-md border sm:border-none mx-auto sm:p-0 p-4 w-full">
+      <Skeleton className="rounded-md hidden sm:block h-[90px] w-[90px]" />
+      <div className="gap-2 flex flex-col w-full">
+        <Skeleton className="h-4 w-[280px]" />
+
+        <Skeleton className="h-6 w-[250px] my-3" />
+
+        <Skeleton className="h-4 flex-grow" />
+        <Skeleton className="h-4 flex-grow " />
+        <Skeleton className="h-4 w-1/2 sm:hidden" />
+
+        <div className="flex sm:flex-row flex-col gap-4 sm:items-center mt-6">
+          {/* join button */}
+          <Skeleton className="h-10 px-4 py-2 sm:w-[65px] sm:flex-grow-0 flex-grow order-1 sm:order-none" />
+          {/* location */}
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </div>
+    </div>
+  );
 };
