@@ -12,7 +12,7 @@ const UpcomingEvents = () => {
     const getEvents = async () => {
       try {
         // remove production
-        // await new Promise((resolve) => setTimeout(resolve, 100000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const res = await _get<IEventResponse>("/event/get-events");
         const data = res.data;
@@ -26,13 +26,11 @@ const UpcomingEvents = () => {
     getEvents();
   }, []);
 
-  if (events) {
-    return (
-      <div>
-        <div className="grid sm:gap-12 gap-4">
-          <SkeletonEventCard />
-
-          {events.currentEvents?.length > 0 ? (
+  return (
+    <div>
+      <div className="grid sm:gap-12 gap-4">
+        {events ? (
+          events.currentEvents?.length > 0 ? (
             <>
               {events.currentEvents.map((event) => (
                 <UpcomingEvent key={event._id} event={event} />
@@ -40,23 +38,31 @@ const UpcomingEvents = () => {
             </>
           ) : (
             <div>More events coming soon!</div>
-          )}
-        </div>
+          )
+        ) : (
+          <SkeletonEventCard />
+        )}
+      </div>
 
-        <HeadingTwoWrapper>Past events</HeadingTwoWrapper>
+      <HeadingTwoWrapper>Past events</HeadingTwoWrapper>
 
-        <div className="grid sm:gap-12 gap-4">
-          {events.pastEvents?.length > 0 ? (
-            events.pastEvents.map((event) => (
-              <UpcomingEvent key={event._id} event={event} />
-            ))
+      <div className="grid sm:gap-12 gap-4">
+        {events ? (
+          events.pastEvents?.length > 0 ? (
+            <>
+              {events.pastEvents.map((event) => (
+                <UpcomingEvent key={event._id} event={event} />
+              ))}
+            </>
           ) : (
             <div>More events coming soon!</div>
-          )}
-        </div>
+          )
+        ) : (
+          <SkeletonEventCard />
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default UpcomingEvents;
