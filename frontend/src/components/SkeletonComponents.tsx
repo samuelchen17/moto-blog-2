@@ -7,8 +7,8 @@ export const SkeletonHotPostSide = () => {
   for (let i = 0; i < skeletonCount; i++) {
     skeletons.push(
       <div className="h-[250px] border rounded-md flex">
-        <div className="object-cover h-full w-1/2">
-          <Skeleton className="object-cover h-full w-full object-center" />
+        <div className="object-cover h-full w-1/2 overflow-hidden">
+          <Skeleton className="object-cover h-full w-full object-center rounded-none" />
         </div>
 
         {/* card information */}
