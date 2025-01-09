@@ -18,7 +18,7 @@ const HotPosts = () => {
     try {
       const fetchHotPosts = async () => {
         // for testing
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 100000));
 
         const res = await _get<IPostWithAuthor[]>(`/post/gethotposts`);
         const data = res.data;
