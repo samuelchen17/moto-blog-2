@@ -43,37 +43,44 @@ export const SkeletonHotPostMain = () => {
 };
 
 export const SkeletonRecentPostsCard = () => {
-  return (
-    <CarouselItem className="lg:basis-1/4 md:basis-1/3 sm:basis-1/2">
-      <Card className="min-h-[430px]">
-        <Skeleton className="h-[160px] w-full object-cover rounded-t-md border-b" />
+  const skeletonCount = 8;
+  const skeletons = [];
 
-        <CardHeader>
-          <CardDescription className="flex justify-between">
-            {/* author */}
-            <div className="flex gap-2 items-center">
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-4 w-20" />
-            </div>
+  for (let i = 0; i < skeletonCount; i++) {
+    skeletons.push(
+      <CarouselItem className="lg:basis-1/4 md:basis-1/3 sm:basis-1/2">
+        <Card className="min-h-[430px]">
+          {/* image */}
+          <Skeleton className="h-[160px] w-full object-cover rounded-t-md border-b rounded-b-none" />
 
-            {/* date */}
-            <div className="flex gap-2 items-center ">
-              <Skeleton className="h-4 w-24" />
-            </div>
-          </CardDescription>
-          {/* title */}
-          <CardTitle className="flex-col space-y-2 flex pt-3">
-            <Skeleton className="flex-grow h-5" />
-            <Skeleton className="flex-grow h-5" />
-          </CardTitle>
-        </CardHeader>
+          <CardHeader>
+            <CardDescription className="flex justify-between">
+              {/* author */}
+              <div className="flex gap-2 items-center">
+                <Skeleton className="h-6 w-6 rounded-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
 
-        <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
-          <Skeleton className="h-4 w-20 rounded-full" />
+              {/* date */}
+              <div className="flex gap-2 items-center ">
+                <Skeleton className="h-4 w-24" />
+              </div>
+            </CardDescription>
+            {/* title */}
+            <CardTitle className="flex-col space-y-2 flex pt-3">
+              <Skeleton className="flex-grow h-5" />
+              <Skeleton className="flex-grow h-5" />
+            </CardTitle>
+          </CardHeader>
 
-          <Skeleton className="h-10 px-4 py-2 w-24" />
-        </div>
-      </Card>
-    </CarouselItem>
-  );
+          <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
+            <Skeleton className="h-4 w-20 rounded-full" />
+
+            <Skeleton className="h-10 px-4 py-2 w-24" />
+          </div>
+        </Card>
+      </CarouselItem>
+    );
+  }
+  return <>{skeletons}</>;
 };

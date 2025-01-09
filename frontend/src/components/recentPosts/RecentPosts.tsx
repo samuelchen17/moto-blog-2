@@ -61,11 +61,6 @@ const RecentPosts = ({ limit }: { limit: number }) => {
         ) : (
           <>
             <SkeletonRecentPostsCard />
-            <SkeletonRecentPostsCard />
-            <SkeletonRecentPostsCard />
-            <SkeletonRecentPostsCard />
-            <SkeletonRecentPostsCard />
-            <SkeletonRecentPostsCard />
           </>
         )}
       </CarouselContent>
