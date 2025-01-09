@@ -17,7 +17,7 @@ const HotPosts = () => {
   useEffect(() => {
     try {
       const fetchHotPosts = async () => {
-        // for testing
+        // remove production
         await new Promise((resolve) => setTimeout(resolve, 100000));
 
         const res = await _get<IPostWithAuthor[]>(`/post/gethotposts`);

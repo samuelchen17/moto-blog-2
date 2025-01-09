@@ -18,6 +18,9 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
+        // remove production
+        await new Promise((resolve) => setTimeout(resolve, 100000));
+
         const res = await _get<IPostResponse>(`/post/getposts?limit=${limit}`);
         const data = res.data;
 

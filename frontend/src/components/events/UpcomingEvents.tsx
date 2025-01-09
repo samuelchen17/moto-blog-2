@@ -10,7 +10,8 @@ const UpcomingEvents = () => {
   useEffect(() => {
     const getEvents = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        // remove production
+        await new Promise((resolve) => setTimeout(resolve, 100000));
 
         const res = await _get<IEventResponse>("/event/get-events");
         const data = res.data;
