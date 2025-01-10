@@ -8,6 +8,7 @@ import RecentPosts from "../components/recentPosts/RecentPosts";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";
+import Summarizer from "@/components/Summarizer";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -137,6 +138,8 @@ const PostPage = () => {
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               <hr className="mx-auto" />
+
+              <Summarizer />
 
               {/* add comment and display comments */}
               <div className="flex flex-col justify-center py-14">

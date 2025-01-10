@@ -6,13 +6,13 @@ const inference = new HfInference(
 
 const summarizeText = async (text: string) => {
   try {
-    const result = await inference.textClassification({
+    const result = await inference.summarization({
       model: "facebook/bart-large-cnn",
       inputs: text,
     });
 
     console.log(result);
-    return result;
+    return result.summary_text;
   } catch (err) {
     console.error(err);
   }
