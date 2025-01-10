@@ -11,7 +11,6 @@ const summarizeText = async (text: string) => {
       inputs: text,
     });
 
-    console.log(result);
     return result.summary_text;
   } catch (err) {
     console.error(err);
