@@ -37,8 +37,6 @@ hot post selection in dash
 
 different alerts for user feedback
 
-skeleton for loading
-
 # event
 
 a tab for user dash events, where they can see what events they have signed up to etc? also for them to leave event, manage and see events
