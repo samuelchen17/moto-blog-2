@@ -139,7 +139,7 @@ const PostPage = () => {
               />
               <hr className="mx-auto" />
 
-              <Summarizer />
+              <Summarizer text={post.content} />
 
               {/* add comment and display comments */}
               <div className="flex flex-col justify-center py-14">
