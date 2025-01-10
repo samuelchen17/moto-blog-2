@@ -12,7 +12,7 @@ const UpcomingEvents = () => {
     const getEvents = async () => {
       try {
         // remove production
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const res = await _get<IEventResponse>("/event/get-events");
         const data = res.data;
