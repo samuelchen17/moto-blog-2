@@ -42,7 +42,8 @@ const HomePage = () => {
         </div>
 
         {/* upcoming events */}
-        <div className="max-w-screen-lg mx-auto">
+        {/* <div className="max-w-screen-lg mx-auto"> */}
+        <div>
           <HeadingTwoWrapper>Upcoming events</HeadingTwoWrapper>
           <UpcomingEvents />
         </div>

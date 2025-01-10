@@ -5,7 +5,6 @@ import { format } from "date-fns";
 
 const UpcomingEvent = ({ event }: { event: IEvent }) => {
   return (
-    // add loading for hot posts and recent posts? skeleton maybe?
     // finish hot posts selection? or perhaps integrate algo to auto select hot posts - might be too resource intensive for free service
 
     <div className="flex gap-4 rounded-md bg-gray-100 dark:bg-gray-700 sm:dark:bg-transparent sm:bg-transparent mx-auto sm:p-0 p-4 w-full">

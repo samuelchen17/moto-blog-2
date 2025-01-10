@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { _get } from "@/api/axiosClient";
+import { SkeletonRecentPostsCard } from "../SkeletonComponents";
 
 const RecentPosts = ({ limit }: { limit: number }) => {
   const [recentPosts, setRecentPosts] = useState<IPostWithAuthor[] | null>(
@@ -18,6 +19,9 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
+        // remove production
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+
         const res = await _get<IPostResponse>(`/post/getposts?limit=${limit}`);
         const data = res.data;
 
@@ -31,13 +35,6 @@ const RecentPosts = ({ limit }: { limit: number }) => {
   }, []);
 
   return (
-    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
-    //   {recentPosts &&
-    //     recentPosts.map((post) => (
-    //       <RecentPostCard key={post._id} post={post} />
-    //     ))}
-    // </div>
-
     <Carousel
       opts={{
         // align: "start",
@@ -45,7 +42,7 @@ const RecentPosts = ({ limit }: { limit: number }) => {
       }}
     >
       <CarouselContent>
-        {recentPosts &&
+        {recentPosts ? (
           recentPosts.map((post) => (
             <CarouselItem
               className="lg:basis-1/4 md:basis-1/3 sm:basis-1/2"
@@ -53,7 +50,12 @@ const RecentPosts = ({ limit }: { limit: number }) => {
             >
               <RecentPostCard post={post} />
             </CarouselItem>
-          ))}
+          ))
+        ) : (
+          <>
+            <SkeletonRecentPostsCard />
+          </>
+        )}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
