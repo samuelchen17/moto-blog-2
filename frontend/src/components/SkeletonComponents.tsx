@@ -15,7 +15,7 @@ export const SkeletonHotPostSide = () => {
 
   for (let i = 0; i < skeletonCount; i++) {
     skeletons.push(
-      <div className="h-[250px] border rounded-md flex">
+      <div className="h-[250px] border rounded-md flex" key={i}>
         <div className="object-cover h-full w-1/2 overflow-hidden">
           <Skeleton className="object-cover h-full w-full object-center rounded-none" />
         </div>
@@ -48,7 +48,7 @@ export const SkeletonRecentPostsCard = () => {
 
   for (let i = 0; i < skeletonCount; i++) {
     skeletons.push(
-      <CarouselItem className="lg:basis-1/4 md:basis-1/3 sm:basis-1/2">
+      <CarouselItem className="lg:basis-1/4 md:basis-1/3 sm:basis-1/2" key={i}>
         <Card className="min-h-[430px]">
           {/* image */}
           <Skeleton className="h-[160px] w-full object-cover rounded-t-md border-b rounded-b-none" />
@@ -91,7 +91,10 @@ export const SkeletonEventCard = () => {
 
   for (let i = 0; i < skeletonCount; i++) {
     skeletons.push(
-      <div className="flex gap-4 rounded-md border sm:border-none mx-auto sm:p-0 p-4 w-full">
+      <div
+        className="flex gap-4 rounded-md border sm:border-none mx-auto sm:p-0 p-4 w-full"
+        key={i}
+      >
         <Skeleton className="rounded-md hidden sm:block h-[90px] w-[90px]" />
         <div className="gap-2 flex flex-col w-full">
           <Skeleton className="h-4 w-[280px]" />
