@@ -137,7 +137,7 @@ const PostPage = () => {
                 className="post-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
-              <hr className="mx-auto" />
+              {/* <hr className="mx-auto" /> */}
 
               <Summarizer text={post.content} />
 

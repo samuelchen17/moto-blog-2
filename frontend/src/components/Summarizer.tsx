@@ -22,12 +22,16 @@ const Summarizer = ({ text }: { text: string }) => {
   };
 
   return (
-    <div>
-      <Button onClick={handleSummarize}>Summarize</Button>
+    <div className="w-full border rounded-md p-4 flex flex-col gap-4 mt-14">
+      <Button className="mx-auto" onClick={handleSummarize}>
+        Summarize
+      </Button>
       {summarizedText ? (
         <div>{summarizedText}</div>
       ) : (
-        <div>Click the button</div>
+        <div className="mx-auto">
+          Can't be bothered reading everything? Try the summary
+        </div>
       )}
     </div>
   );
