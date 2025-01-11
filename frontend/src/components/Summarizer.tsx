@@ -17,7 +17,7 @@ const Summarizer = ({ text }: { text: string }) => {
       const plainText = stripHtml(text);
       const summary = await summarizeText(plainText);
 
-      console.log(summary);
+      //   console.log(summary);
       if (summary) {
         setSummarizedText(summary);
       } else {
