@@ -28,16 +28,24 @@ export const LoadingSpinner = ({ className }: any) => {
 
 const Summarizer = ({ text }: { text: string }) => {
   const [summarizedText, setSummarizedText] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSummarize = async () => {
-    const plainText = stripHtml(text);
-    const summary = await summarizeText(plainText);
+    setIsLoading(true);
+    try {
+      const plainText = stripHtml(text);
+      const summary = await summarizeText(plainText);
 
-    console.log(summary);
-    if (summary) {
-      setSummarizedText(summary);
-    } else {
-      console.log("Failed to summarize");
+      console.log(summary);
+      if (summary) {
+        setSummarizedText(summary);
+      } else {
+        console.log("Failed to summarize");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -46,12 +54,13 @@ const Summarizer = ({ text }: { text: string }) => {
       <Button className="mx-auto" onClick={handleSummarize}>
         Summarize
       </Button>
-      {summarizedText ? (
-        <div>{summarizedText}</div>
+      {isLoading ? (
+        <LoadingSpinner className="h-10 w-10 animate-spin mx-auto mb-5 mt-2" />
+      ) : summarizedText ? (
+        <div className="mb-5 mt-2">{summarizedText}</div>
       ) : (
-        <div className="mx-auto">
+        <div className="mx-auto mb-5 mt-2">
           Can't be bothered reading everything? Try the summary
-          <LoadingSpinner className="h-10 w-10 animate-spin" />
         </div>
       )}
     </div>
