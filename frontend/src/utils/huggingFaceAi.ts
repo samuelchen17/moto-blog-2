@@ -6,10 +6,12 @@ const inference = new HfInference(
 
 const summarizeText = async (text: string) => {
   try {
+    console.log(text);
     const prompt = `Summarize the following text, making sure to separate by headings: \n\n${text}`;
 
     const result = await inference.summarization({
       model: "facebook/bart-large-cnn",
+      // model: "t5-base",
       inputs: prompt,
     });
 
