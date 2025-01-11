@@ -7,6 +7,7 @@ import {
   signInSuccess,
   signInFailure,
   signUpSuccess,
+  loadingFalse,
 } from "../../redux/features/user/userSlice";
 import {
   toggleAuthModal,
@@ -70,6 +71,8 @@ export const AuthFormsSignIn = () => {
       } else {
         dispatch(signInFailure("An unknown error occurred"));
       }
+    } finally {
+      dispatch(loadingFalse());
     }
   };
 
