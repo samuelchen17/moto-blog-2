@@ -28,14 +28,13 @@ export const isAuthSuccessResponse = (
 };
 
 export const AuthFormsSignIn = () => {
-  const {
-    loading: isLoading,
-    error: errorMessage,
-    success: successMessage,
-  } = useAppSelector((state) => state.persisted.user);
+  const { error: errorMessage, success: successMessage } = useAppSelector(
+    (state) => state.persisted.user
+  );
 
   const clearForm: ISignInAuthPayload = { emailOrUsername: "", password: "" };
   const [formData, setFormData] = useState<ISignInAuthPayload>(clearForm);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -45,6 +44,7 @@ export const AuthFormsSignIn = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       dispatch(signInStart());
@@ -73,6 +73,7 @@ export const AuthFormsSignIn = () => {
       }
     } finally {
       dispatch(loadingFalse());
+      setIsLoading(false);
     }
   };
 
