@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   VITE_FIREBASE_STORAGE_BUCKET: string;
   VITE_FIREBASE_MESSAGING_SENDER_ID: string;
   VITE_FIREBASE_APP_ID: string;
+  VITE_HUGGINGFACE_ACCESS_TOKEN: string;
 }
 
 interface ImportMeta {
