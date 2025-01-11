@@ -1,4 +1,4 @@
-import { Modal } from "flowbite-react";
+// import { Modal } from "flowbite-react";
 import { AuthFormsSignIn, AuthFormsSignUp } from "./AuthForms";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -6,6 +6,12 @@ import {
   toggleAuthMode,
 } from "../../redux/features/modal/authModalSlice";
 import { RootState } from "../../redux/store";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@/components/ui/dialog";
 
 interface IAuthLayoutProps {
   isSignIn: boolean;
@@ -19,13 +25,25 @@ const AuthModal = () => {
   const closeModal = () => dispatch(toggleAuthModal());
   const isSignIn = authMode === "login";
 
+  // return (
+  //   <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
+  //     <Modal.Header className="" />
+  //     <Modal.Body>
+  //       <AuthLayout isSignIn={isSignIn} />
+  //     </Modal.Body>
+  //   </Modal>
+  // );
+
   return (
-    <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
-      <Modal.Header className="" />
-      <Modal.Body>
-        <AuthLayout isSignIn={isSignIn} />
-      </Modal.Body>
-    </Modal>
+    <Dialog open={authOpen} onOpenChange={closeModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogDescription>
+            <AuthLayout isSignIn={isSignIn} />
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 };
 
