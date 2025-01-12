@@ -83,6 +83,10 @@ const DashUsers = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="w-full">
       {currentUser?.user.admin && allUsers.length > 0 ? (
@@ -163,8 +167,9 @@ const DashUsers = () => {
 
       <DeleteModal
         open={openModal}
-        type="account"
+        close={handleClose}
         handleDelete={handleDeleteUser}
+        message="account"
       />
 
       {/* delete user modal */}
