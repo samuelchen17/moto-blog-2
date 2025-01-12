@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { _delete, _get } from "@/api/axiosClient";
+import DeleteModal from "@/components/DeleteModal";
 
 const DashUsers = () => {
   const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
@@ -160,8 +161,14 @@ const DashUsers = () => {
         <p>No users created yet!</p>
       )}
 
+      <DeleteModal
+        open={openModal}
+        type="account"
+        handleDelete={handleDeleteUser}
+      />
+
       {/* delete user modal */}
-      <Modal
+      {/* <Modal
         show={openModal}
         size="md"
         onClose={() => setOpenModal(false)}
@@ -185,7 +192,7 @@ const DashUsers = () => {
             </div>
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
