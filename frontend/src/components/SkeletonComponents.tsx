@@ -120,32 +120,38 @@ export const SkeletonEventCard = () => {
 };
 
 export const SkeletonSearchItem = () => {
-  return (
-    <div>
-      <div className="flex flex-col w-full mt-12">
-        {/* author information */}
-        <div className=" flex gap-2 items-center mb-2">
-          <Skeleton className="h-5 w-5 rounded-full " />
-          <Skeleton className="h-3 w-[100px]" />
-        </div>
+  const skeletonCount = 9;
+  const skeletons = [];
 
-        {/* title and content */}
-        <div className="flex flex-row justify-between">
-          <div className="mb-2 mr-6 w-full">
-            <Skeleton className="h-5 lg:h-6 mt-2 mb-3" />
-            <div className="grid gap-2 mb-5">
-              <Skeleton className="h-4" />
-              <Skeleton className="h-4 w-4/5" />
-            </div>
-
-            <Skeleton className="h-3 w-[170px]" />
+  for (let i = 0; i < skeletonCount; i++) {
+    skeletons.push(
+      <div>
+        <div className="flex flex-col w-full mt-12">
+          {/* author information */}
+          <div className=" flex gap-2 items-center mb-2">
+            <Skeleton className="h-5 w-5 rounded-full " />
+            <Skeleton className="h-3 w-[100px]" />
           </div>
 
-          {/* search item image */}
-          <Skeleton className="md:w-[400px] md:h-[200px] sm:w-[200px] w-[150px] h-[100px] rounded-md" />
+          {/* title and content */}
+          <div className="flex flex-row justify-between">
+            <div className="mb-2 mr-6 w-full">
+              <Skeleton className="h-5 lg:h-6 mt-2 mb-3" />
+              <div className="grid gap-2 mb-5">
+                <Skeleton className="h-4" />
+                <Skeleton className="h-4 w-4/5" />
+              </div>
+
+              <Skeleton className="h-3 w-[170px]" />
+            </div>
+
+            {/* search item image */}
+            <Skeleton className="md:w-[400px] md:h-[200px] sm:w-[200px] w-[150px] h-[100px] rounded-md" />
+          </div>
         </div>
+        <Separator className="my-12" />
       </div>
-      <Separator className="my-12" />
-    </div>
-  );
+    );
+  }
+  return <>{skeletons}</>;
 };

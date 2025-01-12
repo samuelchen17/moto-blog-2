@@ -129,10 +129,9 @@ const SearchPage = () => {
           </Select>
         </form>
 
-        <SkeletonSearchItem />
         {/* search */}
         {loading ? (
-          <Spinner />
+          <SkeletonSearchItem />
         ) : (
           posts.map((post) => (
             <Link key={post._id} to={`/blogs/post/${post.slug}`}>
