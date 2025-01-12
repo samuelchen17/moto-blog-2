@@ -19,8 +19,8 @@ import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
 import { _post } from "@/api/axiosClient";
-import { LoadingSpinner } from "../LoadingSpinner";
 import { Checkbox } from "../ui/checkbox";
+import { Loader2 } from "lucide-react";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 
@@ -122,7 +122,7 @@ export const AuthFormsSignIn = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <LoadingSpinner className="h-4 w-4" />
+              <Loader2 className="animate-spin" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (
@@ -228,7 +228,7 @@ export const AuthFormsSignUp = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <LoadingSpinner className="h-4 w-4" />
+              <Loader2 className="animate-spin" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (
