@@ -1,6 +1,8 @@
 const HeadingTwoWrapper = ({ children }: { children: string }) => {
   return (
-    <h2 className="font-bold text-4xl mt-10 py-8 text-center">{children}</h2>
+    <h2 className="font-bold text-2xl lg:text-4xl mt-24 py-4 lg:py-8">
+      {children}
+    </h2>
   );
 };
 
