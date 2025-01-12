@@ -11,7 +11,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import { CircleAlert } from "lucide-react";
 
-const DeleteModal = ({ open, close, handleDelete, message }: any) => {
+const DeleteModal = ({
+  open,
+  close,
+  handleDelete,
+  message,
+}: {
+  open: boolean;
+  close: () => void;
+  handleDelete: () => Promise<void>;
+  message: string;
+}) => {
   return (
     <AlertDialog open={open} onOpenChange={close}>
       {/* <AlertDialogTrigger asChild>{children}</AlertDialogTrigger> */}
@@ -22,8 +32,8 @@ const DeleteModal = ({ open, close, handleDelete, message }: any) => {
             <CircleAlert className="h-20 w-20 mx-auto" />
           </div>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your{" "}
-            {message} and remove your data from our servers.
+            This action cannot be undone. This will permanently delete {message}
+            .
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -37,10 +47,4 @@ const DeleteModal = ({ open, close, handleDelete, message }: any) => {
 
 export default DeleteModal;
 
-// onOpenChange={closeModal}
-
-// {
-//     children: any;
-//     type: string;
-//     handleDelete: () => Promise<void>;
-//   }
+// and remove your data from our servers

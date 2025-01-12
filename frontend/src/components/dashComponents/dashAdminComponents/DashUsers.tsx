@@ -169,7 +169,7 @@ const DashUsers = () => {
         open={openModal}
         close={handleClose}
         handleDelete={handleDeleteUser}
-        message="account"
+        message="this user from our servers"
       />
 
       {/* delete user modal */}
