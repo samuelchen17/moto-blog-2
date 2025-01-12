@@ -240,7 +240,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
               </h3>
               <div className="flex justify-center gap-4">
                 <Button
-                  color="failure"
+                  variant="destructive"
                   onClick={() => {
                     setOpenModal(false);
                     handleDelete(comment._id);

@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { _get } from "@/api/axiosClient";
 import { Spinner } from "flowbite-react";
+import { SkeletonSearchItem } from "@/components/SkeletonComponents";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -130,7 +131,7 @@ const SearchPage = () => {
 
         {/* search */}
         {loading ? (
-          <Spinner />
+          <SkeletonSearchItem />
         ) : (
           posts.map((post) => (
             <Link key={post._id} to={`/blogs/post/${post.slug}`}>

@@ -1,4 +1,3 @@
-// import { Modal } from "flowbite-react";
 import { AuthFormsSignIn, AuthFormsSignUp } from "./AuthForms";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -12,6 +11,7 @@ import {
   DialogDescription,
   DialogHeader,
 } from "@/components/ui/dialog";
+import { Label } from "../ui/label";
 
 interface IAuthLayoutProps {
   isSignIn: boolean;
@@ -25,19 +25,10 @@ const AuthModal = () => {
   const closeModal = () => dispatch(toggleAuthModal());
   const isSignIn = authMode === "login";
 
-  // return (
-  //   <Modal show={authOpen} dismissible popup size="lg" onClose={closeModal}>
-  //     <Modal.Header className="" />
-  //     <Modal.Body>
-  //       <AuthLayout isSignIn={isSignIn} />
-  //     </Modal.Body>
-  //   </Modal>
-  // );
-
   return (
     <Dialog open={authOpen} onOpenChange={closeModal}>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="text-left">
           <DialogDescription>
             <AuthLayout isSignIn={isSignIn} />
           </DialogDescription>
@@ -60,7 +51,12 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({ isSignIn }) => {
       {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
 
       <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-        {isSignIn ? "Not registered?" : "Have an account?"}&nbsp;
+        {isSignIn ? (
+          <Label>Not registered?</Label>
+        ) : (
+          <Label>Have an account?</Label>
+        )}
+        &nbsp;
         <button
           onClick={() => dispatch(toggleAuthMode())}
           className="text-black underline dark:text-white"

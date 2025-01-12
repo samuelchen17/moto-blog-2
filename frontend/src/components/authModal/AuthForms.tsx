@@ -1,5 +1,7 @@
-import { Checkbox, Label, TextInput, Alert, Spinner } from "flowbite-react";
+import { Alert } from "flowbite-react";
 import { Button } from "../ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "../ui/input";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -17,6 +19,8 @@ import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
 import { _post } from "@/api/axiosClient";
+import { Checkbox } from "../ui/checkbox";
+import { Loader2 } from "lucide-react";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 
@@ -81,9 +85,9 @@ export const AuthFormsSignIn = () => {
     <form className="space-y-6" onSubmit={handleFormSubmit}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="emailOrUsername" value="Your email or username" />
+          <Label htmlFor="emailOrUsername">Email or Username</Label>
         </div>
-        <TextInput
+        <Input
           id="emailOrUsername"
           placeholder=""
           // required
@@ -92,9 +96,9 @@ export const AuthFormsSignIn = () => {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="password" value="Your password" />
+          <Label htmlFor="password">Password</Label>
         </div>
-        <TextInput
+        <Input
           id="password"
           type="password"
           // required
@@ -103,8 +107,8 @@ export const AuthFormsSignIn = () => {
       </div>
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
+          <Checkbox id="rememberMe" />
+          <Label htmlFor="rememberMe">Remember me</Label>
         </div>
         <a href="#" className="text-sm text-black underline dark:text-white">
           Lost Password?
@@ -118,7 +122,7 @@ export const AuthFormsSignIn = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Spinner size="sm" />
+              <Loader2 className="animate-spin" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (
@@ -187,9 +191,9 @@ export const AuthFormsSignUp = () => {
     <form className="space-y-6" onSubmit={handleFormSubmit}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="username" value="Your username" />
+          <Label htmlFor="username">Your username</Label>
         </div>
-        <TextInput
+        <Input
           id="username"
           placeholder=""
           // required
@@ -198,9 +202,9 @@ export const AuthFormsSignUp = () => {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="email" value="Your email" />
+          <Label htmlFor="email">Your email</Label>
         </div>
-        <TextInput
+        <Input
           // type="email"
           id="email"
           placeholder="name@company.com"
@@ -210,9 +214,9 @@ export const AuthFormsSignUp = () => {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="password" value="Your password" />
+          <Label htmlFor="password">Your password</Label>
         </div>
-        <TextInput
+        <Input
           id="password"
           type="password"
           // required
@@ -224,7 +228,7 @@ export const AuthFormsSignUp = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Spinner size="sm" />
+              <Loader2 className="animate-spin" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (

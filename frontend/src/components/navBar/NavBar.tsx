@@ -30,7 +30,7 @@ const NavBar = () => {
         <NavBarThemeBtn />
 
         {/* search component */}
-        <Button className="rounded-full">
+        <Button className="rounded-full" variant="outline" size="icon">
           <Link to="/search">
             <Search />
           </Link>

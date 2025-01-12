@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Input } from "../ui/input";
+import { InputWithIcon } from "../ui/inputWithIcon";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -31,7 +31,7 @@ const SearchBar = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Input
+      <InputWithIcon
         startIcon={Search}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
