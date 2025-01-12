@@ -44,27 +44,26 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({ isSignIn }) => {
     <div className="space-y-6">
       <DialogTitle> {isSignIn ? "Login" : "Sign Up"}</DialogTitle>
 
-      <DialogDescription>
-        <div className="space-y-6">
-          {/* sign in form */}
-          {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
+      <DialogDescription>Please fill out details.</DialogDescription>
+      <div className="space-y-6">
+        {/* sign in form */}
+        {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
 
-          <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-            {isSignIn ? (
-              <Label>Not registered?</Label>
-            ) : (
-              <Label>Have an account?</Label>
-            )}
-            &nbsp;
-            <button
-              onClick={() => dispatch(toggleAuthMode())}
-              className="text-black underline dark:text-white"
-            >
-              {isSignIn ? "Create account" : "Log in "}
-            </button>
-          </div>
+        <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
+          {isSignIn ? (
+            <Label>Not registered?</Label>
+          ) : (
+            <Label>Have an account?</Label>
+          )}
+          &nbsp;
+          <button
+            onClick={() => dispatch(toggleAuthMode())}
+            className="text-black underline dark:text-white"
+          >
+            {isSignIn ? "Create account" : "Log in "}
+          </button>
         </div>
-      </DialogDescription>
+      </div>
     </div>
   );
 };
