@@ -1,4 +1,4 @@
-import { Checkbox, Alert, Spinner } from "flowbite-react";
+import { Alert } from "flowbite-react";
 import { Button } from "../ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
@@ -19,6 +19,8 @@ import { IErrorRes, ISuccessRes } from "src/types";
 import OAuth from "./OAuth";
 import { ISignInAuthPayload, ISignUpAuthPayload } from "src/types";
 import { _post } from "@/api/axiosClient";
+import { LoadingSpinner } from "../LoadingSpinner";
+import { Checkbox } from "../ui/checkbox";
 
 export type AuthResponse = ISuccessRes | IErrorRes;
 
@@ -83,7 +85,7 @@ export const AuthFormsSignIn = () => {
     <form className="space-y-6" onSubmit={handleFormSubmit}>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="emailOrUsername">Email</Label>
+          <Label htmlFor="emailOrUsername">Email or Username</Label>
         </div>
         <Input
           id="emailOrUsername"
@@ -105,8 +107,8 @@ export const AuthFormsSignIn = () => {
       </div>
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
+          <Checkbox id="rememberMe" />
+          <Label htmlFor="rememberMe">Remember me</Label>
         </div>
         <a href="#" className="text-sm text-black underline dark:text-white">
           Lost Password?
@@ -120,7 +122,7 @@ export const AuthFormsSignIn = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Spinner size="sm" />
+              <LoadingSpinner className="h-4 w-4" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (
@@ -226,7 +228,7 @@ export const AuthFormsSignUp = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Spinner size="sm" />
+              <LoadingSpinner className="h-4 w-4" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (
