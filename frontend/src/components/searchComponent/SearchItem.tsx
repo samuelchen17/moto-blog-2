@@ -6,7 +6,7 @@ import { _get } from "@/api/axiosClient";
 
 const SearchItem = ({ post }: { post: IPostWithAuthor }) => {
   return (
-    <>
+    <div>
       <div className="flex flex-col w-full mt-12">
         {/* author information */}
         <div className=" flex gap-2 items-center mb-2">
@@ -47,12 +47,12 @@ const SearchItem = ({ post }: { post: IPostWithAuthor }) => {
           {/* search item image */}
           <img
             src={post.image}
-            className="md:w-[300px] md:h-[200px] sm:w-[150px] w-[100px] h-[100px] object-cover"
+            className="md:w-[300px] md:h-[200px] sm:w-[150px] w-[100px] h-[100px] object-cover rounded-md"
           />
         </div>
       </div>
       <Separator className="my-12" />
-    </>
+    </div>
   );
 };
 
