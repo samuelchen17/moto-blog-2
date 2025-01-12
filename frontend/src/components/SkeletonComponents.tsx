@@ -1,4 +1,5 @@
 import { CarouselItem } from "./ui/carousel";
+import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
 import {
   Card,
@@ -119,34 +120,32 @@ export const SkeletonEventCard = () => {
 };
 
 export const SkeletonSearchItem = () => {
-  const skeletonCount = 4;
-  const skeletons = [];
+  return (
+    <div>
+      <div className="flex flex-col w-full mt-12">
+        {/* author information */}
+        <div className=" flex gap-2 items-center mb-2">
+          <Skeleton className="h-5 w-5 rounded-full " />
+          <Skeleton className="h-3 w-[100px]" />
+        </div>
 
-  for (let i = 0; i < skeletonCount; i++) {
-    skeletons.push(
-      <div
-        className="flex gap-4 rounded-md border sm:border-none mx-auto sm:p-0 p-4 w-full"
-        key={i}
-      >
-        <Skeleton className="rounded-md hidden sm:block h-[90px] w-[90px]" />
-        <div className="gap-2 flex flex-col w-full">
-          <Skeleton className="h-4 w-[280px]" />
+        {/* title and content */}
+        <div className="flex flex-row justify-between">
+          <div className="mb-2 mr-6 w-full">
+            <Skeleton className="h-5 lg:h-6 mt-2 mb-3" />
+            <div className="grid gap-2 mb-5">
+              <Skeleton className="h-4" />
+              <Skeleton className="h-4 w-4/5" />
+            </div>
 
-          <Skeleton className="h-6 w-[250px] my-3" />
-
-          <Skeleton className="h-4 flex-grow" />
-          <Skeleton className="h-4 flex-grow " />
-          <Skeleton className="h-4 w-1/2 sm:hidden" />
-
-          <div className="flex sm:flex-row flex-col gap-4 sm:items-center mt-6">
-            {/* join button */}
-            <Skeleton className="h-10 px-4 py-2 sm:w-[65px] sm:flex-grow-0 flex-grow order-1 sm:order-none" />
-            {/* location */}
-            <Skeleton className="h-4 w-[200px]" />
+            <Skeleton className="h-3 w-[170px]" />
           </div>
+
+          {/* search item image */}
+          <Skeleton className="md:w-[400px] md:h-[200px] sm:w-[200px] w-[150px] h-[100px] rounded-md" />
         </div>
       </div>
-    );
-  }
-  return <>{skeletons}</>;
+      <Separator className="my-12" />
+    </div>
+  );
 };
