@@ -165,7 +165,7 @@ const DashEvents = () => {
         <p>No events created yet!</p>
       )}
 
-      {/* delete post modal */}
+      {/* delete event modal */}
       <Modal
         show={openModal}
         size="md"

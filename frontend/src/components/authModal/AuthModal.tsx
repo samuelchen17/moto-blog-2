@@ -28,7 +28,7 @@ const AuthModal = () => {
   return (
     <Dialog open={authOpen} onOpenChange={closeModal}>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="text-left">
           <DialogDescription>
             <AuthLayout isSignIn={isSignIn} />
           </DialogDescription>
