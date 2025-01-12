@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "../ui/label";
 
@@ -29,9 +30,7 @@ const AuthModal = () => {
     <Dialog open={authOpen} onOpenChange={closeModal}>
       <DialogContent>
         <DialogHeader className="text-left">
-          <DialogDescription>
-            <AuthLayout isSignIn={isSignIn} />
-          </DialogDescription>
+          <AuthLayout isSignIn={isSignIn} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
@@ -43,27 +42,29 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({ isSignIn }) => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-        {isSignIn ? "Login" : "Sign Up"}
-      </h3>
+      <DialogTitle> {isSignIn ? "Login" : "Sign Up"}</DialogTitle>
 
-      {/* sign in form */}
-      {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
+      <DialogDescription>
+        <div className="space-y-6">
+          {/* sign in form */}
+          {isSignIn ? <AuthFormsSignIn /> : <AuthFormsSignUp />}
 
-      <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-        {isSignIn ? (
-          <Label>Not registered?</Label>
-        ) : (
-          <Label>Have an account?</Label>
-        )}
-        &nbsp;
-        <button
-          onClick={() => dispatch(toggleAuthMode())}
-          className="text-black underline dark:text-white"
-        >
-          {isSignIn ? "Create account" : "Log in "}
-        </button>
-      </div>
+          <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
+            {isSignIn ? (
+              <Label>Not registered?</Label>
+            ) : (
+              <Label>Have an account?</Label>
+            )}
+            &nbsp;
+            <button
+              onClick={() => dispatch(toggleAuthMode())}
+              className="text-black underline dark:text-white"
+            >
+              {isSignIn ? "Create account" : "Log in "}
+            </button>
+          </div>
+        </div>
+      </DialogDescription>
     </div>
   );
 };

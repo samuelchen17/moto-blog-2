@@ -46,5 +46,3 @@ const DeleteModal = ({
 };
 
 export default DeleteModal;
-
-// and remove your data from our servers
