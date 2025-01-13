@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { Alert, Modal, Table, Button } from "flowbite-react";
+import { Alert, Table } from "flowbite-react";
 import { Button as ShadButton } from "@/components/ui/button";
 import { IEvent, IEventResponse } from "src/types";
 import { format } from "date-fns";
-import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { _delete, _get } from "@/api/axiosClient";
 import AddEventModal from "@/components/AddEventModal";
+import DeleteModal from "@/components/DeleteModal";
 
 // implement, sort by date of event rather than creation
 
@@ -82,6 +82,10 @@ const DashEvents = () => {
         setErrorMessage("An unknown error occurred");
       }
     }
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -165,32 +169,12 @@ const DashEvents = () => {
         <p>No events created yet!</p>
       )}
 
-      {/* delete event modal */}
-      <Modal
-        show={openModal}
-        size="md"
-        onClose={() => setOpenModal(false)}
-        popup
-        dismissible
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this event?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDelete}>
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <DeleteModal
+        open={openModal}
+        close={handleClose}
+        handleDelete={handleDelete}
+        message="this event from our servers"
+      />
     </div>
   );
 };

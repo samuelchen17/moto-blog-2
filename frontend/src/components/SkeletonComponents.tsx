@@ -125,7 +125,7 @@ export const SkeletonSearchItem = () => {
 
   for (let i = 0; i < skeletonCount; i++) {
     skeletons.push(
-      <div>
+      <div key={i}>
         <div className="flex flex-col w-full mt-12">
           {/* author information */}
           <div className=" flex gap-2 items-center mb-2">

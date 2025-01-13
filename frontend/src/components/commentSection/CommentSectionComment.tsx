@@ -5,16 +5,15 @@ import TimeAgo from "../TimeAgo";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { Modal } from "flowbite-react";
 import { openLogin } from "../../redux/features/modal/authModalSlice";
 import {
   decrementTotalComments,
   setComments,
 } from "../../redux/features/comment/commentSlice";
-import { HiOutlineExclamationCircle } from "react-icons/hi2";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { _delete, _get, _patch } from "@/api/axiosClient";
+import DeleteModal from "../DeleteModal";
 
 // implement show message been deleted
 
@@ -137,6 +136,10 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
     getUser();
   }, [comment]);
 
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="flex py-6 border-b dark:border-gray-800 text-sm">
       <div className="flex-shrink-0 mr-3">
@@ -222,40 +225,12 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         )}
       </div>
 
-      {/* delete confirmation modal */}
-      {openModal && (
-        <Modal
-          show={openModal}
-          size="md"
-          onClose={() => setOpenModal(false)}
-          dismissible
-          popup
-        >
-          <Modal.Header />
-          <Modal.Body>
-            <div className="text-center">
-              <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this comment?
-              </h3>
-              <div className="flex justify-center gap-4">
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setOpenModal(false);
-                    handleDelete(comment._id);
-                  }}
-                >
-                  {"Yes, I'm sure"}
-                </Button>
-                <Button color="gray" onClick={() => setOpenModal(false)}>
-                  No, cancel
-                </Button>
-              </div>
-            </div>
-          </Modal.Body>
-        </Modal>
-      )}
+      <DeleteModal
+        open={openModal}
+        close={closeModal}
+        message="your comment"
+        handleDelete={() => handleDelete(comment._id)}
+      />
     </div>
   );
 };

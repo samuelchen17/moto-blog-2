@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { Alert, Button, Modal, Table } from "flowbite-react";
+import { Alert, Table } from "flowbite-react";
 import { format } from "date-fns";
-import { HiOutlineExclamationCircle } from "react-icons/hi2";
+
 import { IComment, IAllCommentResponse } from "src/types";
 import { _delete, _get } from "@/api/axiosClient";
+import DeleteModal from "@/components/DeleteModal";
 
 // implement accordion for post and comments
 
@@ -89,6 +90,10 @@ const DashComments = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="w-full">
       {currentUser?.user.admin && allComments.length > 0 ? (
@@ -153,32 +158,12 @@ const DashComments = () => {
         <p className="">No comments created yet!</p>
       )}
 
-      {/* delete comment modal */}
-      <Modal
-        show={openModal}
-        size="md"
-        onClose={() => setOpenModal(false)}
-        popup
-        dismissible
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this comment?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeleteComment}>
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <DeleteModal
+        open={openModal}
+        close={handleClose}
+        handleDelete={handleDeleteComment}
+        message="this comment from our servers"
+      />
     </div>
   );
 };

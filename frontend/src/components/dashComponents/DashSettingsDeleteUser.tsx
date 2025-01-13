@@ -1,6 +1,4 @@
-import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
 import {
   deleteUserStart,
   deleteUserFailure,
@@ -9,6 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { _delete } from "@/api/axiosClient";
+import DeleteModal from "../DeleteModal";
 
 const DashSettingsDeleteUser = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -45,6 +44,10 @@ const DashSettingsDeleteUser = () => {
     }
   };
 
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       <div className="my-2 cursor-pointer hover:underline">
@@ -53,31 +56,12 @@ const DashSettingsDeleteUser = () => {
         </span>
       </div>
 
-      <Modal
-        show={openModal}
-        size="md"
-        onClose={() => setOpenModal(false)}
-        popup
-        dismissible
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete your account?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeleteUser}>
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <DeleteModal
+        open={openModal}
+        close={closeModal}
+        handleDelete={handleDeleteUser}
+        message="your account and remove your data from our servers"
+      />
     </>
   );
 };
