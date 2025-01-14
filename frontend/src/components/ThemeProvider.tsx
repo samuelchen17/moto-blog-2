@@ -1,5 +1,6 @@
 import { useAppSelector } from "../redux/hooks";
 import { ReactNode } from "react";
+import { ToastContainer } from "react-toastify";
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
       <div className="bg-white text-black dark:text-white dark:bg-background  min-h-screen">
         {children}
       </div>
+      <ToastContainer position="top-center" theme={theme} />
     </div>
   );
 };
