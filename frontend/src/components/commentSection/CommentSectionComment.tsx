@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { _delete, _get, _patch } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
+import { toast } from "react-toastify";
 
 // implement show message been deleted
 
@@ -111,6 +112,9 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
       const data = res.data;
       console.log(data);
+
+      toast("Wow so easy!");
+
       dispatch(
         setComments(comments.filter((comment) => comment._id !== commentId))
       );

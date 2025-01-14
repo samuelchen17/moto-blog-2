@@ -9,6 +9,8 @@ import ThemeProvider from "./components/ThemeProvider.tsx";
 import { Flowbite } from "flowbite-react";
 import flowbiteTheme from "./theme/flowbite.theme.ts";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -18,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
           <TooltipProvider>
             <div id="app-portal-root">
               <App />
+              <ToastContainer />
             </div>
           </TooltipProvider>
         </Flowbite>
