@@ -38,30 +38,68 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
     setEditedContent(comment.content);
   };
 
-  // edit comment logic
-  const handleSave = async (commentId: string) => {
-    try {
-      await _patch(
-        `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-        { content: editedContent }
-      );
+  // save edit comment logic
+  // const handleSave = async (commentId: string) => {
+  //   try {
+  //     await _patch(
+  //       `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+  //       { content: editedContent }
+  //     );
 
-      setIsEditing(false);
-      dispatch(
-        setComments(
-          comments.map((comment) =>
-            comment._id === commentId
-              ? {
-                  ...comment,
-                  content: editedContent,
-                }
-              : comment
+  //     setIsEditing(false);
+  //     dispatch(
+  //       setComments(
+  //         comments.map((comment) =>
+  //           comment._id === commentId
+  //             ? {
+  //                 ...comment,
+  //                 content: editedContent,
+  //               }
+  //             : comment
+  //         )
+  //       )
+  //     );
+  //   } catch (err) {
+  //     console.error("Error editing comment:", err);
+  //   }
+  // };
+
+  const handleSave = async (commentId: string) => {
+    // Create a promise for the operation
+    const savePromise = new Promise<void>(async (resolve, reject) => {
+      try {
+        await _patch(
+          `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+          { content: editedContent }
+        );
+
+        setIsEditing(false);
+        dispatch(
+          setComments(
+            comments.map((comment) =>
+              comment._id === commentId
+                ? {
+                    ...comment,
+                    content: editedContent,
+                  }
+                : comment
+            )
           )
-        )
-      );
-    } catch (err) {
-      console.error("Error editing comment:", err);
-    }
+        );
+
+        resolve(); // Resolve the promise on success
+      } catch (err) {
+        console.error("Error editing comment:", err);
+        reject(err); // Reject the promise on error
+      }
+    });
+
+    // Use toast.promise for feedback
+    toast.promise(savePromise, {
+      pending: "Saving your comment...",
+      success: "Comment saved successfully! 🎉",
+      error: "Failed to save the comment. Please try again. ❌",
+    });
   };
 
   // comment like logic
