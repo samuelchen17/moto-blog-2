@@ -1,7 +1,5 @@
 import { CustomFlowbiteTheme } from "flowbite-react";
 
-// modal, dropdown, navbar, button etc. implement
-
 const flowbiteTheme: CustomFlowbiteTheme = {
   sidebar: {
     root: {

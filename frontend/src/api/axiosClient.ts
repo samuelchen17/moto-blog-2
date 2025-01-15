@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
           store.dispatch(signOutSuccess());
           store.dispatch(openLogin());
 
-          toast.info("please sign in");
+          toast.info("Authentication has expired, please sign in");
         } catch (err) {
           console.error("Error logging out user:", err);
         }
