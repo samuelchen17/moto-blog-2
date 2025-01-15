@@ -13,6 +13,7 @@ import {
   deleteTempImageSuccess,
 } from "../../redux/features/image/imageSlice";
 import { Loader2 } from "lucide-react";
+import { Label } from "../ui/label";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
 const DashDP = ({ setFormData, formData }: IDashFormProps) => {
@@ -97,7 +98,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <span>Profile picture</span>
+      <Label>Display picture</Label>
       <input
         hidden
         type="file"
@@ -106,7 +107,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
         ref={fileInputRef}
       />
       <div
-        className="self-center w-52 h-52 cursor-pointer relative rounded-full"
+        className="self-center w-52 h-52 cursor-pointer relative rounded-full mr-auto"
         onClick={() => fileInputRef.current?.click()}
       >
         <img
@@ -116,7 +117,7 @@ const DashDP = ({ setFormData, formData }: IDashFormProps) => {
           // fix for cross origin implement
           // crossOrigin="anonymous" ?
         />
-        <button className="absolute bottom-4 text-lg px-2 py-1 rounded-lg bg-black text-white flex justify-center items-center gap-2 bg-opacity-80">
+        <button className="absolute bottom-4 text-lg px-2 py-1 rounded-lg bg-black text-white flex justify-center items-center gap-2 bg-opacity-80 border-black dark:border-white border">
           <FaEdit />
           Edit
         </button>
