@@ -9,6 +9,7 @@ import { RootState } from "../../redux/store";
 import { _delete } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
+import { Button } from "../ui/button";
 
 const DashSettingsDeleteUser = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -50,10 +51,18 @@ const DashSettingsDeleteUser = () => {
 
   return (
     <>
-      <div className="my-2 cursor-pointer hover:underline">
-        <span onClick={() => setOpenModal(true)} className="text-red-700">
+      <div className="pt-10 space-y-3">
+        <div className="text-xl mb-3 capitalize space-y-2 text-red-600">
+          <span>Delete Account</span>
+          <hr />
+        </div>
+        <div>
+          Once you delete your account, there is no going back. Please be
+          certain.
+        </div>
+        <Button onClick={() => setOpenModal(true)} variant="destructive">
           Delete Account
-        </span>
+        </Button>
       </div>
 
       <DeleteModal
