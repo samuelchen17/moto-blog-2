@@ -16,8 +16,6 @@ import { _delete, _get, _patch } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
 
-// implement show message been deleted
-
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [commentBy, setCommentBy] = useState<IGetUser | null>(null);
@@ -39,67 +37,31 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   };
 
   // save edit comment logic
-  // const handleSave = async (commentId: string) => {
-  //   try {
-  //     await _patch(
-  //       `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-  //       { content: editedContent }
-  //     );
-
-  //     setIsEditing(false);
-  //     dispatch(
-  //       setComments(
-  //         comments.map((comment) =>
-  //           comment._id === commentId
-  //             ? {
-  //                 ...comment,
-  //                 content: editedContent,
-  //               }
-  //             : comment
-  //         )
-  //       )
-  //     );
-  //   } catch (err) {
-  //     console.error("Error editing comment:", err);
-  //   }
-  // };
-
   const handleSave = async (commentId: string) => {
-    // Create a promise for the operation
-    const savePromise = new Promise<void>(async (resolve, reject) => {
-      try {
-        await _patch(
-          `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
-          { content: editedContent }
-        );
+    try {
+      await _patch(
+        `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+        { content: editedContent }
+      );
 
-        setIsEditing(false);
-        dispatch(
-          setComments(
-            comments.map((comment) =>
-              comment._id === commentId
-                ? {
-                    ...comment,
-                    content: editedContent,
-                  }
-                : comment
-            )
+      setIsEditing(false);
+      toast.success("Comment successfully saved");
+      dispatch(
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  content: editedContent,
+                }
+              : comment
           )
-        );
-
-        resolve(); // Resolve the promise on success
-      } catch (err) {
-        console.error("Error editing comment:", err);
-        reject(err); // Reject the promise on error
-      }
-    });
-
-    // Use toast.promise for feedback
-    toast.promise(savePromise, {
-      pending: "Saving your comment...",
-      success: "Comment saved successfully! 🎉",
-      error: "Failed to save the comment. Please try again. ❌",
-    });
+        )
+      );
+    } catch (err) {
+      toast.error("Failed to save comment");
+      console.error("Error editing comment:", err);
+    }
   };
 
   // comment like logic
@@ -151,7 +113,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
       const data = res.data;
       console.log(data);
 
-      toast("Wow so easy!");
+      toast.success("Comment has been deleted");
 
       dispatch(
         setComments(comments.filter((comment) => comment._id !== commentId))
@@ -159,6 +121,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 
       dispatch(decrementTotalComments());
     } catch (err) {
+      toast.error("Failed to delete comment");
       console.error(err);
     }
   };
@@ -278,3 +241,40 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
 };
 
 export default CommentSectionComment;
+
+// const handleSave = async (commentId: string) => {
+//   const savePromise = new Promise<void>(async (resolve, reject) => {
+//     try {
+//       await _patch(
+//         `/comment/edit/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`,
+//         { content: editedContent }
+//       );
+
+//       setIsEditing(false);
+//       dispatch(
+//         setComments(
+//           comments.map((comment) =>
+//             comment._id === commentId
+//               ? {
+//                   ...comment,
+//                   content: editedContent,
+//                 }
+//               : comment
+//           )
+//         )
+//       );
+
+//       resolve(); // Resolve the promise on success
+//     } catch (err) {
+//       console.error("Error editing comment:", err);
+//       reject(err); // Reject the promise on error
+//     }
+//   });
+
+//   // Use toast.promise for feedback
+//   toast.promise(savePromise, {
+//     pending: "Saving your comment...",
+//     success: "Comment saved successfully!",
+//     error: "Failed to save the comment. Please try again.",
+//   });
+// };
