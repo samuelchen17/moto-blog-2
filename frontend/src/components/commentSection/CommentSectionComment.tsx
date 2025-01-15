@@ -106,12 +106,9 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         return;
       }
 
-      const res = await _delete(
+      await _delete(
         `/comment/delete/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`
       );
-
-      const data = res.data;
-      console.log(data);
 
       toast.success("Comment has been deleted");
 

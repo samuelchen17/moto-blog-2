@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { _delete } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
+import { toast } from "react-toastify";
 
 const DashSettingsDeleteUser = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -28,12 +29,11 @@ const DashSettingsDeleteUser = () => {
       }
 
       const res = await _delete(`/user/${currentUser.user.id}`);
-      // const data: any = res.data;
+      const data: any = res.data;
 
       dispatch(deleteUserSuccess());
 
-      // react toast? implement delete success message
-      // alert(data.message);
+      toast.info(data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
