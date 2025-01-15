@@ -1,6 +1,8 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Alert, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Spinner } from "flowbite-react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
@@ -55,9 +57,9 @@ const DashProfile = () => {
 
   return (
     <div className="w-full mx-auto">
-      <div className="flex flex-col-reverse">
+      <div className="flex flex-col-reverse lg:flex-row lg:justify-between">
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2 lg:w-1/2"
           onSubmit={handleDashFormSubmit({
             formData,
             setFormData,
@@ -68,9 +70,9 @@ const DashProfile = () => {
         >
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="username" value="Username" />
+              <Label htmlFor="username">Username</Label>
             </div>
-            <TextInput
+            <Input
               type="text"
               id="username"
               placeholder="username"
