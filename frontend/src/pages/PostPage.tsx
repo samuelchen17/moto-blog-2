@@ -9,6 +9,7 @@ import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";
 import Summarizer from "@/components/Summarizer";
+import { SkeletonPostPage } from "@/components/SkeletonComponents";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -77,12 +78,7 @@ const PostPage = () => {
 
   // console.log(tableOfContents);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center min-h-dvh">
-        <Spinner size="xl" />
-      </div>
-    );
+  if (loading) return <SkeletonPostPage />;
 
   if (error) {
     return <div>Post could not be retrieved</div>;

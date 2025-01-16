@@ -37,4 +37,14 @@ sort event by event date rather than creation date?
 
 join events - also show capacity, display if event full
 
-chat between user feature?
+# profile page
+
+Hover over user card
+
+user page to show bio etc. if admin, show their posts
+
+# saved and liked posts
+
+# fix all loadings/ spinners?
+
+# fix all alerts?
