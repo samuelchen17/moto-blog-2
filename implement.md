@@ -1,7 +1,3 @@
-react hook form?
-shad cn form?
-delete dp image if not submitted - needs firebase auth, configure
-
 add AI to check if post or comment is appropriate?
 
 urgent - delete post success, edit post success etc. different alerts for user feedback
@@ -29,6 +25,8 @@ hot post selection in dash
 
 404 page
 
+# saved and liked posts
+
 # event
 
 a tab for user dash events, where they can see what events they have signed up to etc? also for them to leave event, manage and see events
@@ -43,8 +41,16 @@ Hover over user card
 
 user page to show bio etc. if admin, show their posts
 
-# saved and liked posts
-
 # fix all loadings/ spinners?
 
 # fix all alerts?
+
+# contact us
+
+- contact us sends it to admin inbox
+- need schema etc.
+
+# dash post accordion?
+
+dropdown info for author updated at
+how many comments etc.

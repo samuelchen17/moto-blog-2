@@ -108,6 +108,7 @@ const DashProfile = () => {
               "Save changes"
             )}
           </Button>
+
           {error && <Alert color="failure">{error}</Alert>}
           {updateComplete && (
             <Alert color="success">Successfully updated</Alert>

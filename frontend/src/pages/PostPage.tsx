@@ -1,4 +1,3 @@
-import { Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPostResponse, IPostWithAuthor } from "src/types";
