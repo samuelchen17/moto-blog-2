@@ -23,7 +23,7 @@ const DashboardPage = () => {
     <div className="max-w-screen-xl mx-auto ">
       <DashHeader />
 
-      <div className="min-h-screen flex flex-col md:flex-row">
+      <div className="min-h-screen flex flex-col md:flex-row mb-12">
         {/* sidebar */}
         <DashSidebar />
 

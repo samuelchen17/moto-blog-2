@@ -14,7 +14,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
         {children}
       </div>
       <ToastContainer
-        position="top-center"
+        position="bottom-right"
         theme={theme}
         autoClose={3000}
         transition={Slide}
