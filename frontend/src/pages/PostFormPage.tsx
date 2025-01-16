@@ -11,11 +11,20 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { _get, _patch, _post } from "@/api/axiosClient";
 
-import { Alert, FileInput, Select, Spinner } from "flowbite-react";
+import { Alert, FileInput, Spinner } from "flowbite-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
@@ -102,54 +111,61 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
   // handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const promise = new Promise<void>(async (resolve, reject) => {
+      try {
+        // get html content from tiptap and prevent xss
+        const rawContent = editorRef.current?.getHTML() || "";
+        const sanitizedContent = DOMPurify.sanitize(rawContent);
 
-    try {
-      // get html content from tiptap and prevent xss
-      const rawContent = editorRef.current?.getHTML() || "";
-      const sanitizedContent = DOMPurify.sanitize(rawContent);
+        // more specific rules for sanitization
+        // const clean = DOMPurify.sanitize(dirty, {
+        //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
+        //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
+        //   });
 
-      // more specific rules for sanitization
-      // const clean = DOMPurify.sanitize(dirty, {
-      //     ALLOWED_TAGS: ['p', 'b', 'i', 'a', 'span'],
-      //     ALLOWED_ATTR: ['href', 'title', 'src', 'alt']
-      //   });
+        const updatedFormData = { ...formData, content: sanitizedContent };
 
-      const updatedFormData = { ...formData, content: sanitizedContent };
+        setFormData(updatedFormData);
 
-      setFormData(updatedFormData);
+        const payload: IPublishPostPayload = { ...formData };
 
-      const payload: IPublishPostPayload = { ...formData };
+        // post new or update existing depending on post id
+        const url = postId
+          ? `/post/update/${postId}/${currentUser.user.id}`
+          : `/post/create/${currentUser.user.id}`;
 
-      // post new or update existing depending on post id
-      const url = postId
-        ? `/post/update/${postId}/${currentUser.user.id}`
-        : `/post/create/${currentUser.user.id}`;
+        const res = postId
+          ? await _patch<IPost>(url, payload)
+          : await _post<IPost>(url, payload);
 
-      const res = postId
-        ? await _patch<IPost>(url, payload)
-        : await _post<IPost>(url, payload);
+        const data = res.data;
 
-      const data = res.data;
+        setPublishErrMsg(null);
+        resolve();
+        navigate(`/blogs/post/${data.slug}`);
+      } catch (err) {
+        reject(err);
+        console.error("Error:", err);
 
-      setPublishErrMsg(null);
-
-      navigate(`/blogs/post/${data.slug}`);
-    } catch (err) {
-      console.error("Error:", err);
-
-      if (err instanceof Error) {
-        setPublishErrMsg(err.message);
-      } else {
-        setPublishErrMsg("An unknown error occurred");
+        if (err instanceof Error) {
+          setPublishErrMsg(err.message);
+        } else {
+          setPublishErrMsg("An unknown error occurred");
+        }
       }
-    }
-  };
+    });
 
-  // console.log(formData);
+    toast.promise(promise, {
+      pending: "Saving post...",
+      success: "Post saved",
+      error: "Failed to save post. Please try again.",
+    });
+  };
 
   return (
     <div className="max-w-screen-lg mx-auto">
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        {/* title */}
         <div>
           <Label htmlFor="title">Title</Label>
           <Input
@@ -161,20 +177,26 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
             onChange={handlePostChange}
           />
         </div>
+
+        {/* category */}
         <div>
-          <Label htmlFor="category">Category</Label>
+          <Label>Category</Label>
           <Select
-            id="category"
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setFormData({ ...formData, category: e.target.value });
+            onValueChange={(value) => {
+              setFormData({ ...formData, category: value });
             }}
             value={formData.category}
           >
-            {postCategory.map((item) => (
-              <option key={item.name} value={item.value}>
-                {item.name}
-              </option>
-            ))}
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {postCategory.map((item) => (
+                <SelectItem key={item.name} value={item.value}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
 
