@@ -13,7 +13,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
     },
     collapse: {
       button:
-        "group flex w-full items-center rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+        "group flex w-full items-center rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-secondary",
       icon: {
         base: "h-6 w-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white",
         open: {
@@ -34,7 +34,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
       list: "space-y-2 py-2",
     },
     cta: {
-      base: "mt-6 rounded-lg bg-gray-100 p-4 dark:bg-gray-700",
+      base: "mt-6 rounded-lg bg-gray-100 p-4 dark:bg-secondary",
       color: {
         blue: "bg-cyan-50 dark:bg-cyan-900",
         dark: "bg-dark-50 dark:bg-dark-900",
@@ -50,8 +50,8 @@ const flowbiteTheme: CustomFlowbiteTheme = {
       },
     },
     item: {
-      base: "flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
-      active: "bg-gray-100 dark:bg-gray-700",
+      base: "flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-secondary",
+      active: "bg-gray-100 dark:bg-secondary",
       collapsed: {
         insideCollapse: "group w-full pl-8 transition duration-75",
         noIcon: "font-bold",
