@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Document, Types } from "mongoose";
 import config from "../config/config";
+import { IPost } from "src/types";
 
 export interface IUser {
   username: string;
@@ -12,6 +13,7 @@ export interface IUser {
     sessionToken?: string;
   };
   isAdmin: boolean;
+  savedPosts: (Types.ObjectId | IPost)[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +53,9 @@ const userSchema = new mongoose.Schema<IUser>(
       type: Boolean,
       default: false,
     },
+    savedPosts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Post", select: false },
+    ],
   },
   { timestamps: true }
 );
