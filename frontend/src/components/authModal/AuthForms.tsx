@@ -169,7 +169,6 @@ export const AuthFormsSignUp = () => {
 
       // const res = await _post<AuthResponse>("/auth/register", payload);
       // const data = res.data;
-      // implement signup success message
 
       dispatch(signUpSuccess());
       // redirect to log in

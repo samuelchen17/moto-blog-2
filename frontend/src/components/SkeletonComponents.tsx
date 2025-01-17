@@ -155,3 +155,36 @@ export const SkeletonSearchItem = () => {
   }
   return <>{skeletons}</>;
 };
+
+export const SkeletonPostPage = () => {
+  return (
+    <div>
+      {/* banner */}
+      <div className="relative w-full h-[400px] lg:h-[500px] 2xl:h-[600px]">
+        <Skeleton className="w-full h-full rounded-none" />
+      </div>
+
+      {/* content */}
+      <div className="flex flex-col justify-center max-w-[1280px] mx-auto p-6 my-12">
+        {/* blog content */}
+        <div className="flex lg:flex-row flex-col max-w-screen-xl justify-between mt-8 gap-6">
+          <aside className="hidden lg:block min-w-[350px] max-w-[350px] overflow-y-auto sticky top-16 self-start border rounded-md mr-8">
+            <Skeleton className="w-full h-[400px]" />
+          </aside>
+
+          <Skeleton className="w-full h-[60px] lg:hidden" />
+
+          <main className="w-full">
+            <Skeleton className="h-[5000px] w-full" />
+
+            {/* <Summarizer text={post.content} />
+
+          <div className="flex flex-col justify-center py-14">
+            <CommentSection postId={post._id} />
+          </div> */}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};

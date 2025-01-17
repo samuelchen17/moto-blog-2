@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { Alert, Table } from "flowbite-react";
+import { Alert } from "flowbite-react";
 import { format } from "date-fns";
-
 import { IComment, IAllCommentResponse } from "src/types";
 import { _delete, _get } from "@/api/axiosClient";
 import DeleteModal from "@/components/DeleteModal";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { toast } from "react-toastify";
 
 // implement accordion for post and comments
 
@@ -67,13 +77,9 @@ const DashComments = () => {
   const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
-      const res = await _delete(
-        `/comment/delete/${idToDelete}/${currentUser?.user.id}`
-      );
+      await _delete(`/comment/delete/${idToDelete}/${currentUser?.user.id}`);
 
-      const data = res.data;
-
-      // implement delete alert
+      toast.success("Comment deleted");
 
       setAllComments((prev) =>
         prev.filter((comment) => comment._id !== idToDelete)
@@ -81,6 +87,7 @@ const DashComments = () => {
 
       setIdToDelete(null);
     } catch (err) {
+      toast.error("Failed to delete comment");
       console.error("Error:", err);
       if (err instanceof Error) {
         setErrorMessage(err.message);
@@ -99,29 +106,31 @@ const DashComments = () => {
       {currentUser?.user.admin && allComments.length > 0 ? (
         // implement tailwind-scrollbar? for mobile
         <div className="overflow-x-auto">
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>date posted</Table.HeadCell>
-              <Table.HeadCell>comment</Table.HeadCell>
-              <Table.HeadCell>likes</Table.HeadCell>
-              <Table.HeadCell>posted by</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Delete</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
+          <Table>
+            <TableCaption className="mb-6">
+              A list of all comments by post
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date posted</TableHead>
+                <TableHead>Comment</TableHead>
+                <TableHead>Likes</TableHead>
+                <TableHead>Posted by</TableHead>
+                <TableHead>
+                  <span className="sr-only">Delete</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y">
               {allComments.map((comment) => (
-                <Table.Row
-                  key={comment._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                <TableRow key={comment._id}>
+                  <TableCell className="whitespace-nowrap font-medium">
                     {format(new Date(comment.updatedAt), "dd MMM yyyy")}
-                  </Table.Cell>
-                  <Table.Cell>{comment.content}</Table.Cell>
-                  <Table.Cell>{comment.likes}</Table.Cell>
-                  <Table.Cell>{comment.commentBy}</Table.Cell>
-                  <Table.Cell>
+                  </TableCell>
+                  <TableCell>{comment.content}</TableCell>
+                  <TableCell>{comment.likes.length}</TableCell>
+                  <TableCell>{comment.commentBy}</TableCell>
+                  <TableCell>
                     <button
                       onClick={() => {
                         setOpenModal(true);
@@ -131,10 +140,10 @@ const DashComments = () => {
                     >
                       Delete
                     </button>
-                  </Table.Cell>
-                </Table.Row>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Body>
+            </TableBody>
           </Table>
           {showMore && (
             // implement style button

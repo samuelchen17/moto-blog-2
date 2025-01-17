@@ -2,6 +2,7 @@ import { openLogin } from "@/redux/features/modal/authModalSlice";
 import { signOutSuccess } from "@/redux/features/user/userSlice";
 import { store } from "@/redux/store";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const apiClient = axios.create({
   baseURL: "/api",
@@ -44,8 +45,7 @@ apiClient.interceptors.response.use(
           store.dispatch(signOutSuccess());
           store.dispatch(openLogin());
 
-          // implement please sign in message? alert message
-          console.log("please sign in implement");
+          toast.info("Your session has expired. Please log in again.");
         } catch (err) {
           console.error("Error logging out user:", err);
         }

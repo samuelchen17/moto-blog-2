@@ -1,7 +1,5 @@
 import { CustomFlowbiteTheme } from "flowbite-react";
 
-// modal, dropdown, navbar, button etc. implement
-
 const flowbiteTheme: CustomFlowbiteTheme = {
   sidebar: {
     root: {
@@ -11,7 +9,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
         off: "w-64",
       },
       inner:
-        "h-full overflow-y-auto overflow-x-hidden rounded bg-gray-50 px-3 py-4 dark:bg-background border-r",
+        "h-full overflow-y-auto overflow-x-hidden rounded px-3 py-4 dark:bg-background",
     },
     collapse: {
       button:

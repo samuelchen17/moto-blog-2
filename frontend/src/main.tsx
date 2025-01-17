@@ -10,6 +10,8 @@ import { Flowbite } from "flowbite-react";
 import flowbiteTheme from "./theme/flowbite.theme.ts";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
+import "react-toastify/dist/ReactToastify.css";
+
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate persistor={persistor} loading={null}>

@@ -1,6 +1,8 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Alert, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert } from "flowbite-react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import { IUpdateUserPayload } from "src/types";
 import {
   handleDashFormChange,
@@ -11,6 +13,7 @@ import { useEffect, useState } from "react";
 import { updateStop } from "../../redux/features/user/userSlice";
 import DashSettingsDeleteUser from "./DashSettingsDeleteUser";
 import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 
 const DashSettings = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -27,7 +30,7 @@ const DashSettings = () => {
   return (
     <div className="w-full mx-auto">
       <form
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-5"
         onSubmit={handleDashFormSubmit({
           formData,
           setFormData,
@@ -37,10 +40,8 @@ const DashSettings = () => {
         })}
       >
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="email" value="Change email" />
-          </div>
-          <TextInput
+          <Label htmlFor="email">Change email</Label>
+          <Input
             type="text"
             id="email"
             placeholder="email"
@@ -49,29 +50,28 @@ const DashSettings = () => {
           />
         </div>
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="password" value="Change password" />
-          </div>
-          <TextInput
+          <Label htmlFor="password">Change password</Label>
+          <Input
             type="password"
             id="password"
             placeholder="password"
             onChange={handleDashFormChange({ formData, setFormData })}
           />
-          <div className="mb-2 block">
-            <Label htmlFor="password" value="Confirm password" />
-          </div>
-          <TextInput
+        </div>
+
+        <div>
+          <Label htmlFor="password">Confirm password</Label>
+          <Input
             type="password"
             id="confirmPassword"
             placeholder="Confirm password"
             onChange={handleDashFormChange({ formData, setFormData })}
           />
         </div>
-        <Button type="submit" disabled={loading === true}>
+        <Button className="mr-auto" type="submit" disabled={loading === true}>
           {loading ? (
             <>
-              <Spinner size="sm" />
+              <Loader2 className="animate-spin" />
               <span className="pl-2">Loading...</span>{" "}
             </>
           ) : (

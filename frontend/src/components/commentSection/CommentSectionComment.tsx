@@ -14,8 +14,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { _delete, _get, _patch } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
-
-// implement show message been deleted
+import { toast } from "react-toastify";
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -37,7 +36,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
     setEditedContent(comment.content);
   };
 
-  // edit comment logic
+  // save edit comment logic
   const handleSave = async (commentId: string) => {
     try {
       await _patch(
@@ -46,6 +45,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
       );
 
       setIsEditing(false);
+      toast.success("Comment successfully saved");
       dispatch(
         setComments(
           comments.map((comment) =>
@@ -59,6 +59,7 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         )
       );
     } catch (err) {
+      toast.error("Failed to save comment");
       console.error("Error editing comment:", err);
     }
   };
@@ -105,18 +106,19 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
         return;
       }
 
-      const res = await _delete(
+      await _delete(
         `/comment/delete/${comment._id}/${currentUser?.user.id}/${comment.commentBy}`
       );
 
-      const data = res.data;
-      console.log(data);
+      toast.success("Comment has been deleted");
+
       dispatch(
         setComments(comments.filter((comment) => comment._id !== commentId))
       );
 
       dispatch(decrementTotalComments());
     } catch (err) {
+      toast.error("Failed to delete comment");
       console.error(err);
     }
   };

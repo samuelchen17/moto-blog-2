@@ -1,6 +1,8 @@
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
-import { Alert, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Spinner } from "flowbite-react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
@@ -15,6 +17,7 @@ import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../../config/firebase.config";
 import { deleteTempImageSuccess } from "../../redux/features/image/imageSlice";
 import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -55,9 +58,9 @@ const DashProfile = () => {
 
   return (
     <div className="w-full mx-auto">
-      <div className="flex flex-col-reverse">
+      <div className="flex flex-col-reverse lg:flex-row gap-10">
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-5 w-full"
           onSubmit={handleDashFormSubmit({
             formData,
             setFormData,
@@ -67,10 +70,8 @@ const DashProfile = () => {
           })}
         >
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="username" value="Username" />
-            </div>
-            <TextInput
+            <Label htmlFor="username">Username</Label>
+            <Input
               type="text"
               id="username"
               placeholder="username"
@@ -79,15 +80,21 @@ const DashProfile = () => {
             />
           </div>
 
+          <div>
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea id="bio" placeholder="Tell us a little about yourself" />
+          </div>
+
           <div className="flex flex-col">
-            <span>Date Joined</span>
-            <span>
+            <Label>
+              Date Joined:{" "}
               {currentUser?.user.dateJoined &&
                 format(new Date(currentUser.user.dateJoined), "MMMM dd, yyyy")}
-            </span>
+            </Label>
           </div>
 
           <Button
+            className="mr-auto"
             type="submit"
             disabled={loading === true}
             onClick={() => (hasSubmittedRef.current = true)}
@@ -101,6 +108,7 @@ const DashProfile = () => {
               "Save changes"
             )}
           </Button>
+
           {error && <Alert color="failure">{error}</Alert>}
           {updateComplete && (
             <Alert color="success">Successfully updated</Alert>

@@ -7,7 +7,6 @@ import Dashboard from "../components/dashComponents/dashAdminComponents/Dashboar
 import DashComments from "../components/dashComponents/dashAdminComponents/DashComments";
 import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";
 import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import DashEvents from "../components/dashComponents/dashAdminComponents/DashEvents";
 import PostFormPage from "./PostFormPage";
 
@@ -20,18 +19,20 @@ const DashboardPage = () => {
   const postId = match ? match[1] : null;
 
   return (
-    <SidebarProvider className="flex flex-col">
+    // <SidebarProvider className="flex flex-col">
+    <div className="max-w-screen-xl mx-auto ">
       <DashHeader />
 
-      <div className="min-h-screen flex flex-col md:flex-row">
+      <div className="min-h-screen flex flex-col md:flex-row mb-12">
         {/* sidebar */}
         <DashSidebar />
 
         {/* dashboard */}
-        <div className="w-full max-w-screen-xl mx-auto mt-4 px-4">
+        <div className="w-full max-w-screen-xl mx-auto mt-4 px-8">
           {/* dynamically  display page title*/}
-          <h2 className="text-2xl mb-6 capitalize">
-            {tab} <hr />
+          <h2 className="text-2xl mb-6 capitalize space-y-2">
+            <span>{tab}</span>
+            <hr />
           </h2>
 
           {tab === "dashboard" && <Dashboard />}
@@ -61,7 +62,8 @@ const DashboardPage = () => {
           {postId && <PostFormPage key="update" postId={postId} />}
         </div>
       </div>
-    </SidebarProvider>
+    </div>
+    // </SidebarProvider>
   );
 };
 

@@ -8,13 +8,13 @@ const DashHeader = () => {
   );
 
   return (
-    <div className="flex flex-row gap-2 px-4 py-4 border-b">
+    <div className="flex flex-row gap-2 px-4 py-4">
       <Avatar rounded img={currentUser?.user.profilePicture} />
       <div className="flex flex-col gap">
         <span className="text-lg font-semibold">
-          {currentUser?.user.username}
+          {currentUser?.user.username} ({currentUser?.user.email})
         </span>
-        <span className="text-sm">User Account</span>
+        <span className="text-sm">Your personal Account</span>
       </div>
     </div>
   );

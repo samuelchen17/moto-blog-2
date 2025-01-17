@@ -25,7 +25,7 @@ const DashSidebar = () => {
   }, [location.search]);
 
   return (
-    <div className="w-full md:w-60">
+    <div className="w-full md:max-w-60">
       <Sidebar className="w-full">
         <Sidebar.Items>
           <Sidebar.ItemGroup>
