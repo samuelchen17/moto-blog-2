@@ -340,6 +340,8 @@ export const savePost = async (
   try {
     await User.findByIdAndUpdate(userId, { $addToSet: { savedPosts: postId } });
     await Post.findByIdAndUpdate(postId, { $inc: { saves: 1 } });
+
+    // implement send something back
   } catch (err) {
     console.error("Error adding post to saved list:", err);
     next(new CustomError(500, "Failed to save post to user collection"));
@@ -363,3 +365,9 @@ export const unsavePost = async (
     );
   }
 };
+
+// const user = await User.findById(userId).populate("savedPosts");
+// console.log(user.savedPosts); // Array of saved posts
+
+// const post = await Post.findById(postId);
+// console.log(post.saves); // Total saves count

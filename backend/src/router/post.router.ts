@@ -10,9 +10,12 @@ import {
   deletePost,
   updatePost,
   getHotPosts,
+  savePost,
+  unsavePost,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
+  // create post
   router.post(
     "/post/create/:id",
     isAuthenticated,
@@ -28,6 +31,7 @@ const postRouter = (router: Router) => {
     isAdmin,
     deletePost
   );
+  // update post
   router.patch(
     "/post/update/:postId/:id",
     isAuthenticated,
@@ -36,6 +40,20 @@ const postRouter = (router: Router) => {
     updatePost
   );
   router.get("/post/gethotposts", getHotPosts);
+
+  // save and unsave post
+  router.patch(
+    "/post/save-post/:id/:postId",
+    isAuthenticated,
+    isOwner,
+    savePost
+  );
+  router.patch(
+    "/post/unsave-post/:id/:postId",
+    isAuthenticated,
+    isOwner,
+    unsavePost
+  );
 };
 
 export default postRouter;
