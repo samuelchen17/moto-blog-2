@@ -6,6 +6,7 @@ import DOMPurify from "dompurify";
 import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
+import mongoose from "mongoose";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -330,7 +331,7 @@ export const getHotPosts = async (
   }
 };
 
-export const savePost = async (
+export const toggleSavePost = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -338,44 +339,35 @@ export const savePost = async (
   const { postId, id } = req.params;
 
   try {
-    await User.findByIdAndUpdate(id, { $addToSet: { savedPosts: postId } });
-    await Post.findByIdAndUpdate(postId, { $inc: { saves: 1 } });
+    const user = await User.findById(id);
+
+    // convert string post id to mongoose object id
+    const objectIdPostId = new mongoose.Types.ObjectId(postId);
+    const isPostSaved = user!.savedPosts.includes(objectIdPostId);
+
+    const updateSave = isPostSaved
+      ? { $pull: { savedPosts: objectIdPostId } } // remove if saved
+      : { $addToSet: { savedPosts: postId } }; // add if not
+
+    const updateSaveNumber = { $inc: { saves: isPostSaved ? -1 : 1 } };
+
+    await User.findByIdAndUpdate(id, updateSave);
+    await Post.findByIdAndUpdate(postId, updateSaveNumber);
 
     // implement send something back
+
     const post = await Post.findById(postId);
     if (post) {
-      res.status(200).json(post);
+      res.status(200).json({
+        message: isPostSaved
+          ? "Post unsaved successfully"
+          : "Post saved successfully",
+        post,
+      });
     }
   } catch (err) {
     console.error("Error adding post to saved list:", err);
     next(new CustomError(500, "Failed to save post to user collection"));
-  }
-};
-
-export const unsavePost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { postId, id } = req.params;
-
-  try {
-    await User.findByIdAndUpdate(id, {
-      $pull: { savedPosts: postId },
-    });
-    await Post.findByIdAndUpdate(postId, {
-      $inc: { saves: -1 },
-    });
-
-    const post = await Post.findById(postId);
-    if (post) {
-      res.status(200).json(post);
-    }
-  } catch (err) {
-    console.error("Error removing post from saved list:", err);
-    next(
-      new CustomError(500, "Failed to remove saved post from user collection")
-    );
   }
 };
 
