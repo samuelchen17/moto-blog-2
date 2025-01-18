@@ -41,6 +41,9 @@ const userSchema = new mongoose.Schema<IUser>(
     savedPosts: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Post", select: false },
     ],
+    likedPosts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Post", select: false },
+    ],
   },
   { timestamps: true }
 );

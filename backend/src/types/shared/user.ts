@@ -12,6 +12,7 @@ export interface IUser {
   };
   isAdmin: boolean;
   savedPosts: (Types.ObjectId | IPost)[];
+  likedPosts: (Types.ObjectId | IPost)[];
   createdAt: Date;
   updatedAt: Date;
 }
