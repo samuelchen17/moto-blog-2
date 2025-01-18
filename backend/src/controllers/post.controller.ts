@@ -341,9 +341,13 @@ export const toggleSavePost = async (
   try {
     const user = await User.findById(id);
 
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
     // convert string post id to mongoose object id
     const objectIdPostId = new mongoose.Types.ObjectId(postId);
-    const isPostSaved = user!.savedPosts.includes(objectIdPostId);
+    const isPostSaved = user.savedPosts.includes(objectIdPostId);
 
     const updateSave = isPostSaved
       ? { $pull: { savedPosts: objectIdPostId } } // remove if saved

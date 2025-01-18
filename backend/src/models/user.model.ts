@@ -39,10 +39,18 @@ const userSchema = new mongoose.Schema<IUser>(
       default: false,
     },
     savedPosts: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Post", select: false },
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
     ],
     likedPosts: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Post", select: false },
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
     ],
   },
   { timestamps: true }
