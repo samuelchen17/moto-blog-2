@@ -323,23 +323,43 @@ export const getHotPosts = async (
       posts
     );
 
-    // Fetch authors for each post
-    // const postsWithAuthors = await Promise.all(
-    //   posts.map(async (post) => {
-    //     const author = await User.findById(post.createdBy).select(
-    //       "username profilePicture"
-    //     );
-    //     const authorData = author || {
-    //       username: "Deleted User",
-    //     };
-    //     return { ...post.toObject(), author: authorData };
-    //   })
-    // );
-
-    // res.status(200).json(postsWithAuthors);
     res.status(200).json(postsWithAuthors);
   } catch (err) {
-    console.error("Error retrieving  hot articles:", err);
+    console.error("Error retrieving hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));
+  }
+};
+
+export const savePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId, userId } = req.params;
+
+  try {
+    await User.findByIdAndUpdate(userId, { $addToSet: { savedPosts: postId } });
+    await Post.findByIdAndUpdate(postId, { $inc: { saves: 1 } });
+  } catch (err) {
+    console.error("Error adding post to saved list:", err);
+    next(new CustomError(500, "Failed to save post to user collection"));
+  }
+};
+
+export const unsavePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId, userId } = req.params;
+
+  try {
+    await User.findByIdAndUpdate(userId, { $pull: { savedPosts: postId } });
+    await Post.findByIdAndUpdate(postId, { $inc: { saves: -1 } });
+  } catch (err) {
+    console.error("Error removing post from saved list:", err);
+    next(
+      new CustomError(500, "Failed to remove saved post from user collection")
+    );
   }
 };
