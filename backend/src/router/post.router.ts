@@ -11,6 +11,7 @@ import {
   updatePost,
   getHotPosts,
   toggleSavePost,
+  toggleLikePost,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
@@ -46,6 +47,14 @@ const postRouter = (router: Router) => {
     isAuthenticated,
     isOwner,
     toggleSavePost
+  );
+
+  // like and unlike post
+  router.patch(
+    "/post/like-post/:id/:postId",
+    isAuthenticated,
+    isOwner,
+    toggleLikePost
   );
 };
 
