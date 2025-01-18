@@ -335,13 +335,17 @@ export const savePost = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { postId, userId } = req.params;
+  const { postId, id } = req.params;
 
   try {
-    await User.findByIdAndUpdate(userId, { $addToSet: { savedPosts: postId } });
+    await User.findByIdAndUpdate(id, { $addToSet: { savedPosts: postId } });
     await Post.findByIdAndUpdate(postId, { $inc: { saves: 1 } });
 
     // implement send something back
+    const post = await Post.findById(postId);
+    if (post) {
+      res.status(200).json(post);
+    }
   } catch (err) {
     console.error("Error adding post to saved list:", err);
     next(new CustomError(500, "Failed to save post to user collection"));
@@ -353,11 +357,20 @@ export const unsavePost = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { postId, userId } = req.params;
+  const { postId, id } = req.params;
 
   try {
-    await User.findByIdAndUpdate(userId, { $pull: { savedPosts: postId } });
-    await Post.findByIdAndUpdate(postId, { $inc: { saves: -1 } });
+    await User.findByIdAndUpdate(id, {
+      $pull: { savedPosts: postId },
+    });
+    await Post.findByIdAndUpdate(postId, {
+      $inc: { saves: -1 },
+    });
+
+    const post = await Post.findById(postId);
+    if (post) {
+      res.status(200).json(post);
+    }
   } catch (err) {
     console.error("Error removing post from saved list:", err);
     next(
