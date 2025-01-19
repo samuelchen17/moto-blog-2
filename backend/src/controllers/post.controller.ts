@@ -94,7 +94,7 @@ export const getPosts = async (
     const posts = await Post.find<IPost>(query)
       .skip(startIndex)
       .limit(limit)
-      .sort({ updatedAt: sortDirection })
+      .sort({ createdAt: sortDirection })
       .lean();
 
     const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
@@ -355,8 +355,10 @@ export const toggleSavePost = async (
 
     const updateSaveNumber = { $inc: { saves: isPostSaved ? -1 : 1 } };
 
-    await User.findByIdAndUpdate(id, updateSave);
-    await Post.findByIdAndUpdate(postId, updateSaveNumber);
+    await User.findByIdAndUpdate(id, updateSave, { timestamps: false });
+    await Post.findByIdAndUpdate(postId, updateSaveNumber, {
+      timestamps: false,
+    });
 
     // implement send something back
 
@@ -404,8 +406,10 @@ export const toggleLikePost = async (
 
     const updateLikeNumber = { $inc: { likes: isPostLiked ? -1 : 1 } };
 
-    await User.findByIdAndUpdate(id, updateLike);
-    await Post.findByIdAndUpdate(postId, updateLikeNumber);
+    await User.findByIdAndUpdate(id, updateLike, { timestamps: false });
+    await Post.findByIdAndUpdate(postId, updateLikeNumber, {
+      timestamps: false,
+    });
 
     // implement send something back
 
