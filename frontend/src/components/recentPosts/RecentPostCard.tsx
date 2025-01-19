@@ -17,24 +17,27 @@ import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
 const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <Card className="min-h-[430px]">
-      <Link className="relative" to={`/blogs/post/${post.slug}`}>
+      <Link
+        className="relative overflow-hidden"
+        to={`/blogs/post/${post.slug}`}
+      >
         <img
           src={post.image}
           alt={post.title}
           className="h-[160px] w-full object-cover rounded-t-md border-b"
         />
-        <div className="absolute rounded-tl-md rounded-br-md left-0 top-0 bg-black opacity-75 text-white p-2 flex gap-2">
+        <div className="absolute rounded-sm rounded-br-md left-0 top-0 bg-black opacity-75 text-white p-2 flex gap-2">
           <div className="flex items-center text-center gap-1">
             <ThumbsUp className="w-4 h-4" />
-            <span className="text-xs">50</span>
+            <span className="text-xs">{post.likes}</span>
           </div>
           <div className="flex items-center text-center gap-1">
             <MessageSquare className="w-4 h-4" />
-            <span className="text-xs">50</span>
+            <span className="text-xs"></span>
           </div>
           <div className="flex items-center text-center gap-1">
             <Bookmark className="w-4 h-4" />
-            <span className="text-xs">50</span>
+            <span className="text-xs">{post.saves}</span>
           </div>
         </div>
       </Link>
