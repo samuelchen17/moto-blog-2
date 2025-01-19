@@ -1,7 +1,23 @@
 import mongoose from "mongoose";
 import { Document, Types } from "mongoose";
 import config from "../config/config";
-import { IUser } from "src/types";
+import { IPost } from "src/types";
+
+export interface IUser {
+  username: string;
+  email: string;
+  profilePicture: string;
+  authentication: {
+    password: string;
+    salt?: string;
+    sessionToken?: string;
+  };
+  isAdmin: boolean;
+  savedPosts: (Types.ObjectId | IPost)[];
+  likedPosts: (Types.ObjectId | IPost)[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const userSchema = new mongoose.Schema<IUser>(
   {

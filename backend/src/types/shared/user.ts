@@ -1,21 +1,4 @@
-import { Types } from "mongoose";
 import { IPost } from "src/types";
-
-export interface IUser {
-  username: string;
-  email: string;
-  profilePicture: string;
-  authentication: {
-    password: string;
-    salt?: string;
-    sessionToken?: string;
-  };
-  isAdmin: boolean;
-  savedPosts: (Types.ObjectId | IPost)[];
-  likedPosts: (Types.ObjectId | IPost)[];
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export interface IUpdateUserPayload {
   username?: string;
@@ -31,6 +14,8 @@ export interface IGetUser {
   email: string;
   profilePicture: string;
   isAdmin: boolean;
+  savedPosts: (string | IPost)[];
+  likedPosts: (string | IPost)[];
   createdAt: Date;
   updatedAt: Date;
   image: string;
