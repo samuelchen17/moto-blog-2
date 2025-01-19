@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { _get } from "@/api/axiosClient";
-import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
+import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 
 const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
@@ -26,20 +26,9 @@ const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
           alt={post.title}
           className="h-[160px] w-full object-cover rounded-t-md border-b"
         />
-        <div className="absolute rounded-sm rounded-br-md left-0 top-0 bg-black opacity-75 text-white p-2 flex gap-2">
-          <div className="flex items-center text-center gap-1">
-            <ThumbsUp className="w-4 h-4" />
-            <span className="text-xs">{post.likes}</span>
-          </div>
-          <div className="flex items-center text-center gap-1">
-            <MessageSquare className="w-4 h-4" />
-            <span className="text-xs"></span>
-          </div>
-          <div className="flex items-center text-center gap-1">
-            <Bookmark className="w-4 h-4" />
-            <span className="text-xs">{post.saves}</span>
-          </div>
-        </div>
+
+        {/* like comment and save counter */}
+        <LikeCommentSaveCounter post={post} />
       </Link>
       <CardHeader>
         <CardDescription className="flex justify-between">
