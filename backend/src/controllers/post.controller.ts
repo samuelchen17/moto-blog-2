@@ -384,9 +384,14 @@ export const toggleLikePost = async (
 
   try {
     const user = await User.findById(id);
+    const post = await Post.findById(postId);
 
     if (!user) {
       return next(new CustomError(404, "User not found"));
+    }
+
+    if (!post) {
+      return next(new CustomError(404, "Post not found"));
     }
 
     // convert string post id to mongoose object id
@@ -404,15 +409,12 @@ export const toggleLikePost = async (
 
     // implement send something back
 
-    const post = await Post.findById(postId);
-    if (post) {
-      res.status(200).json({
-        message: isPostLiked
-          ? "Like removed successful"
-          : "Post liked successful",
-        post,
-      });
-    }
+    res.status(200).json({
+      message: isPostLiked
+        ? "Like removed successful"
+        : "Post liked successful",
+      post,
+    });
   } catch (err) {
     console.error("Error liking post:", err);
     next(new CustomError(500, "Failed to like post"));
