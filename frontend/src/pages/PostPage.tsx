@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPostResponse, IPostWithAuthor } from "src/types";
-import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
 import ImageBanner from "@/components/ImageBanner";
@@ -9,8 +8,7 @@ import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";
 import Summarizer from "@/components/Summarizer";
 import { SkeletonPostPage } from "@/components/SkeletonComponents";
-import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import PostInteractionsBar from "@/components/PostInteractionsBar";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -108,7 +106,7 @@ const PostPage = () => {
               {"by "}
               {post?.createdBy.username}
             </div>
-
+            {/* 
             <div className="text-slate-300 font-semibold uppercase">
               {post.createdAt === post.updatedAt ? (
                 <div>
@@ -119,7 +117,7 @@ const PostPage = () => {
                   Updated: {format(new Date(post.updatedAt), "dd MMM yyyy")}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </ImageBanner>
 
@@ -130,42 +128,7 @@ const PostPage = () => {
             <TableOfContents toc={tableOfContents} />
 
             <main className="w-full">
-              <div className="space-y-4 mb-12">
-                <Separator />
-                <div className="flex justify-between">
-                  {/* like comment and saves */}
-                  <div className="flex gap-6">
-                    <div className="flex items-center text-center gap-1">
-                      <ThumbsUp className="w-5 h-5" />
-                      <span className="text-xs">{post.likes}</span>
-                    </div>
-                    <div className="flex items-center text-center gap-1">
-                      <MessageSquare className="w-5 h-5" />
-                      <span className="text-xs">{post.comments}</span>
-                    </div>
-                    <div className="flex items-center text-center gap-1">
-                      <Bookmark className="w-5 h-5" />
-                      <span className="text-xs">{post.saves}</span>
-                    </div>
-                  </div>
-
-                  {/* date posted/updated */}
-                  <div className="font-semibold uppercase">
-                    {post.createdAt === post.updatedAt ? (
-                      <div>
-                        Posted:{" "}
-                        {format(new Date(post.createdAt), "dd MMM yyyy")}
-                      </div>
-                    ) : (
-                      <div>
-                        Updated:{" "}
-                        {format(new Date(post.updatedAt), "dd MMM yyyy")}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <Separator />
-              </div>
+              <PostInteractionsBar post={post} />
 
               <div
                 className="post-content"
