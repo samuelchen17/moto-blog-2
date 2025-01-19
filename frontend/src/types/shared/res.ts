@@ -1,5 +1,3 @@
-import { IPost } from "./post";
-
 export interface ISuccessRes {
   message: string;
   success: true;
@@ -10,8 +8,8 @@ export interface ISuccessRes {
     email: string;
     dateJoined: Date;
     admin: boolean;
-    savedPosts: (string | IPost)[];
-    likedPosts: (string | IPost)[];
+    savedPosts?: string[];
+    likedPosts?: string[];
   };
 }
 

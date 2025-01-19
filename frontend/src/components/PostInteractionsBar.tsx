@@ -1,11 +1,11 @@
-import { IPostWithAuthor } from "@/types";
+import { IGetUser, IPostWithAuthor } from "@/types";
 import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { _patch } from "@/api/axiosClient";
+import { _get, _patch } from "@/api/axiosClient";
 
 const PostInteractionsBar = ({ post }: { post: IPostWithAuthor }) => {
   const { currentUser } = useAppSelector(
@@ -23,30 +23,38 @@ const PostInteractionsBar = ({ post }: { post: IPostWithAuthor }) => {
   });
 
   // get initial state of saved and comment icons
+  useEffect(() => {
+    if (currentUser) {
+      const fetchSavedLikedList = async () => {
+        try {
+          const res = await _get<IGetUser>(`/${currentUser.user.id}`);
+          const data = res.data;
 
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     setLike((prev) => ({
-  //       ...prev,
-  //       liked:
-  //         Array.isArray(currentUser.user.likedPosts) &&
-  //         currentUser.user.likedPosts.some(
-  //           (likedPostId) => String(likedPostId) === String(post._id)
-  //         ),
-  //     }));
+          setLike((prev) => ({
+            ...prev,
+            liked:
+              Array.isArray(data.likedPosts) &&
+              data.likedPosts.some(
+                (likedPostId) => String(likedPostId) === String(post._id)
+              ),
+          }));
 
-  //     setSave((prev) => ({
-  //       ...prev,
-  //       saved:
-  //         Array.isArray(currentUser.user.savedPosts) &&
-  //         currentUser.user.savedPosts.some(
-  //           (savedPostId) => String(savedPostId) === String(post._id)
-  //         ),
-  //     }));
-  //   }
-  // }, [currentUser, post._id]);
+          setSave((prev) => ({
+            ...prev,
+            saved:
+              Array.isArray(data.savedPosts) &&
+              data.savedPosts.some(
+                (savedPostId) => String(savedPostId) === String(post._id)
+              ),
+          }));
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
-  console.log(save);
+      fetchSavedLikedList();
+    }
+  }, [currentUser, post._id]);
 
   const handleLike = async () => {
     setLike((prev) => ({
