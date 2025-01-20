@@ -41,8 +41,6 @@ Hover over user card
 
 user page to show bio etc. if admin, show their posts
 
-# fix all loadings/ spinners?
-
 # fix all alerts?
 
 # contact us
