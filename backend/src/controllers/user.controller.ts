@@ -7,7 +7,12 @@ import {
   getUsers,
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
-import { IGetUserResponse, IUpdateUserPayload } from "src/types";
+import {
+  IGetUserResponse,
+  IPost,
+  IPostWithAuthor,
+  IUpdateUserPayload,
+} from "src/types";
 import { ISuccessRes } from "src/types";
 import { authentication, random } from "../helpers/user.helpers";
 import {
@@ -20,6 +25,7 @@ import {
 } from "../helpers/validator.helpers";
 import { IUser, User } from "../models/user.model";
 import { Post } from "../models/post.model";
+import { attachAuthorsToPosts } from "./post.controller";
 
 export const getAllUsers = async (
   req: Request,
@@ -229,7 +235,7 @@ export const getUser = async (
 // get user saved posts
 export const getUserSavedPosts = async (
   req: Request,
-  res: Response,
+  res: Response<IPostWithAuthor[]>,
   next: NextFunction
 ) => {
   try {
@@ -239,9 +245,15 @@ export const getUserSavedPosts = async (
       return next(new CustomError(404, "User not found"));
     }
 
-    const savedPosts = await Post.find({ _id: { $in: user.savedPosts } });
+    const savedPosts: IPost[] = await Post.find({
+      _id: { $in: user.savedPosts },
+    }).lean();
 
-    res.status(200).json(savedPosts);
+    const savedPostsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      savedPosts
+    );
+
+    res.status(200).json(savedPostsWithAuthors);
   } catch (err) {
     next(new CustomError(400, "failed to get user's saved post list"));
   }
