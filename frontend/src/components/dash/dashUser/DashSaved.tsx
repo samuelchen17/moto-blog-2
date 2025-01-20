@@ -33,7 +33,7 @@ const DashSaved = () => {
     }
   }, [currentUser]);
 
-  console.log(savedList);
+  // console.log(savedList);
 
   return (
     <div className="">
