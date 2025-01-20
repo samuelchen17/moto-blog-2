@@ -3,13 +3,15 @@ import { Button } from "../ui/button";
 import AuthModal from "../authModal/AuthModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-// import { PiSignOutBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
   openRegister,
   openLogin,
 } from "../../redux/features/modal/authModalSlice";
-import { dashNavItems } from "../../config/dashNavItems.config";
+import {
+  dashAdminNavItems,
+  dashUserNavItems,
+} from "../../config/dashNavItems.config";
 import userSignOut from "../../utils/userSignOut.utils";
 
 import {
@@ -57,21 +59,40 @@ const NavBarAuth = () => {
               <DropdownMenuSeparator />
 
               {/* main */}
+              {/* user */}
               <DropdownMenuGroup>
-                {dashNavItems
-                  .filter((item) => !item.admin || currentUser?.user.admin)
-                  .map((item) => (
-                    <Link to={item.path} key={item.name}>
-                      <DropdownMenuItem className="capitalize">
-                        {item.icon &&
-                          React.createElement(item.icon, {
-                            className: "mr-1 h-4 w-4",
-                          })}
-                        <span> {item.name}</span>
-                      </DropdownMenuItem>
-                    </Link>
-                  ))}
+                {dashUserNavItems.map((item) => (
+                  <Link to={item.path} key={item.name}>
+                    <DropdownMenuItem className="capitalize">
+                      {item.icon &&
+                        React.createElement(item.icon, {
+                          className: "mr-1 h-4 w-4",
+                        })}
+                      <span> {item.name}</span>
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
               </DropdownMenuGroup>
+
+              {/* admin */}
+              {currentUser.user.admin && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {dashAdminNavItems.map((item) => (
+                      <Link to={item.path} key={item.name}>
+                        <DropdownMenuItem className="capitalize">
+                          {item.icon &&
+                            React.createElement(item.icon, {
+                              className: "mr-1 h-4 w-4",
+                            })}
+                          <span> {item.name}</span>
+                        </DropdownMenuItem>
+                      </Link>
+                    ))}
+                  </DropdownMenuGroup>
+                </>
+              )}
 
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => userSignOut({ dispatch })}>
@@ -111,46 +132,3 @@ const NavBarAuth = () => {
 };
 
 export default NavBarAuth;
-
-{
-  /* <Dropdown
-arrowIcon={false}
-inline
-label={
-  <Avatar
-    alt="user"
-    rounded
-    img={currentUser.user.profilePicture}
-  />
-}
->
-<Dropdown.Header>
-  <span className="block text-sm">{currentUser.user.username}</span>
-  <span className="block truncate text-sm font-medium">
-    {currentUser.user.email}
-  </span>
-</Dropdown.Header>
-
-{dashNavItems
-  .filter((item) => !item.admin || currentUser?.user.admin)
-  .map((item) => (
-    <Dropdown.Item
-      key={item.name}
-      as={Link}
-      to={item.path}
-      icon={item.icon}
-      className="capitalize"
-    >
-      {item.name}
-    </Dropdown.Item>
-  ))}
-
-<Dropdown.Divider />
-<Dropdown.Item
-  icon={PiSignOutBold}
-  onClick={() => userSignOut({ dispatch })}
->
-  Sign Out
-</Dropdown.Item>
-</Dropdown> */
-}
