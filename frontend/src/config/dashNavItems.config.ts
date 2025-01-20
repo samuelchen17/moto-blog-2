@@ -38,17 +38,17 @@ export const dashUserNavItems: IDashNavItems[] = [
   },
   {
     name: "saved",
-    path: "/dashboard?tab=settings",
+    path: "/dashboard?tab=saved-posts",
     icon: Bookmark,
   },
   {
     name: "Liked",
-    path: "/dashboard?tab=settings",
+    path: "/dashboard?tab=liked-posts",
     icon: ThumbsUp,
   },
   {
     name: "Events",
-    path: "/dashboard?tab=settings",
+    path: "/dashboard?tab=joined-events",
     icon: Calendar,
   },
 ];

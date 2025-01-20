@@ -9,6 +9,8 @@ import DashPosts from "../components/dash/dashAdmin/DashPosts";
 import DashUsers from "../components/dash/dashAdmin/DashUsers";
 import DashEvents from "../components/dash/dashAdmin/DashEvents";
 import PostFormPage from "./PostFormPage";
+import DashEventsUser from "@/components/dash/dashUser/DashEventsUser";
+import DashSaved from "@/components/dash/dashUser/DashSaved";
 
 const DashboardPage = () => {
   const [searchParams] = useSearchParams();
@@ -60,6 +62,14 @@ const DashboardPage = () => {
 
           {/* edit post */}
           {postId && <PostFormPage key="update" postId={postId} />}
+
+          {/* User events tab */}
+          {tab === "joined-events" && <DashEventsUser />}
+
+          {/* User saved post tab */}
+          {tab === "saved-posts" && <DashSaved />}
+
+          {tab === "liked-posts" && <DashEventsUser />}
         </div>
       </div>
     </div>
