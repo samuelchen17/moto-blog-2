@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import DashProfile from "../components/dashComponents/DashProfile";
+import DashProfile from "../components/dashComponents/dashUser/DashProfile";
 import DashSidebar from "../components/dashComponents/DashSidebar";
-import DashHeader from "../components/dashComponents/DashHeader";
-import DashSettings from "../components/dashComponents/DashSettings";
+import DashHeader from "../components/dashComponents/dashUser/DashHeader";
+import DashSettings from "../components/dashComponents/dashUser/DashSettings";
 import Dashboard from "../components/dashComponents/dashAdminComponents/Dashboard";
 import DashComments from "../components/dashComponents/dashAdminComponents/DashComments";
 import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";

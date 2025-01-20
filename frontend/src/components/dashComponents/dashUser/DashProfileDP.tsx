@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { RootState } from "../../redux/store";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { FaEdit } from "react-icons/fa";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Alert } from "flowbite-react";
 import React from "react";
-import { IDashFormProps } from "../../utils/dashForm.utils";
-import { updateStart, updateStop } from "../../redux/features/user/userSlice";
-import { storage } from "../../config/firebase.config";
+import { IDashFormProps } from "../../../utils/dashForm.utils";
+import {
+  updateStart,
+  updateStop,
+} from "../../../redux/features/user/userSlice";
+import { storage } from "../../../config/firebase.config";
 import {
   setTempImagePath,
   deleteTempImageSuccess,
-} from "../../redux/features/image/imageSlice";
+} from "../../../redux/features/image/imageSlice";
 import { Loader2 } from "lucide-react";
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 
 // const DashDP: React.FC<IDashDpProps> = ({ setFormData })
 const DashDP = ({ setFormData, formData }: IDashFormProps) => {

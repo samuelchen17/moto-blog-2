@@ -1,18 +1,18 @@
-import { RootState } from "../../redux/store";
-import { useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import { Alert } from "flowbite-react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import { IUpdateUserPayload } from "src/types";
 import {
   handleDashFormChange,
   handleDashFormSubmit,
-} from "../../utils/dashForm.utils";
-import { useAppDispatch } from "../../redux/hooks";
+} from "../../../utils/dashForm.utils";
+import { useAppDispatch } from "../../../redux/hooks";
 import { useEffect, useState } from "react";
-import { updateStop } from "../../redux/features/user/userSlice";
+import { updateStop } from "../../../redux/features/user/userSlice";
 import DashSettingsDeleteUser from "./DashSettingsDeleteUser";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Loader2 } from "lucide-react";
 
 const DashSettings = () => {

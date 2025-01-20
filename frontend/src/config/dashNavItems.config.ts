@@ -9,6 +9,9 @@ import {
   FileText,
   NotebookPen,
   Calendar,
+  Bookmark,
+  CalendarCog,
+  ThumbsUp,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -20,13 +23,7 @@ interface IDashNavItems {
   admin?: boolean;
 }
 
-export const dashNavItems: IDashNavItems[] = [
-  {
-    name: "dashboard",
-    path: "/dashboard/?tab=dashboard",
-    icon: LayoutDashboard,
-    admin: true,
-  },
+export const dashUserNavItems: IDashNavItems[] = [
   {
     name: "profile",
     path: "/dashboard?tab=profile",
@@ -40,33 +37,51 @@ export const dashNavItems: IDashNavItems[] = [
     icon: Settings,
   },
   {
+    name: "saved",
+    path: "/dashboard?tab=settings",
+    icon: Bookmark,
+  },
+  {
+    name: "Liked",
+    path: "/dashboard?tab=settings",
+    icon: ThumbsUp,
+  },
+  {
+    name: "Events",
+    path: "/dashboard?tab=settings",
+    icon: Calendar,
+  },
+];
+
+export const dashAdminNavItems: IDashNavItems[] = [
+  {
+    name: "dashboard",
+    path: "/dashboard/?tab=dashboard",
+    icon: LayoutDashboard,
+  },
+  {
     name: "comments",
     path: "/dashboard/?tab=comments",
     icon: MessageSquareText,
-    admin: true,
   },
   {
     name: "users",
     path: "/dashboard/?tab=users",
     icon: Users,
-    admin: true,
   },
   {
     name: "events",
     path: "/dashboard/?tab=events",
-    icon: Calendar,
-    admin: true,
+    icon: CalendarCog,
   },
   {
     name: "posts",
     path: "/dashboard/?tab=posts",
     icon: FileText,
-    admin: true,
   },
   {
     name: "write",
     path: "/dashboard/?tab=create-post",
     icon: NotebookPen,
-    admin: true,
   },
 ];

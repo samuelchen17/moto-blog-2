@@ -1,8 +1,8 @@
-import { RootState } from "../../redux/store";
-import { useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import { Alert, Spinner } from "flowbite-react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import DashDP from "./DashProfileDP";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
@@ -10,14 +10,14 @@ import { IUpdateUserPayload } from "src/types";
 import {
   handleDashFormChange,
   handleDashFormSubmit,
-} from "../../utils/dashForm.utils";
-import { useAppDispatch } from "../../redux/hooks";
-import { updateStop } from "../../redux/features/user/userSlice";
+} from "../../../utils/dashForm.utils";
+import { useAppDispatch } from "../../../redux/hooks";
+import { updateStop } from "../../../redux/features/user/userSlice";
 import { deleteObject, ref } from "firebase/storage";
-import { storage } from "../../config/firebase.config";
-import { deleteTempImageSuccess } from "../../redux/features/image/imageSlice";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { storage } from "../../../config/firebase.config";
+import { deleteTempImageSuccess } from "../../../redux/features/image/imageSlice";
+import { Button } from "../../ui/button";
+import { Textarea } from "../../ui/textarea";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});

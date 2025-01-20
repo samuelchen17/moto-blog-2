@@ -6,7 +6,10 @@ import { PiSignOutBold } from "react-icons/pi";
 import userSignOut from "../../utils/userSignOut.utils";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { dashNavItems } from "../../config/dashNavItems.config";
+import {
+  dashUserNavItems,
+  dashAdminNavItems,
+} from "../../config/dashNavItems.config";
 
 const DashSidebar = () => {
   const location = useLocation();
@@ -28,9 +31,10 @@ const DashSidebar = () => {
     <div className="w-full md:max-w-60">
       <Sidebar className="w-full">
         <Sidebar.Items>
+          {/* User group */}
           <Sidebar.ItemGroup>
-            {dashNavItems
-              .filter((item) => !item.admin || currentUser?.user.admin)
+            {dashUserNavItems
+              // .filter((item) => !item.admin || currentUser?.user.admin)
               .map((item) => (
                 <Sidebar.Item
                   key={item.name}
@@ -49,7 +53,28 @@ const DashSidebar = () => {
                   <span className="capitalize">{item.name}</span>
                 </Sidebar.Item>
               ))}
+          </Sidebar.ItemGroup>
 
+          {/* Admin group */}
+          {currentUser?.user.admin && (
+            <Sidebar.ItemGroup>
+              {dashAdminNavItems.map((item) => (
+                <Sidebar.Item
+                  key={item.name}
+                  as={Link}
+                  to={item.path}
+                  icon={item.icon}
+                  // conditionally render properties
+                  active={tab === item.name}
+                >
+                  <span className="capitalize">{item.name}</span>
+                </Sidebar.Item>
+              ))}
+            </Sidebar.ItemGroup>
+          )}
+
+          {/* sign out button */}
+          <Sidebar.ItemGroup>
             <Sidebar.Item
               href="#"
               icon={PiSignOutBold}
