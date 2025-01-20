@@ -41,11 +41,11 @@ export const dashUserNavItems: IDashNavItems[] = [
     path: "/dashboard?tab=saved-posts",
     icon: Bookmark,
   },
-  {
-    name: "Liked",
-    path: "/dashboard?tab=liked-posts",
-    icon: ThumbsUp,
-  },
+  // {
+  //   name: "Liked",
+  //   path: "/dashboard?tab=liked-posts",
+  //   icon: ThumbsUp,
+  // },
   {
     name: "Events",
     path: "/dashboard?tab=joined-events",

@@ -12,8 +12,8 @@ const DashSaved = () => {
   );
 
   const [savedList, setSavedList] = useState<IPostWithAuthor[]>();
-  // useEffect to get users saved list
 
+  // useEffect to get users saved list
   useEffect(() => {
     if (currentUser) {
       const fetchSavedList = async () => {
