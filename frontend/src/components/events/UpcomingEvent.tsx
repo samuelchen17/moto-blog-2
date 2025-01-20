@@ -1,5 +1,5 @@
 import { MapPin } from "lucide-react";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 import { IEvent } from "@/types";
 import { format } from "date-fns";
 
