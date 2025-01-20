@@ -11,7 +11,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { _get, _patch, _post } from "@/api/axiosClient";
 
-import { Alert, FileInput, Spinner } from "flowbite-react";
+import { Alert, FileInput } from "flowbite-react";
 
 import {
   Select,
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 const clearForm: IPublishPostPayload = { title: "", content: "" };
 
@@ -211,7 +212,7 @@ const PostFormPage: React.FC<IPostFormPageProps> = ({ postId }) => {
               {imageUploading ? (
                 <div className="flex justify-center items-center text-center gap-2">
                   <span>Uploading...</span>
-                  <Spinner />
+                  <Loader2 className="animate-spin" />
                 </div>
               ) : (
                 <>

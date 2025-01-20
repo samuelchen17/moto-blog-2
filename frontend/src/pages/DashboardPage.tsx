@@ -69,7 +69,7 @@ const DashboardPage = () => {
           {/* User saved post tab */}
           {tab === "saved-posts" && <DashSaved />}
 
-          {tab === "liked-posts" && <DashEventsUser />}
+          {/* {tab === "liked-posts" && <DashEventsUser />} */}
         </div>
       </div>
     </div>

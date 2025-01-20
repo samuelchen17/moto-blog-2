@@ -52,20 +52,30 @@ const HomePage = () => {
               src="https://images.unsplash.com/photo-1690540293122-14d3051a5fe5?q=80&w=2698&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
             <div className="absolute bottom-0 top-0 outline flex flex-col md:flex-row w-full justify-end">
-              <div className="flex-grow space-y-6 rounded-md p-10 bg-black bg-opacity-90 md:my-auto md:m-10 m-4 max-w-[600px]">
+              <div className="flex-grow space-y-6 rounded-md p-6 bg-black bg-opacity-90 md:my-auto md:m-10 m-4 max-w-[600px]">
                 <div>
                   <Label className="text-white">Name</Label>
-                  <Input placeholder="name" />
+                  <Input
+                    placeholder="name"
+                    className="bg-white border-white text-black"
+                  />
                 </div>
                 <div>
                   <Label className="text-white">Email</Label>
-                  <Input placeholder="email" type="email" />
+                  <Input
+                    placeholder="email"
+                    type="email"
+                    className="bg-white border-white text-black"
+                  />
                 </div>
                 <div>
                   <Label className="text-white">Message</Label>
-                  <Textarea />
+                  <Textarea
+                    placeholder="your message..."
+                    className="bg-white border-white text-black"
+                  />
                 </div>
-                <Button variant="secondary">Send message</Button>
+                <Button className="bg-white text-black">Send message</Button>
               </div>
             </div>
           </div>

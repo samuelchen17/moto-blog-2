@@ -1,6 +1,6 @@
 import { RootState } from "../../../redux/store";
 import { useAppSelector } from "../../../redux/hooks";
-import { Alert, Spinner } from "flowbite-react";
+import { Alert } from "flowbite-react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import DashDP from "./DashProfileDP";
@@ -18,6 +18,7 @@ import { storage } from "../../../config/firebase.config";
 import { deleteTempImageSuccess } from "../../../redux/features/image/imageSlice";
 import { Button } from "../../ui/button";
 import { Textarea } from "../../ui/textarea";
+import { Loader2 } from "lucide-react";
 
 const DashProfile = () => {
   const [formData, setFormData] = useState<IUpdateUserPayload>({});
@@ -101,7 +102,7 @@ const DashProfile = () => {
           >
             {loading ? (
               <>
-                <Spinner size="sm" />
+                <Loader2 className="animate-spin" />
                 <span className="pl-2">Loading...</span>{" "}
               </>
             ) : (

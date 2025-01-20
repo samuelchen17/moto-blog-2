@@ -32,7 +32,7 @@ const UpcomingEvent = ({ event }: { event: IEvent }) => {
 
         {/* join event button */}
         <div className="flex sm:flex-row flex-col gap-4 sm:items-center">
-          <Button className="order-1 sm:order-none">Join</Button>
+          {/* <Button className="order-1 sm:order-none">Join</Button> */}
           <div className="flex gap-1">
             <MapPin />
             <span>{event.location}</span>
