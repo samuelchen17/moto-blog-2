@@ -16,7 +16,7 @@ const DashSaved = () => {
     if (currentUser) {
       const fetchSavedList = async () => {
         try {
-          const res = await _get<IGetUser>(`/${currentUser.user.id}`);
+          const res = await _get(`/saved-posts/${currentUser.user.id}`);
           const data = res.data;
 
           console.log(data);

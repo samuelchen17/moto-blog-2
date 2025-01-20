@@ -18,7 +18,8 @@ import {
   validatePassword,
   validateUsername,
 } from "../helpers/validator.helpers";
-import { User } from "../models/user.model";
+import { IUser, User } from "../models/user.model";
+import { Post } from "../models/post.model";
 
 export const getAllUsers = async (
   req: Request,
@@ -210,7 +211,7 @@ export const getUser = async (
   next: NextFunction
 ) => {
   try {
-    const user = await User.findById(req.params.commentBy);
+    const user = await User.findById(req.params.userId);
 
     if (!user) {
       res.status(200).json({
@@ -222,5 +223,26 @@ export const getUser = async (
     res.status(200).json(user);
   } catch (err) {
     next(new CustomError(400, "failed to get user"));
+  }
+};
+
+// get user saved posts
+export const getUserSavedPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
+    const savedPosts = await Post.find({ _id: { $in: user.savedPosts } });
+
+    res.status(200).json(savedPosts);
+  } catch (err) {
+    next(new CustomError(400, "failed to get user's saved post list"));
   }
 };
