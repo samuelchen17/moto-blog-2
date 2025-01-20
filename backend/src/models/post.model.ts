@@ -31,6 +31,9 @@ const postSchema = new mongoose.Schema<IPost>(
       required: true,
       unique: true,
     },
+    saves: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+    comments: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

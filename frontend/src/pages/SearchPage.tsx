@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
 import { _get } from "@/api/axiosClient";
-import { Spinner } from "flowbite-react";
 import { SkeletonSearchItem } from "@/components/SkeletonComponents";
 
 const SearchPage = () => {

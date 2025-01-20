@@ -3,13 +3,13 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
-} from "../../redux/features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { RootState } from "../../redux/store";
+} from "../../../redux/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { RootState } from "../../../redux/store";
 import { _delete } from "@/api/axiosClient";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../../DeleteModal";
 import { toast } from "react-toastify";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 const DashSettingsDeleteUser = () => {
   const [openModal, setOpenModal] = useState(false);

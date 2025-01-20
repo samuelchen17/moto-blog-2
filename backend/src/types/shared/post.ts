@@ -16,6 +16,9 @@ export interface IPost {
   createdAt: Date;
   updatedAt: Date;
   image: string;
+  saves: number;
+  likes: number;
+  comments: number;
 }
 
 // refactor to user after testing implement

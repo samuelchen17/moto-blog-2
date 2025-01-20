@@ -1,3 +1,5 @@
+import { IPost } from "src/types";
+
 export interface IUpdateUserPayload {
   username?: string;
   profilePicture?: string;
@@ -12,6 +14,8 @@ export interface IGetUser {
   email: string;
   profilePicture: string;
   isAdmin: boolean;
+  savedPosts: (string | IPost)[];
+  likedPosts: (string | IPost)[];
   createdAt: Date;
   updatedAt: Date;
   image: string;

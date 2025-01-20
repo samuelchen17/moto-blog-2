@@ -4,6 +4,7 @@ import {
   deleteUserAdmin,
   getAllUsers,
   getUser,
+  getUserSavedPosts,
   signOut,
   updateUser,
 } from "../controllers/user.controller";
@@ -33,7 +34,10 @@ const userRouter = (router: Router) => {
   router.post("/user", signOut);
 
   // get user info by id
-  router.get("/:commentBy", getUser);
+  router.get("/:userId", getUser);
+
+  // get user saved posts
+  router.get("/saved-posts/:id", isAuthenticated, isOwner, getUserSavedPosts);
 };
 
 export default userRouter;

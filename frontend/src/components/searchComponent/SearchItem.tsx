@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { IPostWithAuthor } from "src/types";
-import { MessageCircle, ThumbsUp } from "lucide-react";
+import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
 import TimeAgo from "../TimeAgo";
 import { _get } from "@/api/axiosClient";
 
@@ -35,11 +35,15 @@ const SearchItem = ({ post }: { post: IPostWithAuthor }) => {
               </span>
               <div className="flex gap-1 items-center text-gray-500">
                 <ThumbsUp size={14} className="" />
-                <span className="text-xs">72</span>
+                <span className="text-xs">{post.likes}</span>
               </div>
               <div className="flex gap-1 items-center text-gray-500">
-                <MessageCircle size={14} />
-                <span className="text-xs">13</span>
+                <MessageSquare size={14} />
+                <span className="text-xs">{post.comments}</span>
+              </div>
+              <div className="flex gap-1 items-center text-gray-500">
+                <Bookmark size={14} />
+                <span className="text-xs">{post.saves}</span>
               </div>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPostResponse, IPostWithAuthor } from "src/types";
-import { format } from "date-fns";
 import CommentSection from "../components/commentSection/CommentSection";
 import RecentPosts from "../components/recentPosts/RecentPosts";
 import ImageBanner from "@/components/ImageBanner";
@@ -9,6 +8,7 @@ import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";
 import Summarizer from "@/components/Summarizer";
 import { SkeletonPostPage } from "@/components/SkeletonComponents";
+import PostInteractionsBar from "@/components/PostInteractionsBar";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -106,7 +106,7 @@ const PostPage = () => {
               {"by "}
               {post?.createdBy.username}
             </div>
-
+            {/* 
             <div className="text-slate-300 font-semibold uppercase">
               {post.createdAt === post.updatedAt ? (
                 <div>
@@ -117,7 +117,7 @@ const PostPage = () => {
                   Updated: {format(new Date(post.updatedAt), "dd MMM yyyy")}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </ImageBanner>
 
@@ -128,6 +128,8 @@ const PostPage = () => {
             <TableOfContents toc={tableOfContents} />
 
             <main className="w-full">
+              <PostInteractionsBar post={post} />
+
               <div
                 className="post-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}

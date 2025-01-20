@@ -165,7 +165,7 @@ export const login = async (
     );
 
     if (!user) {
-      return next(new CustomError(401, "Invalid credentials"));
+      return next(new CustomError(400, "Invalid credentials"));
     }
 
     // check if these properties exist so that it cannot be undefined
@@ -177,7 +177,7 @@ export const login = async (
     const expectedHash = authentication(user.authentication.salt, password);
 
     if (user.authentication.password !== expectedHash) {
-      return next(new CustomError(401, "Invalid credentials"));
+      return next(new CustomError(400, "Invalid credentials"));
     }
 
     // sign user in

@@ -4,19 +4,21 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import TimeAgo from "../TimeAgo";
 import { _get } from "@/api/axiosClient";
+import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 
 const HotPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <>
       <Link
         to={`/blogs/post/${post.slug}`}
-        className="object-cover h-full w-1/2"
+        className="object-cover h-full w-1/2 relative"
       >
         <img
           src={post.image}
           className="object-cover h-full w-full object-center"
           alt="Post Thumbnail"
         />
+        <LikeCommentSaveCounter post={post} />
       </Link>
 
       {/* card information */}

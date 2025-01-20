@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
-import { ICommentResponse, IAllCommentResponse } from "src/types";
+import { Post } from "../models/post.model";
+import { ICommentResponse, IAllCommentResponse, IComment } from "src/types";
 
 // no need to sanitize or check if fields are missing
 
@@ -20,6 +21,9 @@ export const createComment = async (
     });
 
     await newComment.save();
+
+    // add 1 to post comment total count
+    await Post.findByIdAndUpdate(postId, { $inc: { comments: 1 } });
 
     res.status(200).json(newComment);
   } catch (err) {
@@ -98,11 +102,16 @@ export const deleteComment = async (
   try {
     const deletedComment = await Comment.findByIdAndDelete(
       req.params.commentId
-    );
+    ).lean();
 
     if (!deletedComment) {
       return next(new CustomError(404, "Comment not found"));
     }
+
+    await Post.findByIdAndUpdate(deletedComment.postId, {
+      $inc: { comments: -1 },
+    });
+
     res.status(200).json("Comment has been deleted");
   } catch (err) {
     console.error("Error deleting comment:", err);
@@ -174,20 +183,3 @@ export const getComments = async (
     next(new CustomError(500, "Failed to get comments"));
   }
 };
-
-// export const getComments = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const comments = await Comment.find({ postId: req.params.postId }).sort({
-//       createdAt: -1,
-//     });
-
-//     res.status(200).json(comments);
-//   } catch (err) {
-//     console.error("Error getting comments:", err);
-//     next(new CustomError(500, "Failed to get comments"));
-//   }
-// };

@@ -10,6 +10,7 @@ import {
   SkeletonHotPostMain,
   SkeletonHotPostSide,
 } from "../SkeletonComponents";
+import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 
 const HotPosts = () => {
   const [hotPosts, setHotPosts] = useState<IPostWithAuthor[] | null>(null);
@@ -43,6 +44,7 @@ const HotPosts = () => {
               alt="Post Thumbnail"
               src={hotPosts[0].image}
             />
+            <LikeCommentSaveCounter post={hotPosts[0]} />
             <Link to={`/blogs/post/${hotPosts[0].slug}`}>
               <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
                 <span className="lg:text-4xl text-xl font-bold pb-4">

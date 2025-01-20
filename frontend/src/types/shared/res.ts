@@ -8,6 +8,8 @@ export interface ISuccessRes {
     email: string;
     dateJoined: Date;
     admin: boolean;
+    savedPosts?: string[];
+    likedPosts?: string[];
   };
 }
 

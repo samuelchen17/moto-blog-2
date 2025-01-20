@@ -12,19 +12,27 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { _get } from "@/api/axiosClient";
+import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 
 const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <Card className="min-h-[430px]">
-      <Link to={`/blogs/post/${post.slug}`}>
+      <Link
+        className="relative overflow-hidden"
+        to={`/blogs/post/${post.slug}`}
+      >
         <img
           src={post.image}
           alt={post.title}
           className="h-[160px] w-full object-cover rounded-t-md border-b"
         />
+
+        {/* like comment and save counter */}
+        <LikeCommentSaveCounter post={post} />
       </Link>
       <CardHeader>
         <CardDescription className="flex justify-between">
+          {/* author */}
           <div className="flex gap-2 items-center">
             <img
               src={post?.createdBy.profilePicture}
@@ -33,11 +41,8 @@ const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
             <span className="font-semibold">{post?.createdBy.username}</span>
           </div>
 
+          {/* date */}
           <div className="flex gap-2 items-center ">
-            {/* implement */}
-            {/* <FaThumbsUp />
-            <FaComment />
-            <FaSave /> */}
             {format(new Date(post.createdAt), "dd MMM yyyy")}
           </div>
         </CardDescription>

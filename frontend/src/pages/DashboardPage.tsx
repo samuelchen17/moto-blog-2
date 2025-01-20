@@ -1,14 +1,16 @@
 import { useSearchParams } from "react-router-dom";
-import DashProfile from "../components/dashComponents/DashProfile";
-import DashSidebar from "../components/dashComponents/DashSidebar";
-import DashHeader from "../components/dashComponents/DashHeader";
-import DashSettings from "../components/dashComponents/DashSettings";
-import Dashboard from "../components/dashComponents/dashAdminComponents/Dashboard";
-import DashComments from "../components/dashComponents/dashAdminComponents/DashComments";
-import DashPosts from "../components/dashComponents/dashAdminComponents/DashPosts";
-import DashUsers from "../components/dashComponents/dashAdminComponents/DashUsers";
-import DashEvents from "../components/dashComponents/dashAdminComponents/DashEvents";
+import DashProfile from "../components/dash/dashUser/DashProfile";
+import DashSidebar from "../components/dash/DashSidebar";
+import DashHeader from "../components/dash/dashUser/DashHeader";
+import DashSettings from "../components/dash/dashUser/DashSettings";
+import Dashboard from "../components/dash/dashAdmin/Dashboard";
+import DashComments from "../components/dash/dashAdmin/DashComments";
+import DashPosts from "../components/dash/dashAdmin/DashPosts";
+import DashUsers from "../components/dash/dashAdmin/DashUsers";
+import DashEvents from "../components/dash/dashAdmin/DashEvents";
 import PostFormPage from "./PostFormPage";
+import DashEventsUser from "@/components/dash/dashUser/DashEventsUser";
+import DashSaved from "@/components/dash/dashUser/DashSaved";
 
 const DashboardPage = () => {
   const [searchParams] = useSearchParams();
@@ -60,6 +62,14 @@ const DashboardPage = () => {
 
           {/* edit post */}
           {postId && <PostFormPage key="update" postId={postId} />}
+
+          {/* User events tab */}
+          {tab === "joined-events" && <DashEventsUser />}
+
+          {/* User saved post tab */}
+          {tab === "saved-posts" && <DashSaved />}
+
+          {tab === "liked-posts" && <DashEventsUser />}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
       <ToastContainer
         position="bottom-right"
         theme={theme}
-        autoClose={3000}
+        autoClose={5000}
         transition={Slide}
         pauseOnFocusLoss={false}
         draggable

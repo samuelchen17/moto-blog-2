@@ -6,6 +6,7 @@ import DOMPurify from "dompurify";
 import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
+import mongoose from "mongoose";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -93,7 +94,7 @@ export const getPosts = async (
     const posts = await Post.find<IPost>(query)
       .skip(startIndex)
       .limit(limit)
-      .sort({ updatedAt: sortDirection })
+      .sort({ createdAt: sortDirection })
       .lean();
 
     const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
@@ -323,23 +324,109 @@ export const getHotPosts = async (
       posts
     );
 
-    // Fetch authors for each post
-    // const postsWithAuthors = await Promise.all(
-    //   posts.map(async (post) => {
-    //     const author = await User.findById(post.createdBy).select(
-    //       "username profilePicture"
-    //     );
-    //     const authorData = author || {
-    //       username: "Deleted User",
-    //     };
-    //     return { ...post.toObject(), author: authorData };
-    //   })
-    // );
-
-    // res.status(200).json(postsWithAuthors);
     res.status(200).json(postsWithAuthors);
   } catch (err) {
-    console.error("Error retrieving  hot articles:", err);
+    console.error("Error retrieving hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };
+
+export const toggleSavePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId, id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
+    // convert string post id to mongoose object id
+    const objectIdPostId = new mongoose.Types.ObjectId(postId);
+    const isPostSaved = user.savedPosts.includes(objectIdPostId);
+
+    const updateSave = isPostSaved
+      ? { $pull: { savedPosts: objectIdPostId } } // remove if saved
+      : { $addToSet: { savedPosts: postId } }; // add if not
+
+    const updateSaveNumber = { $inc: { saves: isPostSaved ? -1 : 1 } };
+
+    await User.findByIdAndUpdate(id, updateSave, { timestamps: false });
+    await Post.findByIdAndUpdate(postId, updateSaveNumber, {
+      timestamps: false,
+    });
+
+    // implement send something back
+
+    const post = await Post.findById(postId);
+    if (post) {
+      res.status(200).json({
+        message: isPostSaved
+          ? "Post unsaved successfully"
+          : "Post saved successfully",
+        post,
+      });
+    }
+  } catch (err) {
+    console.error("Error adding post to saved list:", err);
+    next(new CustomError(500, "Failed to save post to user collection"));
+  }
+};
+
+export const toggleLikePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId, id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    const post = await Post.findById(postId);
+
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
+    if (!post) {
+      return next(new CustomError(404, "Post not found"));
+    }
+
+    // convert string post id to mongoose object id
+    const objectIdPostId = new mongoose.Types.ObjectId(postId);
+    const isPostLiked = user.likedPosts.includes(objectIdPostId);
+
+    const updateLike = isPostLiked
+      ? { $pull: { likedPosts: objectIdPostId } } // remove if liked
+      : { $addToSet: { likedPosts: postId } }; // add if not
+
+    const updateLikeNumber = { $inc: { likes: isPostLiked ? -1 : 1 } };
+
+    await User.findByIdAndUpdate(id, updateLike, { timestamps: false });
+    await Post.findByIdAndUpdate(postId, updateLikeNumber, {
+      timestamps: false,
+    });
+
+    // implement send something back
+
+    res.status(200).json({
+      message: isPostLiked
+        ? "Like removed successful"
+        : "Post liked successful",
+      post,
+    });
+  } catch (err) {
+    console.error("Error liking post:", err);
+    next(new CustomError(500, "Failed to like post"));
+  }
+};
+
+// const user = await User.findById(userId).populate("savedPosts");
+// console.log(user.savedPosts); // Array of saved posts
+
+// const post = await Post.findById(postId);
+// console.log(post.saves); // Total saves count
