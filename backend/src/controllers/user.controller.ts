@@ -127,7 +127,7 @@ export const updateUser = async (
 ) => {
   try {
     const { id } = req.params;
-    const { username, profilePicture, email, password, confirmPassword } =
+    const { username, profilePicture, email, password, confirmPassword, bio } =
       req.body;
 
     const user = await getUserById(id);
@@ -166,6 +166,10 @@ export const updateUser = async (
     // update profile picture
     if (profilePicture) {
       user.profilePicture = profilePicture;
+    }
+
+    if (bio) {
+      user.bio = bio;
     }
 
     // update password
