@@ -15,6 +15,7 @@ import { Textarea } from "../ui/textarea";
 import { _delete, _get, _patch } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
+import ProfileLinkWrapper from "../ProfileLinkWrapper";
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -145,18 +146,22 @@ const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   return (
     <div className="flex py-6 border-b dark:border-gray-800 text-sm">
       <div className="flex-shrink-0 mr-3">
-        <img
-          src={commentBy?.profilePicture}
-          alt={commentBy?.username}
-          className="rounded-full h-10 w-10 bg-gray-400"
-        />
+        <ProfileLinkWrapper userId={commentBy?._id}>
+          <img
+            src={commentBy?.profilePicture}
+            alt={commentBy?.username}
+            className="rounded-full h-10 w-10 bg-gray-400"
+          />
+        </ProfileLinkWrapper>
       </div>
 
       <div className="flex-1">
         <div className="flex items-center mb-1">
-          <span className="font-bold truncate mr-1 text-sm">
-            {commentBy ? `@${commentBy?.username}` : "Deleted User"}
-          </span>
+          <ProfileLinkWrapper userId={commentBy?._id}>
+            <span className="font-bold truncate mr-1 text-sm hover:underline">
+              {commentBy ? `@${commentBy?.username}` : "Deleted User"}
+            </span>
+          </ProfileLinkWrapper>
           <span className="text-sm text-gray-500">
             <TimeAgo date={comment.createdAt} />
           </span>
