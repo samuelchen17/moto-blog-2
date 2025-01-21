@@ -28,3 +28,10 @@ export interface IGetUserResponse {
   totalUsers: number;
   lastMonthUsers: number;
 }
+
+export interface IProfileData {
+  username: string;
+  profilePicture: string;
+  bio: string;
+  createdAt: Date;
+}
