@@ -12,6 +12,7 @@ import {
 } from "../SkeletonComponents";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 import { Badge } from "../ui/badge";
+import ProfileLinkWrapper from "../ProfileLinkWrapper";
 
 const HotPosts = () => {
   const [hotPosts, setHotPosts] = useState<IPostWithAuthor[] | null>(null);
@@ -46,33 +47,47 @@ const HotPosts = () => {
               src={hotPosts[0].image}
             />
             <LikeCommentSaveCounter post={hotPosts[0]} />
-            <Link to={`/blogs/post/${hotPosts[0].slug}`}>
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white space-y-4">
-                <span className="lg:text-4xl text-xl font-bold">
-                  {hotPosts[0].title}
-                </span>
-                <span className="flex gap-2">
-                  By{" "}
-                  <img
-                    src={hotPosts[0].createdBy.profilePicture}
-                    className="h-6 w-6 object-cover rounded-full bg-gray-500 border"
-                  />
-                  {hotPosts[0]?.createdBy.username} ·{" "}
-                  <TimeAgo date={hotPosts[0].createdAt} />
-                </span>
-                <p
-                  className="  line-clamp-2"
-                  dangerouslySetInnerHTML={{ __html: hotPosts[0].content }}
-                />
 
-                <Badge className="uppercase mr-auto">
-                  {hotPosts[0].category}
-                </Badge>
-                <Button className="bg-white text-black hover:bg-white/90">
+            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white space-y-4">
+              {/* post title */}
+              <span className="lg:text-4xl text-xl font-bold">
+                {hotPosts[0].title}
+              </span>
+
+              {/* author information */}
+
+              <span className="flex gap-2">
+                By{" "}
+                <ProfileLinkWrapper userId={hotPosts[0].createdBy._id}>
+                  <div className="flex gap-2">
+                    <img
+                      src={hotPosts[0].createdBy.profilePicture}
+                      className="h-6 w-6 object-cover rounded-full bg-gray-500 border"
+                    />
+                    <span className="hover:underline">
+                      {hotPosts[0]?.createdBy.username}
+                    </span>{" "}
+                  </div>
+                </ProfileLinkWrapper>{" "}
+                · <TimeAgo date={hotPosts[0].createdAt} />
+              </span>
+
+              {/* blog content */}
+              <p
+                className="  line-clamp-2"
+                dangerouslySetInnerHTML={{ __html: hotPosts[0].content }}
+              />
+
+              {/* category */}
+              <Badge className="uppercase mr-auto bg-white text-black hover:bg-white">
+                {hotPosts[0].category}
+              </Badge>
+              <Link to={`/blogs/post/${hotPosts[0].slug}`}>
+                <Button className="bg-white text-black hover:bg-white/90 w-full">
                   Read more
                 </Button>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </>
         ) : (
           <SkeletonHotPostMain />
