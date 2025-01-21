@@ -66,13 +66,13 @@ const DashSaved = () => {
             <SelectItem value="desc">Latest</SelectItem>
             <SelectItem value="asc">Oldest</SelectItem>
             <SelectItem value="recent">
-              <div className="flex items-center justify-center text-center">
+              <div className="flex items-center justify-center text-center gap-1">
                 <span>Recently Added </span>
                 <MoveUp size={14} />
               </div>
             </SelectItem>
             <SelectItem value="oldest">
-              <div className="flex items-center justify-center text-center">
+              <div className="flex items-center justify-center text-center gap-1">
                 <span>Recently Added </span>
                 <MoveDown size={14} />
               </div>

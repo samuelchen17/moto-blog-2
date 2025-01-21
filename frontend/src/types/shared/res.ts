@@ -6,10 +6,9 @@ export interface ISuccessRes {
     username: string;
     profilePicture: string;
     email: string;
+    bio: string;
     dateJoined: Date;
     admin: boolean;
-    savedPosts?: string[];
-    likedPosts?: string[];
   };
 }
 

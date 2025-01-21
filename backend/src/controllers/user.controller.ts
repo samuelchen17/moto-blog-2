@@ -202,6 +202,7 @@ export const updateUser = async (
         email: user.email,
         dateJoined: user.createdAt,
         admin: user.isAdmin,
+        bio: user.bio,
       },
     });
   } catch (error) {

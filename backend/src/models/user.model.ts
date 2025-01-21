@@ -13,6 +13,7 @@ export interface IUser {
     sessionToken?: string;
   };
   isAdmin: boolean;
+  bio: string;
   savedPosts: (Types.ObjectId | IPost)[];
   likedPosts: (Types.ObjectId | IPost)[];
   createdAt: Date;
@@ -53,6 +54,10 @@ const userSchema = new mongoose.Schema<IUser>(
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+    bio: {
+      type: String,
+      default: "",
     },
     savedPosts: [
       {

@@ -83,7 +83,12 @@ const DashProfile = () => {
 
           <div>
             <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" placeholder="Tell us a little about yourself" />
+            <Textarea
+              id="bio"
+              placeholder="Tell us a little about yourself"
+              defaultValue={currentUser?.user.bio}
+              onChange={handleDashFormChange({ formData, setFormData })}
+            />
           </div>
 
           <div className="flex flex-col">
