@@ -1,7 +1,7 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
-const ProfileLinkWrapper = () => {
-  return <div>ProfileLinkWrapper</div>;
+const ProfileLinkWrapper = ({ children, userId }: any) => {
+  return <Link to={`/profile/${userId}`}>{children}</Link>;
 };
 
 export default ProfileLinkWrapper;
