@@ -14,6 +14,7 @@ import PostFormPage from "../pages/PostFormPage";
 import { navLinks } from "../config/navLinks.config";
 import PostPage from "../pages/PostPage";
 import SearchPage from "@/pages/SearchPage";
+import ProfilePage from "@/pages/ProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         </Route>
       </Route>
       {/* <Route path="blogs" element={<BlogsPage />} /> */}
+      <Route path="/profile/:userId" element={<ProfilePage />} />
       <Route path="blogs/post/:postSlug" element={<PostPage />} />
       <Route path="search" element={<SearchPage />} />
       <Route path={navLinks[2].path} element={<AboutPage />} />

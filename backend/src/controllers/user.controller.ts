@@ -271,3 +271,9 @@ export const getUserSavedPosts = async (
     next(new CustomError(400, "failed to get user's saved post list"));
   }
 };
+
+export const getProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
