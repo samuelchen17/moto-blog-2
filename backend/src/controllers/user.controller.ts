@@ -249,8 +249,16 @@ export const getUserSavedPosts = async (
       _id: { $in: user.savedPosts },
     }).lean();
 
+    // using .map() here, it will retain the original order of the array
+    // user.savedPost is in the correct order whereas savedPosts is not
+    const orderedPosts = user.savedPosts
+      .map((id) =>
+        savedPosts.find((post) => post._id.toString() === id.toString())
+      )
+      .filter((post): post is IPost => Boolean(post));
+
     const savedPostsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
-      savedPosts
+      orderedPosts
     );
 
     res.status(200).json(savedPostsWithAuthors);

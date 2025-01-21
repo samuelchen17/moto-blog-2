@@ -47,15 +47,14 @@ const DashSaved = () => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else if (sortOrder === "asc") {
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    } else if (sortOrder === "recent") {
-      return savedList.indexOf(a) - savedList.indexOf(b);
     } else if (sortOrder === "oldest") {
+      return savedList.indexOf(a) - savedList.indexOf(b);
+    } else if (sortOrder === "recent") {
       return savedList.indexOf(b) - savedList.indexOf(a);
     }
     return 0;
   });
 
-  console.log(sortedList);
   return (
     <div className="">
       <div className="flex justify-end">
