@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { _get } from "@/api/axiosClient";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
+import ProfileLinkWrapper from "../ProfileLinkWrapper";
 
 const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (
@@ -33,13 +34,15 @@ const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
       <CardHeader>
         <CardDescription className="flex justify-between">
           {/* author */}
-          <div className="flex gap-2 items-center">
-            <img
-              src={post?.createdBy.profilePicture}
-              className="h-6 w-6 object-cover rounded-full bg-gray-500"
-            />
-            <span className="font-semibold">{post?.createdBy.username}</span>
-          </div>
+          <ProfileLinkWrapper userId={post?.createdBy._id}>
+            <div className="flex gap-2 items-center hover:underline">
+              <img
+                src={post?.createdBy.profilePicture}
+                className="h-6 w-6 object-cover rounded-full bg-gray-500"
+              />
+              <span className="font-semibold">{post?.createdBy.username}</span>
+            </div>
+          </ProfileLinkWrapper>
 
           {/* date */}
           <div className="flex gap-2 items-center ">

@@ -11,6 +11,7 @@ import {
   SkeletonHotPostSide,
 } from "../SkeletonComponents";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
+import { Badge } from "../ui/badge";
 
 const HotPosts = () => {
   const [hotPosts, setHotPosts] = useState<IPostWithAuthor[] | null>(null);
@@ -46,22 +47,27 @@ const HotPosts = () => {
             />
             <LikeCommentSaveCounter post={hotPosts[0]} />
             <Link to={`/blogs/post/${hotPosts[0].slug}`}>
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white">
-                <span className="lg:text-4xl text-xl font-bold pb-4">
+              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 flex flex-col justify-start rounded-md p-6 m-6 text-white space-y-4">
+                <span className="lg:text-4xl text-xl font-bold">
                   {hotPosts[0].title}
                 </span>
-                <span className="mb-4">
-                  By {hotPosts[0]?.createdBy.username} ·{" "}
+                <span className="flex gap-2">
+                  By{" "}
+                  <img
+                    src={hotPosts[0].createdBy.profilePicture}
+                    className="h-6 w-6 object-cover rounded-full bg-gray-500 border"
+                  />
+                  {hotPosts[0]?.createdBy.username} ·{" "}
                   <TimeAgo date={hotPosts[0].createdAt} />
-                  {/* By {hotPosts[0].author.username} ·{" "}
-                <TimeAgo date={hotPosts[0].createdAt} /> */}
                 </span>
-                {/* <p
-                className="  line-clamp-1"
-                dangerouslySetInnerHTML={{ __html: hotPosts[0].content }}
-              /> */}
+                <p
+                  className="  line-clamp-2"
+                  dangerouslySetInnerHTML={{ __html: hotPosts[0].content }}
+                />
 
-                {/* {hotPosts[0].category} */}
+                <Badge className="uppercase mr-auto">
+                  {hotPosts[0].category}
+                </Badge>
                 <Button className="bg-white text-black hover:bg-white/90">
                   Read more
                 </Button>
