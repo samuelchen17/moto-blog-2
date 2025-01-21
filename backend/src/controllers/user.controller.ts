@@ -11,6 +11,7 @@ import {
   IGetUserResponse,
   IPost,
   IPostWithAuthor,
+  IProfileData,
   IUpdateUserPayload,
 } from "src/types";
 import { ISuccessRes } from "src/types";
@@ -276,4 +277,18 @@ export const getProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  try {
+    const user: IProfileData | null = await User.findById(
+      req.params.userId
+    ).select("username bio profilePicture createdAt");
+
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    next(new CustomError(400, "failed to get user profile data"));
+  }
+};
