@@ -57,7 +57,6 @@ const HotPosts = () => {
               {/* author information */}
 
               <span className="flex gap-2">
-                By{" "}
                 <ProfileLinkWrapper userId={hotPosts[0].createdBy._id}>
                   <div className="flex gap-2">
                     <img
@@ -65,7 +64,7 @@ const HotPosts = () => {
                       className="h-6 w-6 object-cover rounded-full bg-gray-500 border"
                     />
                     <span className="hover:underline">
-                      {hotPosts[0]?.createdBy.username}
+                      {hotPosts[0].createdBy.username}
                     </span>{" "}
                   </div>
                 </ProfileLinkWrapper>{" "}
