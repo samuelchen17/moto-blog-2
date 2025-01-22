@@ -137,7 +137,11 @@ export const updateUser = async (
     }
 
     // update username
-    if (username) {
+    if (username !== undefined) {
+      if (username.trim() === "") {
+        return next(new CustomError(400, "Username cannot be empty"));
+      }
+
       // validate username format
       if (!validateUsername(username)) {
         return next(new CustomError(400, getUsernameValidationErrMsg()));
@@ -151,7 +155,12 @@ export const updateUser = async (
     }
 
     // update email
-    if (email) {
+
+    if (email !== undefined) {
+      if (email.trim() === "") {
+        return next(new CustomError(400, "email cannot be empty"));
+      }
+
       // validate email format
       if (!validateEmail(email)) {
         return next(new CustomError(400, getEmailValidationErrMsg()));
@@ -169,12 +178,18 @@ export const updateUser = async (
       user.profilePicture = profilePicture;
     }
 
-    if (bio) {
+    // allow for empty string update to remove bio
+    if (bio !== undefined) {
       user.bio = bio;
     }
 
     // update password
-    if (password) {
+
+    if (password !== undefined) {
+      if (password.trim() === "") {
+        return next(new CustomError(400, "password cannot be empty"));
+      }
+
       // validate password format implement
       // if (!validatePassword(password)) {
       //   return next(new CustomError(400, getPasswordValidationErrMsg()));

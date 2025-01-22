@@ -24,8 +24,6 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
-  console.log(profileData);
-
   if (profileData) {
     return (
       <div className="max-w-screen-xl mx-auto my-24 px-4">
@@ -41,14 +39,13 @@ const ProfilePage = () => {
 
           <div>
             <span>name: {profileData.username}</span>
-            <p>
-              bio:{" "}
-              {profileData.bio ? (
-                <p>{profileData.bio}</p>
-              ) : (
-                <p>No bio to display</p>
-              )}
-            </p>
+            <p>bio: </p>
+            {profileData.bio ? (
+              <p>{profileData.bio}</p>
+            ) : (
+              <p>No bio to display</p>
+            )}
+
             <span>
               Joined: {format(new Date(profileData.createdAt), "dd MMM yyyy")}
             </span>

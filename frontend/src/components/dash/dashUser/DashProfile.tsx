@@ -57,6 +57,8 @@ const DashProfile = () => {
     };
   }, [tempImagePath]);
 
+  console.log(formData);
+
   return (
     <div className="w-full mx-auto">
       <div className="flex flex-col-reverse lg:flex-row gap-10">
