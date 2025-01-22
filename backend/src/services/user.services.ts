@@ -92,7 +92,8 @@ export const getUserByEmailOrUsername = async (
   selectParameter?: string
 ) => {
   try {
-    const defaultFields = "username email profilePicture createdAt isAdmin";
+    // ADD FIELDS HERE FOR LOGIN OBJECT
+    const defaultFields = "username email profilePicture createdAt isAdmin bio";
 
     let query = User.findOne({
       $or: [{ email: emailOrUsername }, { username: emailOrUsername }],

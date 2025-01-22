@@ -161,6 +161,7 @@ export const login = async (
       return next(new CustomError(400, "All fields are required"));
     }
 
+    // ADD FIELDS IN getUserByEmailOrUsername FOR LOGIN OBJECT
     const user = await getUserByEmailOrUsername(
       emailOrUsername,
       "authentication.salt authentication.password"
