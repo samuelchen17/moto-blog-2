@@ -79,20 +79,20 @@ const ProfilePage = () => {
             <hr />
           </h2>
 
-          <div className="flex">
+          <div className="flex flex-col md:flex-row">
             {/* display picture */}
-            <div>
+            <div className="max-h-80 max-w-80 rounded-full object-cover">
               <img
-                className="h-72 w-72 bg-gray-500 rounded-full object-cover"
+                className="rounded-full object-cover aspect-square"
                 src={profileData.profilePicture}
               />
             </div>
 
             {/* information */}
-            <div className="flex flex-col space-y-5">
+            <div className="flex flex-col space-y-5 pt-4 md:ml-12 md:pt-0 max-w-xl">
               <div>
                 <Label>Name</Label>
-                <p>{profileData.username}</p>
+                <p className="">{profileData.username}</p>
               </div>
 
               <div>
@@ -102,7 +102,7 @@ const ProfilePage = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="max-w-lg">
                 <Label>Bio</Label>
                 {profileData.bio ? (
                   <p>{profileData.bio}</p>
