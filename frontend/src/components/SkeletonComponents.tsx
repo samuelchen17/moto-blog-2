@@ -1,4 +1,5 @@
 import { CarouselItem } from "./ui/carousel";
+import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
 import {
@@ -183,6 +184,32 @@ export const SkeletonPostPage = () => {
             <CommentSection postId={post._id} />
           </div> */}
           </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const SkeletonProfilePage = () => {
+  return (
+    <div className="flex flex-col md:flex-row">
+      {/* display picture */}
+      <Skeleton className="h-80 w-80 md:h-80 md:w-80 rounded-full mx-auto md:mx-0" />
+
+      {/* information */}
+      <div className="flex flex-col space-y-6 pt-4 md:ml-12 md:pt-0 max-w-xl">
+        <div className="space-y-1">
+          <Label>Name</Label>
+          <Skeleton className="h-4 w-[170px]" />
+        </div>
+        <div className="space-y-1">
+          <Label>Joined</Label>
+          <Skeleton className="h-4 w-[120px]" />
+        </div>
+
+        <div className="max-w-lg space-y-1">
+          <Label>Bio</Label>
+          <Skeleton className="h-20 md:w-[400px] flex-grow" />
         </div>
       </div>
     </div>

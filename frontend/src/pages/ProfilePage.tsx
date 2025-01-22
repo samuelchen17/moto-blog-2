@@ -6,7 +6,10 @@ import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import SearchItem from "@/components/searchComponent/SearchItem";
-import { SkeletonSearchItem } from "@/components/SkeletonComponents";
+import {
+  SkeletonProfilePage,
+  SkeletonSearchItem,
+} from "@/components/SkeletonComponents";
 
 const ProfilePage = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -76,9 +79,11 @@ const ProfilePage = () => {
             <hr />
           </h2>
 
+          <SkeletonProfilePage />
+
           <div className="flex flex-col md:flex-row">
             {/* display picture */}
-            <div className="max-h-80 max-w-80 rounded-full object-cover">
+            <div className="max-h-80 max-w-80 rounded-full object-cover mx-auto md:mx-0">
               <img
                 className="rounded-full object-cover aspect-square"
                 src={profileData.profilePicture}
