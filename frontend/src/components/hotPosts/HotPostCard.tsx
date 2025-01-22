@@ -25,9 +25,11 @@ const HotPostCard = ({ post }: { post: IPostWithAuthor }) => {
       {/* card information */}
       <div className="w-1/2 p-4 flex flex-col justify-between">
         <div>
-          <span className="line-clamp-2 font-semibold md:text-lg">
-            {post.title}
-          </span>
+          <Link to={`/blogs/post/${post.slug}`}>
+            <span className="line-clamp-2 font-semibold md:text-lg">
+              {post.title}
+            </span>
+          </Link>
           <div className="text-gray-500 text-sm flex gap-2 items-center">
             {/* By{" "} */}
             <ProfileLinkWrapper userId={post.createdBy._id}>

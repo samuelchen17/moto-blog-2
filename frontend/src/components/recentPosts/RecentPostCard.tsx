@@ -49,7 +49,9 @@ const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
             {format(new Date(post.createdAt), "dd MMM yyyy")}
           </div>
         </CardDescription>
-        <CardTitle className="capitalize pt-3">{post.title}</CardTitle>
+        <CardTitle className="capitalize pt-3">
+          <Link to={`/blogs/post/${post.slug}`}>{post.title}</Link>
+        </CardTitle>
       </CardHeader>
       {/* <CardContent className=""></CardContent> */}
       <div className="absolute bottom-0 ml-5 mb-5 flex flex-col gap-4">
