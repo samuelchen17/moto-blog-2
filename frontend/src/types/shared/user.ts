@@ -4,6 +4,7 @@ export interface IUpdateUserPayload {
   username?: string;
   profilePicture?: string;
   email?: string;
+  bio?: string;
   password?: string;
   confirmPassword?: string;
 }
@@ -14,6 +15,7 @@ export interface IGetUser {
   email: string;
   profilePicture: string;
   isAdmin: boolean;
+  bio: string;
   savedPosts: (string | IPost)[];
   likedPosts: (string | IPost)[];
   createdAt: Date;
@@ -25,4 +27,12 @@ export interface IGetUserResponse {
   users: IGetUser[];
   totalUsers: number;
   lastMonthUsers: number;
+}
+
+export interface IProfileData {
+  username: string;
+  profilePicture: string;
+  bio: string;
+  isAdmin: boolean;
+  createdAt: Date;
 }

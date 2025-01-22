@@ -75,6 +75,7 @@ const DashProfile = () => {
             <Input
               type="text"
               id="username"
+              className="focus:ring-gray-700 focus:border-gray-700"
               placeholder="username"
               defaultValue={currentUser?.user.username}
               onChange={handleDashFormChange({ formData, setFormData })}
@@ -83,7 +84,20 @@ const DashProfile = () => {
 
           <div>
             <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" placeholder="Tell us a little about yourself" />
+            <Textarea
+              className="focus:ring-gray-700 focus:border-gray-700"
+              id="bio"
+              maxLength={300}
+              placeholder="Tell us a little about yourself"
+              defaultValue={currentUser?.user.bio}
+              onChange={handleDashFormChange({ formData, setFormData })}
+            />
+            <span className="text-gray-500 text-xs">
+              {formData?.bio !== undefined
+                ? 300 - formData.bio.length
+                : 300 - (currentUser?.user.bio.length || 0)}{" "}
+              characters remaining
+            </span>
           </div>
 
           <div className="flex flex-col">

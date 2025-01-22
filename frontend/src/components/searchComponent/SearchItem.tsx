@@ -1,22 +1,25 @@
 import { Separator } from "@/components/ui/separator";
 import { IPostWithAuthor } from "src/types";
 import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
-import TimeAgo from "../TimeAgo";
+import TimeAgo from "../wrapperComponents/TimeAgo";
 import { _get } from "@/api/axiosClient";
+import ProfileLinkWrapper from "../wrapperComponents/ProfileLinkWrapper";
 
 const SearchItem = ({ post }: { post: IPostWithAuthor }) => {
   return (
     <div>
       <div className="flex flex-col w-full mt-12">
         {/* author information */}
-        <div className=" flex gap-2 items-center mb-2">
-          <img
-            className="h-5 w-5 rounded-full bg-gray-400 "
-            src={post?.createdBy.profilePicture}
-          />
+        <ProfileLinkWrapper userId={post?.createdBy._id}>
+          <div className=" flex gap-2 items-center mb-2 hover:underline">
+            <img
+              className="h-5 w-5 rounded-full bg-gray-400 "
+              src={post?.createdBy.profilePicture}
+            />
 
-          <span className="text-sm">{post?.createdBy.username}</span>
-        </div>
+            <span className="text-sm">{post?.createdBy.username}</span>
+          </div>
+        </ProfileLinkWrapper>
 
         {/* title and content */}
         <div className="flex flex-row justify-between">

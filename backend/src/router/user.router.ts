@@ -3,6 +3,7 @@ import {
   deleteUser,
   deleteUserAdmin,
   getAllUsers,
+  getProfile,
   getUser,
   getUserSavedPosts,
   signOut,
@@ -38,6 +39,7 @@ const userRouter = (router: Router) => {
 
   // get user saved posts
   router.get("/saved-posts/:id", isAuthenticated, isOwner, getUserSavedPosts);
+  router.get("/profile/:userId", getProfile);
 };
 
 export default userRouter;

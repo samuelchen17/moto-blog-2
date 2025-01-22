@@ -26,7 +26,7 @@ interface IDashSubmitProps extends IDashFormProps {
 // handle update for change
 export const handleDashFormChange =
   ({ formData, setFormData }: IDashFormProps) =>
-  (e: React.ChangeEvent<HTMLInputElement>) => {
+  (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 

@@ -64,6 +64,7 @@ const handleLoginResponse = async (
       username: user.username,
       profilePicture: user.profilePicture,
       email: user.email,
+      bio: user.bio,
       dateJoined: user.createdAt,
       admin: user.isAdmin,
     },
@@ -136,6 +137,7 @@ export const register = async (
         username: newUser.username,
         profilePicture: newUser.profilePicture,
         email: newUser.email,
+        bio: newUser.bio,
         dateJoined: newUser.createdAt,
         admin: newUser.isAdmin,
       },
@@ -159,6 +161,7 @@ export const login = async (
       return next(new CustomError(400, "All fields are required"));
     }
 
+    // ADD FIELDS IN getUserByEmailOrUsername FOR LOGIN OBJECT
     const user = await getUserByEmailOrUsername(
       emailOrUsername,
       "authentication.salt authentication.password"

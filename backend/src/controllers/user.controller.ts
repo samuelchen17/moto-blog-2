@@ -11,6 +11,7 @@ import {
   IGetUserResponse,
   IPost,
   IPostWithAuthor,
+  IProfileData,
   IUpdateUserPayload,
 } from "src/types";
 import { ISuccessRes } from "src/types";
@@ -127,7 +128,7 @@ export const updateUser = async (
 ) => {
   try {
     const { id } = req.params;
-    const { username, profilePicture, email, password, confirmPassword } =
+    const { username, profilePicture, email, password, confirmPassword, bio } =
       req.body;
 
     const user = await getUserById(id);
@@ -136,7 +137,11 @@ export const updateUser = async (
     }
 
     // update username
-    if (username) {
+    if (username !== undefined) {
+      if (username.trim() === "") {
+        return next(new CustomError(400, "Username cannot be empty"));
+      }
+
       // validate username format
       if (!validateUsername(username)) {
         return next(new CustomError(400, getUsernameValidationErrMsg()));
@@ -150,7 +155,12 @@ export const updateUser = async (
     }
 
     // update email
-    if (email) {
+
+    if (email !== undefined) {
+      if (email.trim() === "") {
+        return next(new CustomError(400, "email cannot be empty"));
+      }
+
       // validate email format
       if (!validateEmail(email)) {
         return next(new CustomError(400, getEmailValidationErrMsg()));
@@ -168,8 +178,21 @@ export const updateUser = async (
       user.profilePicture = profilePicture;
     }
 
+    // allow for empty string update to remove bio
+    if (bio !== undefined) {
+      if (bio.length > 300) {
+        return next(new CustomError(400, "Bio cannot exceed 300 characters."));
+      }
+      user.bio = bio;
+    }
+
     // update password
-    if (password) {
+
+    if (password !== undefined) {
+      if (password.trim() === "") {
+        return next(new CustomError(400, "password cannot be empty"));
+      }
+
       // validate password format implement
       // if (!validatePassword(password)) {
       //   return next(new CustomError(400, getPasswordValidationErrMsg()));
@@ -202,6 +225,7 @@ export const updateUser = async (
         email: user.email,
         dateJoined: user.createdAt,
         admin: user.isAdmin,
+        bio: user.bio,
       },
     });
   } catch (error) {
@@ -249,12 +273,40 @@ export const getUserSavedPosts = async (
       _id: { $in: user.savedPosts },
     }).lean();
 
+    // using .map() here, it will retain the original order of the array
+    // user.savedPost is in the correct order whereas savedPosts is not
+    const orderedPosts = user.savedPosts
+      .map((id) =>
+        savedPosts.find((post) => post._id.toString() === id.toString())
+      )
+      .filter((post): post is IPost => Boolean(post));
+
     const savedPostsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
-      savedPosts
+      orderedPosts
     );
 
     res.status(200).json(savedPostsWithAuthors);
   } catch (err) {
     next(new CustomError(400, "failed to get user's saved post list"));
+  }
+};
+
+export const getProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: IProfileData | null = await User.findById(
+      req.params.userId
+    ).select("username bio profilePicture createdAt isAdmin");
+
+    if (!user) {
+      return next(new CustomError(404, "User not found"));
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    next(new CustomError(400, "failed to get user profile data"));
   }
 };

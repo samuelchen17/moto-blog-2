@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import RecentPosts from "../components/recentPosts/RecentPosts";
-import HotPosts from "@/components/hotPosts/HotPosts";
+import RecentPosts from "../components/postComponents/RecentPosts";
+import HotPosts from "@/components/postComponents/HotPosts";
 import ImageBanner from "@/components/ImageBanner";
 import UpcomingEvents from "@/components/events/UpcomingEvents";
-import HeadingTwoWrapper from "@/components/HeadingTwoWrapper";
+import HeadingTwoWrapper from "@/components/wrapperComponents/HeadingTwoWrapper";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";

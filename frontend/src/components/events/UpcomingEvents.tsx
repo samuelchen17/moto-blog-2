@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import UpcomingEvent from "./UpcomingEvent";
 import { _get } from "@/api/axiosClient";
 import { IEventResponse } from "@/types";
-import HeadingTwoWrapper from "../HeadingTwoWrapper";
+import HeadingTwoWrapper from "../wrapperComponents/HeadingTwoWrapper";
 import { SkeletonEventCard } from "../SkeletonComponents";
 
 const UpcomingEvents = () => {
