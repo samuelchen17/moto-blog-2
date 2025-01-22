@@ -180,6 +180,9 @@ export const updateUser = async (
 
     // allow for empty string update to remove bio
     if (bio !== undefined) {
+      if (bio.length > 300) {
+        return next(new CustomError(400, "Bio cannot exceed 300 characters."));
+      }
       user.bio = bio;
     }
 

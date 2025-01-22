@@ -1,5 +1,4 @@
 import { _get } from "@/api/axiosClient";
-import { Separator } from "@/components/ui/separator";
 import { IPostResponse, IPostWithAuthor, IProfileData } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -8,12 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import SearchItem from "@/components/searchComponent/SearchItem";
 import { SkeletonSearchItem } from "@/components/SkeletonComponents";
-import HeadingTwoWrapper from "@/components/wrapperComponents/HeadingTwoWrapper";
 
 const ProfilePage = () => {
   const { userId } = useParams<{ userId: string }>();
   const [profileData, setProfileData] = useState<IProfileData>();
-  const [postData, setPostData] = useState<IPostWithAuthor[]>();
+  const [postData, setPostData] = useState<IPostWithAuthor[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
 
   useEffect(() => {
@@ -41,6 +39,7 @@ const ProfilePage = () => {
         const data = res.data;
 
         setPostData(data.posts);
+        setShowMore(data.posts.length === 9);
       } catch (err) {
         console.error("Error:", err);
       }
@@ -49,25 +48,23 @@ const ProfilePage = () => {
     fetchPosts();
   }, [profileData]);
 
-  //   const handleShowMore = async () => {
-  //     const startIndex = postData.length.toString();
-  //     try {
-  //       const urlParams = new URLSearchParams(location.search);
-  //       urlParams.set("startIndex", startIndex);
-  //       const searchQuery = urlParams.toString();
+  const handleShowMore = async () => {
+    const startIndex = postData.length.toString();
+    try {
+      const res = await _get<IPostResponse>(
+        `/post/getposts?startIndex=${startIndex}`
+      );
 
-  //       const res = await _get<IPostResponse>(`/post/getposts?${searchQuery}`);
+      const data = res.data;
 
-  //       const data = res.data;
-
-  //       setPostData((prev) => [...prev, ...data.posts]);
-  //       if (data.posts.length < 9) {
-  //         setShowMore(false);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error:", err);
-  //     }
-  //   };
+      setPostData((prev) => [...prev, ...data.posts]);
+      if (data.posts.length < 9) {
+        setShowMore(false);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
 
   if (profileData) {
     return (
@@ -138,14 +135,14 @@ const ProfilePage = () => {
             <div>User does not have permission to post</div>
           )}
 
-          {/* {showMore && (
-          <button
-            onClick={handleShowMore}
-            className="self-center w-full text-red-500 py-6"
-          >
-            Show more
-          </button>
-        )} */}
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="self-center w-full text-red-500 py-6"
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     );
