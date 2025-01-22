@@ -33,5 +33,6 @@ export interface IProfileData {
   username: string;
   profilePicture: string;
   bio: string;
+  isAdmin: boolean;
   createdAt: Date;
 }

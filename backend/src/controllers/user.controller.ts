@@ -281,7 +281,7 @@ export const getProfile = async (
   try {
     const user: IProfileData | null = await User.findById(
       req.params.userId
-    ).select("username bio profilePicture createdAt");
+    ).select("username bio profilePicture createdAt isAdmin");
 
     if (!user) {
       return next(new CustomError(404, "User not found"));
