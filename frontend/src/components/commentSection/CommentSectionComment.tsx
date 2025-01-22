@@ -1,7 +1,7 @@
 import { IComment } from "src/types";
 import { IGetUser } from "src/types";
 import { useEffect, useState } from "react";
-import TimeAgo from "../TimeAgo";
+import TimeAgo from "../wrapperComponents/TimeAgo";
 import { FaThumbsUp } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
@@ -15,7 +15,7 @@ import { Textarea } from "../ui/textarea";
 import { _delete, _get, _patch } from "@/api/axiosClient";
 import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
-import ProfileLinkWrapper from "../ProfileLinkWrapper";
+import ProfileLinkWrapper from "../wrapperComponents/ProfileLinkWrapper";
 
 const CommentSectionComment = ({ comment }: { comment: IComment }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);

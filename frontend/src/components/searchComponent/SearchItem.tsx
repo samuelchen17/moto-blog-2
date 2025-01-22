@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { IPostWithAuthor } from "src/types";
 import { Bookmark, MessageSquare, ThumbsUp } from "lucide-react";
-import TimeAgo from "../TimeAgo";
+import TimeAgo from "../wrapperComponents/TimeAgo";
 import { _get } from "@/api/axiosClient";
 
 const SearchItem = ({ post }: { post: IPostWithAuthor }) => {

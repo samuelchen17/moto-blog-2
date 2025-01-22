@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { _get } from "@/api/axiosClient";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
-import ProfileLinkWrapper from "../ProfileLinkWrapper";
+import ProfileLinkWrapper from "../wrapperComponents/ProfileLinkWrapper";
 
 const RecentPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (

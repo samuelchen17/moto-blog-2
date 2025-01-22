@@ -2,7 +2,7 @@ import { IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import HotPostCard from "./HotPostCard";
-import TimeAgo from "../TimeAgo";
+import TimeAgo from "../wrapperComponents/TimeAgo";
 import { Link } from "react-router-dom";
 
 import { _get } from "@/api/axiosClient";
@@ -12,7 +12,7 @@ import {
 } from "../SkeletonComponents";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
 import { Badge } from "../ui/badge";
-import ProfileLinkWrapper from "../ProfileLinkWrapper";
+import ProfileLinkWrapper from "../wrapperComponents/ProfileLinkWrapper";
 
 const HotPosts = () => {
   const [hotPosts, setHotPosts] = useState<IPostWithAuthor[] | null>(null);

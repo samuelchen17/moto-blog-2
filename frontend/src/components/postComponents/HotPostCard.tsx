@@ -2,10 +2,10 @@ import { IPostWithAuthor } from "src/types";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import TimeAgo from "../TimeAgo";
+import TimeAgo from "../wrapperComponents/TimeAgo";
 import { _get } from "@/api/axiosClient";
 import LikeCommentSaveCounter from "../LikeCommentSaveCounter";
-import ProfileLinkWrapper from "../ProfileLinkWrapper";
+import ProfileLinkWrapper from "../wrapperComponents/ProfileLinkWrapper";
 
 const HotPostCard = ({ post }: { post: IPostWithAuthor }) => {
   return (

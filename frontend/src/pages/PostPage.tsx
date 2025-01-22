@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IPostResponse, IPostWithAuthor } from "src/types";
 import CommentSection from "../components/commentSection/CommentSection";
-import RecentPosts from "../components/recentPosts/RecentPosts";
+import RecentPosts from "../components/postComponents/RecentPosts";
 import ImageBanner from "@/components/ImageBanner";
 import TableOfContents from "@/components/TableOfContents";
 import { _get } from "@/api/axiosClient";

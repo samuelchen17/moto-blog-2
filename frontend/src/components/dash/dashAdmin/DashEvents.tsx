@@ -6,7 +6,7 @@ import { Button as ShadButton } from "@/components/ui/button";
 import { IEvent, IEventResponse } from "src/types";
 import { format } from "date-fns";
 import { _delete, _get } from "@/api/axiosClient";
-import AddEventModal from "@/components/AddEventModal";
+import AddEventModal from "@/components/events/AddEventModal";
 import DeleteModal from "@/components/DeleteModal";
 
 // implement, sort by date of event rather than creation
