@@ -9,6 +9,7 @@ import { _get } from "@/api/axiosClient";
 import Summarizer from "@/components/Summarizer";
 import { SkeletonPostPage } from "@/components/SkeletonComponents";
 import PostInteractionsBar from "@/components/PostInteractionsBar";
+import ProfileLinkWrapper from "@/components/wrapperComponents/ProfileLinkWrapper";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -97,15 +98,16 @@ const PostPage = () => {
             </h1>
 
             {/* author */}
-            <div className="flex items-center text-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2">
-              <img
-                className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
-                src={post?.createdBy.profilePicture}
-                alt={post?.createdBy.username}
-              />
-              {"by "}
-              {post?.createdBy.username}
-            </div>
+            <ProfileLinkWrapper userId={post?.createdBy._id}>
+              <div className="flex items-center text-center gap-2 text-slate-300 uppercase font-bold text-md w-full my-2 hover:underline">
+                <img
+                  className="h-9 w-9 rounded-full bg-gray-500 mr-1 hidden sm:flex"
+                  src={post?.createdBy.profilePicture}
+                  alt={post?.createdBy.username}
+                />
+                {post?.createdBy.username}
+              </div>
+            </ProfileLinkWrapper>
             {/* 
             <div className="text-slate-300 font-semibold uppercase">
               {post.createdAt === post.updatedAt ? (

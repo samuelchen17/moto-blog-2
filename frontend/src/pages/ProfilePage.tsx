@@ -16,6 +16,7 @@ const ProfilePage = () => {
   const [profileData, setProfileData] = useState<IProfileData>();
   const [postData, setPostData] = useState<IPostWithAuthor[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -24,6 +25,7 @@ const ProfilePage = () => {
         const data = res.data;
 
         setProfileData(data);
+        setLoading(false);
       } catch (err) {
         console.error("Error:", err);
       }
@@ -69,18 +71,18 @@ const ProfilePage = () => {
     }
   };
 
-  if (profileData) {
-    return (
-      <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-screen space-y-24">
-        {/* profile section */}
-        <div>
-          <h2 className="text-2xl mb-6 capitalize space-y-2">
-            <span>Profile</span>
-            <hr />
-          </h2>
+  return (
+    <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-screen space-y-24">
+      {/* profile section */}
+      <div>
+        <h2 className="text-2xl mb-6 capitalize space-y-2">
+          <span>Profile</span>
+          <hr />
+        </h2>
 
+        {loading || !profileData ? (
           <SkeletonProfilePage />
-
+        ) : (
           <div className="flex flex-col md:flex-row">
             {/* display picture */}
             <div className="max-h-80 max-w-80 rounded-full object-cover mx-auto md:mx-0">
@@ -114,48 +116,44 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* recent posts section */}
-        <div>
-          <h2 className="text-2xl mb-6 capitalize space-y-2">
-            <span>Recent posts</span>
-            <hr />
-          </h2>
-          {profileData.isAdmin ? (
-            postData ? (
-              postData.length > 0 ? (
-                postData.map((post) => (
-                  <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-                    <SearchItem post={post} />
-                  </Link>
-                ))
-              ) : (
-                <div>User has not posted yet</div>
-              )
+      {/* recent posts section */}
+      <div>
+        <h2 className="text-2xl mb-6 capitalize space-y-2">
+          <span>Recent posts</span>
+          <hr />
+        </h2>
+        {profileData?.isAdmin ? (
+          postData ? (
+            postData.length > 0 ? (
+              postData.map((post) => (
+                <Link key={post._id} to={`/blogs/post/${post.slug}`}>
+                  <SearchItem post={post} />
+                </Link>
+              ))
             ) : (
-              <SkeletonSearchItem />
+              <div>User has not posted yet</div>
             )
           ) : (
-            <div>User does not have permission to post</div>
-          )}
+            <SkeletonSearchItem />
+          )
+        ) : (
+          <div>User does not have permission to post</div>
+        )}
 
-          {showMore && (
-            <button
-              onClick={handleShowMore}
-              className="self-center w-full text-red-500 py-6"
-            >
-              Show more
-            </button>
-          )}
-        </div>
+        {showMore && (
+          <button
+            onClick={handleShowMore}
+            className="self-center w-full text-red-500 py-6"
+          >
+            Show more
+          </button>
+        )}
       </div>
-    );
-  } else {
-    <div>
-      <span>Skeleton for this page</span>
-    </div>;
-  }
+    </div>
+  );
 };
 
 export default ProfilePage;
