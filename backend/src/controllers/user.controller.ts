@@ -115,7 +115,7 @@ export const signOut = (req: Request, res: Response, next: NextFunction) => {
     res
       .clearCookie("motoBlogAuthToken")
       .status(200)
-      .json("User has been signed out");
+      .json({ message: "User has been signed out" });
   } catch (error) {
     next(new CustomError(400, "Unable to sign user out"));
   }

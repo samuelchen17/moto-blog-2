@@ -17,7 +17,7 @@ export const handleContactForm = async (
     const newMessage = new Contact({ name, email, message });
     await newMessage.save();
 
-    res.status(200).json("Your message has been sent");
+    res.status(200).json({ message: "Your message has been sent" });
   } catch (err) {
     console.error("Error sending message:", err);
     next(new CustomError(500, "Failed to send message"));
