@@ -4,6 +4,7 @@ import userRouter from "./user.router";
 import postRouter from "./post.router";
 import commentRouter from "./comment.router";
 import eventRouter from "./events.router";
+import contactRouter from "./contact.router";
 
 const router: Router = Router();
 
@@ -13,5 +14,7 @@ export default (): Router => {
   postRouter(router);
   commentRouter(router);
   eventRouter(router);
+  contactRouter(router);
+
   return router;
 };
