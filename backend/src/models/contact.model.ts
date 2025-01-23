@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { IContact } from "src/types";
 
-const contactSchema = new mongoose.Schema(
+const contactSchema = new mongoose.Schema<IContact>(
   {
     name: {
       type: String,
