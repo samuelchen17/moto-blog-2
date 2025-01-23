@@ -76,7 +76,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-screen space-y-24">
+    <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-[80vh] space-y-24">
       {/* profile section */}
       <div>
         <h2 className="text-2xl mb-6 capitalize space-y-2">
