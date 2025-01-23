@@ -15,8 +15,8 @@ import { _get } from "@/api/axiosClient";
 const CommentSectionComments = ({ postId }: ICommentSection) => {
   //   const [comments, setComments] = useState<IComment[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
-  const { comments } = useAppSelector((state: RootState) => state.comment);
   const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
+  const { comments } = useAppSelector((state: RootState) => state.comment);
 
   const dispatch = useAppDispatch();
 
