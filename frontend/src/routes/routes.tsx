@@ -15,11 +15,13 @@ import { navLinks } from "../config/navLinks.config";
 import PostPage from "../pages/PostPage";
 import SearchPage from "@/pages/SearchPage";
 import ProfilePage from "@/pages/ProfilePage";
+import ErrorPage from "@/pages/ErrorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
+      <Route path="*" element={<ErrorPage />} />
       <Route path={navLinks[0].path} element={<HomePage />} />
       {/* for logged in  users */}
       <Route element={<AuthRoute />}>
