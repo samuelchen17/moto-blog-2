@@ -2,8 +2,32 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { useState } from "react";
+import { IContactRes } from "@/types";
+
+const clearForm = {
+  name: "",
+  email: "",
+  message: "",
+};
 
 const ContactUs = () => {
+  const [contactForm, setContactForm] = useState<IContactRes>(clearForm);
+  const [errorMsg, setErrorMsg] = useState();
+
+  const handleContactFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setContactForm({ ...contactForm, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmit = async () => {
+    try {
+    } catch (err) {
+      console.error;
+    }
+  };
+
   return (
     <div className="flex justify-between overflow-hidden md:border rounded-md relative md:h-[500px] h-[460px]">
       <img
@@ -16,27 +40,35 @@ const ContactUs = () => {
           <div>
             <Label className="text-white">Name</Label>
             <Input
+              id="name"
               placeholder="name"
+              onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
           </div>
           <div>
             <Label className="text-white">Email</Label>
             <Input
+              id="email"
               placeholder="email"
               type="email"
+              onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
           </div>
           <div>
             <Label className="text-white">Message</Label>
             <Textarea
+              id="message"
               placeholder="your message..."
               rows={5}
+              onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
           </div>
-          <Button className="bg-white text-black">Send message</Button>
+          <Button type="submit" className="bg-white text-black">
+            Send message
+          </Button>
         </div>
       </div>
     </div>
