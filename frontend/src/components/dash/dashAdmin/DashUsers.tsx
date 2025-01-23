@@ -11,6 +11,7 @@ import DeleteModal from "@/components/DeleteModal";
 const DashUsers = () => {
   const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
@@ -44,6 +45,8 @@ const DashUsers = () => {
 
   const handleShowMore = async () => {
     const startIndex = allUsers.length;
+    setShowMoreLoading(true);
+
     try {
       setErrorMessage(null);
       const res = await _get<IGetUserResponse>(
@@ -58,6 +61,8 @@ const DashUsers = () => {
     } catch (err) {
       console.error("Error:", err);
       setErrorMessage("Failed to show more, internal error");
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
@@ -147,8 +152,9 @@ const DashUsers = () => {
             <button
               onClick={handleShowMore}
               className="self-center w-full text-red-500 py-6"
+              disabled={showMoreLoading}
             >
-              Show more
+              {showMoreLoading ? "Loading..." : "Show more"}
             </button>
           )}
           {errorMessage && (
