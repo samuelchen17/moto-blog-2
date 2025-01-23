@@ -9,7 +9,7 @@ const initialState: IShowMoreLoadingState = {
   showMoreLoading: false,
 };
 
-const authModalSlice = createSlice({
+const showMoreLoadingSlice = createSlice({
   name: "showMoreLoading",
   initialState,
   reducers: {
@@ -19,6 +19,6 @@ const authModalSlice = createSlice({
   },
 });
 
-export const { setShowMoreLoading } = authModalSlice.actions;
+export const { setShowMoreLoading } = showMoreLoadingSlice.actions;
 
-export default authModalSlice.reducer;
+export default showMoreLoadingSlice.reducer;
