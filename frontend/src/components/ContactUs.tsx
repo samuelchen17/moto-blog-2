@@ -4,6 +4,9 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { IContactRes } from "@/types";
+import { _post } from "@/api/axiosClient";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 const clearForm = {
   name: "",
@@ -13,7 +16,7 @@ const clearForm = {
 
 const ContactUs = () => {
   const [contactForm, setContactForm] = useState<IContactRes>(clearForm);
-  const [errorMsg, setErrorMsg] = useState();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleContactFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -21,10 +24,20 @@ const ContactUs = () => {
     setContactForm({ ...contactForm, [e.target.id]: e.target.value.trim() });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-    } catch (err) {
-      console.error;
+      // this response is not iContactRes, it is just message
+      const res = await _post<IContactRes>("/contact-us", contactForm);
+      const data = res.data;
+
+      toast.success(data.message);
+    } catch (err: any) {
+      toast.error(err.message);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,7 +48,10 @@ const ContactUs = () => {
         alt="group ride image"
         src="https://images.unsplash.com/photo-1690540293122-14d3051a5fe5?q=80&w=2698&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
-      <div className="absolute bottom-0 top-0 flex flex-col md:flex-row w-full justify-end">
+      <form
+        onSubmit={handleSubmit}
+        className="absolute bottom-0 top-0 flex flex-col md:flex-row w-full justify-end"
+      >
         <div className="flex-grow space-y-6 rounded-lg p-6 bg-black md:bg-opacity-75 bg-opacity-90 md:my-auto md:m-8 max-w-[600px]">
           <div>
             <Label className="text-white">Name</Label>
@@ -51,7 +67,6 @@ const ContactUs = () => {
             <Input
               id="email"
               placeholder="email"
-              type="email"
               onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
@@ -66,11 +81,18 @@ const ContactUs = () => {
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
           </div>
-          <Button type="submit" className="bg-white text-black">
-            Send message
+          <Button className="bg-white text-black" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" />
+                <span className="pl-2">Loading...</span>{" "}
+              </>
+            ) : (
+              "Send message"
+            )}
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
