@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 interface ImageBannerProps {
   img: string;

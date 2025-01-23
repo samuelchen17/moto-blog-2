@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import RecentPosts from "../components/postComponents/RecentPosts";
 import HotPosts from "@/components/postComponents/HotPosts";
-import ImageBanner from "@/components/ImageBanner";
+import ImageBanner from "@/components/wrapperComponents/ImageBanner";
 import UpcomingEvents from "@/components/events/UpcomingEvents";
 import HeadingTwoWrapper from "@/components/wrapperComponents/HeadingTwoWrapper";
 import { Input } from "@/components/ui/input";
