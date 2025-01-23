@@ -11,8 +11,6 @@ dash post accordion, dropdown info for, accordion or stacked for mobile view?
 -updated at
 -how many comments
 
-add likes and saves to posts?
-
 contact us feature?
 
 whole dash ui refactor
@@ -38,8 +36,6 @@ join events - also show capacity, display if event full
 # profile page
 
 Hover over user card
-
-user page to show bio etc. if admin, show their posts
 
 # fix all alerts?
 
