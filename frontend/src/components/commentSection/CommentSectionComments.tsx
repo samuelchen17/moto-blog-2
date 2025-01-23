@@ -9,6 +9,7 @@ import {
   setTotalComments,
 } from "../../redux/features/comment/commentSlice";
 import { _get } from "@/api/axiosClient";
+import { setShowMoreLoading } from "@/redux/features/loading/showMoreLoadingSlice";
 
 // implement collapse comment section!!
 
@@ -16,6 +17,9 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
   //   const [comments, setComments] = useState<IComment[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const { comments } = useAppSelector((state: RootState) => state.comment);
+  const { showMoreLoading } = useAppSelector(
+    (state: RootState) => state.showMoreLoading
+  );
 
   const dispatch = useAppDispatch();
 
@@ -43,6 +47,7 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
 
   const handleShowMore = async () => {
     const startIndex = comments.length;
+    dispatch(setShowMoreLoading(true));
     try {
       const res = await _get<ICommentResponse>(
         `/comment/getcomments/${postId}?startIndex=${startIndex}`
@@ -55,6 +60,8 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
       }
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      dispatch(setShowMoreLoading(false));
     }
   };
 
@@ -74,8 +81,9 @@ const CommentSectionComments = ({ postId }: ICommentSection) => {
         <button
           onClick={handleShowMore}
           className="self-center w-full text-red-500 py-6"
+          disabled={showMoreLoading}
         >
-          Show more
+          {showMoreLoading ? "Loading..." : "Show more"}
         </button>
       )}
     </>
