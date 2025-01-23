@@ -21,6 +21,7 @@ const SearchPage = () => {
   const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
 
   //   update search params from URL
   useEffect(() => {
@@ -61,6 +62,8 @@ const SearchPage = () => {
 
   const handleShowMore = async () => {
     const startIndex = posts.length.toString();
+    setShowMoreLoading(true);
+
     try {
       const urlParams = new URLSearchParams(location.search);
       urlParams.set("startIndex", startIndex);
@@ -76,6 +79,8 @@ const SearchPage = () => {
       }
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
@@ -143,8 +148,9 @@ const SearchPage = () => {
           <button
             onClick={handleShowMore}
             className="self-center w-full text-red-500 py-6"
+            disabled={showMoreLoading}
           >
-            Show more
+            {showMoreLoading ? "Loading..." : "Show more"}
           </button>
         )}
       </div>

@@ -14,6 +14,7 @@ import {
 const ProfilePage = () => {
   const { userId } = useParams<{ userId: string }>();
   const [profileData, setProfileData] = useState<IProfileData>();
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [postData, setPostData] = useState<IPostWithAuthor[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,6 +56,7 @@ const ProfilePage = () => {
 
   const handleShowMore = async () => {
     const startIndex = postData.length.toString();
+    setShowMoreLoading(true);
     try {
       const res = await _get<IPostResponse>(
         `/post/getposts?startIndex=${startIndex}`
@@ -68,11 +70,13 @@ const ProfilePage = () => {
       }
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-screen space-y-24">
+    <div className="max-w-screen-xl mx-auto my-12 px-4 min-h-[80vh] space-y-24">
       {/* profile section */}
       <div>
         <h2 className="text-2xl mb-6 capitalize space-y-2">
@@ -147,8 +151,9 @@ const ProfilePage = () => {
           <button
             onClick={handleShowMore}
             className="self-center w-full text-red-500 py-6"
+            disabled={showMoreLoading}
           >
-            Show more
+            {showMoreLoading ? "Loading..." : "Show more"}
           </button>
         )}
       </div>

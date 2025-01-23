@@ -14,6 +14,7 @@ import DeleteModal from "@/components/DeleteModal";
 const DashEvents = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [eventIdToDelete, setEventIdToDelete] = useState<string | null>(null);
@@ -45,6 +46,7 @@ const DashEvents = () => {
 
   const handleShowMore = async () => {
     const startIndex = events.length;
+    setShowMoreLoading(true);
     try {
       setErrorMessage(null);
       const res = await _get<IEventResponse>(
@@ -59,6 +61,8 @@ const DashEvents = () => {
     } catch (err) {
       console.error("Error:", err);
       setErrorMessage("Failed to show more, internal error");
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
@@ -152,8 +156,9 @@ const DashEvents = () => {
             <button
               onClick={handleShowMore}
               className="self-center w-full text-red-500 py-6"
+              disabled={showMoreLoading}
             >
-              Show more
+              {showMoreLoading ? "Loading..." : "Show more"}
             </button>
           )}
           {errorMessage && (

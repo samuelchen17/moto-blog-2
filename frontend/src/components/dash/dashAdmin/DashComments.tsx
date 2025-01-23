@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 const DashComments = () => {
   const [allComments, setAllComments] = useState<IComment[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [idToDelete, setIdToDelete] = useState<string | null>(null);
@@ -56,6 +57,7 @@ const DashComments = () => {
 
   const handleShowMore = async () => {
     const startIndex = allComments.length;
+    setShowMoreLoading(true);
     try {
       setErrorMessage(null);
       const res = await _get<IAllCommentResponse>(
@@ -70,6 +72,8 @@ const DashComments = () => {
     } catch (err) {
       console.error("Error:", err);
       setErrorMessage("Failed to show more, internal error");
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
@@ -150,8 +154,9 @@ const DashComments = () => {
             <button
               onClick={handleShowMore}
               className="self-center w-full text-red-500 py-6"
+              disabled={showMoreLoading}
             >
-              Show more
+              {showMoreLoading ? "Loading..." : "Show more"}
             </button>
           )}
           {errorMessage && (

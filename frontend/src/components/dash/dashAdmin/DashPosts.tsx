@@ -19,6 +19,7 @@ import DeleteModal from "@/components/DeleteModal";
 const DashPosts = () => {
   const [userAdminPosts, setUserAdminPosts] = useState<IPostWithAuthor[]>([]);
   const [showMore, setShowMore] = useState<boolean>(true);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
@@ -55,6 +56,7 @@ const DashPosts = () => {
 
   const handleShowMore = async () => {
     const startIndex = userAdminPosts.length;
+    setShowMoreLoading(true);
     try {
       setErrorMessage(null);
       const res = await _get<IPostResponse>(
@@ -69,6 +71,8 @@ const DashPosts = () => {
     } catch (err) {
       console.error("Error:", err);
       setErrorMessage("Failed to show more, internal error");
+    } finally {
+      setShowMoreLoading(false);
     }
   };
 
@@ -187,8 +191,9 @@ const DashPosts = () => {
             <button
               onClick={handleShowMore}
               className="self-center w-full text-red-500 py-6"
+              disabled={showMoreLoading}
             >
-              Show more
+              {showMoreLoading ? "Loading..." : "Show more"}
             </button>
           )}
           {errorMessage && (
