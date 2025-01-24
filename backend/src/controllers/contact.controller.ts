@@ -32,12 +32,30 @@ export const handleContactForm = async (
   }
 };
 
-export const getContactFormMessages = async (
+export const getContactUsMessages = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const startIndex = parseInt(req.query.startIndex as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 9;
+    const sortDirection = req.query.order === "asc" ? -1 : 1;
+
+    const [unreadMessages, readMessages] = await Promise.all([
+      Contact.find({ read: false }),
+      Contact.find({ read: true })
+        .sort({ createdAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit),
+    ]);
+
+    const messages = {
+      unread: unreadMessages,
+      read: readMessages,
+    };
+
+    res.status(200).json(messages);
   } catch (err) {
     console.error("Error retrieving messages:", err);
     next(new CustomError(500, "Failed to retrieve messages"));

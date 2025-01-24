@@ -81,7 +81,10 @@ const ContactUs = () => {
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
           </div>
-          <Button className="bg-white text-black" disabled={loading}>
+          <Button
+            className="bg-white text-black hover:bg-gray-300"
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <Loader2 className="animate-spin" />
