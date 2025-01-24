@@ -11,8 +11,6 @@ dash post accordion, dropdown info for, accordion or stacked for mobile view?
 -updated at
 -how many comments
 
-contact us feature?
-
 whole dash ui refactor
 
 check all db connections, current loading times is far too long, move backend to vercel?
@@ -20,10 +18,6 @@ check all db connections, current loading times is far too long, move backend to
 add sort functionality to dash management pages?
 
 hot post selection in dash
-
-404 page
-
-# saved and liked posts
 
 # event
 
@@ -48,3 +42,5 @@ Hover over user card
 
 dropdown info for author updated at
 how many comments etc.
+
+future thought, messaging between users, forum page?

@@ -19,6 +19,8 @@ const DashSidebar = () => {
     (state: RootState) => state.persisted.user
   );
 
+  const { theme } = useAppSelector((state: RootState) => state.persisted.theme);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
@@ -42,12 +44,10 @@ const DashSidebar = () => {
                   to={item.path}
                   icon={item.icon}
                   // conditionally render properties
-                  {...(item.label
-                    ? {
-                        label: currentUser?.user.admin ? "Admin" : "User",
-                        labelColor: item.labelColor,
-                      }
-                    : {})}
+                  {...(item.label && {
+                    label: currentUser?.user.admin ? "Admin" : "User",
+                    labelColor: theme,
+                  })}
                   active={tab === item.name}
                 >
                   <span className="capitalize">{item.name}</span>
@@ -65,6 +65,7 @@ const DashSidebar = () => {
                   to={item.path}
                   icon={item.icon}
                   // conditionally render properties
+                  {...(item.label && { label: 3 })}
                   active={tab === item.name}
                 >
                   <span className="capitalize">{item.name}</span>
