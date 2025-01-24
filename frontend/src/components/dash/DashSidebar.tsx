@@ -65,7 +65,7 @@ const DashSidebar = () => {
                   to={item.path}
                   icon={item.icon}
                   // conditionally render properties
-                  {...(item.label && { label: 3 })}
+                  {...(item.label && { label: 24 })}
                   active={tab === item.name}
                 >
                   <span className="capitalize">{item.name}</span>

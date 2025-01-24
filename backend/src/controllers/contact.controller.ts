@@ -31,3 +31,15 @@ export const handleContactForm = async (
     next(new CustomError(500, "Failed to send message"));
   }
 };
+
+export const getContactFormMessages = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  } catch (err) {
+    console.error("Error retrieving messages:", err);
+    next(new CustomError(500, "Failed to retrieve messages"));
+  }
+};

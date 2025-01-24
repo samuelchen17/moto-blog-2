@@ -11,6 +11,7 @@ import DashEvents from "../components/dash/dashAdmin/DashEvents";
 import PostFormPage from "./PostFormPage";
 import DashEventsUser from "@/components/dash/dashUser/DashEventsUser";
 import DashSaved from "@/components/dash/dashUser/DashSaved";
+import DashMessages from "@/components/dash/dashAdmin/DashMessages";
 
 const DashboardPage = () => {
   const [searchParams] = useSearchParams();
@@ -68,6 +69,8 @@ const DashboardPage = () => {
 
           {/* User saved post tab */}
           {tab === "saved-posts" && <DashSaved />}
+
+          {tab === "admin-messages" && <DashMessages />}
 
           {/* {tab === "liked-posts" && <DashEventsUser />} */}
         </div>
