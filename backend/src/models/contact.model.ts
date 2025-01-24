@@ -15,6 +15,10 @@ const contactSchema = new mongoose.Schema<IContactForm>(
       type: String,
       required: true,
     },
+    read: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
