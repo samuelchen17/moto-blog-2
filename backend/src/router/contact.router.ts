@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getContactUsMessages,
   handleContactForm,
+  toggleReadStatus,
 } from "../controllers/contact.controller";
 import { isAdmin, isAuthenticated } from "../middlewares/user.middlewares";
 
@@ -13,6 +14,7 @@ const authRouter = (router: Router) => {
     isAdmin,
     getContactUsMessages
   );
+  router.patch("/toggle-read-status", toggleReadStatus);
 };
 
 export default authRouter;
