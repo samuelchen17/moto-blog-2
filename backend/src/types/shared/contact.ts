@@ -2,7 +2,7 @@ export interface IContactRes {
   name: string;
   email: string;
   message: string;
-  read: boolean;
+  read?: boolean;
 }
 
 export interface IContactForm extends IContactRes {
