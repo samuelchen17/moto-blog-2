@@ -5,6 +5,7 @@ import {
   validateEmail,
   getEmailValidationErrMsg,
 } from "../helpers/validator.helpers";
+import { IContactForm } from "src/types";
 
 export const handleContactForm = async (
   req: Request,
@@ -62,23 +63,34 @@ export const getContactUsMessages = async (
   }
 };
 
-// toggle read bool controller, implement
-
 export const toggleReadStatus = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // find message by message id
+    const message = await Contact.findById(req.params.messageId);
 
-    await Contact.findByIdAndUpdate();
+    if (!message) {
+      return next(new CustomError(404, "Message not found"));
+    }
 
-    res.status(200);
+    message.read = !message.read;
+    await message.save();
+
+    res.status(200).json({
+      message: message.read
+        ? "Message marked as read"
+        : "Message marked as unread",
+      data: message,
+    });
   } catch (err) {
-    console.error("Error retrieving messages:", err);
-    next(new CustomError(500, "Failed to retrieve messages"));
+    console.error("Error trying to toggle read status:", err);
+    next(new CustomError(500, "Failed to toggle read status"));
   }
 };
 
 // controller for getting only unread message number? for displaying on notifications
+// count documents
+
+// delete message controller

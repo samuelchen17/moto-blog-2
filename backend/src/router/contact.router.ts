@@ -17,7 +17,7 @@ const authRouter = (router: Router) => {
   );
   // toggle read status
   router.patch(
-    "/toggle-read-status/:id",
+    "/contact/toggle-read-status/:id/:messageId",
     isAuthenticated,
     isAdmin,
     toggleReadStatus
