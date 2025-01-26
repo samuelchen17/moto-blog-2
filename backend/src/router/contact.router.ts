@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteContactUsMessage,
   getContactUsMessages,
   handleContactForm,
   toggleReadStatus,
@@ -21,6 +22,13 @@ const authRouter = (router: Router) => {
     isAuthenticated,
     isAdmin,
     toggleReadStatus
+  );
+  // delete message
+  router.delete(
+    "/contact/delete-message/:id/:messageId",
+    isAuthenticated,
+    isAdmin,
+    deleteContactUsMessage
   );
 };
 

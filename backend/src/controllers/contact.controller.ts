@@ -90,7 +90,27 @@ export const toggleReadStatus = async (
   }
 };
 
+export const deleteContactUsMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const message = await Contact.findByIdAndDelete(req.params.messageId);
+
+    if (!message) {
+      return next(new CustomError(404, "Message not found"));
+    }
+
+    res.status(200).json({
+      message: "Message deleted successfully",
+      data: message,
+    });
+  } catch (err) {
+    console.error("Error deleting message:", err);
+    next(new CustomError(500, "Failed to delete message"));
+  }
+};
+
 // controller for getting only unread message number? for displaying on notifications
 // count documents
-
-// delete message controller
