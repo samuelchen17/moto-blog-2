@@ -8,13 +8,20 @@ import { isAdmin, isAuthenticated } from "../middlewares/user.middlewares";
 
 const authRouter = (router: Router) => {
   router.post("/contact-us", handleContactForm);
+  // get all messages
   router.get(
-    "/contact/get-messages",
+    "/contact/get-messages/:id",
     isAuthenticated,
     isAdmin,
     getContactUsMessages
   );
-  router.patch("/toggle-read-status", toggleReadStatus);
+  // toggle read status
+  router.patch(
+    "/toggle-read-status/:id",
+    isAuthenticated,
+    isAdmin,
+    toggleReadStatus
+  );
 };
 
 export default authRouter;
