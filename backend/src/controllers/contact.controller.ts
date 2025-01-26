@@ -126,3 +126,5 @@ export const getMessageNotificationCount = async (
     next(new CustomError(500, "Failed to get message notifications"));
   }
 };
+
+// a controller to mark multiple messages as read or unread?, mark multiple for delete?

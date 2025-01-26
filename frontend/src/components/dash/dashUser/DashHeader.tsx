@@ -14,7 +14,9 @@ const DashHeader = () => {
         <span className="text-lg font-semibold">
           {currentUser?.user.username} ({currentUser?.user.email})
         </span>
-        <span className="text-sm">Your personal Account</span>
+        <span className="text-sm">
+          {currentUser?.user.admin ? "Admin" : "User"} Account
+        </span>
       </div>
     </div>
   );

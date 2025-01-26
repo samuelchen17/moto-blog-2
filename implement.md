@@ -36,7 +36,6 @@ Hover over user card
 # contact us
 
 - contact us sends it to admin inbox
-- need schema etc.
 
 # dash post accordion?
 
@@ -44,3 +43,6 @@ dropdown info for author updated at
 how many comments etc.
 
 future thought, messaging between users, forum page?
+
+display name?
+modal for popup changing email and password
