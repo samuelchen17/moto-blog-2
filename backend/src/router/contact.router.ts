@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deleteContactUsMessage,
   getContactUsMessages,
+  getMessageNotificationCount,
   handleContactForm,
   toggleReadStatus,
 } from "../controllers/contact.controller";
@@ -29,6 +30,14 @@ const authRouter = (router: Router) => {
     isAuthenticated,
     isAdmin,
     deleteContactUsMessage
+  );
+
+  // get number of unread messages
+  router.get(
+    "/contact/notifications/:id",
+    isAuthenticated,
+    isAdmin,
+    getMessageNotificationCount
   );
 };
 

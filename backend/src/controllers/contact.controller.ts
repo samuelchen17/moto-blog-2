@@ -112,5 +112,17 @@ export const deleteContactUsMessage = async (
   }
 };
 
-// controller for getting only unread message number? for displaying on notifications
-// count documents
+export const getMessageNotificationCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const notificationsCount = await Contact.countDocuments({ read: false });
+
+    res.status(200).json({ notificationsCount });
+  } catch (err) {
+    console.error("Error getting message notifications:", err);
+    next(new CustomError(500, "Failed to get message notifications"));
+  }
+};
