@@ -17,6 +17,7 @@ const clearForm = {
 const ContactUs = () => {
   const [contactForm, setContactForm] = useState<IContactRes>(clearForm);
   const [loading, setLoading] = useState<boolean>(false);
+  const [delay, setDelay] = useState(false);
 
   const handleContactFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,7 +27,11 @@ const ContactUs = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (delay) return;
+
     setLoading(true);
+    setDelay(true);
+
     try {
       // this response is not iContactRes, it is just message
       const res = await _post<IContactRes>("/contact-us", contactForm);
@@ -38,6 +43,7 @@ const ContactUs = () => {
       console.error(err);
     } finally {
       setLoading(false);
+      setTimeout(() => setDelay(false), 5000);
     }
   };
 
@@ -83,7 +89,7 @@ const ContactUs = () => {
           </div>
           <Button
             className="bg-white text-black hover:bg-gray-300"
-            disabled={loading}
+            disabled={loading || delay}
           >
             {loading ? (
               <>
