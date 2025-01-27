@@ -3,7 +3,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { IContactRes } from "@/types";
+import { IContactRequest } from "@/types";
 import { _post } from "@/api/axiosClient";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
@@ -15,7 +15,7 @@ const clearForm = {
 };
 
 const ContactUs = () => {
-  const [contactForm, setContactForm] = useState<IContactRes>(clearForm);
+  const [contactForm, setContactForm] = useState<IContactRequest>(clearForm);
   const [loading, setLoading] = useState<boolean>(false);
   const [delay, setDelay] = useState(false);
 
@@ -33,8 +33,8 @@ const ContactUs = () => {
     setDelay(true);
 
     try {
-      // this response is not iContactRes, it is just message
-      const res = await _post<IContactRes>("/contact-us", contactForm);
+      // this response is not IContactRequest, it is just message
+      const res = await _post<IContactRequest>("/contact-us", contactForm);
       const data = res.data;
 
       toast.success(data.message);
