@@ -58,7 +58,7 @@ const ContactUs = () => {
         onSubmit={handleSubmit}
         className="absolute bottom-0 top-0 flex flex-col md:flex-row w-full justify-end"
       >
-        <div className="flex-grow space-y-6 rounded-lg p-6 bg-black md:bg-opacity-75 bg-opacity-90 md:my-auto md:m-8 max-w-[600px]">
+        <div className="flex-grow space-y-6 rounded-lg p-6 bg-background md:bg-black md:bg-opacity-75 bg-opacity-90 md:my-auto md:m-8 max-w-[600px] mx-auto w-full">
           <div>
             <Label className="text-white">Name</Label>
             <Input
