@@ -56,6 +56,11 @@ export const getContactUsMessages = async (
       read: readMessages,
     };
 
+    // dont separate the unread and read? sort them
+    // const messages = await Contact.find().sort({ createdAt: sortDirection })
+    //     .skip(startIndex)
+    //     .limit(limit),
+
     res.status(200).json(messages);
   } catch (err) {
     console.error("Error retrieving messages:", err);
