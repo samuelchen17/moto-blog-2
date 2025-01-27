@@ -1,8 +1,9 @@
 import { User } from "../models/user.model";
 import { userServiceErrorHandler } from "../utils/errorHandler.utils";
+import config from "../config/config";
 
 // ADD FIELDS HERE FOR LOGIN OBJECT
-const defaultFields = "username email profilePicture createdAt isAdmin bio";
+const defaultFields = config.loginResponseDefaultFields;
 
 export const getUsers = async () => {
   try {

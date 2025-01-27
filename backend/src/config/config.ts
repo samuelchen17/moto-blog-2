@@ -30,6 +30,8 @@ const config = {
     default:
       "https://www.shutterstock.com/image-photo/motorcycle-parked-alone-on-asphalt-260nw-2153911847.jpg",
   },
+  loginResponseDefaultFields:
+    "username email profilePicture createdAt isAdmin bio",
 };
 
 export default config;
