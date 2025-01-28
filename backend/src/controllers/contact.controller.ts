@@ -35,7 +35,7 @@ export const handleContactForm = async (
 
 export const getContactUsMessages = async (
   req: Request,
-  res: Response,
+  res: Response<IContactForm[]>,
   next: NextFunction
 ) => {
   try {
@@ -43,23 +43,23 @@ export const getContactUsMessages = async (
     const limit = parseInt(req.query.limit as string) || 9;
     const sortDirection = req.query.order === "asc" ? -1 : 1;
 
-    const [unreadMessages, readMessages] = await Promise.all([
-      Contact.find({ read: false }),
-      Contact.find({ read: true })
-        .sort({ createdAt: sortDirection })
-        .skip(startIndex)
-        .limit(limit),
-    ]);
-
-    const messages = {
-      unread: unreadMessages,
-      read: readMessages,
-    };
-
-    // dont separate the unread and read? sort them
-    // const messages = await Contact.find().sort({ createdAt: sortDirection })
+    // const [unreadMessages, readMessages] = await Promise.all([
+    //   Contact.find({ read: false }),
+    //   Contact.find({ read: true })
+    //     .sort({ createdAt: sortDirection })
     //     .skip(startIndex)
     //     .limit(limit),
+    // ]);
+
+    // const messages = {
+    //   unread: unreadMessages,
+    //   read: readMessages,
+    // };
+
+    const messages = await Contact.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
 
     res.status(200).json(messages);
   } catch (err) {

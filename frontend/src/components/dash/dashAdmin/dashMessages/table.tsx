@@ -1,28 +1,28 @@
 import { _get } from "@/api/axiosClient";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { IContactColumns } from "@/types";
+import { IContactColumns, IContactForm } from "@/types";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 
 export default function DemoPage() {
-  const [data, setData] = useState<IContactColumns[]>([]);
+  const [contactMessages, setContactMessages] = useState<IContactColumns[]>([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMessages = async () => {
       try {
         setLoading(true);
-        const res = await _get<IContactColumns[]>(
+        const res = await _get<IContactForm[]>(
           `/contact/get-messages/${currentUser?.user.id}`
         );
         const data = res.data;
 
-        setData(data);
+        setContactMessages(data);
       } catch (err) {
         console.error("Failed to fetch contact messages:", err);
       } finally {
@@ -31,9 +31,11 @@ export default function DemoPage() {
     };
 
     if (currentUser?.user.id) {
-      fetchData();
+      fetchMessages();
     }
   }, [currentUser?.user.id]);
+
+  console.log(contactMessages);
 
   if (loading) {
     return (
@@ -45,7 +47,7 @@ export default function DemoPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={contactMessages} />
     </div>
   );
 }
