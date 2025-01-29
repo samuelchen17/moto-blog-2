@@ -8,9 +8,7 @@ import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
 import { IContactForm, IContactResponse } from "@/types";
 import { format } from "date-fns";
-import { Check, X } from "lucide-react";
-
-import { MoreHorizontal } from "lucide-react";
+import { Check, X, MoreHorizontal, ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -110,13 +108,24 @@ export default function DemoPage() {
   const columns: ColumnDef<IContactForm>[] = [
     {
       accessorKey: "createdAt",
-      header: "Date",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className=""
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         const formattedDate = format(
           new Date(row.getValue("createdAt")),
           "d/MM/yy"
         );
-        return <div>{formattedDate}</div>;
+        return <div className="text-center">{formattedDate}</div>;
       },
     },
     {
@@ -125,7 +134,20 @@ export default function DemoPage() {
     },
     {
       accessorKey: "email",
-      header: "Email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
     },
     {
       accessorKey: "message",
@@ -133,18 +155,29 @@ export default function DemoPage() {
     },
     {
       accessorKey: "read",
-      header: "Read",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className=""
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Read
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         const readStatus = row.getValue("read");
 
         return (
-          <div className="">
+          <>
             {readStatus ? (
               <Check className="text-green-600" />
             ) : (
               <X className="text-red-600" />
             )}
-          </div>
+          </>
         );
       },
     },
