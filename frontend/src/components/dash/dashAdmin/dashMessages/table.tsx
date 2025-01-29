@@ -27,7 +27,8 @@ import { toast } from "react-toastify";
 export default function DemoPage() {
   const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sort, setSorting] = useState();
+  const [sortField, setSortField] = useState<"date" | "email" | "read">();
+  const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
@@ -42,9 +43,13 @@ export default function DemoPage() {
 
         // dynamically construct the url
         let url = `/contact/get-messages/${currentUser?.user.id}`;
+        const queryParams = new URLSearchParams();
 
-        if (sort) {
-          url += `?order=${sort}`;
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+
+        if (queryParams.toString()) {
+          url += `?${queryParams.toString()}`;
         }
 
         const res = await _get<IContactForm[]>(url);
@@ -59,7 +64,7 @@ export default function DemoPage() {
     if (currentUser?.user.id) {
       fetchMessages();
     }
-  }, [currentUser?.user.id, sort]);
+  }, [currentUser?.user.id, sortField]);
 
   const handleDeleteComment = async () => {
     setOpenModal(false);
@@ -110,6 +115,16 @@ export default function DemoPage() {
     setOpenModal(false);
   };
 
+  const toggleOrder = (sort: "date" | "email" | "read") => {
+    if (sortField === sort) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(sort);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
+
   const columns: ColumnDef<IContactForm>[] = [
     {
       accessorKey: "createdAt",
@@ -118,7 +133,7 @@ export default function DemoPage() {
           <Button
             variant="ghost"
             className=""
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => toggleOrder("date")}
           >
             Date
             <ArrowUpDown />
@@ -141,10 +156,7 @@ export default function DemoPage() {
       accessorKey: "email",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => toggleOrder("email")}>
             Email
             <ArrowUpDown />
           </Button>
@@ -165,7 +177,7 @@ export default function DemoPage() {
           <Button
             variant="ghost"
             className=""
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => toggleOrder("read")}
           >
             Read
             <ArrowUpDown />
