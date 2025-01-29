@@ -1,4 +1,4 @@
-import { _get } from "@/api/axiosClient";
+import { _get, _patch } from "@/api/axiosClient";
 import { DataTable } from "./data-table";
 
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ export default function DemoPage() {
   const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [idToDelete, setIdToDelete] = useState<string | null>(null);
+  const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
@@ -62,16 +62,43 @@ export default function DemoPage() {
     setOpenModal(false);
     try {
       const res = await _delete<IContactResponse>(
-        `/contact/delete-message/${currentUser?.user.id}/${idToDelete}`
+        `/contact/delete-message/${currentUser?.user.id}/${idSelected}`
       );
 
       const data = res.data;
 
+      setContactMessages((prev) =>
+        prev.filter((message) => message._id !== idSelected)
+      );
+
       toast.success(data.message);
 
-      setIdToDelete(null);
+      setIdSelected(null);
     } catch (err) {
       toast.error("Failed to delete comment");
+      console.error("Error:", err);
+    }
+  };
+
+  const toggleReadStatus = async (messageId: string) => {
+    try {
+      const res = await _patch<IContactResponse>(
+        `/contact/toggle-read-status/${currentUser?.user.id}/${messageId}`
+      );
+
+      const data = res.data;
+
+      setContactMessages((prev) =>
+        prev.map((message) =>
+          message._id === messageId
+            ? { ...message, read: !message.read }
+            : message
+        )
+      );
+
+      toast.success(data.message);
+    } catch (err) {
+      toast.error("Failed to toggle read status");
       console.error("Error:", err);
     }
   };
@@ -136,7 +163,11 @@ export default function DemoPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem
+                onClick={() => {
+                  toggleReadStatus(row.original._id);
+                }}
+              >
                 Mark as {readStatus ? "unread" : "read"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -144,7 +175,7 @@ export default function DemoPage() {
               <DropdownMenuItem
                 onClick={() => {
                   setOpenModal(true);
-                  setIdToDelete(row.original._id);
+                  setIdSelected(row.original._id);
                 }}
               >
                 Delete
