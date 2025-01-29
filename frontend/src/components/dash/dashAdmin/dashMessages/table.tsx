@@ -254,6 +254,14 @@ export default function DemoPage() {
         handleDelete={handleDeleteComment}
         message="this message from our servers"
       />
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button variant="outline" size="sm">
+          Previous
+        </Button>
+        <Button variant="outline" size="sm">
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
