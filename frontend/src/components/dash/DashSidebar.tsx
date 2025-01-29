@@ -65,6 +65,7 @@ const DashSidebar = () => {
                   to={item.path}
                   icon={item.icon}
                   // conditionally render properties
+                  // implement notification number
                   {...(item.label && { label: 24 })}
                   active={tab === item.name}
                 >

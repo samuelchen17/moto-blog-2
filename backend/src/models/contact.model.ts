@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { IContactResponse } from "src/types";
+import { IContactForm } from "src/types";
 
-const contactSchema = new mongoose.Schema<IContactResponse>(
+const contactSchema = new mongoose.Schema<IContactForm>(
   {
     name: {
       type: String,

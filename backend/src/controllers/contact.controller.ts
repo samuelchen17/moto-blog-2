@@ -5,7 +5,7 @@ import {
   validateEmail,
   getEmailValidationErrMsg,
 } from "../helpers/validator.helpers";
-import { IContactResponse } from "src/types";
+import { IContactForm, IContactResponse } from "src/types";
 
 export const handleContactForm = async (
   req: Request,
@@ -35,7 +35,7 @@ export const handleContactForm = async (
 
 export const getContactUsMessages = async (
   req: Request,
-  res: Response<IContactResponse[]>,
+  res: Response<IContactForm[]>,
   next: NextFunction
 ) => {
   try {
@@ -70,7 +70,7 @@ export const getContactUsMessages = async (
 
 export const toggleReadStatus = async (
   req: Request,
-  res: Response,
+  res: Response<IContactResponse>,
   next: NextFunction
 ) => {
   try {
@@ -97,7 +97,7 @@ export const toggleReadStatus = async (
 
 export const deleteContactUsMessage = async (
   req: Request,
-  res: Response,
+  res: Response<IContactResponse>,
   next: NextFunction
 ) => {
   try {

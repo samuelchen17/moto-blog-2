@@ -5,8 +5,13 @@ export interface IContactRequest {
   read?: boolean;
 }
 
-export interface IContactResponse extends IContactRequest {
+export interface IContactForm extends IContactRequest {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IContactResponse {
+  message: string;
+  data: IContactForm;
 }
