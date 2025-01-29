@@ -64,7 +64,7 @@ export default function DemoPage() {
     if (currentUser?.user.id) {
       fetchMessages();
     }
-  }, [currentUser?.user.id, sortField]);
+  }, [currentUser?.user.id, sortField, order]);
 
   const handleDeleteComment = async () => {
     setOpenModal(false);
@@ -115,14 +115,11 @@ export default function DemoPage() {
     setOpenModal(false);
   };
 
-  console.log(sortField);
-  console.log(order);
-
-  const toggleOrder = (sort: "createdAt" | "email" | "read") => {
-    if (sortField === sort) {
+  const toggleOrder = (field: "createdAt" | "email" | "read") => {
+    if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
-      setSortField(sort);
+      setSortField(field);
       // default to asc otherwise
       setOrder("asc");
     }

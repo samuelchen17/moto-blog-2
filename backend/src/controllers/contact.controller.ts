@@ -60,11 +60,11 @@ export const getContactUsMessages = async (
     let sortField = "createdAt";
     let sortOrder: SortOrder = -1;
 
-    // using set instead of arrays for faster lookups
+    // using set instead of arrays for faster lookups O(1)
     const validFields = new Set(["createdAt", "email", "read"]);
 
-    if (req.query.sortField && req.query.order) {
-      sortField = req.query.sortField as string;
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
 
       // injection attack check
       if (!validFields.has(sortField)) {
@@ -76,8 +76,6 @@ export const getContactUsMessages = async (
     const sortOptions: Record<string, SortOrder> = {
       [sortField]: sortOrder,
     };
-
-    console.log(sortOptions);
 
     const messages = await Contact.find()
       .sort(sortOptions)
