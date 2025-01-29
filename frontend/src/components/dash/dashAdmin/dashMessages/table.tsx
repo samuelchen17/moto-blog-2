@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 export default function DemoPage() {
   const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sort, setSorting] = useState();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
@@ -54,7 +55,7 @@ export default function DemoPage() {
     if (currentUser?.user.id) {
       fetchMessages();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, sort]);
 
   const handleDeleteComment = async () => {
     setOpenModal(false);

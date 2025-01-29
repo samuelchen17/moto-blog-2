@@ -6,6 +6,7 @@ import {
   getEmailValidationErrMsg,
 } from "../helpers/validator.helpers";
 import { IContactForm, IContactResponse } from "src/types";
+import { SortOrder } from "mongoose";
 
 export const handleContactForm = async (
   req: Request,
@@ -33,6 +34,19 @@ export const handleContactForm = async (
   }
 };
 
+// const [unreadMessages, readMessages] = await Promise.all([
+//   Contact.find({ read: false }),
+//   Contact.find({ read: true })
+//     .sort({ createdAt: sortDirection })
+//     .skip(startIndex)
+//     .limit(limit),
+// ]);
+
+// const messages = {
+//   unread: unreadMessages,
+//   read: readMessages,
+// };
+
 export const getContactUsMessages = async (
   req: Request,
   res: Response<IContactForm[]>,
@@ -41,23 +55,45 @@ export const getContactUsMessages = async (
   try {
     const startIndex = parseInt(req.query.startIndex as string) || 0;
     const limit = parseInt(req.query.limit as string) || 9;
-    const sortDirection = req.query.order === "asc" ? -1 : 1;
 
-    // const [unreadMessages, readMessages] = await Promise.all([
-    //   Contact.find({ read: false }),
-    //   Contact.find({ read: true })
-    //     .sort({ createdAt: sortDirection })
-    //     .skip(startIndex)
-    //     .limit(limit),
-    // ]);
+    let sortField = "createdAt";
+    let sortOrder: SortOrder = -1;
 
-    // const messages = {
-    //   unread: unreadMessages,
-    //   read: readMessages,
-    // };
+    if (req.query.order) {
+      switch (req.query.order) {
+        case "asc":
+          sortField = "createdAt";
+          sortOrder = 1 as SortOrder;
+          break;
+        case "desc":
+          sortField = "createdAt";
+          sortOrder = -1 as SortOrder;
+          break;
+        case "readAsc":
+          sortField = "read";
+          sortOrder = 1 as SortOrder;
+          break;
+        case "readDesc":
+          sortField = "read";
+          sortOrder = -1 as SortOrder;
+          break;
+        case "emailAsc":
+          sortField = "email";
+          sortOrder = 1 as SortOrder;
+          break;
+        case "emailDesc":
+          sortField = "email";
+          sortOrder = -1 as SortOrder;
+          break;
+      }
+    }
+
+    const sortOptions: { [key: string]: SortOrder } = {
+      [sortField]: sortOrder,
+    };
 
     const messages = await Contact.find()
-      .sort({ createdAt: sortDirection })
+      .sort(sortOptions)
       .skip(startIndex)
       .limit(limit);
 
