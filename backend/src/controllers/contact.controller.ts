@@ -69,13 +69,13 @@ export const getContactUsMessages = async (
           sortField = "createdAt";
           sortOrder = -1 as SortOrder;
           break;
-        case "readAsc":
-          sortField = "read";
-          sortOrder = 1 as SortOrder;
-          break;
-        case "readDesc":
+        case "readFirst":
           sortField = "read";
           sortOrder = -1 as SortOrder;
+          break;
+        case "unreadFirst":
+          sortField = "read";
+          sortOrder = 1 as SortOrder;
           break;
         case "emailAsc":
           sortField = "email";

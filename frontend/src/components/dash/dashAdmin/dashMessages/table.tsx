@@ -39,12 +39,16 @@ export default function DemoPage() {
     const fetchMessages = async () => {
       try {
         setLoading(true);
-        const res = await _get<IContactForm[]>(
-          `/contact/get-messages/${currentUser?.user.id}`
-        );
-        const data = res.data;
 
-        setContactMessages(data);
+        // dynamically construct the url
+        let url = `/contact/get-messages/${currentUser?.user.id}`;
+
+        if (sort) {
+          url += `?order=${sort}`;
+        }
+
+        const res = await _get<IContactForm[]>(url);
+        setContactMessages(res.data);
       } catch (err) {
         console.error("Failed to fetch contact messages:", err);
       } finally {
