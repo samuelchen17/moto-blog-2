@@ -5,7 +5,7 @@ import {
   validateEmail,
   getEmailValidationErrMsg,
 } from "../helpers/validator.helpers";
-import { IContactForm } from "src/types";
+import { IContactResponse } from "src/types";
 
 export const handleContactForm = async (
   req: Request,
@@ -35,7 +35,7 @@ export const handleContactForm = async (
 
 export const getContactUsMessages = async (
   req: Request,
-  res: Response<IContactForm[]>,
+  res: Response<IContactResponse[]>,
   next: NextFunction
 ) => {
   try {

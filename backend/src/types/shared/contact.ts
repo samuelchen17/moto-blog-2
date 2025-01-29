@@ -5,12 +5,8 @@ export interface IContactRequest {
   read?: boolean;
 }
 
-export interface IContactForm extends IContactRequest {
+export interface IContactResponse extends IContactRequest {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface IContactColumns extends IContactRequest {
-  createdAt: Date;
 }

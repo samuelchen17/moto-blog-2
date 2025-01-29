@@ -1,13 +1,15 @@
 import { _get } from "@/api/axiosClient";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { IContactColumns, IContactForm } from "@/types";
+import { IContactResponse } from "@/types";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 
 export default function DemoPage() {
-  const [contactMessages, setContactMessages] = useState<IContactColumns[]>([]);
+  const [contactMessages, setContactMessages] = useState<IContactResponse[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -17,7 +19,7 @@ export default function DemoPage() {
     const fetchMessages = async () => {
       try {
         setLoading(true);
-        const res = await _get<IContactForm[]>(
+        const res = await _get<IContactResponse[]>(
           `/contact/get-messages/${currentUser?.user.id}`
         );
         const data = res.data;
@@ -34,8 +36,6 @@ export default function DemoPage() {
       fetchMessages();
     }
   }, [currentUser?.user.id]);
-
-  console.log(contactMessages);
 
   if (loading) {
     return (
