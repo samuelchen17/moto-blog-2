@@ -56,41 +56,28 @@ export const getContactUsMessages = async (
     const startIndex = parseInt(req.query.startIndex as string) || 0;
     const limit = parseInt(req.query.limit as string) || 9;
 
+    // default sorting
     let sortField = "createdAt";
     let sortOrder: SortOrder = -1;
 
-    if (req.query.order) {
-      switch (req.query.order) {
-        case "asc":
-          sortField = "createdAt";
-          sortOrder = 1 as SortOrder;
-          break;
-        case "desc":
-          sortField = "createdAt";
-          sortOrder = -1 as SortOrder;
-          break;
-        case "readFirst":
-          sortField = "read";
-          sortOrder = -1 as SortOrder;
-          break;
-        case "unreadFirst":
-          sortField = "read";
-          sortOrder = 1 as SortOrder;
-          break;
-        case "emailAsc":
-          sortField = "email";
-          sortOrder = 1 as SortOrder;
-          break;
-        case "emailDesc":
-          sortField = "email";
-          sortOrder = -1 as SortOrder;
-          break;
+    // using set instead of arrays for faster lookups
+    const validFields = new Set(["createdAt", "email", "read"]);
+
+    if (req.query.sortField && req.query.order) {
+      sortField = req.query.sortField as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
       }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
     }
 
-    const sortOptions: { [key: string]: SortOrder } = {
+    const sortOptions: Record<string, SortOrder> = {
       [sortField]: sortOrder,
     };
+
+    console.log(sortOptions);
 
     const messages = await Contact.find()
       .sort(sortOptions)

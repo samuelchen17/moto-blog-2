@@ -27,7 +27,7 @@ import { toast } from "react-toastify";
 export default function DemoPage() {
   const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortField, setSortField] = useState<"date" | "email" | "read">();
+  const [sortField, setSortField] = useState<"createdAt" | "email" | "read">();
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | null>(null);
@@ -115,7 +115,10 @@ export default function DemoPage() {
     setOpenModal(false);
   };
 
-  const toggleOrder = (sort: "date" | "email" | "read") => {
+  console.log(sortField);
+  console.log(order);
+
+  const toggleOrder = (sort: "createdAt" | "email" | "read") => {
     if (sortField === sort) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -133,7 +136,7 @@ export default function DemoPage() {
           <Button
             variant="ghost"
             className=""
-            onClick={() => toggleOrder("date")}
+            onClick={() => toggleOrder("createdAt")}
           >
             Date
             <ArrowUpDown />
