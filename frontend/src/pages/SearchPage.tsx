@@ -10,7 +10,6 @@ import {
 import { postCategory } from "@/config/postCategory.config";
 import { IPostResponse, IPostWithAuthor } from "src/types";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
 import { _get } from "@/api/axiosClient";
@@ -137,11 +136,7 @@ const SearchPage = () => {
         {loading ? (
           <SkeletonSearchItem />
         ) : (
-          posts.map((post) => (
-            <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-              <SearchItem post={post} />
-            </Link>
-          ))
+          posts.map((post) => <SearchItem key={post._id} post={post} />)
         )}
 
         {showMore && (

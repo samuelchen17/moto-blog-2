@@ -1,102 +1,140 @@
+import { _get, _patch } from "@/api/axiosClient";
+import { DataTable } from "../../ui/data-table";
+
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { RootState } from "../../../redux/store";
-import { Alert, Table } from "flowbite-react";
-import { IPostResponse, IPostWithAuthor } from "src/types";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { IContactForm, IContactResponse, INotificationsCount } from "@/types";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Check, X, MoreHorizontal, ArrowUpDown } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { _delete, _get } from "@/api/axiosClient";
-import DeleteModal from "@/components/DeleteModal";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const DashPosts = () => {
-  const [userAdminPosts, setUserAdminPosts] = useState<IPostWithAuthor[]>([]);
-  const [showMore, setShowMore] = useState<boolean>(true);
-  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+import DeleteModal from "@/components/DeleteModal";
+import { _delete } from "@/api/axiosClient";
+import { toast } from "react-toastify";
+import { setNotifications } from "@/redux/features/notifications/contactNotificationSlice";
+import DashOld from "./DashOld";
+
+export default function DashPosts() {
+  const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sortField, setSortField] = useState<"createdAt" | "email" | "read">();
+  const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const limit = 9;
 
-  // implement accordion so user doesnt have to scrolls
-  // Dropdown to select hot posts, could change to algorithm based on interactivity with users?
+  const dispatch = useAppDispatch();
 
+  // fetch messages
   useEffect(() => {
-    const getPosts = async () => {
+    const fetchMessages = async () => {
       try {
-        setErrorMessage(null);
-        const res = await _get<IPostResponse>(
-          `/post/getposts?createdBy=${currentUser?.user.id}`
-        );
-        const data = res.data;
+        setLoading(true);
 
-        setUserAdminPosts(data.posts);
-        if (data.posts.length < 9) {
-          setShowMore(false);
+        // dynamically construct the url
+        let url = `/contact/get-messages/${currentUser?.user.id}?limit=${limit}`;
+        const queryParams = new URLSearchParams();
+
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
+
+        if (queryParams.toString()) {
+          url += `&${queryParams.toString()}`;
         }
+
+        const res = await _get<IContactForm[]>(url);
+        setContactMessages(res.data);
       } catch (err) {
-        console.error("Error:", err);
-        setErrorMessage("Failed to retrieve posts, internal error");
+        console.error("Failed to fetch contact messages:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (currentUser?.user.admin) {
-      getPosts();
+    if (currentUser?.user.id) {
+      fetchMessages();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, sortField, order, startIndex]);
 
-  const handleShowMore = async () => {
-    const startIndex = userAdminPosts.length;
-    setShowMoreLoading(true);
+  const fetchNotificationCount = async () => {
     try {
-      setErrorMessage(null);
-      const res = await _get<IPostResponse>(
-        `/post/getposts?createdBy=${currentUser?.user.id}&startIndex=${startIndex}`
+      const res = await _get<INotificationsCount>(
+        `/contact/notifications/${currentUser?.user.id}`
       );
-      const data = res.data;
-
-      setUserAdminPosts((prev) => [...prev, ...data.posts]);
-      if (data.posts.length < 9) {
-        setShowMore(false);
-      }
+      console.log(res.data);
+      dispatch(setNotifications(res.data));
     } catch (err) {
-      console.error("Error:", err);
-      setErrorMessage("Failed to show more, internal error");
-    } finally {
-      setShowMoreLoading(false);
+      console.error("Failed to fetch notification count:", err);
     }
   };
 
-  const handleDeletePost = async () => {
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
+  };
+
+  const handleDeleteMessage = async () => {
     setOpenModal(false);
     try {
-      const res = await _delete(
-        `/post/delete/${postIdToDelete}/${currentUser?.user.id}`
+      const res = await _delete<IContactResponse>(
+        `/contact/delete-message/${currentUser?.user.id}/${idSelected}`
       );
 
       const data = res.data;
 
-      // implement delete post success message
-
-      setUserAdminPosts((prev) =>
-        prev.filter((post) => post._id !== postIdToDelete)
+      setContactMessages((prev) =>
+        prev.filter((message) => message._id !== idSelected)
       );
+
+      toast.success(data.message);
+
+      setIdSelected(null);
     } catch (err) {
+      toast.error("Failed to delete comment");
       console.error("Error:", err);
-      if (err instanceof Error) {
-        setErrorMessage(err.message);
-      } else {
-        setErrorMessage("An unknown error occurred");
-      }
+    }
+  };
+
+  const toggleReadStatus = async (messageId: string) => {
+    try {
+      const res = await _patch<IContactResponse>(
+        `/contact/toggle-read-status/${currentUser?.user.id}/${messageId}`
+      );
+
+      const data = res.data;
+
+      setContactMessages((prev) =>
+        prev.map((message) =>
+          message._id === messageId
+            ? { ...message, read: !message.read }
+            : message
+        )
+      );
+
+      fetchNotificationCount();
+      toast.success(data.message);
+    } catch (err) {
+      toast.error("Failed to toggle read status");
+      console.error("Error:", err);
     }
   };
 
@@ -104,119 +142,173 @@ const DashPosts = () => {
     setOpenModal(false);
   };
 
+  const toggleOrder = (field: "createdAt" | "email" | "read") => {
+    if (sortField === field) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
+
+  const columns: ColumnDef<IContactForm>[] = [
+    {
+      accessorKey: "createdAt",
+      header: () => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("createdAt")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const formattedDate = format(
+          new Date(row.getValue("createdAt")),
+          "dd MMM yy"
+        );
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "email",
+      header: () => {
+        return (
+          <Button variant="ghost" onClick={() => toggleOrder("email")}>
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      accessorKey: "message",
+      header: "Message",
+      cell: ({ row }) => (
+        <div className="min-w-[250px]">{row.getValue("message")}</div>
+      ),
+    },
+    {
+      accessorKey: "read",
+      header: () => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("read")}
+          >
+            Read
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const readStatus = row.getValue("read");
+
+        return (
+          <div className="flex items-center justify-center w-full">
+            {readStatus ? (
+              <Check className="text-green-600" />
+            ) : (
+              <X className="text-red-600" />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const readStatus = row.getValue("read");
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  toggleReadStatus(row.original._id);
+                }}
+              >
+                Mark as {readStatus ? "unread" : "read"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpenModal(true);
+                  setIdSelected(row.original._id);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full">
-      {/* implement select hotpost section */}
-      <span>Hot Post Selection</span>
-      <form>
-        <span>Post 1</span>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Post" />
-          </SelectTrigger>
-          <SelectContent>
-            {userAdminPosts.map((post) => (
-              <SelectItem key={post._id} value={post._id}>
-                {post.slug}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </form>
-
-      {currentUser?.user.admin && userAdminPosts.length > 0 ? (
-        // implement tailwind-scrollbar? for mobile
-        <div className="overflow-x-auto">
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Image</Table.HeadCell>
-              <Table.HeadCell>Title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Delete</span>
-              </Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Edit</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {userAdminPosts.map((post) => (
-                <Table.Row
-                  key={post.slug}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {format(new Date(post.updatedAt), "dd MMM yyyy")}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/blogs/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500"
-                      />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/blogs/post/${post.slug}`}>{post.title}</Link>
-                  </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>
-                    <button
-                      onClick={() => {
-                        setOpenModal(true);
-                        setPostIdToDelete(post._id);
-                      }}
-                      className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      // to={`/update-post/${post._id}`}
-                      to={`/dashboard/?tab=update-post/${post._id}`}
-                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    >
-                      Edit
-                    </Link>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          {showMore && (
-            // implement style button
-            <button
-              onClick={handleShowMore}
-              className="self-center w-full text-red-500 py-6"
-              disabled={showMoreLoading}
-            >
-              {showMoreLoading ? "Loading..." : "Show more"}
-            </button>
-          )}
-          {errorMessage && (
-            <Alert
-              color="failure"
-              className="text-center justify-center items-center"
-            >
-              {errorMessage}
-            </Alert>
-          )}
-        </div>
-      ) : (
-        <p>No posts created yet!</p>
-      )}
-
+    <div className="container mx-auto">
+      <DashOld />
+      <DataTable columns={columns} data={contactMessages} />
+      {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDeletePost}
-        message="this post from our servers"
+        handleDelete={handleDeleteMessage}
+        message="this message from our servers"
       />
+      {/* Pagination */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={startIndex === 0}
+          onClick={() => handlePagination("prev")}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePagination("next")}
+          disabled={contactMessages.length < startIndex}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
-};
-
-export default DashPosts;
+}

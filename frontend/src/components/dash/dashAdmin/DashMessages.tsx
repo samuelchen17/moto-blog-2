@@ -36,7 +36,7 @@ export default function DashMessages() {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const limit = 9;
+  const limit = 10;
 
   const dispatch = useAppDispatch();
 
