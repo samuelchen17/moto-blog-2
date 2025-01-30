@@ -68,12 +68,19 @@ const DashSidebar = () => {
                   as={Link}
                   to={item.path}
                   icon={item.icon}
-                  // conditionally render properties
-                  // implement notification number
-                  {...(item.label && { label: notificationsCount })}
                   active={tab === item.name}
+                  // {...(notificationsCount > 0 &&
+                  //   item.label && {
+                  //     label: notificationsCount,
+                  //     labelColor: "bg-red-600 text-white",
+                  //   })}
                 >
                   <span className="capitalize">{item.name}</span>
+                  {notificationsCount > 0 && item.label && (
+                    <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-600 rounded-md">
+                      {notificationsCount}
+                    </span>
+                  )}
                 </Sidebar.Item>
               ))}
             </Sidebar.ItemGroup>

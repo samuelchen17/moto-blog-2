@@ -43,12 +43,19 @@ const NavBarAuth = () => {
       {currentUser ? (
         <>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="relative">
               <Avatar
                 alt="user"
                 rounded
                 img={currentUser.user.profilePicture}
               />
+
+              {/* notification badge */}
+              {notificationsCount > 0 && (
+                <span className="absolute -bottom-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-md">
+                  {notificationsCount}
+                </span>
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-44">
               <DropdownMenuLabel>
@@ -91,7 +98,7 @@ const NavBarAuth = () => {
                               className: "mr-1 h-4 w-4",
                             })}
                           <span> {item.name}</span>
-                          {item.label && (
+                          {notificationsCount > 0 && item.label && (
                             <span className="ml-auto text-xs tracking-widest px-1.5 rounded-md bg-red-600 text-white">
                               {notificationsCount}
                             </span>
