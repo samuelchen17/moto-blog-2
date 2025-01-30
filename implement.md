@@ -33,10 +33,6 @@ Hover over user card
 
 # fix all alerts?
 
-# contact us
-
-- contact us sends it to admin inbox
-
 # dash post accordion?
 
 dropdown info for author updated at
