@@ -30,10 +30,12 @@ export default function DemoPage() {
   const [sortField, setSortField] = useState<"createdAt" | "email" | "read">();
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [startIndex, setStartIndex] = useState(0);
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const limit = 9;
 
   // fetch messages
   useEffect(() => {
@@ -42,14 +44,16 @@ export default function DemoPage() {
         setLoading(true);
 
         // dynamically construct the url
-        let url = `/contact/get-messages/${currentUser?.user.id}`;
+        let url = `/contact/get-messages/${currentUser?.user.id}?limit=${limit}`;
         const queryParams = new URLSearchParams();
 
         if (sortField) queryParams.append("sort", sortField);
         if (order) queryParams.append("order", order);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
 
         if (queryParams.toString()) {
-          url += `?${queryParams.toString()}`;
+          url += `&${queryParams.toString()}`;
         }
 
         const res = await _get<IContactForm[]>(url);
@@ -64,9 +68,15 @@ export default function DemoPage() {
     if (currentUser?.user.id) {
       fetchMessages();
     }
-  }, [currentUser?.user.id, sortField, order]);
+  }, [currentUser?.user.id, sortField, order, startIndex]);
 
-  const handleDeleteComment = async () => {
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
+  };
+
+  const handleDeleteMessage = async () => {
     setOpenModal(false);
     try {
       const res = await _delete<IContactResponse>(
@@ -132,7 +142,7 @@ export default function DemoPage() {
         return (
           <Button
             variant="ghost"
-            className=""
+            className="flex items-center justify-center w-full"
             onClick={() => toggleOrder("createdAt")}
           >
             Date
@@ -145,7 +155,11 @@ export default function DemoPage() {
           new Date(row.getValue("createdAt")),
           "d/MM/yy"
         );
-        return <div className="text-center">{formattedDate}</div>;
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
       },
     },
     {
@@ -176,7 +190,7 @@ export default function DemoPage() {
         return (
           <Button
             variant="ghost"
-            className=""
+            className="flex items-center justify-center w-full"
             onClick={() => toggleOrder("read")}
           >
             Read
@@ -188,13 +202,13 @@ export default function DemoPage() {
         const readStatus = row.getValue("read");
 
         return (
-          <>
+          <div className="flex items-center justify-center w-full">
             {readStatus ? (
               <Check className="text-green-600" />
             ) : (
               <X className="text-red-600" />
             )}
-          </>
+          </div>
         );
       },
     },
@@ -251,14 +265,26 @@ export default function DemoPage() {
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDeleteComment}
+        handleDelete={handleDeleteMessage}
         message="this message from our servers"
       />
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={startIndex === 0}
+          onClick={() => handlePagination("prev")}
+        >
           Previous
         </Button>
-        <Button variant="outline" size="sm">
+        {/* disabled when exceeding current message count */}
+        {/* add total message count and number of unread messages to response? */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePagination("next")}
+          disabled={contactMessages.length < startIndex}
+        >
           Next
         </Button>
       </div>
