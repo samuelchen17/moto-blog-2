@@ -31,7 +31,7 @@ const DashboardPage = () => {
         <DashSidebar />
 
         {/* dashboard */}
-        <div className="w-full max-w-screen-xl mx-auto mt-4 px-8">
+        <div className="w-full max-w-screen-xl mx-auto mt-4 md:px-8 px-4">
           {/* dynamically  display page title*/}
           <h2 className="text-2xl mb-6 capitalize space-y-2">
             <span>{tab}</span>

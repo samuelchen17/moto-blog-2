@@ -1,377 +1,293 @@
-import * as React from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { _get, _patch } from "@/api/axiosClient";
+import { DataTable } from "../../ui/data-table";
+
+import { useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { IContactForm, IContactResponse } from "@/types";
+import { format } from "date-fns";
+import { Check, X, MoreHorizontal, ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import DemoPage from "./dashMessages/table";
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import DeleteModal from "@/components/DeleteModal";
+import { _delete } from "@/api/axiosClient";
+import { toast } from "react-toastify";
 
 export default function DashMessages() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+  const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sortField, setSortField] = useState<"createdAt" | "email" | "read">();
+  const [order, setOrder] = useState<"asc" | "desc">();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [startIndex, setStartIndex] = useState(0);
+  const [idSelected, setIdSelected] = useState<string | null>(null);
+  const { currentUser } = useAppSelector(
+    (state: RootState) => state.persisted.user
   );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const limit = 9;
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
+  // fetch messages
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        setLoading(true);
+
+        // dynamically construct the url
+        let url = `/contact/get-messages/${currentUser?.user.id}?limit=${limit}`;
+        const queryParams = new URLSearchParams();
+
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
+
+        if (queryParams.toString()) {
+          url += `&${queryParams.toString()}`;
+        }
+
+        const res = await _get<IContactForm[]>(url);
+        setContactMessages(res.data);
+      } catch (err) {
+        console.error("Failed to fetch contact messages:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (currentUser?.user.id) {
+      fetchMessages();
+    }
+  }, [currentUser?.user.id, sortField, order, startIndex]);
+
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
+  };
+
+  const handleDeleteMessage = async () => {
+    setOpenModal(false);
+    try {
+      const res = await _delete<IContactResponse>(
+        `/contact/delete-message/${currentUser?.user.id}/${idSelected}`
+      );
+
+      const data = res.data;
+
+      setContactMessages((prev) =>
+        prev.filter((message) => message._id !== idSelected)
+      );
+
+      toast.success(data.message);
+
+      setIdSelected(null);
+    } catch (err) {
+      toast.error("Failed to delete comment");
+      console.error("Error:", err);
+    }
+  };
+
+  const toggleReadStatus = async (messageId: string) => {
+    try {
+      const res = await _patch<IContactResponse>(
+        `/contact/toggle-read-status/${currentUser?.user.id}/${messageId}`
+      );
+
+      const data = res.data;
+
+      setContactMessages((prev) =>
+        prev.map((message) =>
+          message._id === messageId
+            ? { ...message, read: !message.read }
+            : message
+        )
+      );
+
+      toast.success(data.message);
+    } catch (err) {
+      toast.error("Failed to toggle read status");
+      console.error("Error:", err);
+    }
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const toggleOrder = (field: "createdAt" | "email" | "read") => {
+    if (sortField === field) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
+
+  const columns: ColumnDef<IContactForm>[] = [
+    {
+      accessorKey: "createdAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("createdAt")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const formattedDate = format(
+          new Date(row.getValue("createdAt")),
+          "d/MM/yy"
+        );
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
+      },
     },
-  });
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button variant="ghost" onClick={() => toggleOrder("email")}>
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      accessorKey: "message",
+      header: "Message",
+    },
+    {
+      accessorKey: "read",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("read")}
+          >
+            Read
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const readStatus = row.getValue("read");
 
-  return (
-    <>
-      <div className="w-full">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        return (
+          <div className="flex items-center justify-center w-full">
+            {readStatus ? (
+              <Check className="text-green-600" />
+            ) : (
+              <X className="text-red-600" />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const readStatus = row.getValue("read");
+
+        return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown />
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  toggleReadStatus(row.original._id);
+                }}
+              >
+                Mark as {readStatus ? "unread" : "read"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpenModal(true);
+                  setIdSelected(row.original._id);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <p>Loading...</p>
       </div>
-      <DemoPage />
-    </>
+    );
+  }
+
+  return (
+    <div className="container mx-auto">
+      <DataTable columns={columns} data={contactMessages} />
+      {/* delete confirmation */}
+      <DeleteModal
+        open={openModal}
+        close={handleClose}
+        handleDelete={handleDeleteMessage}
+        message="this message from our servers"
+      />
+      {/* Pagination */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={startIndex === 0}
+          onClick={() => handlePagination("prev")}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePagination("next")}
+          disabled={contactMessages.length < startIndex}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
   );
 }
-
-// import {
-//   Table,
-//   TableBody,
-//   TableCaption,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { useEffect, useState } from "react";
-
-// const DashMessages = () => {
-//   // upon going to dashboard page, make an api call to check number of unread messages, to display in the notifications? or maybe, do it as the admin logs in, so it can be used on the avatar?
-
-//   // useEffect to lead the messages in
-//   // n
-//   const [messages, setMessages] = useState();
-
-//   useEffect(() => {
-//     const fetchMessages = async () => {
-//       try {
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     };
-
-//     fetchMessages();
-//   });
-
-//   return (
-//     <Table>
-//       <TableCaption>A list of your recent invoices.</TableCaption>
-//       <TableHeader>
-//         <TableRow>
-//           <TableHead className="w-[70px]">Date</TableHead>
-//           <TableHead>Name</TableHead>
-//           <TableHead>Email</TableHead>
-//           <TableHead>Message</TableHead>
-//           <TableHead className="text-right">Read</TableHead>
-//         </TableRow>
-//       </TableHeader>
-//       <TableBody>
-//         <TableRow>
-//           <TableCell className="font-medium">12/5/24</TableCell>
-//           <TableCell>Jason Chen</TableCell>
-//           <TableCell>j.chen@gmail.com</TableCell>
-//           <TableCell>
-//             Hey i was just wondering, if you want to work for our company, i see
-//             that your skills are very valuable and useful. please contact me and
-//             we can have a discussion with regards to this
-//           </TableCell>
-//           <TableCell className="text-right">True</TableCell>
-//         </TableRow>
-//       </TableBody>
-//     </Table>
-//   );
-// };
-
-// export default DashMessages;
-
-// // when going into a smaller screen make it an expandable table
-// // with message in the expansion
