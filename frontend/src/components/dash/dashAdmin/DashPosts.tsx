@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 // import { Input } from "@/components/ui/input";
 
-export default function DashPosts() {
+export function DashPostsTable() {
   const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState<
@@ -117,6 +117,27 @@ export default function DashPosts() {
       setSortField(field);
       // default to asc otherwise
       setOrder("asc");
+    }
+  };
+
+  const handleSetHotPost = async (order: 0 | 1 | 2 | 3, postId: string) => {
+    try {
+      const res = await _patch(
+        `/post/set-hot-post/${currentUser?.user.id}/${postId}`,
+        { order }
+      );
+
+      const data = res.data;
+
+      console.log(data);
+      // toast.success(data.message)
+    } catch (err) {
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
 
@@ -242,10 +263,26 @@ export default function DashPosts() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Hot posts</DropdownMenuLabel>
-              <DropdownMenuItem>Set Post 1</DropdownMenuItem>
-              <DropdownMenuItem>Set Post 2</DropdownMenuItem>
-              <DropdownMenuItem>Set Post 3</DropdownMenuItem>
-              <DropdownMenuItem>Set Post 4</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleSetHotPost(0, row.original._id)}
+              >
+                Set Post 1
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleSetHotPost(1, row.original._id)}
+              >
+                Set Post 2
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleSetHotPost(2, row.original._id)}
+              >
+                Set Post 3
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleSetHotPost(3, row.original._id)}
+              >
+                Set Post 4
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
@@ -315,3 +352,18 @@ export default function DashPosts() {
     </div>
   );
 }
+
+const DashPosts = () => {
+  return (
+    <div>
+      <h2>Hot Posts Preview</h2>
+      <div>Post 1</div>
+      <div>Post 1</div>
+      <div>Post 1</div>
+      <div>Post 1</div>
+      <DashPostsTable />
+    </div>
+  );
+};
+
+export default DashPosts;

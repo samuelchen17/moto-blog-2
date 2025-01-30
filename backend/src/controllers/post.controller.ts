@@ -305,41 +305,6 @@ export const updatePost = async (
   }
 };
 
-export const getHotPosts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    // construct the query as needed
-    const config = await Config.findOne({ _id: "config" });
-
-    if (!config) {
-      return next(new CustomError(404, "Hot post configuration not found"));
-    }
-
-    // extract post ids
-    const postIds = config.hot_articles;
-
-    const posts = await Post.find({
-      _id: { $in: postIds },
-    }).lean();
-
-    if (posts.length === 0) {
-      return next(new CustomError(404, "No hot articles found"));
-    }
-
-    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
-      posts
-    );
-
-    res.status(200).json(postsWithAuthors);
-  } catch (err) {
-    console.error("Error retrieving hot articles:", err);
-    next(new CustomError(500, "Failed to retrieve hot articles"));
-  }
-};
-
 export const toggleSavePost = async (
   req: Request,
   res: Response,
@@ -510,5 +475,75 @@ export const getDashPosts = async (
   } catch (err) {
     console.error("Error retrieving posts:", err);
     next(new CustomError(500, "Failed to retrieve posts"));
+  }
+};
+
+export const getHotPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // construct the query as needed
+    const config = await Config.findOne({ _id: "config" });
+
+    if (!config) {
+      return next(new CustomError(404, "Hot post configuration not found"));
+    }
+
+    // extract post ids
+    const postIds = config.hot_articles;
+
+    const posts = await Post.find({
+      _id: { $in: postIds },
+    }).lean();
+
+    if (posts.length === 0) {
+      return next(new CustomError(404, "No hot articles found"));
+    }
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
+
+    res.status(200).json(postsWithAuthors);
+  } catch (err) {
+    console.error("Error retrieving hot articles:", err);
+    next(new CustomError(500, "Failed to retrieve hot articles"));
+  }
+};
+
+export const setHotPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // take two values, one is the id of post, second is the order of post
+    const { postId } = req.params;
+    const { order } = req.body;
+
+    // find config doc
+    let config = await Config.findOne({ _id: "config" });
+
+    if (!config) {
+      return next(new CustomError(404, "Hot post configuration not found"));
+    }
+
+    // convert postIds to mongo object ids
+    const postObjectId = new mongoose.Types.ObjectId(postId);
+
+    config.hot_articles[order] = postObjectId;
+
+    // Save the updated config
+    await config.save();
+
+    res.status(200).json({
+      message: "Hot post updated successfully",
+      hot_articles: config.hot_articles,
+    });
+  } catch (err) {
+    console.error("Error setting hot article:", err);
+    next(new CustomError(500, "Failed to set hot article"));
   }
 };

@@ -13,6 +13,7 @@ import {
   toggleSavePost,
   toggleLikePost,
   getDashPosts,
+  setHotPost,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
@@ -65,6 +66,15 @@ const postRouter = (router: Router) => {
     isOwner,
     isAdmin,
     getDashPosts
+  );
+
+  // set hot post
+  router.patch(
+    "/post/set-hot-post/:id/:postId",
+    isAuthenticated,
+    isOwner,
+    isAdmin,
+    setHotPost
   );
 };
 
