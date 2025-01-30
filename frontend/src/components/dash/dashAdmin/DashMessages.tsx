@@ -302,7 +302,10 @@ export default function DashMessages() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={contactMessages.length < startIndex}
+          disabled={
+            contactMessages.length < startIndex ||
+            contactMessages.length < limit
+          }
         >
           Next
         </Button>

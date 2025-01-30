@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
-import mongoose from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -430,3 +430,76 @@ export const toggleLikePost = async (
 
 // const post = await Post.findById(postId);
 // console.log(post.saves); // Total saves count
+
+export const getDashPosts = async (
+  req: Request,
+  res: Response<IPostResponse>,
+  next: NextFunction
+) => {
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+
+  const validFields = new Set(["createdAt", "title", "category"]);
+
+  try {
+    // construct the query based on search params
+    const query: IPostQuery = {};
+
+    if (req.query.searchTerm) {
+      query.$or = [
+        { title: { $regex: req.query.searchTerm as string, $options: "i" } },
+        { content: { $regex: req.query.searchTerm as string, $options: "i" } },
+      ];
+    }
+
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
+
+    // fetch posts
+    const posts = await Post.find<IPost>(query)
+      .skip(startIndex)
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
+
+    const totalPosts = await Post.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthPosts = await Post.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      posts: postsWithAuthors,
+      totalPosts,
+      lastMonthPosts,
+    });
+  } catch (err) {
+    console.error("Error retrieving posts:", err);
+    next(new CustomError(500, "Failed to retrieve posts"));
+  }
+};

@@ -12,6 +12,7 @@ import {
   getHotPosts,
   toggleSavePost,
   toggleLikePost,
+  getDashPosts,
 } from "../controllers/post.controller";
 
 const postRouter = (router: Router) => {
@@ -55,6 +56,15 @@ const postRouter = (router: Router) => {
     isAuthenticated,
     isOwner,
     toggleLikePost
+  );
+
+  // get posts for admin dash
+  router.get(
+    "/post/get-posts/:id",
+    isAuthenticated,
+    isOwner,
+    isAdmin,
+    getDashPosts
   );
 };
 
