@@ -20,6 +20,7 @@ import DeleteModal from "@/components/DeleteModal";
 import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+// import { Input } from "@/components/ui/input";
 
 export default function DashPosts() {
   const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
@@ -30,6 +31,7 @@ export default function DashPosts() {
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [startIndex, setStartIndex] = useState(0);
+  // const [searchTerm, setSearchTerm] = useState();
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -239,12 +241,15 @@ export default function DashPosts() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>mark as what??</DropdownMenuItem>
+              <DropdownMenuLabel>Hot posts</DropdownMenuLabel>
+              <DropdownMenuItem>Set Post 1</DropdownMenuItem>
+              <DropdownMenuItem>Set Post 2</DropdownMenuItem>
+              <DropdownMenuItem>Set Post 3</DropdownMenuItem>
+              <DropdownMenuItem>Set Post 4</DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
                 <Link
-                  // to={`/update-post/${post._id}`}
                   to={`/dashboard/?tab=update-post/${row.original._id}`}
                   className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                 >
@@ -277,7 +282,10 @@ export default function DashPosts() {
 
   return (
     <div className="container mx-auto">
-      <DataTable columns={columns} data={posts} />
+      <DataTable columns={columns} data={posts}>
+        {/* implement filtering? or search */}
+        {/* <Input placeholder="Filter by title..." className="max-w-sm" /> */}
+      </DataTable>
       {/* delete confirmation */}
       <DeleteModal
         open={openModal}
@@ -299,7 +307,7 @@ export default function DashPosts() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          // disabled={posts.length < startIndex || posts.length < limit}
+          disabled={posts.length < startIndex || posts.length < limit}
         >
           Next
         </Button>
