@@ -12,6 +12,7 @@ import {
   Bookmark,
   CalendarCog,
   // ThumbsUp,
+  MessageSquare,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -58,6 +59,12 @@ export const dashAdminNavItems: IDashNavItems[] = [
     name: "dashboard",
     path: "/dashboard/?tab=dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    name: "messages",
+    path: "/dashboard/?tab=admin-messages",
+    icon: MessageSquare,
+    label: true,
   },
   {
     name: "comments",

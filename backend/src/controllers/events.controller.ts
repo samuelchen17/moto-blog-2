@@ -73,7 +73,7 @@ export const deleteEvent = async (
       return next(new CustomError(404, "Event not found"));
     }
 
-    res.status(200).json("Event has been deleted");
+    res.status(200).json({ message: "Event has been deleted" });
   } catch (err) {
     console.error("Error deleting event:", err);
     next(new CustomError(500, "Failed to delete event"));

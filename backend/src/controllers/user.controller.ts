@@ -115,7 +115,7 @@ export const signOut = (req: Request, res: Response, next: NextFunction) => {
     res
       .clearCookie("motoBlogAuthToken")
       .status(200)
-      .json("User has been signed out");
+      .json({ message: "User has been signed out" });
   } catch (error) {
     next(new CustomError(400, "Unable to sign user out"));
   }
@@ -142,6 +142,11 @@ export const updateUser = async (
         return next(new CustomError(400, "Username cannot be empty"));
       }
 
+      // check against current username
+      if (username.trim() === user.username) {
+        return next(new CustomError(400, "Username has not changed"));
+      }
+
       // validate username format
       if (!validateUsername(username)) {
         return next(new CustomError(400, getUsernameValidationErrMsg()));
@@ -158,7 +163,12 @@ export const updateUser = async (
 
     if (email !== undefined) {
       if (email.trim() === "") {
-        return next(new CustomError(400, "email cannot be empty"));
+        return next(new CustomError(400, "Email cannot be empty"));
+      }
+
+      // check against current email
+      if (email.trim() === user.email) {
+        return next(new CustomError(400, "Email has not changed"));
       }
 
       // validate email format

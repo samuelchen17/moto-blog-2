@@ -19,6 +19,12 @@ const DashSidebar = () => {
     (state: RootState) => state.persisted.user
   );
 
+  const { notificationsCount } = useAppSelector(
+    (state: RootState) => state.contactNotification
+  );
+
+  const { theme } = useAppSelector((state: RootState) => state.persisted.theme);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
@@ -42,12 +48,10 @@ const DashSidebar = () => {
                   to={item.path}
                   icon={item.icon}
                   // conditionally render properties
-                  {...(item.label
-                    ? {
-                        label: currentUser?.user.admin ? "Admin" : "User",
-                        labelColor: item.labelColor,
-                      }
-                    : {})}
+                  {...(item.label && {
+                    label: currentUser?.user.admin ? "Admin" : "User",
+                    labelColor: theme,
+                  })}
                   active={tab === item.name}
                 >
                   <span className="capitalize">{item.name}</span>
@@ -64,10 +68,19 @@ const DashSidebar = () => {
                   as={Link}
                   to={item.path}
                   icon={item.icon}
-                  // conditionally render properties
                   active={tab === item.name}
+                  // {...(notificationsCount > 0 &&
+                  //   item.label && {
+                  //     label: notificationsCount,
+                  //     labelColor: "bg-red-600 text-white",
+                  //   })}
                 >
                   <span className="capitalize">{item.name}</span>
+                  {notificationsCount > 0 && item.label && (
+                    <span className="ml-2 px-2 py-0.5 text-xs font-bold text-white bg-red-600 rounded-md">
+                      {notificationsCount}
+                    </span>
+                  )}
                 </Sidebar.Item>
               ))}
             </Sidebar.ItemGroup>

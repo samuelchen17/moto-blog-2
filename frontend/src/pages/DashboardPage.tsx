@@ -11,6 +11,7 @@ import DashEvents from "../components/dash/dashAdmin/DashEvents";
 import PostFormPage from "./PostFormPage";
 import DashEventsUser from "@/components/dash/dashUser/DashEventsUser";
 import DashSaved from "@/components/dash/dashUser/DashSaved";
+import DashMessages from "@/components/dash/dashAdmin/DashMessages";
 
 const DashboardPage = () => {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,7 @@ const DashboardPage = () => {
         <DashSidebar />
 
         {/* dashboard */}
-        <div className="w-full max-w-screen-xl mx-auto mt-4 px-8">
+        <div className="w-full max-w-screen-xl mx-auto mt-4 md:px-8 px-4">
           {/* dynamically  display page title*/}
           <h2 className="text-2xl mb-6 capitalize space-y-2">
             <span>{tab}</span>
@@ -68,6 +69,8 @@ const DashboardPage = () => {
 
           {/* User saved post tab */}
           {tab === "saved-posts" && <DashSaved />}
+
+          {tab === "admin-messages" && <DashMessages />}
 
           {/* {tab === "liked-posts" && <DashEventsUser />} */}
         </div>

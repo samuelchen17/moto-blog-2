@@ -112,7 +112,7 @@ export const deleteComment = async (
       $inc: { comments: -1 },
     });
 
-    res.status(200).json("Comment has been deleted");
+    res.status(200).json({ message: "Comment has been deleted" });
   } catch (err) {
     console.error("Error deleting comment:", err);
     next(new CustomError(500, "Failed to delete comment"));

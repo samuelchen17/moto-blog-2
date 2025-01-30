@@ -200,7 +200,7 @@ export const deletePost = async (
 
     // implement delete all comments related to post
 
-    res.status(200).json("Post has been deleted");
+    res.status(200).json({ message: "Post has been deleted" });
   } catch (err) {
     console.error("Error deleting post:", err);
     next(new CustomError(500, "Failed to delete post"));

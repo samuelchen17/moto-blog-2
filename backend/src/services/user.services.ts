@@ -1,5 +1,9 @@
 import { User } from "../models/user.model";
 import { userServiceErrorHandler } from "../utils/errorHandler.utils";
+import config from "../config/config";
+
+// ADD FIELDS HERE FOR LOGIN OBJECT
+const defaultFields = config.loginResponseDefaultFields;
 
 export const getUsers = async () => {
   try {
@@ -14,9 +18,6 @@ export const getUserByEmail = async (
   selectParameter?: string
 ) => {
   try {
-    // default
-    const defaultFields = "username email profilePicture createdAt isAdmin";
-
     let query = User.findOne({ email });
 
     if (selectParameter) {
@@ -92,9 +93,6 @@ export const getUserByEmailOrUsername = async (
   selectParameter?: string
 ) => {
   try {
-    // ADD FIELDS HERE FOR LOGIN OBJECT
-    const defaultFields = "username email profilePicture createdAt isAdmin bio";
-
     let query = User.findOne({
       $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
     });
