@@ -62,7 +62,12 @@ export default function DashMessages() {
         const res = await _get<IContactForm[]>(url);
         setContactMessages(res.data);
       } catch (err) {
-        console.error("Failed to fetch contact messages:", err);
+        console.error("Error:", err);
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -81,7 +86,12 @@ export default function DashMessages() {
       console.log(res.data);
       dispatch(setNotifications(res.data));
     } catch (err) {
-      console.error("Failed to fetch notification count:", err);
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
 
@@ -104,12 +114,17 @@ export default function DashMessages() {
         prev.filter((message) => message._id !== idSelected)
       );
 
+      fetchNotificationCount();
       toast.success(data.message);
-
-      setIdSelected(null);
     } catch (err) {
-      toast.error("Failed to delete comment");
       console.error("Error:", err);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    } finally {
+      setIdSelected(null);
     }
   };
 
@@ -132,8 +147,12 @@ export default function DashMessages() {
       fetchNotificationCount();
       toast.success(data.message);
     } catch (err) {
-      toast.error("Failed to toggle read status");
       console.error("Error:", err);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
 
@@ -256,6 +275,7 @@ export default function DashMessages() {
               <DropdownMenuSeparator />
               {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
               <DropdownMenuItem
+                className="font-medium text-red-600 hover:underline dark:text-red-500"
                 onClick={() => {
                   setOpenModal(true);
                   setIdSelected(row.original._id);

@@ -3,7 +3,13 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
+import {
+  IPostResponse,
+  IPost,
+  IPostWithAuthor,
+  IUserRes,
+  IPostDeleteResponse,
+} from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
 import mongoose, { SortOrder } from "mongoose";
@@ -188,19 +194,22 @@ export const createPost = async (
 
 export const deletePost = async (
   req: Request,
-  res: Response,
+  res: Response<IPostDeleteResponse>,
   next: NextFunction
 ) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.postId);
 
-    if (!deletePost) {
+    if (!deletedPost) {
       return next(new CustomError(404, "Post not found"));
     }
 
     // implement delete all comments related to post
 
-    res.status(200).json({ message: "Post has been deleted" });
+    res.status(200).json({
+      data: deletedPost,
+      message: "Post has been deleted",
+    });
   } catch (err) {
     console.error("Error deleting post:", err);
     next(new CustomError(500, "Failed to delete post"));

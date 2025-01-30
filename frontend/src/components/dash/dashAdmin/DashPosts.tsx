@@ -1,15 +1,12 @@
 import { _get, _patch } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
-
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
-
 import { ColumnDef } from "@tanstack/react-table";
-import { IContactForm, IContactResponse, INotificationsCount } from "@/types";
+import { IPostDeleteResponse, IPostResponse, IPostWithAuthor } from "@/types";
 import { format } from "date-fns";
-import { Check, X, MoreHorizontal, ArrowUpDown } from "lucide-react";
-
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,17 +16,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import DeleteModal from "@/components/DeleteModal";
 import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
-import { setNotifications } from "@/redux/features/notifications/contactNotificationSlice";
-import DashOld from "./DashOld";
+import { Link } from "react-router-dom";
 
 export default function DashPosts() {
-  const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
+  const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortField, setSortField] = useState<"createdAt" | "email" | "read">();
+  const [sortField, setSortField] = useState<
+    "createdAt" | "title" | "category"
+  >();
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -37,18 +34,16 @@ export default function DashPosts() {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const limit = 9;
+  const limit = 10;
 
-  const dispatch = useAppDispatch();
-
-  // fetch messages
+  // fetch posts
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchPosts = async () => {
       try {
         setLoading(true);
 
         // dynamically construct the url
-        let url = `/contact/get-messages/${currentUser?.user.id}?limit=${limit}`;
+        let url = `/post/get-posts/${currentUser?.user.id}?limit=${limit}`;
         const queryParams = new URLSearchParams();
 
         if (sortField) queryParams.append("sort", sortField);
@@ -60,31 +55,24 @@ export default function DashPosts() {
           url += `&${queryParams.toString()}`;
         }
 
-        const res = await _get<IContactForm[]>(url);
-        setContactMessages(res.data);
+        const res = await _get<IPostResponse>(url);
+        setPosts(res.data.posts);
       } catch (err) {
-        console.error("Failed to fetch contact messages:", err);
+        console.error("Error:", err);
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     if (currentUser?.user.id) {
-      fetchMessages();
+      fetchPosts();
     }
   }, [currentUser?.user.id, sortField, order, startIndex]);
-
-  const fetchNotificationCount = async () => {
-    try {
-      const res = await _get<INotificationsCount>(
-        `/contact/notifications/${currentUser?.user.id}`
-      );
-      console.log(res.data);
-      dispatch(setNotifications(res.data));
-    } catch (err) {
-      console.error("Failed to fetch notification count:", err);
-    }
-  };
 
   const handlePagination = (direction: "next" | "prev") => {
     setStartIndex((prevIndex) =>
@@ -92,49 +80,27 @@ export default function DashPosts() {
     );
   };
 
-  const handleDeleteMessage = async () => {
+  const handleDeletePost = async () => {
     setOpenModal(false);
     try {
-      const res = await _delete<IContactResponse>(
-        `/contact/delete-message/${currentUser?.user.id}/${idSelected}`
+      const res = await _delete<IPostDeleteResponse>(
+        `/post/delete/${idSelected}/${currentUser?.user.id}`
       );
 
       const data = res.data;
 
-      setContactMessages((prev) =>
-        prev.filter((message) => message._id !== idSelected)
-      );
+      setPosts((prev) => prev.filter((post) => post._id !== idSelected));
 
       toast.success(data.message);
-
+    } catch (err) {
+      console.error("Error:", err);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    } finally {
       setIdSelected(null);
-    } catch (err) {
-      toast.error("Failed to delete comment");
-      console.error("Error:", err);
-    }
-  };
-
-  const toggleReadStatus = async (messageId: string) => {
-    try {
-      const res = await _patch<IContactResponse>(
-        `/contact/toggle-read-status/${currentUser?.user.id}/${messageId}`
-      );
-
-      const data = res.data;
-
-      setContactMessages((prev) =>
-        prev.map((message) =>
-          message._id === messageId
-            ? { ...message, read: !message.read }
-            : message
-        )
-      );
-
-      fetchNotificationCount();
-      toast.success(data.message);
-    } catch (err) {
-      toast.error("Failed to toggle read status");
-      console.error("Error:", err);
     }
   };
 
@@ -142,7 +108,7 @@ export default function DashPosts() {
     setOpenModal(false);
   };
 
-  const toggleOrder = (field: "createdAt" | "email" | "read") => {
+  const toggleOrder = (field: "createdAt" | "title" | "category") => {
     if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -152,7 +118,7 @@ export default function DashPosts() {
     }
   };
 
-  const columns: ColumnDef<IContactForm>[] = [
+  const columns: ColumnDef<IPostWithAuthor>[] = [
     {
       accessorKey: "createdAt",
       header: () => {
@@ -180,54 +146,71 @@ export default function DashPosts() {
       },
     },
     {
-      accessorKey: "name",
-      header: "Name",
-    },
-    {
-      accessorKey: "email",
-      header: () => {
-        return (
-          <Button variant="ghost" onClick={() => toggleOrder("email")}>
-            Email
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("email")}</div>
-      ),
-    },
-    {
-      accessorKey: "message",
-      header: "Message",
-      cell: ({ row }) => (
-        <div className="min-w-[250px]">{row.getValue("message")}</div>
-      ),
-    },
-    {
-      accessorKey: "read",
-      header: () => {
-        return (
-          <Button
-            variant="ghost"
-            className="flex items-center justify-center w-full"
-            onClick={() => toggleOrder("read")}
-          >
-            Read
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      accessorKey: "image",
+      header: "Image",
       cell: ({ row }) => {
-        const readStatus = row.getValue("read");
-
+        return (
+          <Link to={`/blogs/post/${row.original.slug}`}>
+            <img
+              src={row.original.image}
+              alt={row.original.title}
+              className="w-20 h-10 object-cover bg-gray-500"
+            />
+          </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "title",
+      header: () => {
+        return (
+          <Button variant="ghost" onClick={() => toggleOrder("title")}>
+            Title
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("title")}</div>
+      ),
+    },
+    {
+      accessorKey: "category",
+      header: () => {
+        return (
+          <Button variant="ghost" onClick={() => toggleOrder("category")}>
+            Category
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="min-w-[250px]">{row.getValue("category")}</div>
+      ),
+    },
+    {
+      id: "engagement",
+      header: () => {
         return (
           <div className="flex items-center justify-center w-full">
-            {readStatus ? (
-              <Check className="text-green-600" />
-            ) : (
-              <X className="text-red-600" />
-            )}
+            Engagement
+          </div>
+        );
+      },
+      accessorFn: (row) => ({
+        likes: row.likes,
+        saves: row.saves,
+      }),
+      cell: ({ row }) => {
+        const { likes, saves } = row.getValue("engagement") as {
+          likes: number;
+          saves: number;
+        };
+
+        return (
+          <div className="flex flex-col justify-center w-full items-end">
+            <span>Likes: {likes}</span>
+            <span>Saves: {saves}</span>
           </div>
         );
       },
@@ -235,8 +218,6 @@ export default function DashPosts() {
     {
       id: "actions",
       cell: ({ row }) => {
-        const readStatus = row.getValue("read");
-
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -247,16 +228,19 @@ export default function DashPosts() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  toggleReadStatus(row.original._id);
-                }}
-              >
-                Mark as {readStatus ? "unread" : "read"}
-              </DropdownMenuItem>
+              <DropdownMenuItem>mark as what??</DropdownMenuItem>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+              <DropdownMenuItem>
+                <Link
+                  // to={`/update-post/${post._id}`}
+                  to={`/dashboard/?tab=update-post/${row.original._id}`}
+                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                >
+                  Edit
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
+                className="font-medium text-red-600 hover:underline dark:text-red-500"
                 onClick={() => {
                   setOpenModal(true);
                   setIdSelected(row.original._id);
@@ -281,14 +265,13 @@ export default function DashPosts() {
 
   return (
     <div className="container mx-auto">
-      <DashOld />
-      <DataTable columns={columns} data={contactMessages} />
+      <DataTable columns={columns} data={posts} />
       {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDeleteMessage}
-        message="this message from our servers"
+        handleDelete={handleDeletePost}
+        message="this post from our servers"
       />
       {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
@@ -304,7 +287,7 @@ export default function DashPosts() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={contactMessages.length < startIndex}
+          // disabled={posts.length < startIndex || posts.length < limit}
         >
           Next
         </Button>

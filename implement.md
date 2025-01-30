@@ -43,3 +43,7 @@ future thought, messaging between users, forum page?
 display name?
 modal for popup changing email and password
 interceptor for fake admin account
+
+# better route implementation
+
+/posts/{postId}/delete?userId={userId}

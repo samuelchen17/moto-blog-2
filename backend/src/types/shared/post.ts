@@ -37,3 +37,8 @@ export interface IPostResponse {
   totalPosts: number;
   lastMonthPosts: number;
 }
+
+export interface IPostDeleteResponse {
+  message: string;
+  data: IPost;
+}
