@@ -147,14 +147,18 @@ export default function DashPosts() {
     },
     {
       accessorKey: "image",
-      header: "Image",
+      header: () => {
+        return (
+          <div className="flex items-center justify-center w-full">Image</div>
+        );
+      },
       cell: ({ row }) => {
         return (
           <Link to={`/blogs/post/${row.original.slug}`}>
             <img
               src={row.original.image}
               alt={row.original.title}
-              className="w-20 h-10 object-cover bg-gray-500"
+              className="min-w-40 h-20 object-cover bg-gray-500"
             />
           </Link>
         );
@@ -164,7 +168,11 @@ export default function DashPosts() {
       accessorKey: "title",
       header: () => {
         return (
-          <Button variant="ghost" onClick={() => toggleOrder("title")}>
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("title")}
+          >
             Title
             <ArrowUpDown />
           </Button>
@@ -178,23 +186,27 @@ export default function DashPosts() {
       accessorKey: "category",
       header: () => {
         return (
-          <Button variant="ghost" onClick={() => toggleOrder("category")}>
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("category")}
+          >
             Category
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="min-w-[250px]">{row.getValue("category")}</div>
+        <div className="flex items-center justify-center w-full">
+          {row.getValue("category")}
+        </div>
       ),
     },
     {
       id: "engagement",
       header: () => {
         return (
-          <div className="flex items-center justify-center w-full">
-            Engagement
-          </div>
+          <div className="flex items-end justify-center w-full">Engagement</div>
         );
       },
       accessorFn: (row) => ({
