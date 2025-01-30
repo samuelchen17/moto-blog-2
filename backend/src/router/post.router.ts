@@ -70,7 +70,7 @@ const postRouter = (router: Router) => {
 
   // set hot post
   router.patch(
-    "/post/set-hot-post/:id/:postId",
+    "/post/set-hot-post/:id/:postId/:order",
     isAuthenticated,
     isOwner,
     isAdmin,

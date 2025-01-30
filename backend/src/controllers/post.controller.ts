@@ -506,7 +506,16 @@ export const getHotPosts = async (
       posts
     );
 
-    res.status(200).json(postsWithAuthors);
+    // sort posts based on the order of postIds
+    const sortedPosts = postIds
+      .map((id) => {
+        return postsWithAuthors.find(
+          (post) => post._id.toString() === id.toString()
+        );
+      })
+      .filter(Boolean);
+
+    res.status(200).json(sortedPosts);
   } catch (err) {
     console.error("Error retrieving hot articles:", err);
     next(new CustomError(500, "Failed to retrieve hot articles"));

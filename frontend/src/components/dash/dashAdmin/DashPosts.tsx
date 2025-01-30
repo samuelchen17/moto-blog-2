@@ -23,7 +23,11 @@ import { Link } from "react-router-dom";
 import HotPosts from "@/components/postComponents/HotPosts";
 // import { Input } from "@/components/ui/input";
 
-export function DashPostsTable() {
+export function DashPostsTable({
+  onHotPostChange,
+}: {
+  onHotPostChange: () => void;
+}) {
   const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState<
@@ -124,13 +128,13 @@ export function DashPostsTable() {
   const handleSetHotPost = async (order: 1 | 2 | 3 | 4, postId: string) => {
     try {
       const res = await _patch(
-        `/post/set-hot-post/${currentUser?.user.id}/${postId}/${order}`,
-        { order }
+        `/post/set-hot-post/${currentUser?.user.id}/${postId}/${order}`
       );
 
       const data = res.data;
 
-      console.log(data);
+      onHotPostChange();
+      // implement response type
       // toast.success(data.message)
     } catch (err) {
       console.error("Error:", err);
@@ -355,11 +359,17 @@ export function DashPostsTable() {
 }
 
 const DashPosts = () => {
+  const [hotPostsChanged, setHotPostsChanged] = useState(false);
+
+  const handleHotPostChange = () => {
+    setHotPostsChanged((prev) => !prev);
+  };
+
   return (
     <div>
-      <h2>Hot Posts Preview</h2>
-      <HotPosts />
-      <DashPostsTable />
+      <h2 className="mb-2 font-semibold text-xl">Hot Posts Preview</h2>
+      <HotPosts key={hotPostsChanged ? "changed" : "unchanged"} />
+      <DashPostsTable onHotPostChange={handleHotPostChange} />
     </div>
   );
 };

@@ -83,7 +83,7 @@ export default function DashMessages() {
       const res = await _get<INotificationsCount>(
         `/contact/notifications/${currentUser?.user.id}`
       );
-      console.log(res.data);
+
       dispatch(setNotifications(res.data));
     } catch (err) {
       console.error("Error:", err);
