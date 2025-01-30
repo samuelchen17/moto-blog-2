@@ -31,6 +31,10 @@ const NavBarAuth = () => {
     (state: RootState) => state.persisted.user
   );
 
+  const { notificationsCount } = useAppSelector(
+    (state: RootState) => state.contactNotification
+  );
+
   // redux modal
   const dispatch = useAppDispatch();
 
@@ -87,6 +91,11 @@ const NavBarAuth = () => {
                               className: "mr-1 h-4 w-4",
                             })}
                           <span> {item.name}</span>
+                          {item.label && (
+                            <span className="ml-auto text-xs tracking-widest px-1.5 rounded-md bg-red-600 text-white">
+                              {notificationsCount}
+                            </span>
+                          )}
                         </DropdownMenuItem>
                       </Link>
                     ))}

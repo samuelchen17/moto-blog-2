@@ -19,6 +19,10 @@ const DashSidebar = () => {
     (state: RootState) => state.persisted.user
   );
 
+  const { notificationsCount } = useAppSelector(
+    (state: RootState) => state.contactNotification
+  );
+
   const { theme } = useAppSelector((state: RootState) => state.persisted.theme);
 
   useEffect(() => {
@@ -66,7 +70,7 @@ const DashSidebar = () => {
                   icon={item.icon}
                   // conditionally render properties
                   // implement notification number
-                  {...(item.label && { label: 24 })}
+                  {...(item.label && { label: notificationsCount })}
                   active={tab === item.name}
                 >
                   <span className="capitalize">{item.name}</span>

@@ -6,6 +6,7 @@ import imageReducer from "./features/image/imageSlice";
 import storage from "redux-persist/lib/storage";
 import authModalReducer from "./features/modal/authModalSlice";
 import commentReducer from "./features/comment/commentSlice";
+import contactNotificationReducer from "./features/notifications/contactNotificationSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -26,6 +27,7 @@ export const store = configureStore({
     persisted: persistedReducer,
     authModal: authModalReducer,
     comment: commentReducer,
+    contactNotification: contactNotificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

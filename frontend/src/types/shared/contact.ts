@@ -15,3 +15,7 @@ export interface IContactResponse {
   message: string;
   data: IContactForm;
 }
+
+export interface INotificationsCount {
+  notificationsCount: number;
+}
