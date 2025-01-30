@@ -492,7 +492,7 @@ export const getHotPosts = async (
     }
 
     // extract post ids
-    const postIds = config.hot_articles;
+    const postIds = Array.from(config.hot_articles.values());
 
     const posts = await Post.find({
       _id: { $in: postIds },
@@ -520,8 +520,7 @@ export const setHotPost = async (
 ) => {
   try {
     // take two values, one is the id of post, second is the order of post
-    const { postId } = req.params;
-    const { order } = req.body;
+    const { postId, order } = req.params;
 
     // find config doc
     let config = await Config.findOne({ _id: "config" });
@@ -533,14 +532,14 @@ export const setHotPost = async (
     // convert postIds to mongo object ids
     const postObjectId = new mongoose.Types.ObjectId(postId);
 
-    config.hot_articles[order] = postObjectId;
+    config.hot_articles.set(order, postObjectId);
 
     // Save the updated config
     await config.save();
 
     res.status(200).json({
-      message: "Hot post updated successfully",
-      hot_articles: config.hot_articles,
+      message: `Post ${postId} set as hot post at order ${order}`,
+      data: config.hot_articles,
     });
   } catch (err) {
     console.error("Error setting hot article:", err);

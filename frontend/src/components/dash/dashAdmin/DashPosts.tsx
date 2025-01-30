@@ -20,6 +20,7 @@ import DeleteModal from "@/components/DeleteModal";
 import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import HotPosts from "@/components/postComponents/HotPosts";
 // import { Input } from "@/components/ui/input";
 
 export function DashPostsTable() {
@@ -120,10 +121,10 @@ export function DashPostsTable() {
     }
   };
 
-  const handleSetHotPost = async (order: 0 | 1 | 2 | 3, postId: string) => {
+  const handleSetHotPost = async (order: 1 | 2 | 3 | 4, postId: string) => {
     try {
       const res = await _patch(
-        `/post/set-hot-post/${currentUser?.user.id}/${postId}`,
+        `/post/set-hot-post/${currentUser?.user.id}/${postId}/${order}`,
         { order }
       );
 
@@ -264,22 +265,22 @@ export function DashPostsTable() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Hot posts</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => handleSetHotPost(0, row.original._id)}
+                onClick={() => handleSetHotPost(1, row.original._id)}
               >
                 Set Post 1
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleSetHotPost(1, row.original._id)}
+                onClick={() => handleSetHotPost(2, row.original._id)}
               >
                 Set Post 2
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleSetHotPost(2, row.original._id)}
+                onClick={() => handleSetHotPost(3, row.original._id)}
               >
                 Set Post 3
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleSetHotPost(3, row.original._id)}
+                onClick={() => handleSetHotPost(4, row.original._id)}
               >
                 Set Post 4
               </DropdownMenuItem>
@@ -357,10 +358,7 @@ const DashPosts = () => {
   return (
     <div>
       <h2>Hot Posts Preview</h2>
-      <div>Post 1</div>
-      <div>Post 1</div>
-      <div>Post 1</div>
-      <div>Post 1</div>
+      <HotPosts />
       <DashPostsTable />
     </div>
   );
