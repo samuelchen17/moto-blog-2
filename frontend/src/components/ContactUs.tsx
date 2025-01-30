@@ -37,6 +37,7 @@ const ContactUs = () => {
       const res = await _post<IContactRequest>("/contact-us", contactForm);
       const data = res.data;
 
+      setContactForm(clearForm);
       toast.success(data.message);
     } catch (err: any) {
       toast.error(err.message);
@@ -64,6 +65,7 @@ const ContactUs = () => {
             <Input
               id="name"
               placeholder="name"
+              value={contactForm.name}
               onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
@@ -73,6 +75,7 @@ const ContactUs = () => {
             <Input
               id="email"
               placeholder="email"
+              value={contactForm.email}
               onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
@@ -83,6 +86,7 @@ const ContactUs = () => {
               id="message"
               placeholder="your message..."
               rows={5}
+              value={contactForm.message}
               onChange={handleContactFormChange}
               className="bg-white  text-black border-black  dark:text-white  dark:bg-black dark:border-white"
             />
