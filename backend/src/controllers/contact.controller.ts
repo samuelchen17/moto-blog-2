@@ -5,7 +5,7 @@ import {
   validateEmail,
   getEmailValidationErrMsg,
 } from "../helpers/validator.helpers";
-import { IContactForm, IContactResponse } from "src/types";
+import { IContactForm, IContactResponse, INotificationsCount } from "src/types";
 import { SortOrder } from "mongoose";
 
 export const handleContactForm = async (
@@ -140,7 +140,7 @@ export const deleteContactUsMessage = async (
 
 export const getMessageNotificationCount = async (
   req: Request,
-  res: Response,
+  res: Response<INotificationsCount>,
   next: NextFunction
 ) => {
   try {

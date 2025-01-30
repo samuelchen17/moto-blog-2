@@ -138,7 +138,7 @@ export default function DashMessages() {
   const columns: ColumnDef<IContactForm>[] = [
     {
       accessorKey: "createdAt",
-      header: ({ column }) => {
+      header: () => {
         return (
           <Button
             variant="ghost"
@@ -153,7 +153,7 @@ export default function DashMessages() {
       cell: ({ row }) => {
         const formattedDate = format(
           new Date(row.getValue("createdAt")),
-          "d/MM/yy"
+          "dd MMM yy"
         );
         return (
           <div className="flex items-center justify-center w-full">
@@ -168,7 +168,7 @@ export default function DashMessages() {
     },
     {
       accessorKey: "email",
-      header: ({ column }) => {
+      header: () => {
         return (
           <Button variant="ghost" onClick={() => toggleOrder("email")}>
             Email
@@ -183,10 +183,13 @@ export default function DashMessages() {
     {
       accessorKey: "message",
       header: "Message",
+      cell: ({ row }) => (
+        <div className="min-w-[250px]">{row.getValue("message")}</div>
+      ),
     },
     {
       accessorKey: "read",
-      header: ({ column }) => {
+      header: () => {
         return (
           <Button
             variant="ghost"
