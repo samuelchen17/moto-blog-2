@@ -14,6 +14,7 @@ function App() {
 
   const dispatch = useAppDispatch();
 
+  // used in two places, can refactor
   const fetchNotificationCount = async () => {
     try {
       const res = await _get<INotificationsCount>(

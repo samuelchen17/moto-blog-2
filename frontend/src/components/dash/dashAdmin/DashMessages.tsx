@@ -2,11 +2,11 @@ import { _get, _patch } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
 
 import { useEffect, useState } from "react";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { IContactForm, IContactResponse } from "@/types";
+import { IContactForm, IContactResponse, INotificationsCount } from "@/types";
 import { format } from "date-fns";
 import { Check, X, MoreHorizontal, ArrowUpDown } from "lucide-react";
 
@@ -23,6 +23,7 @@ import {
 import DeleteModal from "@/components/DeleteModal";
 import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
+import { setNotifications } from "@/redux/features/notifications/contactNotificationSlice";
 
 export default function DashMessages() {
   const [contactMessages, setContactMessages] = useState<IContactForm[]>([]);
@@ -36,6 +37,8 @@ export default function DashMessages() {
     (state: RootState) => state.persisted.user
   );
   const limit = 9;
+
+  const dispatch = useAppDispatch();
 
   // fetch messages
   useEffect(() => {
@@ -69,6 +72,18 @@ export default function DashMessages() {
       fetchMessages();
     }
   }, [currentUser?.user.id, sortField, order, startIndex]);
+
+  const fetchNotificationCount = async () => {
+    try {
+      const res = await _get<INotificationsCount>(
+        `/contact/notifications/${currentUser?.user.id}`
+      );
+      console.log(res.data);
+      dispatch(setNotifications(res.data));
+    } catch (err) {
+      console.error("Failed to fetch notification count:", err);
+    }
+  };
 
   const handlePagination = (direction: "next" | "prev") => {
     setStartIndex((prevIndex) =>
@@ -114,6 +129,7 @@ export default function DashMessages() {
         )
       );
 
+      fetchNotificationCount();
       toast.success(data.message);
     } catch (err) {
       toast.error("Failed to toggle read status");
@@ -238,7 +254,7 @@ export default function DashMessages() {
                 Mark as {readStatus ? "unread" : "read"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit</DropdownMenuItem>
+              {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() => {
                   setOpenModal(true);
