@@ -24,8 +24,7 @@ import HotPosts from "@/components/postComponents/HotPosts";
 import { Input } from "@/components/ui/input";
 import { debounce } from "lodash";
 
-// add debounce to filtering
-// only re render the rows, not the entire table
+// only re render the rows, not the entire table, implement
 
 export function DashPostsTable({
   onHotPostChange,
