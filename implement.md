@@ -47,3 +47,5 @@ interceptor for fake admin account
 # better route implementation
 
 /posts/{postId}/delete?userId={userId}
+
+# comment manager and event manager

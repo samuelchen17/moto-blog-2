@@ -127,7 +127,7 @@ export function DashPostsTable({
 
   const handleSetHotPost = async (order: 1 | 2 | 3 | 4, postId: string) => {
     try {
-      const res = await _patch(
+      const res = await _patch<any>(
         `/post/set-hot-post/${currentUser?.user.id}/${postId}/${order}`
       );
 
@@ -135,7 +135,7 @@ export function DashPostsTable({
 
       onHotPostChange();
       // implement response type
-      // toast.success(data.message)
+      toast.success(data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
