@@ -1,6 +1,6 @@
 import { _get, _patch } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
@@ -21,7 +21,11 @@ import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import HotPosts from "@/components/postComponents/HotPosts";
-// import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
+import { debounce } from "lodash";
+
+// add debounce to filtering
+// only re render the rows, not the entire table
 
 export function DashPostsTable({
   onHotPostChange,
@@ -36,7 +40,7 @@ export function DashPostsTable({
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [startIndex, setStartIndex] = useState(0);
-  // const [searchTerm, setSearchTerm] = useState();
+  const [searchTerm, setSearchTerm] = useState<string>();
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -55,6 +59,7 @@ export function DashPostsTable({
 
         if (sortField) queryParams.append("sort", sortField);
         if (order) queryParams.append("order", order);
+        if (searchTerm) queryParams.append("searchTerm", searchTerm);
         if (startIndex)
           queryParams.append("startIndex", startIndex as unknown as string);
 
@@ -79,7 +84,7 @@ export function DashPostsTable({
     if (currentUser?.user.id) {
       fetchPosts();
     }
-  }, [currentUser?.user.id, sortField, order, startIndex]);
+  }, [currentUser?.user.id, sortField, order, startIndex, searchTerm]);
 
   const handlePagination = (direction: "next" | "prev") => {
     setStartIndex((prevIndex) =>
@@ -144,6 +149,18 @@ export function DashPostsTable({
         toast.error("An unknown error occurred");
       }
     }
+  };
+
+  // debounce to reduce unnecessary api calls
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearchTerm(query);
+    }, 750),
+    []
+  );
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value);
   };
 
   const columns: ColumnDef<IPostWithAuthor>[] = [
@@ -326,7 +343,12 @@ export function DashPostsTable({
     <div className="container mx-auto">
       <DataTable columns={columns} data={posts}>
         {/* implement filtering? or search */}
-        {/* <Input placeholder="Filter by title..." className="max-w-sm" /> */}
+        <Input
+          placeholder="Filter by title..."
+          className="max-w-sm"
+          onChange={handleOnChange}
+          value={searchTerm}
+        />
       </DataTable>
       {/* delete confirmation */}
       <DeleteModal

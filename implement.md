@@ -15,10 +15,6 @@ whole dash ui refactor
 
 check all db connections, current loading times is far too long, move backend to vercel?
 
-add sort functionality to dash management pages?
-
-hot post selection in dash
-
 # event
 
 a tab for user dash events, where they can see what events they have signed up to etc? also for them to leave event, manage and see events
@@ -48,4 +44,4 @@ interceptor for fake admin account
 
 /posts/{postId}/delete?userId={userId}
 
-# comment manager and event manager
+# comment manager and event manager for user
