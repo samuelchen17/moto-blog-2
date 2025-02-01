@@ -45,3 +45,7 @@ interceptor for fake admin account
 /posts/{postId}/delete?userId={userId}
 
 # comment manager and event manager for user
+
+# fix dash tables
+
+- only refresh table body when data updates
