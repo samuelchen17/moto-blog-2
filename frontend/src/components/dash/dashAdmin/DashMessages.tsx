@@ -1,4 +1,4 @@
-import { _get, _patch } from "@/api/axiosClient";
+import { _get, _patch, _delete } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
 
 import { useEffect, useState } from "react";
@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import DeleteModal from "@/components/DeleteModal";
-import { _delete } from "@/api/axiosClient";
 import { toast } from "react-toastify";
 import { setNotifications } from "@/redux/features/notifications/contactNotificationSlice";
 
