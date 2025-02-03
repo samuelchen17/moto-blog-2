@@ -3,10 +3,16 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Post } from "../models/post.model";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { IPostResponse, IPost, IPostWithAuthor, IUserRes } from "src/types";
+import {
+  IPostResponse,
+  IPost,
+  IPostWithAuthor,
+  IUserRes,
+  IPostDeleteResponse,
+} from "src/types";
 import { Config } from "../models/config.model";
 import { User } from "../models/user.model";
-import mongoose from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -59,7 +65,7 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   const startIndex = parseInt(req.query.startIndex as string) || 0;
-  const limit = parseInt(req.query.limit as string) || 9;
+  const limit = parseInt(req.query.limit as string) || 10;
   // 1 = asc, -1 = desc
   const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
@@ -188,19 +194,22 @@ export const createPost = async (
 
 export const deletePost = async (
   req: Request,
-  res: Response,
+  res: Response<IPostDeleteResponse>,
   next: NextFunction
 ) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.postId);
 
-    if (!deletePost) {
+    if (!deletedPost) {
       return next(new CustomError(404, "Post not found"));
     }
 
     // implement delete all comments related to post
 
-    res.status(200).json({ message: "Post has been deleted" });
+    res.status(200).json({
+      data: deletedPost,
+      message: "Post has been deleted",
+    });
   } catch (err) {
     console.error("Error deleting post:", err);
     next(new CustomError(500, "Failed to delete post"));
@@ -293,41 +302,6 @@ export const updatePost = async (
   } catch (err) {
     console.error("Error updating post:", err);
     next(new CustomError(500, "Failed to update post"));
-  }
-};
-
-export const getHotPosts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    // construct the query as needed
-    const config = await Config.findOne({ _id: "config" });
-
-    if (!config) {
-      return next(new CustomError(404, "Hot post configuration not found"));
-    }
-
-    // extract post ids
-    const postIds = config.hot_articles;
-
-    const posts = await Post.find({
-      _id: { $in: postIds },
-    }).lean();
-
-    if (posts.length === 0) {
-      return next(new CustomError(404, "No hot articles found"));
-    }
-
-    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
-      posts
-    );
-
-    res.status(200).json(postsWithAuthors);
-  } catch (err) {
-    console.error("Error retrieving hot articles:", err);
-    next(new CustomError(500, "Failed to retrieve hot articles"));
   }
 };
 
@@ -430,3 +404,154 @@ export const toggleLikePost = async (
 
 // const post = await Post.findById(postId);
 // console.log(post.saves); // Total saves count
+
+export const getDashPosts = async (
+  req: Request,
+  res: Response<IPostResponse>,
+  next: NextFunction
+) => {
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+
+  const validFields = new Set(["createdAt", "title", "category"]);
+
+  try {
+    // construct the query based on search params
+    const query: IPostQuery = {};
+
+    if (req.query.searchTerm) {
+      query.$or = [
+        { title: { $regex: req.query.searchTerm as string, $options: "i" } },
+        { content: { $regex: req.query.searchTerm as string, $options: "i" } },
+      ];
+    }
+
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
+
+    // fetch posts
+    const posts = await Post.find<IPost>(query)
+      .skip(startIndex)
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
+
+    const totalPosts = await Post.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthPosts = await Post.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      posts: postsWithAuthors,
+      totalPosts,
+      lastMonthPosts,
+    });
+  } catch (err) {
+    console.error("Error retrieving posts:", err);
+    next(new CustomError(500, "Failed to retrieve posts"));
+  }
+};
+
+export const getHotPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // construct the query as needed
+    const config = await Config.findOne({ _id: "config" });
+
+    if (!config) {
+      return next(new CustomError(404, "Hot post configuration not found"));
+    }
+
+    // extract post ids
+    const postIds = Array.from(config.hot_articles.values());
+
+    const posts = await Post.find({
+      _id: { $in: postIds },
+    }).lean();
+
+    if (posts.length === 0) {
+      return next(new CustomError(404, "No hot articles found"));
+    }
+
+    const postsWithAuthors: IPostWithAuthor[] = await attachAuthorsToPosts(
+      posts
+    );
+
+    // sort posts based on the order of postIds
+    const sortedPosts = postIds
+      .map((id) => {
+        return postsWithAuthors.find(
+          (post) => post._id.toString() === id.toString()
+        );
+      })
+      .filter(Boolean);
+
+    res.status(200).json(sortedPosts);
+  } catch (err) {
+    console.error("Error retrieving hot articles:", err);
+    next(new CustomError(500, "Failed to retrieve hot articles"));
+  }
+};
+
+export const setHotPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // take two values, one is the id of post, second is the order of post
+    const { postId, order } = req.params;
+
+    // find config doc
+    let config = await Config.findOne({ _id: "config" });
+
+    if (!config) {
+      return next(new CustomError(404, "Hot post configuration not found"));
+    }
+
+    // convert postIds to mongo object ids
+    const postObjectId = new mongoose.Types.ObjectId(postId);
+
+    config.hot_articles.set(order, postObjectId);
+
+    // Save the updated config
+    await config.save();
+
+    res.status(200).json({
+      message: `Post ${postId} set as hot post at order ${order}`,
+      data: config.hot_articles,
+    });
+  } catch (err) {
+    console.error("Error setting hot article:", err);
+    next(new CustomError(500, "Failed to set hot article"));
+  }
+};

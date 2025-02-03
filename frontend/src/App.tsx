@@ -20,7 +20,7 @@ function App() {
       const res = await _get<INotificationsCount>(
         `/contact/notifications/${currentUser?.user.id}`
       );
-      console.log(res.data);
+
       dispatch(setNotifications(res.data));
     } catch (err) {
       console.error("Failed to fetch notification count:", err);

@@ -129,7 +129,7 @@ export const getEvents = async (
 ) => {
   try {
     const startIndex = parseInt(req.query.startIndex as string) || 0;
-    const limit = parseInt(req.query.limit as string) || 9;
+    const limit = parseInt(req.query.limit as string) || 10;
     const sortDirection = req.query.order === "asc" ? 1 : -1;
 
     const events = await Event.find()
