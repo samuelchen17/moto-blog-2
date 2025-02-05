@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import AddEventModal from "@/components/events/AddEventModal";
 
 // only re render the rows, not the entire table, implement
@@ -30,7 +29,7 @@ export function DashEventsTable() {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const limit = 10;
+  // const limit = 10;
 
   // fetch posts
   useEffect(() => {
@@ -190,7 +189,7 @@ export function DashEventsTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <AddEventModal
                   setEvents={setEvents}
                   eventToBeEdited={row.original}
