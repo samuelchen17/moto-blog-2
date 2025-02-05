@@ -1,6 +1,6 @@
 import { _get, _patch, _delete } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
@@ -13,14 +13,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { debounce } from "lodash";
+import AddEventModal from "@/components/events/AddEventModal";
 
 // only re render the rows, not the entire table, implement
 
@@ -226,6 +224,9 @@ export function DashEventsTable() {
 
   return (
     <div className="container mx-auto">
+      <AddEventModal setEvents={setEvents}>
+        <Button className="mr-auto">Create event</Button>
+      </AddEventModal>
       <DataTable columns={columns} data={events} />
       {/* delete confirmation */}
       <DeleteModal
