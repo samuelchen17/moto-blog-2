@@ -191,12 +191,14 @@ export function DashEventsTable() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem>
-                <Link
-                  to={`/dashboard/?tab=update-post/${row.original._id}`}
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                <AddEventModal
+                  setEvents={setEvents}
+                  eventToBeEdited={row.original}
                 >
-                  Edit
-                </Link>
+                  <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                    Edit
+                  </div>
+                </AddEventModal>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="font-medium text-red-600 hover:underline dark:text-red-500"
