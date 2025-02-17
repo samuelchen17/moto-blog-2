@@ -139,7 +139,7 @@ export function DashEventsTable() {
             className="flex items-center justify-center w-full"
             onClick={() => toggleOrder("createdAt")}
           >
-            Date
+            Creation Date
             <ArrowUpDown />
           </Button>
         );
@@ -147,6 +147,27 @@ export function DashEventsTable() {
       cell: ({ row }) => {
         const formattedDate = format(
           new Date(row.getValue("createdAt")),
+          "dd MMM yy"
+        );
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "date",
+      header: () => {
+        return (
+          <div className="flex items-center justify-center w-full">
+            Event Date
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const formattedDate = format(
+          new Date(row.getValue("date")),
           "dd MMM yy"
         );
         return (
@@ -196,7 +217,13 @@ export function DashEventsTable() {
     },
     {
       accessorKey: "location",
-      header: "Location",
+      header: () => {
+        return (
+          <div className="flex items-center justify-center w-full">
+            Location
+          </div>
+        );
+      },
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
           {row.getValue("location")}
