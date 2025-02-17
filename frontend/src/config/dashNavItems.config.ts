@@ -13,6 +13,8 @@ import {
   CalendarCog,
   // ThumbsUp,
   MessageSquare,
+  Mail,
+  MessagesSquare,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -68,13 +70,13 @@ export const dashAdminNavItems: IDashNavItems[] = [
   {
     name: "messages",
     path: "/dashboard/?tab=admin-messages",
-    icon: MessageSquare,
+    icon: Mail,
     label: true,
   },
   {
     name: "comments",
     path: "/dashboard/?tab=comments",
-    icon: MessageSquareText,
+    icon: MessagesSquare,
   },
   {
     name: "users",
