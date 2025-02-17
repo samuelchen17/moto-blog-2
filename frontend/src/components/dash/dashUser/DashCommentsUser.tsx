@@ -1,10 +1,10 @@
 import { _get, _patch, _delete } from "@/api/axiosClient";
 import { DataTable } from "../../ui/data-table";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { IPostDeleteResponse, IPostResponse, IPostWithAuthor } from "@/types";
+import { IComment, ICommentResponse } from "@/types";
 import { format } from "date-fns";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,22 +17,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { debounce } from "lodash";
 
 // only re render the rows, not the entire table, implement
 
 export function DashCommentsUserTable() {
-  const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortField, setSortField] = useState<
-    "createdAt" | "title" | "category"
-  >();
+  const [sortField, setSortField] = useState<"createdAt" | "numberOfLikes">();
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [startIndex, setStartIndex] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>();
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
@@ -41,17 +35,16 @@ export function DashCommentsUserTable() {
 
   // fetch posts
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchComments = async () => {
       try {
         setLoading(true);
 
         // dynamically construct the url
-        let url = `/post/get-posts/${currentUser?.user.id}?limit=${limit}`;
+        let url = `/comment/get-user-comments/${currentUser?.user.id}?limit=${limit}`;
         const queryParams = new URLSearchParams();
 
         if (sortField) queryParams.append("sort", sortField);
         if (order) queryParams.append("order", order);
-        if (searchTerm) queryParams.append("searchTerm", searchTerm);
         if (startIndex)
           queryParams.append("startIndex", startIndex as unknown as string);
 
@@ -59,8 +52,8 @@ export function DashCommentsUserTable() {
           url += `&${queryParams.toString()}`;
         }
 
-        const res = await _get<IPostResponse>(url);
-        setPosts(res.data.posts);
+        const res = await _get<ICommentResponse>(url);
+        setComments(res.data.comments);
       } catch (err) {
         console.error("Error:", err);
         if (err instanceof Error) {
@@ -74,9 +67,9 @@ export function DashCommentsUserTable() {
     };
 
     if (currentUser?.user.id) {
-      fetchPosts();
+      fetchComments();
     }
-  }, [currentUser?.user.id, sortField, order, startIndex, searchTerm]);
+  }, [currentUser?.user.id, sortField, order, startIndex]);
 
   const handlePagination = (direction: "next" | "prev") => {
     setStartIndex((prevIndex) =>
@@ -84,18 +77,19 @@ export function DashCommentsUserTable() {
     );
   };
 
-  const handleDeletePost = async () => {
+  const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
-      const res = await _delete<IPostDeleteResponse>(
-        `/post/delete/${idSelected}/${currentUser?.user.id}`
+      const res = await _delete<any>(
+        `/comment/delete/${idSelected}/${currentUser?.user.id}`
       );
 
-      const data = res.data;
+      setComments((prev) =>
+        prev.filter((comment) => comment._id !== idSelected)
+      );
 
-      setPosts((prev) => prev.filter((post) => post._id !== idSelected));
-
-      toast.success(data.message);
+      //   toast.success("Comment deleted");
+      toast.success(res.data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
@@ -112,7 +106,7 @@ export function DashCommentsUserTable() {
     setOpenModal(false);
   };
 
-  const toggleOrder = (field: "createdAt" | "title" | "category") => {
+  const toggleOrder = (field: "createdAt" | "numberOfLikes") => {
     if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -122,19 +116,7 @@ export function DashCommentsUserTable() {
     }
   };
 
-  // debounce to reduce unnecessary api calls
-  const debouncedSearch = useCallback(
-    debounce((query: string) => {
-      setSearchTerm(query);
-    }, 750),
-    []
-  );
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value);
-  };
-
-  const columns: ColumnDef<IPostWithAuthor>[] = [
+  const columns: ColumnDef<IComment>[] = [
     {
       accessorKey: "createdAt",
       header: () => {
@@ -162,83 +144,56 @@ export function DashCommentsUserTable() {
       },
     },
     {
-      accessorKey: "title",
+      accessorKey: "content",
       header: () => {
         return (
-          <Button
-            className="flex items-center justify-center w-full"
-            variant="ghost"
-            onClick={() => toggleOrder("title")}
-          >
-            Title
-            <ArrowUpDown />
-          </Button>
+          <div className="flex items-center justify-center w-full">Comment</div>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("title")}</div>
+        <div className="lowercase">{row.getValue("content")}</div>
       ),
     },
+
     {
-      accessorKey: "image",
-      header: () => {
-        return (
-          <div className="flex items-center justify-center w-full">Post</div>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <Link to={`/blogs/post/${row.original.slug}`}>
-            <img
-              src={row.original.image}
-              alt={row.original.title}
-              className="min-w-40 h-20 object-cover bg-gray-500"
-            />
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "category",
+      accessorKey: "postId",
       header: () => {
         return (
           <Button
             className="flex items-center justify-center w-full"
             variant="ghost"
-            onClick={() => toggleOrder("category")}
+            // onClick={() => toggleOrder("post")}
           >
-            Category
+            Post Id
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
-          {row.getValue("category")}
+          {row.getValue("postId")}
         </div>
       ),
     },
     {
-      id: "engagement",
+      accessorKey: "numberOfLikes",
       header: () => {
         return (
-          <div className="flex items-end justify-center w-full">Engagement</div>
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("numberOfLikes")}
+          >
+            Likes
+            <ArrowUpDown />
+          </Button>
         );
       },
-      accessorFn: (row) => ({
-        likes: row.likes,
-      }),
-      cell: ({ row }) => {
-        const { likes } = row.getValue("engagement") as {
-          likes: number;
-        };
-
-        return (
-          <div className="flex flex-col justify-center w-full items-end">
-            <span>Likes: {likes}</span>
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center w-full">
+          {row.getValue("numberOfLikes")}
+        </div>
+      ),
     },
     {
       id: "actions",
@@ -253,14 +208,6 @@ export function DashCommentsUserTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Link
-                  to={`/dashboard/?tab=update-post/${row.original._id}`}
-                  className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                >
-                  Edit
-                </Link>
-              </DropdownMenuItem>
               <DropdownMenuItem
                 className="font-medium text-red-600 hover:underline dark:text-red-500"
                 onClick={() => {
@@ -287,20 +234,12 @@ export function DashCommentsUserTable() {
 
   return (
     <div className="container mx-auto">
-      <DataTable columns={columns} data={posts}>
-        {/* implement filtering? or search */}
-        <Input
-          placeholder="Filter by title..."
-          className="max-w-sm"
-          onChange={handleOnChange}
-          value={searchTerm}
-        />
-      </DataTable>
+      <DataTable columns={columns} data={comments} />
       {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDeletePost}
+        handleDelete={handleDeleteComment}
         message="this post from our servers"
       />
       {/* Pagination */}
@@ -317,7 +256,7 @@ export function DashCommentsUserTable() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={posts.length < startIndex || posts.length < limit}
+          disabled={comments.length < startIndex || comments.length < limit}
         >
           Next
         </Button>
