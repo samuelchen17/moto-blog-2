@@ -33,7 +33,7 @@ export function DashCommentsUserTable() {
   );
   const limit = 10;
 
-  // fetch posts
+  // fetch user comments
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -159,14 +159,7 @@ export function DashCommentsUserTable() {
       accessorKey: "postId",
       header: () => {
         return (
-          <Button
-            className="flex items-center justify-center w-full"
-            variant="ghost"
-            // onClick={() => toggleOrder("post")}
-          >
-            Post Id
-            <ArrowUpDown />
-          </Button>
+          <div className="flex items-center justify-center w-full">Post Id</div>
         );
       },
       cell: ({ row }) => (
@@ -240,7 +233,7 @@ export function DashCommentsUserTable() {
         open={openModal}
         close={handleClose}
         handleDelete={handleDeleteComment}
-        message="this post from our servers"
+        message="this comment from our servers"
       />
       {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
