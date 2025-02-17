@@ -12,6 +12,7 @@ import PostFormPage from "./PostFormPage";
 import DashEventsUser from "@/components/dash/dashUser/DashEventsUser";
 import DashSaved from "@/components/dash/dashUser/DashSaved";
 import DashMessages from "@/components/dash/dashAdmin/DashMessages";
+import DashCommentsUser from "@/components/dash/dashUser/DashCommentsUser";
 
 const DashboardPage = () => {
   const [searchParams] = useSearchParams();
@@ -40,39 +41,22 @@ const DashboardPage = () => {
 
           {tab === "dashboard" && <Dashboard />}
 
-          {/* profile */}
+          {/* user routes*/}
           {tab === "profile" && <DashProfile />}
-
-          {/* settings */}
           {tab === "settings" && <DashSettings />}
-
-          {/* comments */}
-          {tab === "comments" && <DashComments />}
-
-          {/* posts */}
-          {tab === "posts" && <DashPosts />}
-
-          {/* users */}
-          {tab === "users" && <DashUsers />}
-
-          {/* add events */}
-          {tab === "events" && <DashEvents />}
-
-          {/* write post */}
-          {tab === "create-post" && <PostFormPage key="create" />}
-
-          {/* edit post */}
-          {postId && <PostFormPage key="update" postId={postId} />}
-
-          {/* User events tab */}
-          {tab === "joined-events" && <DashEventsUser />}
-
-          {/* User saved post tab */}
           {tab === "saved-posts" && <DashSaved />}
-
-          {tab === "admin-messages" && <DashMessages />}
-
+          {tab === "user-comments" && <DashCommentsUser />}
+          {tab === "joined-events" && <DashEventsUser />}
           {/* {tab === "liked-posts" && <DashEventsUser />} */}
+
+          {/* admin */}
+          {tab === "comments" && <DashComments />}
+          {tab === "posts" && <DashPosts />}
+          {tab === "users" && <DashUsers />}
+          {tab === "events" && <DashEvents />}
+          {tab === "create-post" && <PostFormPage key="create" />}
+          {postId && <PostFormPage key="update" postId={postId} />}
+          {tab === "admin-messages" && <DashMessages />}
         </div>
       </div>
     </div>

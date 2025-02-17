@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { IEvent, IEventResponse } from "@/types";
+import { IComment, ICommentResponse } from "@/types";
 import { format } from "date-fns";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,38 +17,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
-import AddEventModal from "@/components/events/AddEventModal";
 
 // only re render the rows, not the entire table, implement
 
-export function DashEventsTable() {
-  const [events, setEvents] = useState<IEvent[]>([]);
+export function DashCommentsUserTable() {
+  const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [eventToBeEdited, setEventToBeEdited] = useState<IEvent>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [startIndex, setStartIndex] = useState(0);
+  const [sortField, setSortField] = useState<"createdAt" | "numberOfLikes">();
   const [order, setOrder] = useState<"asc" | "desc">();
-  const [sortField, setSortField] = useState<
-    "createdAt" | "title" | "category" | "date"
-  >();
-
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [startIndex, setStartIndex] = useState(0);
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
   const limit = 10;
 
-  // fetch events
+  // fetch user comments
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchComments = async () => {
       try {
         setLoading(true);
 
         // dynamically construct the url
-        let url = `/event/get-events?limit=${limit}`;
+        let url = `/comment/get-user-comments/${currentUser?.user.id}?limit=${limit}`;
         const queryParams = new URLSearchParams();
 
         if (sortField) queryParams.append("sort", sortField);
@@ -60,9 +52,8 @@ export function DashEventsTable() {
           url += `&${queryParams.toString()}`;
         }
 
-        const res = await _get<IEventResponse>(url);
-
-        setEvents(res.data.events);
+        const res = await _get<ICommentResponse>(url);
+        setComments(res.data.comments);
       } catch (err) {
         console.error("Error:", err);
         if (err instanceof Error) {
@@ -76,7 +67,7 @@ export function DashEventsTable() {
     };
 
     if (currentUser?.user.id) {
-      fetchEvents();
+      fetchComments();
     }
   }, [currentUser?.user.id, sortField, order, startIndex]);
 
@@ -86,18 +77,19 @@ export function DashEventsTable() {
     );
   };
 
-  const handleDelete = async () => {
+  const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
       const res = await _delete<any>(
-        `/event/delete-event/${idSelected}/${currentUser?.user.id}`
+        `/comment/delete/${idSelected}/${currentUser?.user.id}`
       );
 
-      const data = res.data;
+      setComments((prev) =>
+        prev.filter((comment) => comment._id !== idSelected)
+      );
 
-      setEvents((prev) => prev.filter((event) => event._id !== idSelected));
-
-      toast.success(data.message);
+      //   toast.success("Comment deleted");
+      toast.success(res.data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
@@ -110,7 +102,11 @@ export function DashEventsTable() {
     }
   };
 
-  const toggleOrder = (field: "createdAt" | "title" | "category" | "date") => {
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const toggleOrder = (field: "createdAt" | "numberOfLikes") => {
     if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -120,16 +116,7 @@ export function DashEventsTable() {
     }
   };
 
-  const handleEditClick = (event: IEvent) => {
-    setEventToBeEdited(event);
-    setIsModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
-
-  const columns: ColumnDef<IEvent>[] = [
+  const columns: ColumnDef<IComment>[] = [
     {
       accessorKey: "createdAt",
       header: () => {
@@ -139,7 +126,7 @@ export function DashEventsTable() {
             className="flex items-center justify-center w-full"
             onClick={() => toggleOrder("createdAt")}
           >
-            Creation Date
+            Date
             <ArrowUpDown />
           </Button>
         );
@@ -157,81 +144,47 @@ export function DashEventsTable() {
       },
     },
     {
-      accessorKey: "date",
+      accessorKey: "content",
       header: () => {
         return (
-          <Button
-            variant="ghost"
-            className="flex items-center justify-center w-full"
-            onClick={() => toggleOrder("date")}
-          >
-            Event Date
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        const formattedDate = format(
-          new Date(row.getValue("date")),
-          "dd MMM yy"
-        );
-        return (
-          <div className="flex items-center justify-center w-full">
-            {formattedDate}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "title",
-      header: () => {
-        return (
-          <Button
-            className="flex items-center justify-center w-full"
-            variant="ghost"
-            onClick={() => toggleOrder("title")}
-          >
-            Title
-            <ArrowUpDown />
-          </Button>
+          <div className="flex items-center justify-center w-full">Comment</div>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("title")}</div>
+        <div className="lowercase">{row.getValue("content")}</div>
       ),
     },
+
     {
-      accessorKey: "category",
+      accessorKey: "postId",
       header: () => {
         return (
-          <Button
-            className="flex items-center justify-center w-full"
-            variant="ghost"
-            onClick={() => toggleOrder("category")}
-          >
-            Category
-            <ArrowUpDown />
-          </Button>
+          <div className="flex items-center justify-center w-full">Post Id</div>
         );
       },
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
-          {row.getValue("category")}
+          {row.getValue("postId")}
         </div>
       ),
     },
     {
-      accessorKey: "location",
+      accessorKey: "numberOfLikes",
       header: () => {
         return (
-          <div className="flex items-center justify-center w-full">
-            Location
-          </div>
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("numberOfLikes")}
+          >
+            Likes
+            <ArrowUpDown />
+          </Button>
         );
       },
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
-          {row.getValue("location")}
+          {row.getValue("numberOfLikes")}
         </div>
       ),
     },
@@ -248,11 +201,6 @@ export function DashEventsTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onSelect={() => handleEditClick(row.original)}>
-                <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                  Edit
-                </div>
-              </DropdownMenuItem>
               <DropdownMenuItem
                 className="font-medium text-red-600 hover:underline dark:text-red-500"
                 onClick={() => {
@@ -279,17 +227,13 @@ export function DashEventsTable() {
 
   return (
     <div className="container mx-auto">
-      <DataTable columns={columns} data={events}>
-        <AddEventModal setEvents={setEvents}>
-          <Button className="mr-auto">Create event</Button>
-        </AddEventModal>
-      </DataTable>
+      <DataTable columns={columns} data={comments} />
       {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDelete}
-        message="this event from our servers"
+        handleDelete={handleDeleteComment}
+        message="this comment from our servers"
       />
       {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
@@ -305,28 +249,21 @@ export function DashEventsTable() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={events.length < startIndex || events.length < limit}
+          disabled={comments.length < startIndex || comments.length < limit}
         >
           Next
         </Button>
-
-        <AddEventModal
-          setEvents={setEvents}
-          eventToBeEdited={eventToBeEdited}
-          startOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
       </div>
     </div>
   );
 }
 
-const DashEvents = () => {
+const DashCommentsUser = () => {
   return (
     <div>
-      <DashEventsTable />
+      <DashCommentsUserTable />
     </div>
   );
 };
 
-export default DashEvents;
+export default DashCommentsUser;

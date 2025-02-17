@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
 import SearchItem from "@/components/searchComponent/SearchItem";
 import {
   SkeletonProfilePage,
@@ -132,11 +131,7 @@ const ProfilePage = () => {
         {profileData?.isAdmin ? (
           postData ? (
             postData.length > 0 ? (
-              postData.map((post) => (
-                <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-                  <SearchItem post={post} />
-                </Link>
-              ))
+              postData.map((post) => <SearchItem key={post._id} post={post} />)
             ) : (
               <div>User has not posted yet</div>
             )

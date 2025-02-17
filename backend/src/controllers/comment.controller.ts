@@ -3,6 +3,7 @@ import { CustomError } from "../utils/errorHandler.utils";
 import { Comment } from "../models/comment.model";
 import { Post } from "../models/post.model";
 import { ICommentResponse, IAllCommentResponse, IComment } from "src/types";
+import { SortOrder } from "mongoose";
 
 // no need to sanitize or check if fields are missing
 
@@ -175,6 +176,53 @@ export const getComments = async (
 
     const totalComments = await Comment.countDocuments({
       postId: req.params.postId,
+    });
+
+    res.status(200).json({ comments, totalComments });
+  } catch (err) {
+    console.error("Error getting comments:", err);
+    next(new CustomError(500, "Failed to get comments"));
+  }
+};
+
+// get comments for one user
+export const getUserComments = async (
+  req: Request,
+  res: Response<ICommentResponse>,
+  next: NextFunction
+) => {
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+
+  const validFields = new Set(["createdAt", "numberOfLikes"]);
+
+  try {
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
+
+    const comments = await Comment.find({ commentBy: req.params.id })
+      .skip(startIndex)
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
+
+    const totalComments = await Comment.countDocuments({
+      commentBy: req.params.id,
     });
 
     res.status(200).json({ comments, totalComments });

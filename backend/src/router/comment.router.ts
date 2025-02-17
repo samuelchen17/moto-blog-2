@@ -5,6 +5,7 @@ import {
   editComment,
   getAllComments,
   getComments,
+  getUserComments,
   likeComment,
 } from "../controllers/comment.controller";
 import {
@@ -28,6 +29,14 @@ const commentRouter = (router: Router) => {
     isAuthenticated,
     isAdmin,
     getAllComments
+  );
+
+  // get user comments
+  router.get(
+    "/comment/get-user-comments/:id",
+    isAuthenticated,
+    isOwner,
+    getUserComments
   );
 
   // edit comment

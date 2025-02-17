@@ -1,5 +1,3 @@
-add AI to check if post or comment is appropriate?
-
 urgent - delete post success, edit post success etc. different alerts for user feedback
 
 if submit fails, do not clear form - post?
@@ -44,8 +42,12 @@ interceptor for fake admin account
 
 /posts/{postId}/delete?userId={userId}
 
-# comment manager and event manager for user
-
 # fix dash tables
 
 - only refresh table body when data updates
+
+# todo
+
+- fix dash user, comments and dashboard UI
+- event manager (personal) for user
+- comment manager add link to post

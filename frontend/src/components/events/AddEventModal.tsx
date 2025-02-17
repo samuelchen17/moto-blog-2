@@ -25,10 +25,14 @@ const AddEventModal = ({
   setEvents,
   children,
   eventToBeEdited,
+  startOpen,
+  onClose,
 }: {
   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
-  children: any;
+  children?: any;
   eventToBeEdited?: IEvent;
+  startOpen?: boolean;
+  onClose?: () => void;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
@@ -36,8 +40,17 @@ const AddEventModal = ({
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const eventInfo = eventToBeEdited ? eventToBeEdited : defaultEventDetails;
-  const [eventDetails, setEventDetails] = useState<IEventRequest>(eventInfo);
+  const [eventDetails, setEventDetails] =
+    useState<IEventRequest>(defaultEventDetails);
+
+  // useEffect to fill in existing information
+  React.useEffect(() => {
+    if (eventToBeEdited) {
+      setEventDetails(eventToBeEdited);
+    } else {
+      setEventDetails(defaultEventDetails);
+    }
+  }, [eventToBeEdited]);
 
   // need useEffect as calling a state setter function directly during component render is not allowed
   React.useEffect(() => {
@@ -45,6 +58,13 @@ const AddEventModal = ({
       setDate(new Date(eventToBeEdited.date));
     }
   }, [eventToBeEdited]);
+
+  // useEffect to open modal without trigger
+  React.useEffect(() => {
+    if (startOpen) {
+      setOpen(true);
+    }
+  }, [startOpen]);
 
   const handleChange = (field: string, value: any) => {
     setEventDetails((prev) => ({
@@ -98,7 +118,15 @@ const AddEventModal = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen && onClose) {
+          onClose();
+        }
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>

@@ -8,11 +8,12 @@ import {
   Users,
   FileText,
   NotebookPen,
-  // Calendar,
+  Calendar,
   Bookmark,
   CalendarCog,
   // ThumbsUp,
-  MessageSquare,
+  Mail,
+  MessagesSquare,
 } from "lucide-react";
 
 interface IDashNavItems {
@@ -42,16 +43,21 @@ export const dashUserNavItems: IDashNavItems[] = [
     path: "/dashboard?tab=saved-posts",
     icon: Bookmark,
   },
+  {
+    name: "Comments",
+    path: "/dashboard?tab=user-comments",
+    icon: MessageSquareText,
+  },
   // {
   //   name: "Liked",
   //   path: "/dashboard?tab=liked-posts",
   //   icon: ThumbsUp,
   // },
-  // {
-  //   name: "Events",
-  //   path: "/dashboard?tab=joined-events",
-  //   icon: Calendar,
-  // },
+  {
+    name: "Events",
+    path: "/dashboard?tab=joined-events",
+    icon: Calendar,
+  },
 ];
 
 export const dashAdminNavItems: IDashNavItems[] = [
@@ -63,13 +69,13 @@ export const dashAdminNavItems: IDashNavItems[] = [
   {
     name: "messages",
     path: "/dashboard/?tab=admin-messages",
-    icon: MessageSquare,
+    icon: Mail,
     label: true,
   },
   {
     name: "comments",
     path: "/dashboard/?tab=comments",
-    icon: MessageSquareText,
+    icon: MessagesSquare,
   },
   {
     name: "users",

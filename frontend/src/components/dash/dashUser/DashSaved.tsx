@@ -12,7 +12,6 @@ import { RootState } from "@/redux/store";
 import { IPostWithAuthor } from "@/types";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 const DashSaved = () => {
   const { currentUser } = useAppSelector(
@@ -83,11 +82,7 @@ const DashSaved = () => {
       {savedList?.length === 0 ? (
         <div>Saved list is empty</div>
       ) : (
-        sortedList?.map((post) => (
-          <Link key={post._id} to={`/blogs/post/${post.slug}`}>
-            <SearchItem post={post} />
-          </Link>
-        ))
+        sortedList?.map((post) => <SearchItem key={post._id} post={post} />)
       )}
     </div>
   );
