@@ -25,6 +25,9 @@ export function DashEventsTable() {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [eventToBeEdited, setEventToBeEdited] = useState<IEvent>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [startIndex, setStartIndex] = useState(0);
   const [order, setOrder] = useState<"asc" | "desc">();
   const [sortField, setSortField] = useState<
@@ -115,6 +118,11 @@ export function DashEventsTable() {
       // default to asc otherwise
       setOrder("asc");
     }
+  };
+
+  const handleEditClick = (event: IEvent) => {
+    setEventToBeEdited(event);
+    setIsModalOpen(true);
   };
 
   const handleClose = () => {
@@ -208,15 +216,10 @@ export function DashEventsTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <AddEventModal
-                  setEvents={setEvents}
-                  eventToBeEdited={row.original}
-                >
-                  <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                    Edit
-                  </div>
-                </AddEventModal>
+              <DropdownMenuItem onSelect={() => handleEditClick(row.original)}>
+                <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                  Edit
+                </div>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="font-medium text-red-600 hover:underline dark:text-red-500"
@@ -273,6 +276,12 @@ export function DashEventsTable() {
         >
           Next
         </Button>
+
+        <AddEventModal
+          setEvents={setEvents}
+          eventToBeEdited={eventToBeEdited}
+          startOpen={isModalOpen}
+        />
       </div>
     </div>
   );

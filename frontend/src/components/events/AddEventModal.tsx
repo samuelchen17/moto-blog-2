@@ -25,10 +25,12 @@ const AddEventModal = ({
   setEvents,
   children,
   eventToBeEdited,
+  startOpen,
 }: {
   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
-  children: any;
+  children?: any;
   eventToBeEdited?: IEvent;
+  startOpen?: boolean;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
@@ -45,6 +47,12 @@ const AddEventModal = ({
       setDate(new Date(eventToBeEdited.date));
     }
   }, [eventToBeEdited]);
+
+  React.useEffect(() => {
+    if (startOpen) {
+      setOpen(true);
+    }
+  }, [startOpen]);
 
   const handleChange = (field: string, value: any) => {
     setEventDetails((prev) => ({
