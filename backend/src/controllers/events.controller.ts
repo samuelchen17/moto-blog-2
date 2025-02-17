@@ -127,11 +127,16 @@ export const getEvents = async (
   res: Response<IEventResponse>,
   next: NextFunction
 ) => {
-  try {
-    const startIndex = parseInt(req.query.startIndex as string) || 0;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const sortDirection = req.query.order === "asc" ? 1 : -1;
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 10;
 
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+
+  const validFields = new Set(["createdAt", "title", "category"]);
+
+  try {
     const events = await Event.find()
       .sort({ createdAt: sortDirection })
       .skip(startIndex)

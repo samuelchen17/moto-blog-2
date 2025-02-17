@@ -25,9 +25,8 @@ export function DashEventsTable() {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [order, setOrder] = useState<"asc" | "desc">();
   const [startIndex, setStartIndex] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [order, setOrder] = useState<"asc" | "desc">();
   const [sortField, setSortField] = useState<
     "createdAt" | "title" | "category"
   >();
@@ -45,7 +44,20 @@ export function DashEventsTable() {
       try {
         setLoading(true);
 
-        const res = await _get<IEventResponse>(`/event/get-events`);
+        // dynamically construct the url
+        let url = `/event/get-events?limit=${limit}`;
+        const queryParams = new URLSearchParams();
+
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
+
+        if (queryParams.toString()) {
+          url += `&${queryParams.toString()}`;
+        }
+
+        const res = await _get<IEventResponse>(url);
 
         setEvents(res.data.events);
       } catch (err) {
@@ -63,7 +75,7 @@ export function DashEventsTable() {
     if (currentUser?.user.id) {
       fetchEvents();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, sortField, order, startIndex]);
 
   const handlePagination = (direction: "next" | "prev") => {
     setStartIndex((prevIndex) =>
@@ -95,6 +107,16 @@ export function DashEventsTable() {
     }
   };
 
+  const toggleOrder = (field: "createdAt" | "title" | "category") => {
+    if (sortField === field) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -107,7 +129,7 @@ export function DashEventsTable() {
           <Button
             variant="ghost"
             className="flex items-center justify-center w-full"
-            // onClick={() => toggleOrder("createdAt")}
+            onClick={() => toggleOrder("createdAt")}
           >
             Date
             <ArrowUpDown />
@@ -133,7 +155,7 @@ export function DashEventsTable() {
           <Button
             className="flex items-center justify-center w-full"
             variant="ghost"
-            // onClick={() => toggleOrder("title")}
+            onClick={() => toggleOrder("title")}
           >
             Title
             <ArrowUpDown />
@@ -151,7 +173,7 @@ export function DashEventsTable() {
           <Button
             className="flex items-center justify-center w-full"
             variant="ghost"
-            // onClick={() => toggleOrder("category")}
+            onClick={() => toggleOrder("category")}
           >
             Category
             <ArrowUpDown />
@@ -166,18 +188,7 @@ export function DashEventsTable() {
     },
     {
       accessorKey: "location",
-      header: () => {
-        return (
-          <Button
-            className="flex items-center justify-center w-full"
-            variant="ghost"
-            // onClick={() => toggleOrder("category")}
-          >
-            Location
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: "Location",
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
           {row.getValue("location")}
