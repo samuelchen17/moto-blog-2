@@ -29,11 +29,11 @@ export function DashEventsTable() {
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  // const limit = 10;
+  const limit = 10;
 
-  // fetch posts
+  // fetch events
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchEvents = async () => {
       try {
         setLoading(true);
 
@@ -53,7 +53,7 @@ export function DashEventsTable() {
     };
 
     if (currentUser?.user.id) {
-      fetchPosts();
+      fetchEvents();
     }
   }, [currentUser?.user.id]);
 
@@ -72,7 +72,7 @@ export function DashEventsTable() {
 
       const data = res.data;
 
-      setEvents((prev) => prev.filter((post) => post._id !== idSelected));
+      setEvents((prev) => prev.filter((event) => event._id !== idSelected));
 
       toast.success(data.message);
     } catch (err) {
@@ -234,7 +234,7 @@ export function DashEventsTable() {
         open={openModal}
         close={handleClose}
         handleDelete={handleDelete}
-        message="this post from our servers"
+        message="this event from our servers"
       />
       {/* Pagination */}
       {/* <div className="flex items-center justify-end space-x-2 py-4">
@@ -250,7 +250,7 @@ export function DashEventsTable() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={posts.length < startIndex || posts.length < limit}
+          disabled={events.length < startIndex || events.length < limit}
         >
           Next
         </Button>
@@ -259,7 +259,7 @@ export function DashEventsTable() {
   );
 }
 
-const DashPosts = () => {
+const DashEvents = () => {
   return (
     <div>
       <DashEventsTable />
@@ -267,4 +267,4 @@ const DashPosts = () => {
   );
 };
 
-export default DashPosts;
+export default DashEvents;

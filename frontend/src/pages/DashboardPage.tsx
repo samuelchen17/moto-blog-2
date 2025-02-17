@@ -55,7 +55,7 @@ const DashboardPage = () => {
           {/* users */}
           {tab === "users" && <DashUsers />}
 
-          {/* add events */}
+          {/* Event management */}
           {tab === "events" && <DashEvents />}
 
           {/* write post */}
