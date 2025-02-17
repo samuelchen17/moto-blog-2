@@ -12,7 +12,6 @@ import {
   Bookmark,
   CalendarCog,
   // ThumbsUp,
-  MessageSquare,
   Mail,
   MessagesSquare,
 } from "lucide-react";
