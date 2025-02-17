@@ -26,11 +26,13 @@ const AddEventModal = ({
   children,
   eventToBeEdited,
   startOpen,
+  onClose,
 }: {
   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
   children?: any;
   eventToBeEdited?: IEvent;
   startOpen?: boolean;
+  onClose?: () => void;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [date, setDate] = React.useState<Date>();
@@ -116,7 +118,15 @@ const AddEventModal = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen && onClose) {
+          onClose();
+        }
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>

@@ -281,6 +281,7 @@ export function DashEventsTable() {
           setEvents={setEvents}
           eventToBeEdited={eventToBeEdited}
           startOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
         />
       </div>
     </div>
