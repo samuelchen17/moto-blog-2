@@ -51,4 +51,4 @@ interceptor for fake admin account
 # todo
 
 - fx dash user, comments and dashboard UI
-- comment manager and event manager for user
+- comment manager (personal) and event manager (personal) for user
