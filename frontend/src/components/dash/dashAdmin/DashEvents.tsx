@@ -31,7 +31,7 @@ export function DashEventsTable() {
   const [startIndex, setStartIndex] = useState(0);
   const [order, setOrder] = useState<"asc" | "desc">();
   const [sortField, setSortField] = useState<
-    "createdAt" | "title" | "category"
+    "createdAt" | "title" | "category" | "date"
   >();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -110,7 +110,7 @@ export function DashEventsTable() {
     }
   };
 
-  const toggleOrder = (field: "createdAt" | "title" | "category") => {
+  const toggleOrder = (field: "createdAt" | "title" | "category" | "date") => {
     if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -160,9 +160,14 @@ export function DashEventsTable() {
       accessorKey: "date",
       header: () => {
         return (
-          <div className="flex items-center justify-center w-full">
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("date")}
+          >
             Event Date
-          </div>
+            <ArrowUpDown />
+          </Button>
         );
       },
       cell: ({ row }) => {

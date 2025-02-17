@@ -135,7 +135,7 @@ export const getEvents = async (
   let sortField = "createdAt";
   let sortOrder: SortOrder = -1;
 
-  const validFields = new Set(["createdAt", "title", "category"]);
+  const validFields = new Set(["createdAt", "title", "category", "date"]);
 
   try {
     if (req.query.sort && req.query.order) {
