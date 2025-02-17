@@ -279,10 +279,11 @@ export function DashEventsTable() {
 
   return (
     <div className="container mx-auto">
-      <AddEventModal setEvents={setEvents}>
-        <Button className="mr-auto">Create event</Button>
-      </AddEventModal>
-      <DataTable columns={columns} data={events} />
+      <DataTable columns={columns} data={events}>
+        <AddEventModal setEvents={setEvents}>
+          <Button className="mr-auto">Create event</Button>
+        </AddEventModal>
+      </DataTable>
       {/* delete confirmation */}
       <DeleteModal
         open={openModal}
