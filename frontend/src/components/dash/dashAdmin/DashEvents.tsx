@@ -24,6 +24,14 @@ import AddEventModal from "@/components/events/AddEventModal";
 export function DashEventsTable() {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [order, setOrder] = useState<"asc" | "desc">();
+  const [startIndex, setStartIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const [sortField, setSortField] = useState<
+    "createdAt" | "title" | "category"
+  >();
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
@@ -57,11 +65,11 @@ export function DashEventsTable() {
     }
   }, [currentUser?.user.id]);
 
-  // const handlePagination = (direction: "next" | "prev") => {
-  //   setStartIndex((prevIndex) =>
-  //     direction === "next" ? prevIndex + limit : prevIndex - limit
-  //   );
-  // };
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
+  };
 
   const handleDelete = async () => {
     setOpenModal(false);
@@ -237,7 +245,7 @@ export function DashEventsTable() {
         message="this event from our servers"
       />
       {/* Pagination */}
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
@@ -254,7 +262,7 @@ export function DashEventsTable() {
         >
           Next
         </Button>
-      </div> */}
+      </div>
     </div>
   );
 }
