@@ -38,8 +38,17 @@ const AddEventModal = ({
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
-  const eventInfo = eventToBeEdited ? eventToBeEdited : defaultEventDetails;
-  const [eventDetails, setEventDetails] = useState<IEventRequest>(eventInfo);
+  const [eventDetails, setEventDetails] =
+    useState<IEventRequest>(defaultEventDetails);
+
+  // useEffect to fill in existing information
+  React.useEffect(() => {
+    if (eventToBeEdited) {
+      setEventDetails(eventToBeEdited);
+    } else {
+      setEventDetails(defaultEventDetails);
+    }
+  }, [eventToBeEdited]);
 
   // need useEffect as calling a state setter function directly during component render is not allowed
   React.useEffect(() => {
@@ -48,6 +57,7 @@ const AddEventModal = ({
     }
   }, [eventToBeEdited]);
 
+  // useEffect to open modal without trigger
   React.useEffect(() => {
     if (startOpen) {
       setOpen(true);
