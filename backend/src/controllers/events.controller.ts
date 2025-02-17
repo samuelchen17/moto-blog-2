@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errorHandler.utils";
 import { IEvent, IEventRequest, IEventResponse } from "src/types";
 import { Event } from "../models/event.model";
+import { SortOrder } from "mongoose";
 
 // implement get participants along with getAllEvents, for accordion
 
@@ -137,10 +138,25 @@ export const getEvents = async (
   const validFields = new Set(["createdAt", "title", "category"]);
 
   try {
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
+
     const events = await Event.find()
-      .sort({ createdAt: sortDirection })
       .skip(startIndex)
-      .limit(limit);
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
 
     const totalEvents = await Event.countDocuments();
 
