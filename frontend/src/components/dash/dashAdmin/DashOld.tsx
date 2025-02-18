@@ -36,7 +36,7 @@ const DashComments = () => {
       try {
         setErrorMessage(null);
         const res = await _get<IAllCommentResponse>(
-          `/comment/getallcomments/${currentUser?.user.id}`
+          `/comment/get-all-comments/${currentUser?.user.id}`
         );
         const data = res.data;
 
@@ -61,7 +61,7 @@ const DashComments = () => {
     try {
       setErrorMessage(null);
       const res = await _get<IAllCommentResponse>(
-        `/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
+        `/comment/get-all-comments/${currentUser?.user.id}?startIndex=${startIndex}`
       );
       const data = res.data;
 
