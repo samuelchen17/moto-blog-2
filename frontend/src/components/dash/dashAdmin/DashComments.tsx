@@ -184,7 +184,7 @@ export function DashCommentsUserTable() {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex items-center w-full max-w-[250px] mx-auto">
+          <div className="flex items-center w-full justify-center">
             {row.getValue("commentBy")}
           </div>
         );
