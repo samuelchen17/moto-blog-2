@@ -232,9 +232,9 @@ export const updateUser = async (
       }
 
       // validate password format implement
-      if (!validatePassword(password)) {
-        return next(new CustomError(400, getPasswordValidationErrMsg()));
-      }
+      // if (!validatePassword(password)) {
+      //   return next(new CustomError(400, getPasswordValidationErrMsg()));
+      // }
 
       if (!confirmPassword) {
         return next(new CustomError(400, "Please confirm password"));
