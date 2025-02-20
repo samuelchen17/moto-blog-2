@@ -48,6 +48,6 @@ interceptor for fake admin account
 
 # todo
 
-- fix dash user, comments and dashboard UI
+- dashboard UI
 - event manager (personal) for user
 - comment manager add link to post
