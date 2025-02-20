@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { debounce } from "lodash";
-import DashOld from "./DashOld";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 // only re render the rows, not the entire table, implement
 
@@ -175,13 +175,13 @@ export function DashUsersTable() {
       },
       cell: ({ row }) => {
         return (
-          // <Link to={`/blogs/post/${row.original.slug}`}>
-          <img
-            src={row.original.profilePicture}
-            alt={row.original.username}
-            className="w-10 h-10 rounded-full object-cover bg-gray-500"
-          />
-          // </Link>
+          <Link to={`/profile/${row.original._id}`}>
+            <img
+              src={row.original.profilePicture}
+              alt={row.original.username}
+              className="w-10 h-10 rounded-full object-cover bg-gray-500"
+            />
+          </Link>
         );
       },
     },
@@ -200,7 +200,9 @@ export function DashUsersTable() {
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("username")}</div>
+        <Link to={`/profile/${row.original._id}`}>
+          <div className="lowercase">{row.getValue("username")}</div>
+        </Link>
       ),
     },
     {
@@ -218,9 +220,11 @@ export function DashUsersTable() {
         );
       },
       cell: ({ row }) => (
-        <div className="flex items-center justify-center w-full">
-          {row.getValue("email")}
-        </div>
+        <Link to={`/profile/${row.original._id}`}>
+          <div className="flex items-center justify-center w-full">
+            {row.getValue("email")}
+          </div>
+        </Link>
       ),
     },
     {
@@ -237,11 +241,12 @@ export function DashUsersTable() {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center w-full">
-          {row.getValue("isAdmin")}
-        </div>
-      ),
+      cell: ({ row }) =>
+        row.original.isAdmin ? (
+          <FaCheck className="text-green-500" />
+        ) : (
+          <FaTimes className="text-red-500" />
+        ),
     },
 
     {
@@ -326,7 +331,6 @@ const DashUsers = () => {
   return (
     <div>
       <DashUsersTable />
-      <DashOld />
     </div>
   );
 };
