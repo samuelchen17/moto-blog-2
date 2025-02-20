@@ -1,89 +1,111 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { RootState } from "../../../redux/store";
-import { Alert, Table } from "flowbite-react";
-import { IGetUser, IGetUserResponse } from "src/types";
+import { _get, _patch, _delete } from "@/api/axiosClient";
+import { DataTable } from "../../ui/data-table";
+import { useCallback, useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+import { ColumnDef } from "@tanstack/react-table";
+import { IGetUser, IGetUserResponse } from "@/types";
 import { format } from "date-fns";
-import { FaCheck, FaTimes } from "react-icons/fa";
-import { _delete, _get } from "@/api/axiosClient";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { debounce } from "lodash";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
-const DashUsers = () => {
-  const [allUsers, setAllUsers] = useState<IGetUser[]>([]);
-  const [showMore, setShowMore] = useState<boolean>(true);
-  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+// only re render the rows, not the entire table, implement
+
+export function DashUsersTable() {
+  const [users, setUsers] = useState<IGetUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sortField, setSortField] = useState<
+    "createdAt" | "username" | "email" | "isAdmin"
+  >();
+  const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const limit = 10;
 
+  // fetch users
   useEffect(() => {
-    const getUsers = async () => {
+    const fetchUsers = async () => {
       try {
-        setErrorMessage(null);
-        const res = await _get<IGetUserResponse>(
-          `/user/${currentUser?.user.id}`
-        );
-        const data = res.data;
+        setLoading(true);
 
-        setAllUsers(data.users);
-        if (data.users.length < 9) {
-          setShowMore(false);
+        // dynamically construct the url
+        let url = `/user/${currentUser?.user.id}?limit=${limit}`;
+        const queryParams = new URLSearchParams();
+
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+        if (searchTerm) queryParams.append("searchTerm", searchTerm);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
+
+        if (queryParams.toString()) {
+          url += `&${queryParams.toString()}`;
         }
+
+        const res = await _get<IGetUserResponse>(url);
+        setUsers(res.data.users);
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to retrieve users, internal error");
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (currentUser?.user.admin) {
-      getUsers();
+    if (currentUser?.user.id) {
+      fetchUsers();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, sortField, order, startIndex, searchTerm]);
 
-  const handleShowMore = async () => {
-    const startIndex = allUsers.length;
-    setShowMoreLoading(true);
-
-    try {
-      setErrorMessage(null);
-      const res = await _get<IGetUserResponse>(
-        `/user/${currentUser?.user.id}?startIndex=${startIndex}`
-      );
-      const data = res.data;
-
-      setAllUsers((prev) => [...prev, ...data.users]);
-      if (data.users.length < 9) {
-        setShowMore(false);
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      setErrorMessage("Failed to show more, internal error");
-    } finally {
-      setShowMoreLoading(false);
-    }
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
   };
 
-  // change to handle delete user
   const handleDeleteUser = async () => {
     setOpenModal(false);
     try {
-      await _delete(`/user/admin/${currentUser?.user.id}/${userIdToDelete}`);
+      const res = await _delete(
+        `/user/admin/${currentUser?.user.id}/${idSelected}`
+      );
 
-      setAllUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+      const data: any = res.data;
 
-      // implement delete alert
+      setUsers((prev) => prev.filter((user) => user._id !== idSelected));
 
-      setUserIdToDelete(null);
+      toast.success(data.message);
     } catch (err) {
       console.error("Error:", err);
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        toast.error(err.message);
       } else {
-        setErrorMessage("An unknown error occurred");
+        toast.error("An unknown error occurred");
       }
+    } finally {
+      setIdSelected(null);
     }
   };
 
@@ -91,91 +113,224 @@ const DashUsers = () => {
     setOpenModal(false);
   };
 
-  return (
-    <div className="w-full">
-      {currentUser?.user.admin && allUsers.length > 0 ? (
-        // implement tailwind-scrollbar? for mobile
-        <div className="overflow-x-auto">
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>Date Joined</Table.HeadCell>
-              <Table.HeadCell>Profile image</Table.HeadCell>
-              <Table.HeadCell>Username</Table.HeadCell>
-              <Table.HeadCell>Email</Table.HeadCell>
-              <Table.HeadCell>Admin</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Delete</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {allUsers.map((user) => (
-                <Table.Row
-                  key={user._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {format(new Date(user.createdAt), "dd MMM yyyy")}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <img
-                      src={user.profilePicture}
-                      alt={user.username}
-                      className="w-10 h-10 rounded-full object-cover bg-gray-500"
-                    />
-                  </Table.Cell>
-                  <Table.Cell>{user.username}</Table.Cell>
-                  <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell>
-                    {user.isAdmin ? (
-                      <FaCheck className="text-green-500" />
-                    ) : (
-                      <FaTimes className="text-red-500" />
-                    )}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <button
-                      onClick={() => {
-                        setOpenModal(true);
-                        setUserIdToDelete(user._id);
-                      }}
-                      className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          {showMore && (
-            // implement style button
-            <button
-              onClick={handleShowMore}
-              className="self-center w-full text-red-500 py-6"
-              disabled={showMoreLoading}
-            >
-              {showMoreLoading ? "Loading..." : "Show more"}
-            </button>
-          )}
-          {errorMessage && (
-            <Alert
-              color="failure"
-              className="text-center justify-center items-center"
-            >
-              {errorMessage}
-            </Alert>
-          )}
-        </div>
-      ) : (
-        <p>No users created yet!</p>
-      )}
+  const toggleOrder = (
+    field: "createdAt" | "username" | "email" | "isAdmin"
+  ) => {
+    if (sortField === field) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
 
+  // debounce to reduce unnecessary api calls
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearchTerm(query);
+    }, 750),
+    []
+  );
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value);
+  };
+
+  const columns: ColumnDef<IGetUser>[] = [
+    {
+      accessorKey: "createdAt",
+      header: () => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("createdAt")}
+          >
+            Date Joined
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const formattedDate = format(
+          new Date(row.getValue("createdAt")),
+          "dd MMM yy"
+        );
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "profilePicture",
+      header: () => {
+        return (
+          <div className="flex items-center justify-center w-full">
+            Profile Picture
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <Link to={`/profile/${row.original._id}`}>
+            <img
+              src={row.original.profilePicture}
+              alt={row.original.username}
+              className="w-10 h-10 rounded-full object-cover bg-gray-500"
+            />
+          </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "username",
+      header: () => {
+        return (
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("username")}
+          >
+            Username
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <Link to={`/profile/${row.original._id}`}>
+          <div className="lowercase">{row.getValue("username")}</div>
+        </Link>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: () => {
+        return (
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("email")}
+          >
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <Link to={`/profile/${row.original._id}`}>
+          <div className="flex items-center justify-center w-full">
+            {row.getValue("email")}
+          </div>
+        </Link>
+      ),
+    },
+    {
+      accessorKey: "isAdmin",
+      header: () => {
+        return (
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("isAdmin")}
+          >
+            Admin
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) =>
+        row.original.isAdmin ? (
+          <FaCheck className="text-green-500" />
+        ) : (
+          <FaTimes className="text-red-500" />
+        ),
+    },
+
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                className="font-medium text-red-600 hover:underline dark:text-red-500"
+                onClick={() => {
+                  setOpenModal(true);
+                  setIdSelected(row.original._id);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto">
+      <DataTable columns={columns} data={users}>
+        {/* implement filtering? or search */}
+        <Input
+          placeholder="Filter by title..."
+          className="max-w-sm"
+          onChange={handleOnChange}
+          value={searchTerm}
+        />
+      </DataTable>
+      {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
         handleDelete={handleDeleteUser}
         message="this user from our servers"
       />
+      {/* Pagination */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={startIndex === 0}
+          onClick={() => handlePagination("prev")}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePagination("next")}
+          disabled={users.length < startIndex || users.length < limit}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const DashUsers = () => {
+  return (
+    <div>
+      <DashUsersTable />
     </div>
   );
 };

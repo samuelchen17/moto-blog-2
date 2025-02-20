@@ -1,103 +1,105 @@
+import { _get, _patch, _delete } from "@/api/axiosClient";
+import { DataTable } from "../../ui/data-table";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { RootState } from "../../../redux/store";
-import { Alert } from "flowbite-react";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+import { ColumnDef } from "@tanstack/react-table";
+import { ICommentResponse, ICommentWithPost } from "@/types";
 import { format } from "date-fns";
-import { IComment, IAllCommentResponse } from "src/types";
-import { _delete, _get } from "@/api/axiosClient";
-import DeleteModal from "@/components/DeleteModal";
-
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
-// implement accordion for post and comments
+// only re render the rows, not the entire table, implement
 
-const DashComments = () => {
-  const [allComments, setAllComments] = useState<IComment[]>([]);
-  const [showMore, setShowMore] = useState<boolean>(true);
-  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+export function DashCommentsUserTable() {
+  const [comments, setComments] = useState<ICommentWithPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sortField, setSortField] = useState<"createdAt" | "numberOfLikes">();
+  const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [idToDelete, setIdToDelete] = useState<string | null>(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [idSelected, setIdSelected] = useState<string | null>(null);
   const { currentUser } = useAppSelector(
     (state: RootState) => state.persisted.user
   );
+  const limit = 10;
 
+  // fetch user comments
   useEffect(() => {
-    const getComments = async () => {
+    const fetchComments = async () => {
       try {
-        setErrorMessage(null);
-        const res = await _get<IAllCommentResponse>(
-          `/comment/getallcomments/${currentUser?.user.id}`
-        );
-        const data = res.data;
+        setLoading(true);
 
-        setAllComments(data.comments);
-        if (data.comments.length < 9) {
-          setShowMore(false);
+        // dynamically construct the url
+        let url = `/comment/get-all-comments/${currentUser?.user.id}?limit=${limit}`;
+        const queryParams = new URLSearchParams();
+
+        if (sortField) queryParams.append("sort", sortField);
+        if (order) queryParams.append("order", order);
+        if (startIndex)
+          queryParams.append("startIndex", startIndex as unknown as string);
+
+        if (queryParams.toString()) {
+          url += `&${queryParams.toString()}`;
         }
+
+        const res = await _get<ICommentResponse>(url);
+        setComments(res.data.comments as ICommentWithPost[]);
       } catch (err) {
         console.error("Error:", err);
-        setErrorMessage("Failed to retrieve comments, internal error");
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (currentUser?.user.admin) {
-      getComments();
+    if (currentUser?.user.id) {
+      fetchComments();
     }
-  }, [currentUser?.user.id]);
+  }, [currentUser?.user.id, sortField, order, startIndex]);
 
-  const handleShowMore = async () => {
-    const startIndex = allComments.length;
-    setShowMoreLoading(true);
-    try {
-      setErrorMessage(null);
-      const res = await _get<IAllCommentResponse>(
-        `/comment/getallcomments/${currentUser?.user.id}?startIndex=${startIndex}`
-      );
-      const data = res.data;
-
-      setAllComments((prev) => [...prev, ...data.comments]);
-      if (data.comments.length < 9) {
-        setShowMore(false);
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      setErrorMessage("Failed to show more, internal error");
-    } finally {
-      setShowMoreLoading(false);
-    }
+  const handlePagination = (direction: "next" | "prev") => {
+    setStartIndex((prevIndex) =>
+      direction === "next" ? prevIndex + limit : prevIndex - limit
+    );
   };
 
-  // change to handle delete user
   const handleDeleteComment = async () => {
     setOpenModal(false);
     try {
-      await _delete(`/comment/delete/${idToDelete}/${currentUser?.user.id}`);
-
-      toast.success("Comment deleted");
-
-      setAllComments((prev) =>
-        prev.filter((comment) => comment._id !== idToDelete)
+      const res = await _delete<any>(
+        `/comment/delete/${idSelected}/${currentUser?.user.id}`
       );
 
-      setIdToDelete(null);
+      setComments((prev) =>
+        prev.filter((comment) => comment._id !== idSelected)
+      );
+
+      //   toast.success("Comment deleted");
+      toast.success(res.data.message);
     } catch (err) {
-      toast.error("Failed to delete comment");
       console.error("Error:", err);
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        toast.error(err.message);
       } else {
-        setErrorMessage("An unknown error occurred");
+        toast.error("An unknown error occurred");
       }
+    } finally {
+      setIdSelected(null);
     }
   };
 
@@ -105,81 +107,185 @@ const DashComments = () => {
     setOpenModal(false);
   };
 
-  return (
-    <div className="w-full">
-      {currentUser?.user.admin && allComments.length > 0 ? (
-        // implement tailwind-scrollbar? for mobile
-        <div className="overflow-x-auto">
-          <Table>
-            <TableCaption className="mb-6">
-              A list of all comments by post
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date posted</TableHead>
-                <TableHead>Comment</TableHead>
-                <TableHead>Likes</TableHead>
-                <TableHead>Posted by</TableHead>
-                <TableHead>
-                  <span className="sr-only">Delete</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="divide-y">
-              {allComments.map((comment) => (
-                <TableRow key={comment._id}>
-                  <TableCell className="whitespace-nowrap font-medium">
-                    {format(new Date(comment.updatedAt), "dd MMM yyyy")}
-                  </TableCell>
-                  <TableCell>{comment.content}</TableCell>
-                  <TableCell>{comment.likes.length}</TableCell>
-                  <TableCell>{comment.commentBy}</TableCell>
-                  <TableCell>
-                    <button
-                      onClick={() => {
-                        setOpenModal(true);
-                        setIdToDelete(comment._id);
-                      }}
-                      className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {showMore && (
-            // implement style button
-            <button
-              onClick={handleShowMore}
-              className="self-center w-full text-red-500 py-6"
-              disabled={showMoreLoading}
-            >
-              {showMoreLoading ? "Loading..." : "Show more"}
-            </button>
-          )}
-          {errorMessage && (
-            <Alert
-              color="failure"
-              className="text-center justify-center items-center"
-            >
-              {errorMessage}
-            </Alert>
-          )}
-        </div>
-      ) : (
-        <p className="">No comments created yet!</p>
-      )}
+  const toggleOrder = (field: "createdAt" | "numberOfLikes") => {
+    if (sortField === field) {
+      setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      // default to asc otherwise
+      setOrder("asc");
+    }
+  };
 
+  const columns: ColumnDef<ICommentWithPost>[] = [
+    {
+      accessorKey: "createdAt",
+      header: () => {
+        return (
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-full"
+            onClick={() => toggleOrder("createdAt")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const formattedDate = format(
+          new Date(row.getValue("createdAt")),
+          "dd MMM yy"
+        );
+        return (
+          <div className="flex items-center justify-center w-full">
+            {formattedDate}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "content",
+      header: () => {
+        return <div className="flex items-center mx-auto w-full">Comment</div>;
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("content")}</div>
+      ),
+    },
+    {
+      accessorKey: "post",
+      header: () => (
+        <div className="flex items-center justify-center w-full">Post</div>
+      ),
+      cell: ({ row }) => {
+        const post = row.getValue("post") as {
+          title: string;
+          slug: string;
+        } | null;
+
+        return (
+          <div className="flex items-center w-full max-w-[250px] mx-auto">
+            {post ? (
+              <Link to={`/blogs/post/${post.slug}`} className="hover:underline">
+                {post.title}
+              </Link>
+            ) : (
+              <span className="text-gray-400">No Post</span>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "commentBy",
+      header: () => (
+        <div className="flex items-center justify-center w-full">Author</div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center w-full justify-center">
+            {row.getValue("commentBy")}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "numberOfLikes",
+      header: () => {
+        return (
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("numberOfLikes")}
+          >
+            Likes
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center w-full">
+          {row.getValue("numberOfLikes")}
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                className="font-medium text-red-600 hover:underline dark:text-red-500"
+                onClick={() => {
+                  setOpenModal(true);
+                  setIdSelected(row.original._id);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto">
+      <DataTable columns={columns} data={comments} />
+      {/* delete confirmation */}
       <DeleteModal
         open={openModal}
         close={handleClose}
         handleDelete={handleDeleteComment}
         message="this comment from our servers"
       />
+      {/* Pagination */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={startIndex === 0}
+          onClick={() => handlePagination("prev")}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handlePagination("next")}
+          disabled={comments.length < startIndex || comments.length < limit}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const DashCommentsUser = () => {
+  return (
+    <div>
+      <DashCommentsUserTable />
     </div>
   );
 };
 
-export default DashComments;
+export default DashCommentsUser;

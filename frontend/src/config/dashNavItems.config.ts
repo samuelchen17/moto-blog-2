@@ -8,7 +8,7 @@ import {
   Users,
   FileText,
   NotebookPen,
-  Calendar,
+  // Calendar,
   Bookmark,
   CalendarCog,
   // ThumbsUp,
@@ -53,19 +53,19 @@ export const dashUserNavItems: IDashNavItems[] = [
   //   path: "/dashboard?tab=liked-posts",
   //   icon: ThumbsUp,
   // },
-  {
-    name: "Events",
-    path: "/dashboard?tab=joined-events",
-    icon: Calendar,
-  },
+  // {
+  //   name: "Events",
+  //   path: "/dashboard?tab=joined-events",
+  //   icon: Calendar,
+  // },
 ];
 
 export const dashAdminNavItems: IDashNavItems[] = [
-  {
-    name: "dashboard",
-    path: "/dashboard/?tab=dashboard",
-    icon: LayoutDashboard,
-  },
+  // {
+  //   name: "dashboard",
+  //   path: "/dashboard/?tab=dashboard",
+  //   icon: LayoutDashboard,
+  // },
   {
     name: "messages",
     path: "/dashboard/?tab=admin-messages",

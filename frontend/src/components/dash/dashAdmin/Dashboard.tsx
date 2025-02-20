@@ -46,7 +46,7 @@ const Dashboard = () => {
     const fetchComments = async () => {
       try {
         const res = await _get<IAllCommentResponse>(
-          `/comment/getallcomments/${currentUser?.user.id}?limit=5`
+          `/comment/get-all-comments/${currentUser?.user.id}?limit=5`
         );
         const data = res.data;
 

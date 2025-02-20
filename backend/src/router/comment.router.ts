@@ -25,7 +25,7 @@ const commentRouter = (router: Router) => {
     likeComment
   );
   router.get(
-    "/comment/getallcomments/:id",
+    "/comment/get-all-comments/:id",
     isAuthenticated,
     isAdmin,
     getAllComments

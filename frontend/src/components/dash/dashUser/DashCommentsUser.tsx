@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { IComment, ICommentResponse } from "@/types";
+import { ICommentResponse, ICommentWithPost } from "@/types";
 import { format } from "date-fns";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteModal from "@/components/DeleteModal";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 // only re render the rows, not the entire table, implement
 
 export function DashCommentsUserTable() {
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<ICommentWithPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState<"createdAt" | "numberOfLikes">();
   const [order, setOrder] = useState<"asc" | "desc">();
@@ -53,7 +54,7 @@ export function DashCommentsUserTable() {
         }
 
         const res = await _get<ICommentResponse>(url);
-        setComments(res.data.comments);
+        setComments(res.data.comments as ICommentWithPost[]);
       } catch (err) {
         console.error("Error:", err);
         if (err instanceof Error) {
@@ -116,7 +117,7 @@ export function DashCommentsUserTable() {
     }
   };
 
-  const columns: ColumnDef<IComment>[] = [
+  const columns: ColumnDef<ICommentWithPost>[] = [
     {
       accessorKey: "createdAt",
       header: () => {
@@ -146,27 +147,35 @@ export function DashCommentsUserTable() {
     {
       accessorKey: "content",
       header: () => {
-        return (
-          <div className="flex items-center justify-center w-full">Comment</div>
-        );
+        return <div className="flex items-center mx-auto w-full">Comment</div>;
       },
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue("content")}</div>
       ),
     },
-
     {
-      accessorKey: "postId",
-      header: () => {
+      accessorKey: "post",
+      header: () => (
+        <div className="flex items-center justify-center w-full">Post</div>
+      ),
+      cell: ({ row }) => {
+        const post = row.getValue("post") as {
+          title: string;
+          slug: string;
+        } | null;
+
         return (
-          <div className="flex items-center justify-center w-full">Post Id</div>
+          <div className="flex items-center w-full max-w-[250px] mx-auto">
+            {post ? (
+              <Link to={`/blogs/post/${post.slug}`} className="hover:underline">
+                {post.title}
+              </Link>
+            ) : (
+              <span className="text-gray-400">No Post</span>
+            )}
+          </div>
         );
       },
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center w-full">
-          {row.getValue("postId")}
-        </div>
-      ),
     },
     {
       accessorKey: "numberOfLikes",

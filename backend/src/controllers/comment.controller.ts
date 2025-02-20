@@ -125,15 +125,50 @@ export const getAllComments = async (
   res: Response<IAllCommentResponse>,
   next: NextFunction
 ) => {
+  const startIndex = parseInt(req.query.startIndex as string) || 0;
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+  const validFields = new Set(["createdAt", "numberOfLikes"]);
   try {
-    const startIndex = parseInt(req.query.startIndex as string) || 0;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const sortDirection = req.query.order === "asc" ? -1 : 1;
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
 
     const comments = await Comment.find()
-      .sort({ createdAt: sortDirection })
       .skip(startIndex)
-      .limit(limit);
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
+
+    // get unique postID
+    const postIds = [...new Set(comments.map((comment) => comment.postId))];
+
+    // fetch posts in parallel
+    const posts = await Post.find({ _id: { $in: postIds } })
+      .select("title slug _id")
+      .lean();
+
+    // create map of postId -> post object
+    const postMap = new Map(posts.map((post) => [post._id.toString(), post]));
+
+    // attach post to comments
+    const updatedComments = comments.map((comment) => ({
+      ...comment,
+      post: postMap.get(comment.postId.toString()) || null,
+    }));
 
     const totalComments = await Comment.countDocuments();
     const now = new Date();
@@ -149,7 +184,7 @@ export const getAllComments = async (
     });
 
     res.status(200).json({
-      comments,
+      comments: updatedComments,
       totalComments,
       lastMonthComments,
     });
@@ -197,7 +232,6 @@ export const getUserComments = async (
   // default sorting
   let sortField = "createdAt";
   let sortOrder: SortOrder = -1;
-
   const validFields = new Set(["createdAt", "numberOfLikes"]);
 
   try {
@@ -225,7 +259,24 @@ export const getUserComments = async (
       commentBy: req.params.id,
     });
 
-    res.status(200).json({ comments, totalComments });
+    // get unique postID
+    const postIds = [...new Set(comments.map((comment) => comment.postId))];
+
+    // fetch posts in parallel
+    const posts = await Post.find({ _id: { $in: postIds } })
+      .select("title slug _id")
+      .lean();
+
+    // create map of postId -> post object
+    const postMap = new Map(posts.map((post) => [post._id.toString(), post]));
+
+    // attach post to comments
+    const updatedComments = comments.map((comment) => ({
+      ...comment,
+      post: postMap.get(comment.postId.toString()) || null,
+    }));
+
+    res.status(200).json({ comments: updatedComments, totalComments });
   } catch (err) {
     console.error("Error getting comments:", err);
     next(new CustomError(500, "Failed to get comments"));
