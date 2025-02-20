@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { ColumnDef } from "@tanstack/react-table";
-import { IPostDeleteResponse, IPostResponse, IPostWithAuthor } from "@/types";
+import { IGetUser, IGetUserResponse } from "@/types";
 import { format } from "date-fns";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,10 +25,10 @@ import DashOld from "./DashOld";
 // only re render the rows, not the entire table, implement
 
 export function DashUsersTable() {
-  const [posts, setPosts] = useState<IPostWithAuthor[]>([]);
+  const [users, setUsers] = useState<IGetUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState<
-    "createdAt" | "title" | "category"
+    "createdAt" | "username" | "email" | "isAdmin"
   >();
   const [order, setOrder] = useState<"asc" | "desc">();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -42,12 +42,12 @@ export function DashUsersTable() {
 
   // fetch posts
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchUsers = async () => {
       try {
         setLoading(true);
 
         // dynamically construct the url
-        let url = `/post/get-posts/${currentUser?.user.id}?limit=${limit}`;
+        let url = `/user/${currentUser?.user.id}?limit=${limit}`;
         const queryParams = new URLSearchParams();
 
         if (sortField) queryParams.append("sort", sortField);
@@ -60,8 +60,8 @@ export function DashUsersTable() {
           url += `&${queryParams.toString()}`;
         }
 
-        const res = await _get<IPostResponse>(url);
-        setPosts(res.data.posts);
+        const res = await _get<IGetUserResponse>(url);
+        setUsers(res.data.users);
       } catch (err) {
         console.error("Error:", err);
         if (err instanceof Error) {
@@ -75,7 +75,7 @@ export function DashUsersTable() {
     };
 
     if (currentUser?.user.id) {
-      fetchPosts();
+      fetchUsers();
     }
   }, [currentUser?.user.id, sortField, order, startIndex, searchTerm]);
 
@@ -85,16 +85,16 @@ export function DashUsersTable() {
     );
   };
 
-  const handleDeletePost = async () => {
+  const handleDeleteUser = async () => {
     setOpenModal(false);
     try {
-      const res = await _delete<IPostDeleteResponse>(
-        `/post/delete/${idSelected}/${currentUser?.user.id}`
+      const res = await _delete(
+        `/user/admin/${currentUser?.user.id}/${idSelected}`
       );
 
-      const data = res.data;
+      const data: any = res.data;
 
-      setPosts((prev) => prev.filter((post) => post._id !== idSelected));
+      setUsers((prev) => prev.filter((user) => user._id !== idSelected));
 
       toast.success(data.message);
     } catch (err) {
@@ -113,7 +113,9 @@ export function DashUsersTable() {
     setOpenModal(false);
   };
 
-  const toggleOrder = (field: "createdAt" | "title" | "category") => {
+  const toggleOrder = (
+    field: "createdAt" | "username" | "email" | "isAdmin"
+  ) => {
     if (sortField === field) {
       setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     } else {
@@ -135,7 +137,7 @@ export function DashUsersTable() {
     debouncedSearch(e.target.value);
   };
 
-  const columns: ColumnDef<IPostWithAuthor>[] = [
+  const columns: ColumnDef<IGetUser>[] = [
     {
       accessorKey: "createdAt",
       header: () => {
@@ -145,7 +147,7 @@ export function DashUsersTable() {
             className="flex items-center justify-center w-full"
             onClick={() => toggleOrder("createdAt")}
           >
-            Date
+            Date Joined
             <ArrowUpDown />
           </Button>
         );
@@ -163,87 +165,85 @@ export function DashUsersTable() {
       },
     },
     {
-      accessorKey: "image",
+      accessorKey: "profilePicture",
       header: () => {
         return (
-          <div className="flex items-center justify-center w-full">Image</div>
+          <div className="flex items-center justify-center w-full">
+            Profile Picture
+          </div>
         );
       },
       cell: ({ row }) => {
         return (
-          <Link to={`/blogs/post/${row.original.slug}`}>
-            <img
-              src={row.original.image}
-              alt={row.original.title}
-              className="min-w-40 h-20 object-cover bg-gray-500"
-            />
-          </Link>
+          // <Link to={`/blogs/post/${row.original.slug}`}>
+          <img
+            src={row.original.profilePicture}
+            alt={row.original.username}
+            className="w-10 h-10 rounded-full object-cover bg-gray-500"
+          />
+          // </Link>
         );
       },
     },
     {
-      accessorKey: "title",
+      accessorKey: "username",
       header: () => {
         return (
           <Button
             className="flex items-center justify-center w-full"
             variant="ghost"
-            onClick={() => toggleOrder("title")}
+            onClick={() => toggleOrder("username")}
           >
-            Title
+            Username
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("title")}</div>
+        <div className="lowercase">{row.getValue("username")}</div>
       ),
     },
     {
-      accessorKey: "category",
+      accessorKey: "email",
       header: () => {
         return (
           <Button
             className="flex items-center justify-center w-full"
             variant="ghost"
-            onClick={() => toggleOrder("category")}
+            onClick={() => toggleOrder("email")}
           >
-            Category
+            Email
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="flex items-center justify-center w-full">
-          {row.getValue("category")}
+          {row.getValue("email")}
         </div>
       ),
     },
     {
-      id: "engagement",
+      accessorKey: "isAdmin",
       header: () => {
         return (
-          <div className="flex items-end justify-center w-full">Engagement</div>
+          <Button
+            className="flex items-center justify-center w-full"
+            variant="ghost"
+            onClick={() => toggleOrder("isAdmin")}
+          >
+            Admin
+            <ArrowUpDown />
+          </Button>
         );
       },
-      accessorFn: (row) => ({
-        likes: row.likes,
-        saves: row.saves,
-      }),
-      cell: ({ row }) => {
-        const { likes, saves } = row.getValue("engagement") as {
-          likes: number;
-          saves: number;
-        };
-
-        return (
-          <div className="flex flex-col justify-center w-full items-end">
-            <span>Likes: {likes}</span>
-            <span>Saves: {saves}</span>
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center w-full">
+          {row.getValue("isAdmin")}
+        </div>
+      ),
     },
+
     {
       id: "actions",
       cell: ({ row }) => {
@@ -283,7 +283,7 @@ export function DashUsersTable() {
 
   return (
     <div className="container mx-auto">
-      <DataTable columns={columns} data={posts}>
+      <DataTable columns={columns} data={users}>
         {/* implement filtering? or search */}
         <Input
           placeholder="Filter by title..."
@@ -296,7 +296,7 @@ export function DashUsersTable() {
       <DeleteModal
         open={openModal}
         close={handleClose}
-        handleDelete={handleDeletePost}
+        handleDelete={handleDeleteUser}
         message="this post from our servers"
       />
       {/* Pagination */}
@@ -313,7 +313,7 @@ export function DashUsersTable() {
           variant="outline"
           size="sm"
           onClick={() => handlePagination("next")}
-          disabled={posts.length < startIndex || posts.length < limit}
+          disabled={users.length < startIndex || users.length < limit}
         >
           Next
         </Button>
