@@ -49,7 +49,6 @@ export const getAllUsers = async (
 
     if (req.query.searchTerm) {
       query.$or = [
-        { _id: { $regex: req.query.searchTerm as string, $options: "i" } },
         { username: { $regex: req.query.searchTerm as string, $options: "i" } },
         { email: { $regex: req.query.searchTerm as string, $options: "i" } },
       ];
@@ -233,9 +232,9 @@ export const updateUser = async (
       }
 
       // validate password format implement
-      // if (!validatePassword(password)) {
-      //   return next(new CustomError(400, getPasswordValidationErrMsg()));
-      // }
+      if (!validatePassword(password)) {
+        return next(new CustomError(400, getPasswordValidationErrMsg()));
+      }
 
       if (!confirmPassword) {
         return next(new CustomError(400, "Please confirm password"));

@@ -40,7 +40,7 @@ export function DashUsersTable() {
   );
   const limit = 10;
 
-  // fetch posts
+  // fetch users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -302,7 +302,7 @@ export function DashUsersTable() {
         open={openModal}
         close={handleClose}
         handleDelete={handleDeleteUser}
-        message="this post from our servers"
+        message="this user from our servers"
       />
       {/* Pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
