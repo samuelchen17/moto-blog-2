@@ -8,6 +8,7 @@ import {
 } from "../services/user.services";
 import { CustomError } from "../utils/errorHandler.utils";
 import {
+  IGetUser,
   IGetUserResponse,
   IPost,
   IPostWithAuthor,
@@ -27,6 +28,7 @@ import {
 import { IUser, User } from "../models/user.model";
 import { Post } from "../models/post.model";
 import { attachAuthorsToPosts } from "./post.controller";
+import { SortOrder } from "mongoose";
 
 export const getAllUsers = async (
   req: Request,
@@ -35,16 +37,43 @@ export const getAllUsers = async (
 ) => {
   const startIndex = parseInt(req.query.startIndex as string) || 0;
   const limit = parseInt(req.query.limit as string) || 10;
-  // 1 = asc, -1 = desc
-  const sortDirection = req.query.order === "asc" ? -1 : 1;
+
+  // default sorting
+  let sortField = "createdAt";
+  let sortOrder: SortOrder = -1;
+
+  const validFields = new Set(["createdAt", "username", "email", "isAdmin"]);
 
   try {
-    // const users = await getUsers();
+    const query: any = {};
 
-    const users = await User.find()
-      .sort({ createdAt: sortDirection })
+    if (req.query.searchTerm) {
+      query.$or = [
+        { _id: { $regex: req.query.searchTerm as string, $options: "i" } },
+        { username: { $regex: req.query.searchTerm as string, $options: "i" } },
+        { email: { $regex: req.query.searchTerm as string, $options: "i" } },
+      ];
+    }
+
+    if (req.query.sort && req.query.order) {
+      sortField = req.query.sort as string;
+
+      // injection attack check
+      if (!validFields.has(sortField)) {
+        return next(new CustomError(400, "Invalid sorting field"));
+      }
+      sortOrder = req.query.order === "asc" ? 1 : -1;
+    }
+
+    const sortOptions: Record<string, SortOrder> = {
+      [sortField]: sortOrder,
+    };
+
+    const users = await User.find<IGetUser>(query)
       .skip(startIndex)
-      .limit(limit);
+      .limit(limit)
+      .sort(sortOptions)
+      .lean();
 
     const totalUsers = await User.countDocuments();
 

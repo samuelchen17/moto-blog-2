@@ -61,11 +61,11 @@ export const dashUserNavItems: IDashNavItems[] = [
 ];
 
 export const dashAdminNavItems: IDashNavItems[] = [
-  {
-    name: "dashboard",
-    path: "/dashboard/?tab=dashboard",
-    icon: LayoutDashboard,
-  },
+  // {
+  //   name: "dashboard",
+  //   path: "/dashboard/?tab=dashboard",
+  //   icon: LayoutDashboard,
+  // },
   {
     name: "messages",
     path: "/dashboard/?tab=admin-messages",
